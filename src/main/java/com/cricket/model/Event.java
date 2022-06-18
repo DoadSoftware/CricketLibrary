@@ -85,14 +85,25 @@ public class Event implements Comparable<Event> {
   private int eventTotalRunsInAnOver;
 
   @XmlElement(name = "doNotIncrementBall")
-  private boolean doNotIncrementBall;
+  private String doNotIncrementBall;
+
+  @XmlElement(name = "eventDescription")
+  private String eventDescription;
   
-public boolean isDoNotIncrementBall() {
+public String getDoNotIncrementBall() {
 	return doNotIncrementBall;
 }
 
-public void setDoNotIncrementBall(boolean doNotIncrementBall) {
+public void setDoNotIncrementBall(String doNotIncrementBall) {
 	this.doNotIncrementBall = doNotIncrementBall;
+}
+
+public String getEventDescription() {
+	return eventDescription;
+}
+
+public void setEventDescription(String eventDescription) {
+	this.eventDescription = eventDescription;
 }
 
 public int getEventTotalRunsInAnOver() {
