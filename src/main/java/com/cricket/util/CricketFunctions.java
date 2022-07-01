@@ -744,7 +744,7 @@ public class CricketFunctions {
 		return String.valueOf(total_runs);
 	}
 
-	public String getLastWicket(Match match) {
+	public static String getLastWicket(Match match) {
 
 		for(Inning inn : match.getInning()) {
 			if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)){

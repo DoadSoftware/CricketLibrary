@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cricket.dao.CricketDao;
 import com.cricket.model.Ground;
+import com.cricket.model.NameSuper;
 import com.cricket.model.Player;
 import com.cricket.model.Statistics;
 import com.cricket.model.StatsType;
@@ -76,6 +77,11 @@ public StatsType getStatsType(int stats_type_id) {
 @Override
 public List<Statistics> getPlayerStatistics(int player_id) {
 	return sessionFactory.getCurrentSession().createQuery("from Statistics WHERE playerId = " + player_id).list();  
+}
+
+@Override
+public List<NameSuper> getNameSupers() {
+	return sessionFactory.getCurrentSession().createQuery("from NameSuper").list();
 }
 
 }

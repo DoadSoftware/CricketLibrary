@@ -3,6 +3,7 @@ package com.cricket.dao;
 import java.util.List;
 
 import com.cricket.model.Ground;
+import com.cricket.model.NameSuper;
 import com.cricket.model.Player;
 import com.cricket.model.Statistics;
 import com.cricket.model.StatsType;
@@ -15,6 +16,7 @@ public interface CricketDao {
   StatsType getStatsType(int stats_type_id);
   List<Player> getPlayers(String whatToProcess, String valueToProcess);
   List<Team> getTeams();
+  List<NameSuper> getNameSupers();
   List<Ground> getGrounds();
   List<Statistics> getPlayerStatistics(int player_id);
 }

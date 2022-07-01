@@ -84,6 +84,9 @@ public class Match {
   
   @XmlTransient
   private Ground ground;
+  
+  @XmlTransient
+  private NameSuper nameSuper;
 
   @XmlTransient
   private Team homeTeam;
@@ -246,6 +249,12 @@ public Ground getGround() {
 }
 public void setGround(Ground ground) {
 	this.ground = ground;
+}
+public NameSuper getNameSuper() {
+	return nameSuper;
+}
+public void setNameSuper(NameSuper nameSuper) {
+	this.nameSuper = nameSuper;
 }
 public int getGroundId() {
 	return groundId;
