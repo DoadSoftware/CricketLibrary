@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cricket.dao.CricketDao;
 import com.cricket.model.Ground;
+import com.cricket.model.InfobarStats;
 import com.cricket.model.NameSuper;
 import com.cricket.model.Player;
 import com.cricket.model.Statistics;
@@ -65,6 +66,11 @@ public List<Statistics> getPlayerStatistics(int player_id) {
 @Override
 public List<NameSuper> getNameSupers() {
 	return cricketDao.getNameSupers();
+}
+
+@Override
+public List<InfobarStats> getInfobarStats() {
+	return cricketDao.getInfobarStats();
 }
 
 }

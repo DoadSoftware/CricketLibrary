@@ -36,11 +36,13 @@ public class CricketFunctions {
 		
 		for(Player plyr:match.getHomeSquad()) {
 			this_plyr = cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(plyr.getPlayerId()));
-			this_plyr.setPlayerPosition(plyr.getPlayerPosition()); this_plyr.setCaptainWicketKeeper(plyr.getCaptainWicketKeeper());
-			if(match.getReadPhotoColumn().equalsIgnoreCase(CricketUtil.NO)) {
-				this_plyr.setPhoto("");
+			if(this_plyr != null) {
+				this_plyr.setPlayerPosition(plyr.getPlayerPosition()); this_plyr.setCaptainWicketKeeper(plyr.getCaptainWicketKeeper());
+				if(match.getReadPhotoColumn().equalsIgnoreCase(CricketUtil.NO)) {
+					this_plyr.setPhoto("");
+				}
+				players.add(this_plyr);
 			}
-			players.add(this_plyr);
 		}
 		match.setHomeSquad(players);
 
@@ -48,10 +50,12 @@ public class CricketFunctions {
 		if(match.getHomeOtherSquad() != null) {
 			for(Player plyr:match.getHomeOtherSquad()) {
 				this_plyr = cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(plyr.getPlayerId()));
-				if(match.getReadPhotoColumn().equalsIgnoreCase(CricketUtil.NO)) {
-					this_plyr.setPhoto("");
+				if(this_plyr != null) {
+					if(match.getReadPhotoColumn().equalsIgnoreCase(CricketUtil.NO)) {
+						this_plyr.setPhoto("");
+					}
+					players.add(this_plyr);
 				}
-				players.add(this_plyr);
 			}
 		}
 		match.setHomeOtherSquad(players);
@@ -59,11 +63,13 @@ public class CricketFunctions {
 		players = new ArrayList<Player>();
 		for(Player plyr:match.getAwaySquad()) {
 			this_plyr = cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(plyr.getPlayerId()));
-			this_plyr.setPlayerPosition(plyr.getPlayerPosition()); this_plyr.setCaptainWicketKeeper(plyr.getCaptainWicketKeeper());
-			if(match.getReadPhotoColumn().equalsIgnoreCase(CricketUtil.NO)) {
-				this_plyr.setPhoto("");
+			if(this_plyr != null) {
+				this_plyr.setPlayerPosition(plyr.getPlayerPosition()); this_plyr.setCaptainWicketKeeper(plyr.getCaptainWicketKeeper());
+				if(match.getReadPhotoColumn().equalsIgnoreCase(CricketUtil.NO)) {
+					this_plyr.setPhoto("");
+				}
+				players.add(this_plyr);
 			}
-			players.add(this_plyr);
 		}
 		match.setAwaySquad(players);
 
@@ -71,10 +77,12 @@ public class CricketFunctions {
 		if(match.getAwayOtherSquad() != null) {
 			for(Player plyr:match.getAwayOtherSquad()) {
 				this_plyr = cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(plyr.getPlayerId()));
-				if(match.getReadPhotoColumn().equalsIgnoreCase(CricketUtil.NO)) {
-					this_plyr.setPhoto("");
+				if(this_plyr != null) {
+					if(match.getReadPhotoColumn().equalsIgnoreCase(CricketUtil.NO)) {
+						this_plyr.setPhoto("");
+					}
+					players.add(this_plyr);
 				}
-				players.add(this_plyr);
 			}
 		}
 		match.setAwayOtherSquad(players);
@@ -614,7 +622,7 @@ public class CricketFunctions {
 	      }
 	    }
 	    String teamNameToUse = "", bottomLineText = "";
-	    if (CricketFunctions.getRequiredRuns(match) <= 0) {
+	    if (CricketFunctions.getRequiredRuns(match) <= 0 || CricketFunctions.getRequiredRuns(match) > 0) {
 	    	switch (teamNameType) {
 		    case CricketUtil.SHORT: 
 		    	teamNameToUse = (match.getInning().get(1)).getBatting_team().getShortname();
