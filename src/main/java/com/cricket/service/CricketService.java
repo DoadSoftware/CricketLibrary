@@ -2,6 +2,7 @@ package com.cricket.service;
 
 import java.util.List;
 
+import com.cricket.model.Bugs;
 import com.cricket.model.Ground;
 import com.cricket.model.InfobarStats;
 import com.cricket.model.NameSuper;
@@ -19,6 +20,7 @@ public interface CricketService {
   List<Team> getTeams();
   List<NameSuper> getNameSupers();
   List<InfobarStats> getInfobarStats();
+  List<Bugs> getBugs();
   List<Ground> getGrounds();
   List<Statistics> getPlayerStatistics(int player_id);
 }

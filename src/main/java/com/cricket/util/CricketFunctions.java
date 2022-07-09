@@ -759,7 +759,7 @@ public class CricketFunctions {
 				for(BattingCard bc : inn.getBattingCard()){
 					if(inn.getFallsOfWickets().size() > 0){
 						if(inn.getFallsOfWickets().get(inn.getFallsOfWickets().size() - 1).getFowPlayerID() == bc.getPlayerId()) {
-							return bc.getPlayer().getFull_name() + " (" + bc.getHowOutText() + ")"; 
+							return bc.getPlayer().getFull_name() + " " + bc.getRuns() + "-" + bc.getBalls() + " (" + bc.getHowOutText() + ")" ; 
 						}
 					}								
 				}
@@ -808,25 +808,42 @@ public class CricketFunctions {
 				        case CricketUtil.SIX: 
 				        	sixes++;
 				        	break;
-				        case CricketUtil.DOT: // case CricketUtil.BYE: case CricketUtil.LEG_BYE:
+				        case CricketUtil.DOT:  case CricketUtil.LOG_WICKET: 
 				        	dots++;
 				          break;
-				        case CricketUtil.LOG_ANY_BALL:
-				        	break;
-				        case CricketUtil.WICKET:
-				        	break;
-				        case CricketUtil.BYE:
-							switch (whatToProcess) {
-							case CricketUtil.TEAM:
-								//increment byes counter
+				        case CricketUtil.BYE: case CricketUtil.LEG_BYE:
+				        	switch (whatToProcess) {
+							case CricketUtil.PLAYER:
+								dots++;
 								break;
 							}
 				        	break;
-				        case CricketUtil.LEG_BYE:
-							switch (whatToProcess) {
-							case CricketUtil.TEAM:
-								//increment leg byes counter
-								break;
+				        
+				        case CricketUtil.LOG_ANY_BALL:
+							if(evnt.getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+								if(evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
+									switch (whatToProcess) {
+									case CricketUtil.PLAYER:
+										dots++;
+										break;
+									}
+								}
+								if ((evnt.getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) && (evnt.getEventWasABoundary() != null) && 
+										(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+									switch (whatToProcess) {
+									case CricketUtil.PLAYER:
+										fours++;
+										break;
+									}
+						        }
+								if ((evnt.getEventRuns() == Integer.valueOf(CricketUtil.SIX)) && (evnt.getEventWasABoundary() != null) && 
+										(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+									switch (whatToProcess) {
+									case CricketUtil.PLAYER:
+										sixes++;
+										break;
+									}
+						        }
 							}
 				        	break;
 						}

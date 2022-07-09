@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cricket.dao.CricketDao;
+import com.cricket.model.Bugs;
 import com.cricket.model.Ground;
 import com.cricket.model.InfobarStats;
 import com.cricket.model.NameSuper;
@@ -88,6 +89,11 @@ public List<NameSuper> getNameSupers() {
 @Override
 public List<InfobarStats> getInfobarStats() {
 	return sessionFactory.getCurrentSession().createQuery("from InfobarStats").list();
+}
+
+@Override
+public List<Bugs> getBugs() {
+	return sessionFactory.getCurrentSession().createQuery("from Bugs").list();
 }
 
 }
