@@ -22,5 +22,6 @@ public interface CricketService {
   List<InfobarStats> getInfobarStats();
   List<Bugs> getBugs();
   List<Ground> getGrounds();
-  List<Statistics> getPlayerStatistics(int player_id);
+  List<Statistics> getAllStats();
+  //List<Statistics> getPlayerStatistics(int player_id);
 }

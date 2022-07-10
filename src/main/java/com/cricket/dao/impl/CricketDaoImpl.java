@@ -76,10 +76,10 @@ public StatsType getStatsType(int stats_type_id) {
 	return (StatsType) sessionFactory.getCurrentSession().createQuery("from StatsType WHERE StatsId=" + stats_type_id).uniqueResult();  
 }
 
-@Override
+/*@Override
 public List<Statistics> getPlayerStatistics(int player_id) {
 	return sessionFactory.getCurrentSession().createQuery("from Statistics WHERE playerId = " + player_id).list();  
-}
+}*/
 
 @Override
 public List<NameSuper> getNameSupers() {
@@ -94,6 +94,11 @@ public List<InfobarStats> getInfobarStats() {
 @Override
 public List<Bugs> getBugs() {
 	return sessionFactory.getCurrentSession().createQuery("from Bugs").list();
+}
+
+@Override
+public List<Statistics> getAllStats() {
+	return sessionFactory.getCurrentSession().createQuery("from Statistics").list();
 }
 
 }

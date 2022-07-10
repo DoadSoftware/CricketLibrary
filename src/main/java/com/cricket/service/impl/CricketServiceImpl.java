@@ -59,10 +59,10 @@ public StatsType getStatsType(int stats_type_id) {
 	return cricketDao.getStatsType(stats_type_id);
 }
 
-@Override
+/*@Override
 public List<Statistics> getPlayerStatistics(int player_id) {
 	return cricketDao.getPlayerStatistics(player_id);
-}
+}*/
 
 @Override
 public List<NameSuper> getNameSupers() {
@@ -77,6 +77,11 @@ public List<InfobarStats> getInfobarStats() {
 @Override
 public List<Bugs> getBugs() {
 	return cricketDao.getBugs();
+}
+
+@Override
+public List<Statistics> getAllStats() {
+	return cricketDao.getAllStats();
 }
 
 }
