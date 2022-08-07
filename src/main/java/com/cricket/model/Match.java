@@ -97,6 +97,9 @@ public class Match {
   @XmlTransient
   private int selected_inning;
   
+  @XmlTransient
+  private int which_key_press;
+  
   @XmlElementWrapper(name = "innings")
   @XmlElement(name = "inning")
   private List<Inning> inning;
@@ -334,5 +337,12 @@ public List<Inning> getInning() {
 public void setInning(List<Inning> inning) {
 	this.inning = inning;
 }
+public int getWhich_key_press() {
+	return which_key_press;
+}
+public void setWhich_key_press(int which_key_press) {
+	this.which_key_press = which_key_press;
+}
+
 
 }

@@ -779,8 +779,13 @@ public class CricketFunctions {
 				if(evnt.getEventInningNumber() == inning_number) {
 					go_ahead = false;
 					switch (whatToProcess) {
-					case CricketUtil.PLAYER:
+					case CricketUtil.BATSMAN:
 						if(evnt.getEventBatterNo() == player_id) {
+							go_ahead = true;
+						}
+						break;
+					case CricketUtil.BOWLER:
+						if(evnt.getEventBowlerNo() == player_id) {
 							go_ahead = true;
 						}
 						break;
@@ -813,7 +818,7 @@ public class CricketFunctions {
 				          break;
 				        case CricketUtil.BYE: case CricketUtil.LEG_BYE:
 				        	switch (whatToProcess) {
-							case CricketUtil.PLAYER:
+				        	case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
 								dots++;
 								break;
 							}
@@ -823,7 +828,7 @@ public class CricketFunctions {
 							if(evnt.getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 								if(evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
 									switch (whatToProcess) {
-									case CricketUtil.PLAYER:
+									case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
 										dots++;
 										break;
 									}
@@ -831,7 +836,7 @@ public class CricketFunctions {
 								if ((evnt.getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) && (evnt.getEventWasABoundary() != null) && 
 										(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
 									switch (whatToProcess) {
-									case CricketUtil.PLAYER:
+									case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
 										fours++;
 										break;
 									}
@@ -839,7 +844,7 @@ public class CricketFunctions {
 								if ((evnt.getEventRuns() == Integer.valueOf(CricketUtil.SIX)) && (evnt.getEventWasABoundary() != null) && 
 										(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
 									switch (whatToProcess) {
-									case CricketUtil.PLAYER:
+									case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
 										sixes++;
 										break;
 									}

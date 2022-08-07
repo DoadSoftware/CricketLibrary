@@ -38,6 +38,9 @@ public class Player implements Comparable<Player>, Diffable<Player>
   
   @Column(name = "BOWLINGSTYLE")
   private String bowlingStyle;
+  
+  @Column(name = "BATTINGSTYLE")
+  private String battingStyle;
 
   @Column(name = "TEAMID")
   private Integer teamId;
@@ -127,6 +130,14 @@ public String getBowlingStyle() {
 
 public void setBowlingStyle(String bowlingStyle) {
 	this.bowlingStyle = bowlingStyle;
+}
+
+public String getBattingStyle() {
+	return battingStyle;
+}
+
+public void setBattingStyle(String battingStyle) {
+	this.battingStyle = battingStyle;
 }
 
 public Integer getTeamId() {

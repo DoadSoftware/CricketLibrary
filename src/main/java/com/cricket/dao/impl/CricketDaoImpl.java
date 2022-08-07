@@ -101,4 +101,9 @@ public List<Statistics> getAllStats() {
 	return sessionFactory.getCurrentSession().createQuery("from Statistics").list();
 }
 
+@Override
+public List<Player> getAllPlayer() {
+	return sessionFactory.getCurrentSession().createQuery("from Player").list();
+}
+
 }

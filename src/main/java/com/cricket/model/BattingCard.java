@@ -18,6 +18,9 @@ public class BattingCard implements Comparable<BattingCard>{
   @XmlElement(name = "batterPosition")
   private int batterPosition;
   
+  @XmlElement(name = "battingStyle")
+  private String battingStyle;
+  
   @XmlElement(name = "runs")
   private int runs;
   
@@ -205,6 +208,13 @@ public int getPlayerId() {
 }
 public void setPlayerId(int playerId) {
 	this.playerId = playerId;
+}
+
+public String getBattingStyle() {
+	return battingStyle;
+}
+public void setBattingStyle(String battingStyle) {
+	this.battingStyle = battingStyle;
 }
 public int getBatterPosition() {
 	return batterPosition;

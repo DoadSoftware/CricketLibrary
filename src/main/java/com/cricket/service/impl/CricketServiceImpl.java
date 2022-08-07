@@ -84,4 +84,9 @@ public List<Statistics> getAllStats() {
 	return cricketDao.getAllStats();
 }
 
+@Override
+public List<Player> getAllPlayer() {
+	return cricketDao.getAllPlayer();
+}
+
 }

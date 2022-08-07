@@ -11,6 +11,8 @@ public class CricketUtil {
 	public final static String CONFIGURATIONS_DIRECTORY = "Configurations/";
 	public final static String COMMENTATOR_XML = "COMMENTATOR.XML";
 	public final static String OUTPUT_XML = "OUTPUT.XML";
+	public final static String LEAGUE_TABLE_DIRECTORY = "LeagueTable/";
+	public static final String LEAGUETABLE_XML = "LeagueTable.XML";
 
 	public final static String PNG_EXTENSION = ".png";
 	public final static String BOWL = "bowl";
