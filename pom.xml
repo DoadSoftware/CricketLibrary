@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.cricket</groupId>
   <artifactId>CricketLibrary</artifactId>
-  <version>1.49</version>
+  <version>1.50</version>
   <name>CricketLibrary</name>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -10,6 +10,13 @@
     <failOnMissingWebXml>false</failOnMissingWebXml>
   </properties>
 <dependencies>
+
+<!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
+<dependency>
+    <groupId>commons-net</groupId>
+    <artifactId>commons-net</artifactId>
+    <version>3.8.0</version>
+</dependency>
 
 <!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
 <dependency>
