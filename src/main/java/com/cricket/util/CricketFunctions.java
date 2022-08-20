@@ -305,7 +305,7 @@ public class CricketFunctions {
 	}
 	
 	public static String lastFewOversData(String whatToProcess, List<Event> events)
-	  {
+	{
 	    int count_lb = 0;
 	    boolean exitLoop = false;
 	    if ((events != null) && (events.size() > 0)) {

@@ -24,6 +24,9 @@ public class Match {
 
   @XmlElement(name = "matchResult")
   private String matchResult;
+
+  @XmlElement(name = "matchStatus")
+  private String matchStatus;
   
   @XmlElement(name = "matchFileName")
   private String matchFileName;
@@ -127,6 +130,12 @@ public class Match {
   @XmlTransient
   private List<Event> events;
   
+public String getMatchStatus() {
+	return matchStatus;
+}
+public void setMatchStatus(String matchStatus) {
+	this.matchStatus = matchStatus;
+}
 public List<Event> getEvents() {
 	return events;
 }
