@@ -2,15 +2,14 @@ package com.cricket.util;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-
-import org.apache.commons.net.ntp.NTPUDPClient;
-import org.apache.commons.net.ntp.TimeInfo;
 
 import com.cricket.model.BattingCard;
 import com.cricket.model.BowlingCard;
@@ -22,28 +21,10 @@ import com.cricket.service.CricketService;
 
 public class CricketFunctions {
 
-	public static String checkIfSoftwareHasExpired(Date expiry_date) throws IOException
+	public static String getOnlineCurrentDate() throws MalformedURLException, IOException
 	{
-			NTPUDPClient timeClient = new NTPUDPClient();
-	        
-	        InetAddress inetAddress = null;
-	        try {
-	        	inetAddress = InetAddress.getByName("time-a.nist.gov"); // Set default address
-	        } catch (UnknownHostException e) {
-	            if (inetAddress == null) {
-	            	return "Please check you are connected to the internet";
-	            }
-	        }
-			
-			TimeInfo timeInfo = timeClient.getTime(inetAddress);
-			long returnTime = timeInfo.getReturnTime();
-			Date current_date = new Date(returnTime); // get date from internet
-			
-			if(expiry_date.before(current_date)) {
-				return "Your software has expired";
-			}
-			
-		return "";
+		HttpURLConnection httpCon = (HttpURLConnection) new URL("https://mail.google.com/").openConnection();
+		return new SimpleDateFormat("yyyy-MM-dd").format(new Date(httpCon.getDate()));
 	}	
 	
 	public static class BatsmenScoreComparator implements Comparator<BattingCard> {
