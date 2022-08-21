@@ -38,17 +38,14 @@ public class Statistics
   @Column(name="BESTSCORE")
   private String best_score;
   
-  @Column(name="BESTSCOREAGAINST")
-  private String best_score_against;
-  
-  @Column(name="BESTSCOREVENUE")
-  private String best_score_venue;
-  
   @Column(name="100s")
   private Integer hundreds;
   
   @Column(name="50s")
   private Integer fifties;
+  
+  @Column(name="30s")
+  private Integer thirties;
   
   @Column(name="BALLSBOWLED")
   private Integer balls_bowled;
@@ -61,12 +58,6 @@ public class Statistics
   
   @Column(name="BESTFIGURES")
   private String best_figures;
-  
-  @Column(name="BESTFIGURESAGAINST")
-  private String best_figures_against;
-  
-  @Column(name="BESTFIGURESVENUE")
-  private String best_figures_venue;
   
   @Transient
   private StatsType stats_type;
@@ -161,22 +152,6 @@ public void setBest_score(String best_score) {
 	this.best_score = best_score;
 }
 
-public String getBest_score_against() {
-	return best_score_against;
-}
-
-public void setBest_score_against(String best_score_against) {
-	this.best_score_against = best_score_against;
-}
-
-public String getBest_score_venue() {
-	return best_score_venue;
-}
-
-public void setBest_score_venue(String best_score_venue) {
-	this.best_score_venue = best_score_venue;
-}
-
 public Integer getHundreds() {
 	return hundreds;
 }
@@ -191,6 +166,14 @@ public Integer getFifties() {
 
 public void setFifties(Integer fifties) {
 	this.fifties = fifties;
+}
+
+public Integer getThirties() {
+	return thirties;
+}
+
+public void setThirties(Integer thirties) {
+	this.thirties = thirties;
 }
 
 public Integer getBalls_bowled() {
@@ -223,22 +206,6 @@ public String getBest_figures() {
 
 public void setBest_figures(String best_figures) {
 	this.best_figures = best_figures;
-}
-
-public String getBest_figures_against() {
-	return best_figures_against;
-}
-
-public void setBest_figures_against(String best_figures_against) {
-	this.best_figures_against = best_figures_against;
-}
-
-public String getBest_figures_venue() {
-	return best_figures_venue;
-}
-
-public void setBest_figures_venue(String best_figures_venue) {
-	this.best_figures_venue = best_figures_venue;
 }
 
 }
