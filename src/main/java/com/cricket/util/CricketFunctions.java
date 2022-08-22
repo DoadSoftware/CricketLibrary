@@ -634,7 +634,7 @@ public class CricketFunctions {
 	      }
 	    }
 	    String teamNameToUse = "", bottomLineText = "";
-	    if (CricketFunctions.getRequiredRuns(match) <= 0 || CricketFunctions.getRequiredRuns(match) > 0) {
+	    if (CricketFunctions.getRequiredRuns(match) <= 0) {
 	    	switch (teamNameType) {
 		    case CricketUtil.SHORT: 
 		    	teamNameToUse = (match.getInning().get(1)).getBatting_team().getShortname();
