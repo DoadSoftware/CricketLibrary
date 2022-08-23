@@ -670,10 +670,10 @@ public class CricketFunctions {
 		      switch (teamNameType)
 		      {
 		      case "SHORT": 
-		        bottomLineText = teamNameToUse + " need " + CricketFunctions.getRequiredRuns(match) + " more run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
+		        bottomLineText = teamNameToUse + " need " + CricketFunctions.getRequiredRuns(match) + " run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
 		        break;
 		      default: 
-		        bottomLineText = teamNameToUse + " need " + CricketFunctions.getRequiredRuns(match) + " more run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
+		        bottomLineText = teamNameToUse + " need " + CricketFunctions.getRequiredRuns(match) + " run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
 		      }
 		      if (CricketFunctions.getRequiredBalls(match) >= 150) {
 		        bottomLineText = bottomLineText + CricketFunctions.OverBalls((match.getInning().get(1)).getTotalOvers(), (match.getInning().get(1)).getTotalBalls()) + " over";
