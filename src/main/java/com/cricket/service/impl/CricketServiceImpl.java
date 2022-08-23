@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cricket.dao.CricketDao;
 import com.cricket.model.Bugs;
+import com.cricket.model.Fixture;
 import com.cricket.model.Ground;
 import com.cricket.model.InfobarStats;
 import com.cricket.model.NameSuper;
@@ -87,6 +88,11 @@ public List<Statistics> getAllStats() {
 @Override
 public List<Player> getAllPlayer() {
 	return cricketDao.getAllPlayer();
+}
+
+@Override
+public List<Fixture> getFixtures() {
+	return cricketDao.getFixtures();
 }
 
 }

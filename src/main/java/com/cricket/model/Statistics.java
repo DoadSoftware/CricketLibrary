@@ -38,10 +38,10 @@ public class Statistics
   @Column(name="BESTSCORE")
   private String best_score;
   
-  @Column(name="BESTSCOREAGAINST")
+  @Column(name="BestScoreAgainst")
   private String best_score_against;
   
-  @Column(name="BESTSCOREVENUE")
+  @Column(name="BestScoreVenue")
   private String best_score_venue;
   
   @Column(name="100s")
@@ -49,6 +49,15 @@ public class Statistics
   
   @Column(name="50s")
   private Integer fifties;
+  
+  @Column(name="30s")
+  private Integer thirties;
+  
+  @Column(name="4s")
+  private Integer fours;
+  
+  @Column(name="6s")
+  private Integer sixes;
   
   @Column(name="BALLSBOWLED")
   private Integer balls_bowled;
@@ -62,10 +71,10 @@ public class Statistics
   @Column(name="BESTFIGURES")
   private String best_figures;
   
-  @Column(name="BESTFIGURESAGAINST")
+  @Column(name="BestFiguresAgainst")
   private String best_figures_against;
   
-  @Column(name="BESTFIGURESVENUE")
+  @Column(name="BestFiguresVenue")
   private String best_figures_venue;
   
   @Transient
@@ -191,6 +200,30 @@ public Integer getFifties() {
 
 public void setFifties(Integer fifties) {
 	this.fifties = fifties;
+}
+
+public Integer getThirties() {
+	return thirties;
+}
+
+public void setThirties(Integer thirties) {
+	this.thirties = thirties;
+}
+
+public Integer getFours() {
+	return fours;
+}
+
+public void setFours(Integer fours) {
+	this.fours = fours;
+}
+
+public Integer getSixes() {
+	return sixes;
+}
+
+public void setSixes(Integer sixes) {
+	this.sixes = sixes;
 }
 
 public Integer getBalls_bowled() {

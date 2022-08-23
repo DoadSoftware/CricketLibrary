@@ -634,7 +634,7 @@ public class CricketFunctions {
 	      }
 	    }
 	    String teamNameToUse = "", bottomLineText = "";
-	    if (CricketFunctions.getRequiredRuns(match) <= 0 || CricketFunctions.getRequiredRuns(match) > 0) {
+	    if (CricketFunctions.getRequiredRuns(match) <= 0) {
 	    	switch (teamNameType) {
 		    case CricketUtil.SHORT: 
 		    	teamNameToUse = (match.getInning().get(1)).getBatting_team().getShortname();
@@ -670,10 +670,10 @@ public class CricketFunctions {
 		      switch (teamNameType)
 		      {
 		      case "SHORT": 
-		        bottomLineText = teamNameToUse + " need " + CricketFunctions.getRequiredRuns(match) + " more run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
+		        bottomLineText = teamNameToUse + " need " + CricketFunctions.getRequiredRuns(match) + " run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
 		        break;
 		      default: 
-		        bottomLineText = teamNameToUse + " need " + CricketFunctions.getRequiredRuns(match) + " more run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
+		        bottomLineText = teamNameToUse + " need " + CricketFunctions.getRequiredRuns(match) + " run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
 		      }
 		      if (CricketFunctions.getRequiredBalls(match) >= 150) {
 		        bottomLineText = bottomLineText + CricketFunctions.OverBalls((match.getInning().get(1)).getTotalOvers(), (match.getInning().get(1)).getTotalBalls()) + " over";
@@ -771,7 +771,7 @@ public class CricketFunctions {
 				for(BattingCard bc : inn.getBattingCard()){
 					if(inn.getFallsOfWickets().size() > 0){
 						if(inn.getFallsOfWickets().get(inn.getFallsOfWickets().size() - 1).getFowPlayerID() == bc.getPlayerId()) {
-							return bc.getPlayer().getFull_name() + " " + bc.getRuns() + "-" + bc.getBalls() + " (" + bc.getHowOutText() + ")" ; 
+							return bc.getPlayer().getFull_name() + " " + bc.getRuns() + "-" + bc.getBalls() + " " + bc.getHowOutText(); 
 						}
 					}								
 				}
