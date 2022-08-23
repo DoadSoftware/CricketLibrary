@@ -771,7 +771,7 @@ public class CricketFunctions {
 				for(BattingCard bc : inn.getBattingCard()){
 					if(inn.getFallsOfWickets().size() > 0){
 						if(inn.getFallsOfWickets().get(inn.getFallsOfWickets().size() - 1).getFowPlayerID() == bc.getPlayerId()) {
-							return bc.getPlayer().getFull_name() + " " + bc.getRuns() + "-" + bc.getBalls() + " (" + bc.getHowOutText() + ")" ; 
+							return bc.getPlayer().getFull_name() + " " + bc.getRuns() + "-" + bc.getBalls() + " " + bc.getHowOutText(); 
 						}
 					}								
 				}

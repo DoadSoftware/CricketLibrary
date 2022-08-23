@@ -3,6 +3,7 @@ package com.cricket.dao;
 import java.util.List;
 
 import com.cricket.model.Bugs;
+import com.cricket.model.Fixture;
 import com.cricket.model.Ground;
 import com.cricket.model.InfobarStats;
 import com.cricket.model.NameSuper;
@@ -24,5 +25,6 @@ public interface CricketDao {
   List<Ground> getGrounds();
   List<Statistics> getAllStats();
   List<Player> getAllPlayer();
+  List<Fixture> getFixtures();
   //List<Statistics> getPlayerStatistics(int player_id);
 }
