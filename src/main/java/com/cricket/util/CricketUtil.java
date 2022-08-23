@@ -17,6 +17,7 @@ public class CricketUtil {
 	public final static String PNG_EXTENSION = ".png";
 	public final static String BOWL = "bowl";
 	public final static String DOUBLE_BACKSLASH = "\\";
+	public final static String MATCH = "MATCH";
 
 	public final static String LOG_REVIEW = "LOG_REVIEW";
 	public final static String SUCCESSFUL = "SUCCESSFUL";
@@ -45,7 +46,11 @@ public class CricketUtil {
 	public final static String SWAP_BATSMAN = "SWAP_BATSMAN";
 	public final static String END_OVER = "END_OVER";
 	public final static String DLS = "DLS";
+	public final static String VJD = "VJD";
 	public final static String DRAWN = "DRAWN";
+	public final static String TIED = "TIED";
+	public final static String ABANDONED = "ABANDONED";
+	public final static String NO_RESULT = "NO_RESULT";
 	public final static String SUPER_OVER = "SUPER_OVER";
 	
 	public final static String OUT = "OUT";
@@ -138,7 +143,7 @@ public class CricketUtil {
 	public final static int MAXIMUM_PLAYERS = 11;
 	
 	public final static String BOUNDARY = "BOUNDARY";
-	public final static String RUNS = "RUNS";
+	public final static String RUN = "RUN";
 	public final static String POWERPLAY = "POWERPLAY";
 	public final static String INNING = "INNING";
 	public final static String OVER = "OVER";

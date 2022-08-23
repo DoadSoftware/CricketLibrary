@@ -21,6 +21,62 @@ import com.cricket.service.CricketService;
 
 public class CricketFunctions {
 
+	public static String generateMatchResult(Match match, String teamNameType)
+	{
+		String resultToShow = "";
+		if(match.getMatchResult() != null) {
+			if(match.getMatchResult().toUpperCase().contains(CricketUtil.DRAWN)
+					|| match.getMatchResult().toUpperCase().contains(CricketUtil.ABANDONED)) {
+				if(match.getMatchResult().toUpperCase().contains(CricketUtil.DRAWN) 
+						&& !match.getMatchType().equalsIgnoreCase(CricketUtil.TEST)) { // For limited over match use match tied
+					resultToShow = CricketUtil.MATCH.toLowerCase() + " " + CricketUtil.TIED.toLowerCase();
+				} else {
+					resultToShow = CricketUtil.MATCH.toLowerCase() + " " + match.getMatchResult().toLowerCase();
+				}
+			} else if(match.getMatchResult().toUpperCase().contains(CricketUtil.NO_RESULT)) {
+				resultToShow = match.getMatchResult().toLowerCase().replace("_", " ");
+			} else {
+				if(match.getMatchResult().contains(",")) {
+					switch (teamNameType) {
+					case CricketUtil.SHORT:
+						if(Integer.valueOf(match.getMatchResult().split(",")[0]) == match.getHomeTeamId()) {
+							resultToShow = match.getHomeTeam().getShortname();
+						} else {
+							resultToShow = match.getAwayTeam().getShortname();
+						}
+					    break;
+					default:
+						if(Integer.valueOf(match.getMatchResult().split(",")[0]) == match.getHomeTeamId()) {
+							resultToShow = match.getHomeTeam().getFullname();
+						} else {
+							resultToShow = match.getAwayTeam().getFullname();
+						}
+					    break;
+					}
+					if(match.getMatchResult().toUpperCase().contains(CricketUtil.SUPER_OVER)) {
+						resultToShow = resultToShow + " win super over";
+					} else if(match.getMatchResult().toUpperCase().contains(CricketUtil.INNING) 
+							&& match.getMatchResult().toUpperCase().contains(CricketUtil.RUN)) {
+						resultToShow = resultToShow + " win by an inning and " + Integer.valueOf(match.getMatchResult().split(",")[2]) 
+							+ " run" + Plural(Integer.valueOf(match.getMatchResult().split(",")[2]));
+					} else if (match.getMatchResult().toUpperCase().contains(CricketUtil.RUN)) {
+						resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatchResult().split(",")[2]) 
+							+ " run" + Plural(Integer.valueOf(match.getMatchResult().split(",")[2]));
+					} else if (match.getMatchResult().toUpperCase().contains(CricketUtil.WICKET)) {
+						resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatchResult().split(",")[2]) 
+							+ " wicket" + Plural(Integer.valueOf(match.getMatchResult().split(",")[2]));
+					}
+					if(match.getMatchResult().toUpperCase().contains(CricketUtil.DLS)) {
+						resultToShow = resultToShow + " (" + CricketUtil.DLS + ")";
+					}else if(match.getMatchResult().toUpperCase().contains(CricketUtil.VJD)) {
+						resultToShow = resultToShow + " (" + CricketUtil.VJD + ")";
+					}
+				}
+			}
+		}
+		return resultToShow;
+	}
+	
 	public static String getOnlineCurrentDate() throws MalformedURLException, IOException
 	{
 		HttpURLConnection httpCon = (HttpURLConnection) new URL("https://mail.google.com/").openConnection();
@@ -633,65 +689,75 @@ public class CricketFunctions {
 	        return null;
 	      }
 	    }
-	    String teamNameToUse = "", bottomLineText = "";
-	    if (CricketFunctions.getRequiredRuns(match) <= 0) {
-	    	switch (teamNameType) {
-		    case CricketUtil.SHORT: 
-		    	teamNameToUse = (match.getInning().get(1)).getBatting_team().getShortname();
-		      break;
-		    default: 
-		    	teamNameToUse = (match.getInning().get(1)).getBatting_team().getFullname();
-		    	break;
+	    
+	    String bottomLineText = generateMatchResult(match, teamNameType); // check match result first
+	    
+	    if(bottomLineText.trim().isEmpty()) { // No match result found
+	    	
+	    	String teamNameToUse = "";
+		    if (CricketFunctions.getRequiredRuns(match) <= 0) {
+		    	switch (teamNameType) {
+			    case CricketUtil.SHORT: 
+			    	teamNameToUse = (match.getInning().get(1)).getBatting_team().getShortname();
+			      break;
+			    default: 
+			    	teamNameToUse = (match.getInning().get(1)).getBatting_team().getFullname();
+			    	break;
+			    }
 		    }
-	    }
-	    else {
-	    	switch (teamNameType) {
-		    case CricketUtil.SHORT: 
-		    	teamNameToUse = (match.getInning().get(0)).getBatting_team().getShortname();
-		      break;
-		    default: 
-		    	teamNameToUse = (match.getInning().get(0)).getBatting_team().getFullname();
-		    	break;
+		    else {
+		    	switch (teamNameType) {
+			    case CricketUtil.SHORT: 
+			    	teamNameToUse = (match.getInning().get(0)).getBatting_team().getShortname();
+			      break;
+			    default: 
+			    	teamNameToUse = (match.getInning().get(0)).getBatting_team().getFullname();
+			    	break;
+			    }
 		    }
-	    }
-	    switch (whichInning) {
-	    case 1: 
-	    	if (((match.getInning().get(whichInning - 1)).getTotalRuns() > 0) || 
-	  		      ((match.getInning().get(whichInning - 1)).getTotalOvers() > 0) || 
-	  		      ((match.getInning().get(whichInning - 1)).getTotalBalls() > 0)) {
-	  		      return "Current RunRate " + (match.getInning().get(0)).getRunRate();
-	  		    }
-	    	else {
-	    		return CricketFunctions.generateTossResult(match, CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL);
-	    	}
-	    case 2:
-		    if ((CricketFunctions.getRequiredRuns(match) > 0) && (CricketFunctions.getRequiredBalls(match) > 0) && (CricketFunctions.getWicketsLeft(match) > 0))
-		    {
-		      switch (teamNameType)
-		      {
-		      case "SHORT": 
-		        bottomLineText = teamNameToUse + " need " + CricketFunctions.getRequiredRuns(match) + " run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
-		        break;
-		      default: 
-		        bottomLineText = teamNameToUse + " need " + CricketFunctions.getRequiredRuns(match) + " run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
-		      }
-		      if (CricketFunctions.getRequiredBalls(match) >= 150) {
-		        bottomLineText = bottomLineText + CricketFunctions.OverBalls((match.getInning().get(1)).getTotalOvers(), (match.getInning().get(1)).getTotalBalls()) + " over";
-		      } else {
-		        bottomLineText = bottomLineText + CricketFunctions.getRequiredBalls(match) + " ball" + CricketFunctions.Plural(CricketFunctions.getRequiredBalls(match));
-		      }
-		    }
-		    else if (CricketFunctions.getRequiredRuns(match) <= 0)
-		    {
-		    	bottomLineText = teamNameToUse + " win by " + CricketFunctions.getWicketsLeft(match) + " wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
-		    }
-		    else if (CricketFunctions.getRequiredBalls(match) <= 0 || CricketFunctions.getWicketsLeft(match) <= 0)
-		    {
-		    	bottomLineText = teamNameToUse + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + " run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
+		    switch (whichInning) {
+		    case 1: 
+		    	if (((match.getInning().get(whichInning - 1)).getTotalRuns() > 0) || 
+		  		      ((match.getInning().get(whichInning - 1)).getTotalOvers() > 0) || 
+		  		      ((match.getInning().get(whichInning - 1)).getTotalBalls() > 0)) {
+		  		      return "Current RunRate " + (match.getInning().get(0)).getRunRate();
+		  		    }
+		    	else {
+		    		return CricketFunctions.generateTossResult(match, CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL);
+		    	}
+		    case 2:
+			    if ((CricketFunctions.getRequiredRuns(match) > 0) && (CricketFunctions.getRequiredBalls(match) > 0) && (CricketFunctions.getWicketsLeft(match) > 0))
+			    {
+			      switch (teamNameType)
+			      {
+			      case "SHORT": 
+			        bottomLineText = teamNameToUse + " need " + CricketFunctions.getRequiredRuns(match) + 
+			        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
+			        break;
+			      default: 
+			        bottomLineText = teamNameToUse + " need " + CricketFunctions.getRequiredRuns(match) + 
+			        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
+			      }
+			      if (CricketFunctions.getRequiredBalls(match) >= 150) {
+			        bottomLineText = bottomLineText + CricketFunctions.OverBalls((match.getInning().get(1)).getTotalOvers(), (match.getInning().get(1)).getTotalBalls()) + " over";
+			      } else {
+			        bottomLineText = bottomLineText + CricketFunctions.getRequiredBalls(match) + 
+			        	" ball" + CricketFunctions.Plural(CricketFunctions.getRequiredBalls(match));
+			      }
+			    }
+			    else if (CricketFunctions.getRequiredRuns(match) <= 0)
+			    {
+			    	bottomLineText = teamNameToUse + " win by " + CricketFunctions.getWicketsLeft(match) + 
+			    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
+			    }
+			    else if (CricketFunctions.getRequiredBalls(match) <= 0 || CricketFunctions.getWicketsLeft(match) <= 0)
+			    {
+			    	bottomLineText = teamNameToUse + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
+			    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
+			    }
 		    }
 	    }
 		return bottomLineText;
-		  
 	}
 	
 	public static String getPowerPlayScore(Inning inning,int inn_number, String seperator,List<Event> events) {
