@@ -70,6 +70,9 @@ public class Match {
   @XmlElement(name = "targetRuns")
   private int targetRuns;
 
+  @XmlElement(name = "targetType")
+  private String targetType;
+  
   @XmlElement(name = "targetOvers")
   private int targetOvers;
 
@@ -130,6 +133,12 @@ public class Match {
   @XmlTransient
   private List<Event> events;
   
+public String getTargetType() {
+	return targetType;
+}
+public void setTargetType(String targetType) {
+	this.targetType = targetType;
+}
 public String getMatchStatus() {
 	return matchStatus;
 }
