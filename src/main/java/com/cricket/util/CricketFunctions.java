@@ -212,57 +212,57 @@ public class CricketFunctions {
 
 			switch (bc.getHowOut().toUpperCase()) {
 			case CricketUtil.CAUGHT_AND_BOWLED:
-				bc.setHowOutText("c & b " + bc.getHowOutBowler().getSurname());
+				bc.setHowOutText("c & b " + bc.getHowOutBowler().getTicker_name());
 				bc.setHowOutPartOne("c & b");
-				bc.setHowOutPartTwo(bc.getHowOutBowler().getSurname());
+				bc.setHowOutPartTwo(bc.getHowOutBowler().getTicker_name());
 				break;
 			case CricketUtil.CAUGHT: case CricketUtil.MANKAD: case CricketUtil.RUN_OUT:
 				switch (bc.getHowOut().toUpperCase()) {
 				case CricketUtil.CAUGHT: 
-					bc.setHowOutText("c " + bc.getHowOutFielder().getSurname());
-					bc.setHowOutPartOne("c " + bc.getHowOutFielder().getSurname());
+					bc.setHowOutText("c " + bc.getHowOutFielder().getTicker_name());
+					bc.setHowOutPartOne("c " + bc.getHowOutFielder().getTicker_name());
 					if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
 						bc.setHowOutText(bc.getHowOutText() + " (SUB)");
 						bc.setHowOutPartOne(bc.getHowOutPartOne() + " (SUB)");
 					}
-					bc.setHowOutText(bc.getHowOutText() + " b " + bc.getHowOutBowler().getSurname());
-					bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getSurname());
+					bc.setHowOutText(bc.getHowOutText() + " b " + bc.getHowOutBowler().getTicker_name());
+					bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
 					break;
 				case CricketUtil.RUN_OUT:
-					bc.setHowOutText("run out (" + bc.getHowOutFielder().getSurname() + ")");
+					bc.setHowOutText("run out (" + bc.getHowOutFielder().getTicker_name() + ")");
 					bc.setHowOutPartOne("run out");
-					bc.setHowOutPartTwo(bc.getHowOutFielder().getSurname());
+					bc.setHowOutPartTwo(bc.getHowOutFielder().getTicker_name());
 					if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
 						bc.setHowOutText(bc.getHowOutText() + " (SUB)");
 						bc.setHowOutPartTwo(bc.getHowOutPartTwo() + " (SUB)");
 					}
 					break;
 				case CricketUtil.MANKAD:
-					bc.setHowOutText("run out (" + bc.getHowOutBowler().getSurname() + ")");
+					bc.setHowOutText("run out (" + bc.getHowOutBowler().getTicker_name() + ")");
 					bc.setHowOutPartOne("run out");
-					bc.setHowOutPartTwo(bc.getHowOutBowler().getSurname());
+					bc.setHowOutPartTwo(bc.getHowOutBowler().getTicker_name());
 					break;
 				}
 				break;
 			case CricketUtil.BOWLED:
-				bc.setHowOutText("b " + bc.getHowOutBowler().getSurname());
+				bc.setHowOutText("b " + bc.getHowOutBowler().getTicker_name());
 				bc.setHowOutPartOne("");
-				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getSurname());
+				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
 				break;
 			case CricketUtil.STUMPED:
-				bc.setHowOutText("st " + bc.getHowOutFielder().getSurname() + " b " + bc.getHowOutBowler().getSurname());
-				bc.setHowOutPartOne("st " + bc.getHowOutFielder().getSurname());
-				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getSurname());
+				bc.setHowOutText("st " + bc.getHowOutFielder().getTicker_name() + " b " + bc.getHowOutBowler().getTicker_name());
+				bc.setHowOutPartOne("st " + bc.getHowOutFielder().getTicker_name());
+				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
 				break;
 			case CricketUtil.LBW:
-				bc.setHowOutText("lbw b " + bc.getHowOutBowler().getSurname());
+				bc.setHowOutText("lbw b " + bc.getHowOutBowler().getTicker_name());
 				bc.setHowOutPartOne("lbw");
-				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getSurname());
+				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
 				break;
 			case CricketUtil.HIT_WICKET:
-				bc.setHowOutText("hit wicket b " + bc.getHowOutBowler().getSurname());
+				bc.setHowOutText("hit wicket b " + bc.getHowOutBowler().getTicker_name());
 				bc.setHowOutPartOne("hit wicket");
-				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getSurname());
+				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
 				break;
 			case CricketUtil.HANDLED_THE_BALL:
 				bc.setHowOutText("handled the ball");
