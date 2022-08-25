@@ -92,6 +92,7 @@ public class CricketUtil {
 	public final static String LOG_OVERWRITE_BOWLER_FIGURES = "LOG_OVERWRITE_BOWLER_FIGURES";
 	public final static String LOG_OVERWRITE_BATSMAN_STATS = "LOG_OVERWRITE_BATSMAN_STATS";
 	public final static String LOG_OVERWRITE_BATSMAN_HOWOUT = "LOG_OVERWRITE_BATSMAN_HOWOUT";
+	public final static String LOG_OVERWRITE_PARTNERSHIPS = "LOG_OVERWRITE_PARTNERSHIPS";
 	public final static String LOG_TIME = "LOG_TIME";
 	public final static String LOG_DAY_SESSION = "LOG_DAY_SESSION";
 	public final static String START_PAUSE_TIME = "START_PAUSE_TIME";

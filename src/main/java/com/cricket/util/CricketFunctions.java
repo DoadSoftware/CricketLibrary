@@ -16,6 +16,7 @@ import com.cricket.model.BowlingCard;
 import com.cricket.model.Event;
 import com.cricket.model.Inning;
 import com.cricket.model.Match;
+import com.cricket.model.Partnership;
 import com.cricket.model.Player;
 import com.cricket.service.CricketService;
 
@@ -54,7 +55,7 @@ public class CricketFunctions {
 					    break;
 					}
 					if(match.getMatchResult().toUpperCase().contains(CricketUtil.SUPER_OVER)) {
-						resultToShow = resultToShow + " win super over";
+						resultToShow = resultToShow + " win by super over";
 					} else if(match.getMatchResult().toUpperCase().contains(CricketUtil.INNING) 
 							&& match.getMatchResult().toUpperCase().contains(CricketUtil.RUN)) {
 						resultToShow = resultToShow + " win by an inning and " + Integer.valueOf(match.getMatchResult().split(",")[2]) 
@@ -172,6 +173,12 @@ public class CricketFunctions {
 			if(inn.getBattingCard() != null)
 				for(BattingCard batc:inn.getBattingCard()) 
 					batc = processBattingcard(cricketService,batc);
+
+			if(inn.getPartnerships() != null)
+				for(Partnership part:inn.getPartnerships()) {
+					part.setFirstPlayer(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(part.getFirstBatterNo())));
+					part.setSecondPlayer(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(part.getSecondBatterNo())));
+				}
 			
 			if(inn.getBowlingCard() != null)
 				for(BowlingCard bowlc:inn.getBowlingCard())

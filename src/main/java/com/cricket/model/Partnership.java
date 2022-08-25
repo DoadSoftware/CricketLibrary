@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement(name="partnership")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -37,6 +38,12 @@ public class Partnership implements Comparable<Partnership>
   @XmlElement(name = "totalBalls")
   private int totalBalls;
   
+  @XmlTransient
+  private Player firstPlayer;
+  
+  @XmlTransient
+  private Player secondPlayer;
+  
 public Partnership(int partnershipNumber, int firstBatterNo, int secondBatterNo) {
 	super();
 	this.partnershipNumber = partnershipNumber;
@@ -46,6 +53,22 @@ public Partnership(int partnershipNumber, int firstBatterNo, int secondBatterNo)
 
 public Partnership() {
 	super();
+}
+
+public Player getFirstPlayer() {
+	return firstPlayer;
+}
+
+public void setFirstPlayer(Player firstPlayer) {
+	this.firstPlayer = firstPlayer;
+}
+
+public Player getSecondPlayer() {
+	return secondPlayer;
+}
+
+public void setSecondPlayer(Player secondPlayer) {
+	this.secondPlayer = secondPlayer;
 }
 
 public int getPartnershipNumber() {
