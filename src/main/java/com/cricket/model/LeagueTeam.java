@@ -30,7 +30,7 @@ public class LeagueTeam {
 	private int Points;
 	
 	@XmlElement(name="NetRunRate")
-	private int NetRunRate;
+	private double NetRunRate;
 
 	
 	public String getQualifiedStatus() {
@@ -89,11 +89,11 @@ public class LeagueTeam {
 		Points = points;
 	}
 
-	public int getNetRunRate() {
+	public double getNetRunRate() {
 		return NetRunRate;
 	}
 
-	public void setNetRunRate(int netRunRate) {
+	public void setNetRunRate(double netRunRate) {
 		NetRunRate = netRunRate;
 	}
 }
