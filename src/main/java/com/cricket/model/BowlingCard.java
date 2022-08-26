@@ -104,6 +104,9 @@ public int getMaidens() {
 	return maidens;
 }
 public void setMaidens(int maidens) {
+	if(maidens < 0) {
+		maidens = 0;
+	}
 	this.maidens = maidens;
 }
 public int getDots() {
