@@ -702,8 +702,9 @@ public class CricketFunctions {
 	    if(bottomLineText.trim().isEmpty()) { // No match result found
 	    	
 	    	String teamNameToUse = "";
-		    if (CricketFunctions.getRequiredRuns(match) <= 0) {
-		    	switch (teamNameType) {
+	    	if (CricketFunctions.getRequiredBalls(match) <= 0 || CricketFunctions.getWicketsLeft(match) <= 0)
+		    {
+	    		switch (teamNameType) {
 			    case CricketUtil.SHORT: 
 			    	teamNameToUse = (match.getInning().get(0)).getBatting_team().getShortname();
 			      break;
@@ -711,8 +712,7 @@ public class CricketFunctions {
 			    	teamNameToUse = (match.getInning().get(0)).getBatting_team().getFullname();
 			    	break;
 			    }
-		    }
-		    else {
+		    }else {
 		    	switch (teamNameType) {
 			    case CricketUtil.SHORT: 
 			    	teamNameToUse = (match.getInning().get(1)).getBatting_team().getShortname();
@@ -722,6 +722,7 @@ public class CricketFunctions {
 			    	break;
 			    }
 		    }
+		    
 		    switch (whichInning) {
 		    case 1: 
 		    	if (((match.getInning().get(whichInning - 1)).getTotalRuns() > 0) || 
