@@ -65,6 +65,15 @@ public class Statistics
   @Column(name="RUNSCONCEDED")
   private Integer runs_conceded;
   
+  @Column(name="3Plus")
+  private Integer plus_3;
+  
+  @Column(name="5Plus")
+  private Integer plus_5;
+  
+  @Column(name="DotBowled")
+  private Integer dotbowled;
+  
   @Column(name="WICKETS")
   private Integer wickets;
   
@@ -240,6 +249,30 @@ public Integer getRuns_conceded() {
 
 public void setRuns_conceded(Integer runs_conceded) {
 	this.runs_conceded = runs_conceded;
+}
+
+public Integer getPlus_3() {
+	return plus_3;
+}
+
+public void setPlus_3(Integer plus_3) {
+	this.plus_3 = plus_3;
+}
+
+public Integer getPlus_5() {
+	return plus_5;
+}
+
+public void setPlus_5(Integer plus_5) {
+	this.plus_5 = plus_5;
+}
+
+public Integer getDotbowled() {
+	return dotbowled;
+}
+
+public void setDotbowled(Integer dotbowled) {
+	this.dotbowled = dotbowled;
 }
 
 public Integer getWickets() {
