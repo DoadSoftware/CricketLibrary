@@ -417,7 +417,11 @@ public class CricketFunctions {
 			        	break;
 			        	
 			        case CricketUtil.LOG_WICKET:
-			        	total_wickets += 1;
+			        	if(events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)) {
+			        		total_wickets += 0;
+			        	}else {
+			        		total_wickets += 1;
+			        	}
 			        	break;
 			        
 			        case CricketUtil.LOG_ANY_BALL:
@@ -846,7 +850,7 @@ public class CricketFunctions {
 					if(inn.getFallsOfWickets().size() > 0){
 						if(inn.getFallsOfWickets().get(inn.getFallsOfWickets().size() - 1).getFowPlayerID() == bc.getPlayerId()) {
 							return bc.getPlayer().getFull_name().toUpperCase() + " " + bc.getRuns() + " (" + bc.getBalls() + ")" + " " + 
-									bc.getHowOutText().toUpperCase() ; 
+									bc.getHowOutText();
 						}
 					}								
 				}
