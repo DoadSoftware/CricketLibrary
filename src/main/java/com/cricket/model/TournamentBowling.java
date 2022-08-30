@@ -22,10 +22,13 @@ public class TournamentBowling implements Comparable<TournamentBowling> {
   private int wickets;
   
   @XmlElement(name = "RunsConceded")
-  private int RunsConceded;
+  private double RunsConceded;
   
   @XmlElement(name = "BallsBowled")
   private double BallsBowled;
+  
+  @XmlElement(name = "Economy")
+  private double economy;
   
   @XmlTransient
   private Player player;
@@ -54,11 +57,11 @@ public void setWickets(int wickets) {
 	this.wickets = wickets;
 }
 
-public int getRunsConceded() {
+public double getRunsConceded() {
 	return RunsConceded;
 }
 
-public void setRunsConceded(int runsConceded) {
+public void setRunsConceded(double runsConceded) {
 	RunsConceded = runsConceded;
 }
 
@@ -68,6 +71,14 @@ public double getBallsBowled() {
 
 public void setBallsBowled(double ballsBowled) {
 	BallsBowled = ballsBowled;
+}
+
+public double getEconomy() {
+	return economy;
+}
+
+public void setEconomy(double economy) {
+	this.economy = economy;
 }
 
 public Player getPlayer() {
@@ -81,6 +92,7 @@ public void setPlayer(Player player) {
 @Override
 public int compareTo(TournamentBowling tor) {
 	return (int) (tor.getWickets() - this.getWickets());
+	
 }
 
 }

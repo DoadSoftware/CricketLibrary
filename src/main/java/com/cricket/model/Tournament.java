@@ -1,12 +1,14 @@
 package com.cricket.model;
 
+import java.util.Comparator;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-
-import com.cricket.util.CricketUtil;
 
 @XmlRootElement(name="tournament")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -33,8 +35,13 @@ public class Tournament implements Comparable<Tournament> {
   @XmlElement(name = "strikeRate")
   private double strikeRate;
   
+  @XmlElement(name = "opponentTeam")
+  private String opponentTeam;
+  
   @XmlTransient
   private Player player;
+  
+ private List<Integer> best_Stats;
 
 public int getPlayerId() {
 	return playerId;
@@ -92,12 +99,28 @@ public void setStrikeRate(double strikeRate) {
 	this.strikeRate = strikeRate;
 }
 
+public String getOpponentTeam() {
+	return opponentTeam;
+}
+
+public void setOpponentTeam(String opponentTeam) {
+	this.opponentTeam = opponentTeam;
+}
+
 public Player getPlayer() {
 	return player;
 }
 
 public void setPlayer(Player player) {
 	this.player = player;
+}
+
+public List<Integer> getBest_Stats() {
+	return best_Stats;
+}
+
+public void setBest_Stats(List<Integer> best_Stats) {
+	this.best_Stats = best_Stats;
 }
 
 @Override

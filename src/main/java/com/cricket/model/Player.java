@@ -48,6 +48,8 @@ public class Player implements Comparable<Player>, Diffable<Player>
   @Column(name = "Photo")
   private String Photo;
   
+  
+  
   @Transient
   private Integer playerPosition;
 
