@@ -36,7 +36,7 @@ public class Tournament implements Cloneable {
   private int runsConceded;
   
   @XmlElement(name = "ballsBowled")
-  private int ballsBowled;
+  private double ballsBowled;
   
   @XmlElement(name = "ballsFaced")
   private int ballsFaced;
@@ -58,12 +58,42 @@ public class Tournament implements Cloneable {
   
  private List<Integer> best_Stats;
 
- public int getBatsmanScoreSortData() {
+ public Tournament(int playerId, int matches, int runs,int ballsFaced, int fours, int sixes) {
+	super();
+	this.playerId = playerId;
+	this.matches = matches;
+	this.runs = runs;
+	this.fours = fours;
+	this.sixes = sixes;
+	this.ballsFaced = ballsFaced;
+}
+
+public Tournament(int playerId, int matches, int wickets, int runsConceded, double ballsBowled) {
+	super();
+	this.playerId = playerId;
+	this.matches = matches;
+	this.wickets = wickets;
+	this.runsConceded = runsConceded;
+	this.ballsBowled = ballsBowled;
+}
+
+
+
+public Tournament() {
+	super();
+	// TODO Auto-generated constructor stub
+}
+
+public int getBatsmanScoreSortData() {
 		int sortData = this.getRuns();
 		if(this.getStatus() != null && this.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
 			sortData = sortData + 1;
 		}
 		return 1000 * sortData + 1000 - this.getBalls();
+	}
+ 
+ public int getBowlerFigureSortData() {
+		return 1000 * this.getWickets() - this.getRunsConceded();
 	}
  
 public int getPlayerId() {
@@ -122,11 +152,11 @@ public void setRunsConceded(int runsConceded) {
 	this.runsConceded = runsConceded;
 }
 
-public int getBallsBowled() {
+public double getBallsBowled() {
 	return ballsBowled;
 }
 
-public void setBallsBowled(int ballsBowled) {
+public void setBallsBowled(double ballsBowled) {
 	this.ballsBowled = ballsBowled;
 }
 

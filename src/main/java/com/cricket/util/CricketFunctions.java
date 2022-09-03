@@ -1,5 +1,6 @@
 package com.cricket.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
@@ -10,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 
 import com.cricket.model.BattingCard;
 import com.cricket.model.BowlingCard;
@@ -23,6 +27,155 @@ import com.cricket.service.CricketService;
 
 public class CricketFunctions {
 
+	public static List<Tournament> extractTournamentStats(String typeOfExtraction ,File[] files, String excludeFile, List<Match> tournament_matches,
+			CricketService cricketService,Match currentMatch) throws IllegalAccessException, InvocationTargetException, JAXBException{
+		
+		Match mtch = null;
+		Tournament tourn = null;
+		List<Tournament> tournament_stats = new ArrayList<Tournament>();
+		
+		int playerId = -1;
+		switch(typeOfExtraction) {
+		case "PAST_MATCHES_DATA":
+			for(File file : files) {
+				if(!file.getName().equals(excludeFile)) {
+					
+					mtch = CricketFunctions.populateMatchVariables(cricketService, (Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
+							new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + file.getName())));
+					tournament_matches.add(mtch);
+					if(mtch.getMatchType().equalsIgnoreCase(CricketUtil.DT20)) {
+						for(Inning inn : mtch.getInning())
+						{
+							if(inn.getBattingCard() != null && inn.getBattingCard().size() > 0) {
+								for(BattingCard bc : inn.getBattingCard())
+								{
+									playerId = -1;
+									for(int i=0; i<=tournament_stats.size() - 1;i++)
+									{
+										if(bc.getPlayerId() == tournament_stats.get(i).getPlayer().getPlayerId()) {
+											playerId = i;
+											break;
+										}
+									}
+									
+									if(playerId >= 0) {
+										
+										tournament_stats.get(playerId).setMatches(tournament_stats.get(playerId).getMatches() + 1);
+										tournament_stats.get(playerId).setRuns(tournament_stats.get(playerId).getRuns() + bc.getRuns()); // existing record
+										tournament_stats.get(playerId).setBallsFaced(tournament_stats.get(playerId).getBallsFaced() + bc.getBalls());
+										tournament_stats.get(playerId).setFours(tournament_stats.get(playerId).getFours() + bc.getFours());
+										tournament_stats.get(playerId).setSixes(tournament_stats.get(playerId).getSixes() + bc.getSixes());
+										
+									}else {
+										tournament_stats.add(new Tournament(bc.getPlayerId(), 1, bc.getRuns(), bc.getBalls(), bc.getFours(), bc.getSixes())); // new record
+									}	
+								}
+							}
+							
+							if(inn.getBowlingCard() != null && inn.getBowlingCard().size() > 0) {
+								for(BowlingCard boc : inn.getBowlingCard())
+								{
+									tourn = new Tournament();
+									tourn.setPlayer(boc.getPlayer());
+									tourn.setWickets(boc.getWickets());
+									tourn.setRunsConceded(boc.getRuns());
+									tourn.setBallsBowled(Double.valueOf(CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls())));
+
+									playerId = -1;
+									for(int i=0; i<=tournament_stats.size() - 1;i++)
+									{
+										if(boc.getPlayerId() == tournament_stats.get(i).getPlayer().getPlayerId()) {
+											playerId = i;
+											break;
+										}
+									}
+									if(playerId >= 0) {
+										tournament_stats.get(playerId).setRunsConceded(tournament_stats.get(playerId).getRunsConceded() + tourn.getRunsConceded()); // existing record
+										tournament_stats.get(playerId).setWickets(tournament_stats.get(playerId).getWickets() + tourn.getWickets());
+										tournament_stats.get(playerId).setBallsBowled(tournament_stats.get(playerId).getBallsBowled() + tourn.getBallsBowled());
+									}else {
+										tournament_stats.add(new Tournament(boc.getPlayerId(), 1, boc.getWickets(), boc.getRuns(), Double.valueOf(CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls())))); // new record
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			break;
+			
+		case "CURRENT_MATCH_DATA":
+			
+			if(currentMatch.getMatchType().equalsIgnoreCase(CricketUtil.DT20)) {
+				for(Inning inn : currentMatch.getInning())
+				{
+					for(BattingCard bc : inn.getBattingCard())
+					{
+						tourn = new Tournament();
+						tourn.setPlayer(bc.getPlayer()); // Virat Kholi
+						tourn.setMatches(tourn.getMatches() + 1);
+						tourn.setRuns(bc.getRuns());
+						tourn.setBallsFaced(bc.getBalls());
+						
+						playerId = -1;
+						
+						for(int i=0; i<=tournament_stats.size() - 1;i++)
+						{
+							if(bc.getPlayerId() == tournament_stats.get(i).getPlayer().getPlayerId()) {
+								playerId = i;
+								break;
+							}
+						}
+						if(playerId >= 0) {
+							tournament_stats.get(playerId).setMatches(tournament_stats.get(playerId).getMatches() + tourn.getMatches());
+							tournament_stats.get(playerId).setRuns(tournament_stats.get(playerId).getRuns() + tourn.getRuns()); // existing record
+							tournament_stats.get(playerId).setBallsFaced(tournament_stats.get(playerId).getBallsFaced() + tourn.getBallsFaced());
+						}else {
+							tournament_stats.add(tourn); // new record
+						}
+					}
+
+					if(inn.getBowlingCard() != null && inn.getBowlingCard().size() > 0 ) {
+						for(BowlingCard boc : inn.getBowlingCard())
+						{
+							tourn = new Tournament();
+							tourn.setPlayer(boc.getPlayer()); // Virat Kholi
+							tourn.setMatches(tourn.getMatches() + 1);
+							tourn.setWickets(boc.getWickets());
+							tourn.setRunsConceded(boc.getRuns());
+							tourn.setBallsBowled(Double.valueOf(CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls())));
+
+							//if(tourn.getBallsFaced() >= 1) {
+								//tourn.setStrikeRate((100 * tourn.getRuns()) / tourn.getBallsFaced());
+							//}
+							playerId = -1;
+							for(int i=0; i<=tournament_stats.size() - 1;i++)
+							{
+								if(boc.getPlayerId() == tournament_stats.get(i).getPlayer().getPlayerId()) {
+									playerId = i;
+									break;
+								}
+							}
+							if(playerId >= 0) {
+								tournament_stats.get(playerId).setMatches(tournament_stats.get(playerId).getMatches() + tourn.getMatches());
+								tournament_stats.get(playerId).setRunsConceded(tournament_stats.get(playerId).getRunsConceded() + tourn.getRunsConceded()); // existing record
+								tournament_stats.get(playerId).setWickets(tournament_stats.get(playerId).getWickets() + tourn.getWickets());
+								tournament_stats.get(playerId).setBallsBowled(tournament_stats.get(playerId).getBallsBowled() + tourn.getBallsBowled());
+								
+							}else {
+								tournament_stats.add(tourn); // new record
+							}
+						}
+					}
+					
+				}
+			}
+			break;
+		}
+		
+		return tournament_stats;
+	}
+	
 	public static String generateMatchResult(Match match, String teamNameType)
 	{
 		String resultToShow = "";
@@ -103,6 +256,13 @@ public class CricketFunctions {
 	    @Override
 	    public int compare(Tournament bc1, Tournament bc2) {
 	       return Integer.compare(bc2.getBatsmanScoreSortData(), bc1.getBatsmanScoreSortData());
+	    }
+	}
+	
+	public static class BowlerWicketsComparator implements Comparator<Tournament> {
+	    @Override
+	    public int compare(Tournament bc1, Tournament bc2) {
+	       return Integer.compare(bc2.getBowlerFigureSortData(), bc1.getBowlerFigureSortData());
 	    }
 	}
 	
