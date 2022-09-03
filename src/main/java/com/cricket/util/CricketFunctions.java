@@ -18,6 +18,7 @@ import com.cricket.model.Inning;
 import com.cricket.model.Match;
 import com.cricket.model.Partnership;
 import com.cricket.model.Player;
+import com.cricket.model.Tournament;
 import com.cricket.service.CricketService;
 
 public class CricketFunctions {
@@ -95,6 +96,13 @@ public class CricketFunctions {
 	    @Override
 	    public int compare(BowlingCard bc1, BowlingCard bc2) {
 	       return Integer.compare(bc2.getBowlerFigureSortData(), bc1.getBowlerFigureSortData());
+	    }
+	}
+	
+	public static class BatsmenRunComparator implements Comparator<Tournament> {
+	    @Override
+	    public int compare(Tournament bc1, Tournament bc2) {
+	       return Integer.compare(bc2.getBatsmanScoreSortData(), bc1.getBatsmanScoreSortData());
 	    }
 	}
 	
