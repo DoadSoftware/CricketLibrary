@@ -27,13 +27,24 @@ import com.cricket.model.Tournament;
 import com.cricket.service.CricketService;
 
 public class CricketFunctions {
+	
+	public static List<Match> getTournamentMatches(File[] files, CricketService cricketService) 
+			throws IllegalAccessException, InvocationTargetException, JAXBException
+	{
+		List<Match> tournament_matches = new ArrayList<Match>();
+		for(File file : files) {
+			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService, (Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
+					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + file.getName()))));
+		}
+		return tournament_matches;
+	}
 
-	/*public Statistics updateTournamentDataWithStats(Statistics stat,String typeOfProfile) 
+	public static Statistics updateTournamentDataWithStats(Statistics stat,String typeOfProfile,List<Match> tournament_matches,Match currentMatch) 
 	{
 		String temp = "";
 		boolean player_found = false;
 		for(Match match : tournament_matches) {
-			if(!match.getMatchFileName().equalsIgnoreCase(session_match.getMatchFileName())) {
+			if(!match.getMatchFileName().equalsIgnoreCase(currentMatch.getMatchFileName())) {
 				player_found = false;
 				if(stat.getStats_type().getStats_short_name().equalsIgnoreCase(match.getMatchType())) {
 					for(Inning inn : match.getInning())
@@ -120,7 +131,7 @@ public class CricketFunctions {
 		return stat;
 	}
 	
-	public Statistics updateStatisticsWithMatchData(Statistics stat, Match match, String typeOfProfile)
+	public static Statistics updateStatisticsWithMatchData(Statistics stat, Match match, String typeOfProfile)
 	{
 		String temp = "";
 		boolean player_found = false;
@@ -208,17 +219,6 @@ public class CricketFunctions {
 			stat.setMatches(stat.getMatches() + 1);
 		}
 		return stat;
-	}*/
-	
-	public static List<Match> getTournamentMatches(File[] files, CricketService cricketService) 
-			throws IllegalAccessException, InvocationTargetException, JAXBException
-	{
-		List<Match> tournament_matches = new ArrayList<Match>();
-		for(File file : files) {
-			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService, (Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
-					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + file.getName()))));
-		}
-		return tournament_matches;
 	}
 	
 	public static List<Tournament> extractTournamentStats(String typeOfExtraction, List<Match> tournament_matches, 
@@ -267,8 +267,8 @@ public class CricketFunctions {
 										tournament_stats.get(playerId).setSixes(tournament_stats.get(playerId).getSixes() + bc.getSixes());
 										
 									}else {
-										tournament_stats.add(new Tournament(bc.getPlayerId(), 1, bc.getRuns(), bc.getBalls(), bc.getFours(), 
-												bc.getSixes(),cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bc.getPlayerId())))); // new record
+										tournament_stats.add(new Tournament(bc.getPlayerId(), 0, bc.getRuns(), bc.getFours(), bc.getSixes(),
+												bc.getBalls(),cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bc.getPlayerId())))); // new record
 									}	
 								}
 							}
@@ -291,7 +291,7 @@ public class CricketFunctions {
 										tournament_stats.get(playerId).setBallsBowled(tournament_stats.get(playerId).getBallsBowled() + 
 												6 * boc.getOvers() + boc.getBalls());
 									}else {
-										tournament_stats.add(new Tournament(boc.getPlayerId(), 1, boc.getWickets(), boc.getRuns(), 
+										tournament_stats.add(new Tournament(boc.getPlayerId(), 0, boc.getWickets(), boc.getRuns(), 
 												6 * boc.getOvers() + boc.getBalls(),
 												cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(boc.getPlayerId())))); // new record
 									}
@@ -398,9 +398,7 @@ public class CricketFunctions {
 			}
 			return past_tournament_stats;
 		}
-		
 		return null;
-		
 	}
 	
 	public static String generateMatchResult(Match match, String teamNameType)
