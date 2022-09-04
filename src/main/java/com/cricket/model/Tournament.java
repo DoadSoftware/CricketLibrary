@@ -36,13 +36,10 @@ public class Tournament implements Cloneable {
   private int runsConceded;
   
   @XmlElement(name = "ballsBowled")
-  private double ballsBowled;
+  private int ballsBowled;
   
   @XmlElement(name = "ballsFaced")
   private int ballsFaced;
-  
-  @XmlElement(name = "strikeRate")
-  private double strikeRate;
   
   @XmlElement(name = "opponentTeam")
   private String opponentTeam;
@@ -57,8 +54,6 @@ public class Tournament implements Cloneable {
   private Player player;
   
  private List<Integer> best_Stats;
-
- 
  
  public Tournament(int playerId, int matches, int runs, int fours, int sixes, int ballsFaced, Player player) {
 	super();
@@ -68,23 +63,25 @@ public class Tournament implements Cloneable {
 	this.fours = fours;
 	this.sixes = sixes;
 	this.ballsFaced = ballsFaced;
-	this.player = player;
+	if(player != null) {
+		this.player = player;
+	}
 }
 
-public Tournament(int playerId, int matches, int wickets, int runsConceded, double ballsBowled) {
+public Tournament(int playerId, int matches, int wickets, int runsConceded, int ballsBowled, Player player) {
 	super();
 	this.playerId = playerId;
 	this.matches = matches;
 	this.wickets = wickets;
 	this.runsConceded = runsConceded;
 	this.ballsBowled = ballsBowled;
+	if(player != null) {
+		this.player = player;
+	}
 }
-
-
 
 public Tournament() {
 	super();
-	// TODO Auto-generated constructor stub
 }
 
 public int getBatsmanScoreSortData() {
@@ -93,11 +90,11 @@ public int getBatsmanScoreSortData() {
 			sortData = sortData + 1;
 		}
 		return 1000 * sortData + 1000 - this.getBalls();
-	}
+}
  
- public int getBowlerFigureSortData() {
+public int getBowlerFigureSortData() {
 		return 1000 * this.getWickets() - this.getRunsConceded();
-	}
+}
  
 public int getPlayerId() {
 	return playerId;
@@ -155,11 +152,11 @@ public void setRunsConceded(int runsConceded) {
 	this.runsConceded = runsConceded;
 }
 
-public double getBallsBowled() {
+public int getBallsBowled() {
 	return ballsBowled;
 }
 
-public void setBallsBowled(double ballsBowled) {
+public void setBallsBowled(int ballsBowled) {
 	this.ballsBowled = ballsBowled;
 }
 
@@ -169,14 +166,6 @@ public int getBallsFaced() {
 
 public void setBallsFaced(int ballsFaced) {
 	this.ballsFaced = ballsFaced;
-}
-
-public double getStrikeRate() {
-	return strikeRate;
-}
-
-public void setStrikeRate(double strikeRate) {
-	this.strikeRate = strikeRate;
 }
 
 public String getOpponentTeam() {
