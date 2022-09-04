@@ -95,7 +95,15 @@ public int getBatsmanScoreSortData() {
 public int getBowlerFigureSortData() {
 		return 1000 * this.getWickets() - this.getRunsConceded();
 }
- 
+
+public int getBatsmanFoursSortData() {
+	return 1000 * this.getFours() - this.getMatches();
+}
+
+public int getBatsmanSixesSortData() {
+	return 1000 * this.getSixes() - this.getMatches();
+}
+
 public int getPlayerId() {
 	return playerId;
 }

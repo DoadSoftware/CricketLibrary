@@ -28,7 +28,7 @@ import com.cricket.service.CricketService;
 
 public class CricketFunctions {
 
-	public Statistics updateTournamentDataWithStats(Statistics stat,String typeOfProfile) 
+	/*public Statistics updateTournamentDataWithStats(Statistics stat,String typeOfProfile) 
 	{
 		String temp = "";
 		boolean player_found = false;
@@ -208,7 +208,7 @@ public class CricketFunctions {
 			stat.setMatches(stat.getMatches() + 1);
 		}
 		return stat;
-	}
+	}*/
 	
 	public static List<Match> getTournamentMatches(File[] files, CricketService cricketService) 
 			throws IllegalAccessException, InvocationTargetException, JAXBException
@@ -286,8 +286,8 @@ public class CricketFunctions {
 										}
 									}
 									if(playerId >= 0) {
-										tournament_stats.get(playerId).setRunsConceded(tournament_stats.get(playerId).getRunsConceded() + boc.getRuns()); // existing record
 										tournament_stats.get(playerId).setWickets(tournament_stats.get(playerId).getWickets() + boc.getWickets());
+										tournament_stats.get(playerId).setRunsConceded(tournament_stats.get(playerId).getRunsConceded() + boc.getRuns()); // existing record
 										tournament_stats.get(playerId).setBallsBowled(tournament_stats.get(playerId).getBallsBowled() + 
 												6 * boc.getOvers() + boc.getBalls());
 									}else {
@@ -490,6 +490,20 @@ public class CricketFunctions {
 	    @Override
 	    public int compare(Tournament bc1, Tournament bc2) {
 	       return Integer.compare(bc2.getBowlerFigureSortData(), bc1.getBowlerFigureSortData());
+	    }
+	}
+	
+	public static class BatsmanFoursComparator implements Comparator<Tournament> {
+	    @Override
+	    public int compare(Tournament bc1, Tournament bc2) {
+	       return Integer.compare(bc2.getBatsmanFoursSortData(), bc1.getBatsmanFoursSortData());
+	    }
+	}
+	
+	public static class BatsmanSixesComparator implements Comparator<Tournament> {
+	    @Override
+	    public int compare(Tournament bc1, Tournament bc2) {
+	       return Integer.compare(bc2.getBatsmanSixesSortData(), bc1.getBatsmanSixesSortData());
 	    }
 	}
 	
