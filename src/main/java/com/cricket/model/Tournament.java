@@ -58,7 +58,9 @@ public class Tournament implements Cloneable {
   
  private List<Integer> best_Stats;
 
- public Tournament(int playerId, int matches, int runs,int ballsFaced, int fours, int sixes) {
+ 
+ 
+ public Tournament(int playerId, int matches, int runs, int fours, int sixes, int ballsFaced, Player player) {
 	super();
 	this.playerId = playerId;
 	this.matches = matches;
@@ -66,6 +68,7 @@ public class Tournament implements Cloneable {
 	this.fours = fours;
 	this.sixes = sixes;
 	this.ballsFaced = ballsFaced;
+	this.player = player;
 }
 
 public Tournament(int playerId, int matches, int wickets, int runsConceded, double ballsBowled) {
