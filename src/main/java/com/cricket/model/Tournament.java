@@ -41,43 +41,29 @@ public class Tournament implements Cloneable {
   @XmlElement(name = "ballsFaced")
   private int ballsFaced;
   
-  @XmlElement(name = "opponentTeam")
-  private String opponentTeam;
-  
-  @XmlElement(name = "status")
-  private String status;
-  
-  @XmlElement(name = "balls")
-  private int balls;
+  @XmlElement(name = "notOut")
+  private String notOut;
   
   @XmlTransient
   private Player player;
   
- private List<Integer> best_Stats;
- 
- public Tournament(int playerId, int matches, int runs, int fours, int sixes, int ballsFaced, Player player) {
+ private List<BestStats> best_Stats;
+
+public Tournament(int playerId, int matches, int runs, int fours, int sixes, int wickets, int runsConceded,
+		int ballsBowled, int ballsFaced, String notOut, Player player, List<BestStats> best_Stats) {
 	super();
 	this.playerId = playerId;
 	this.matches = matches;
 	this.runs = runs;
 	this.fours = fours;
 	this.sixes = sixes;
-	this.ballsFaced = ballsFaced;
-	if(player != null) {
-		this.player = player;
-	}
-}
-
-public Tournament(int playerId, int matches, int wickets, int runsConceded, int ballsBowled, Player player) {
-	super();
-	this.playerId = playerId;
-	this.matches = matches;
 	this.wickets = wickets;
 	this.runsConceded = runsConceded;
 	this.ballsBowled = ballsBowled;
-	if(player != null) {
-		this.player = player;
-	}
+	this.ballsFaced = ballsFaced;
+	this.notOut = notOut;
+	this.player = player;
+	this.best_Stats = best_Stats;
 }
 
 public Tournament() {
@@ -86,10 +72,10 @@ public Tournament() {
 
 public int getBatsmanScoreSortData() {
 		int sortData = this.getRuns();
-		if(this.getStatus() != null && this.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+		if(this.getNotOut() != null && this.getNotOut().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
 			sortData = sortData + 1;
 		}
-		return 1000 * sortData + 1000 - this.getBalls();
+		return 1000 * sortData + 1000 - this.getBallsFaced();
 }
  
 public int getBowlerFigureSortData() {
@@ -176,28 +162,12 @@ public void setBallsFaced(int ballsFaced) {
 	this.ballsFaced = ballsFaced;
 }
 
-public String getOpponentTeam() {
-	return opponentTeam;
+public String getNotOut() {
+	return notOut;
 }
 
-public void setOpponentTeam(String opponentTeam) {
-	this.opponentTeam = opponentTeam;
-}
-
-public String getStatus() {
-	return status;
-}
-
-public void setStatus(String status) {
-	this.status = status;
-}
-
-public int getBalls() {
-	return balls;
-}
-
-public void setBalls(int balls) {
-	this.balls = balls;
+public void setNotOut(String notOut) {
+	this.notOut = notOut;
 }
 
 public Player getPlayer() {
@@ -208,11 +178,11 @@ public void setPlayer(Player player) {
 	this.player = player;
 }
 
-public List<Integer> getBest_Stats() {
+public List<BestStats> getBest_Stats() {
 	return best_Stats;
 }
 
-public void setBest_Stats(List<Integer> best_Stats) {
+public void setBest_Stats(List<BestStats> best_Stats) {
 	this.best_Stats = best_Stats;
 }
 
