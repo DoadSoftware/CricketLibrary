@@ -108,4 +108,11 @@ public void setBallsBowled(int ballsBowled) {
 	this.ballsBowled = ballsBowled;
 }
 
+@Override
+public String toString() {
+	return "BestStats [playerId=" + playerId + ", batsmanBestEquation=" + batsmanBestEquation + ", bowlerBestEquation="
+			+ bowlerBestEquation + ", ballsBowled=" + ballsBowled + ", ballsFaced=" + ballsFaced + ", opponentTeam="
+			+ opponentTeam + ", player=" + player + "]";
+}
+
 }

@@ -226,14 +226,16 @@ public class CricketFunctions {
 			CricketService cricketService,Match currentMatch, List<Tournament> past_tournament_stats) 
 	{		
 		int playerId = -1;
+		List<Tournament> tournament_stats = new ArrayList<Tournament>();
 		boolean has_match_started = false;
 		
 		switch(typeOfExtraction) {
+		case "CONBINE_PAST_CURRENT_MATCH_DATA":
+			 return extractTournamentStats("CURRENT_MATCH_DATA", tournament_matches, cricketService, currentMatch, 
+					extractTournamentStats("PAST_MATCHES_DATA", tournament_matches, cricketService, currentMatch, null));
+			
 		case "PAST_MATCHES_DATA":
 			
-			
-			List<Tournament> tournament_stats = new ArrayList<Tournament>();
-		
 			for(Match mtch : tournament_matches) {
 				
 				if(!mtch.getMatchFileName().equalsIgnoreCase(currentMatch.getMatchFileName())) {
@@ -806,6 +808,26 @@ public class CricketFunctions {
 		return Overs_text;
 		
 	}
+	public static String convertBallsintoOvers(int Balls) {
+			
+			int TotalBalls=0, WholeOv, OddBalls;
+			String Overs_text = "0.0" ;
+			
+			TotalBalls = Balls ;
+	
+			if(TotalBalls > 0) {
+				WholeOv = ((TotalBalls)/6);
+				OddBalls = (TotalBalls - 6 * (WholeOv));
+				if(OddBalls == 0) {
+					Overs_text = String.valueOf(WholeOv);
+				} else {
+					Overs_text = String.valueOf(WholeOv)+"."+String.valueOf(OddBalls);
+				}
+			}
+			
+			return Overs_text;
+			
+		}
 	
 	public static String processPowerPlay(String powerplay_return_type, Inning inning, int total_overs, int total_balls)
 	{
@@ -1219,8 +1241,11 @@ public class CricketFunctions {
 			        bottomLineText = teamNameToUse + " need " + CricketFunctions.getRequiredRuns(match) + 
 			        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
 			      }
-			      if (CricketFunctions.getRequiredBalls(match) >= 150) {
-			        bottomLineText = bottomLineText + CricketFunctions.OverBalls((match.getInning().get(1)).getTotalOvers(), (match.getInning().get(1)).getTotalBalls()) + " over";
+			      if (CricketFunctions.getRequiredBalls(match) >= 100) {
+			    	int  remain_balls = ((match.getMaxOvers() * 6) - (match.getInning().get(1).getTotalOvers()*6 + 
+			    			match.getInning().get(1).getTotalBalls()));
+			    	
+			        bottomLineText = bottomLineText + CricketFunctions.convertBallsintoOvers(remain_balls) + " over";
 			      } else {
 			        bottomLineText = bottomLineText + CricketFunctions.getRequiredBalls(match) + 
 			        	" ball" + CricketFunctions.Plural(CricketFunctions.getRequiredBalls(match));
