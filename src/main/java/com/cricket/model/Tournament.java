@@ -1,56 +1,43 @@
 package com.cricket.model;
 
 import java.util.List;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
 import com.cricket.util.CricketUtil;
 
-@XmlRootElement(name="tournament")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Tournament implements Cloneable {
 
-  @XmlElement(name = "playerId")
   private int playerId;
   
-  @XmlElement(name = "matches")
   private int matches;
   
-  @XmlElement(name = "runs")
   private int runs;
   
-  @XmlElement(name = "fours")
   private int fours;
   
-  @XmlElement(name = "sixes")
   private int sixes;
   
-  @XmlElement(name = "wickets")
   private int wickets;
   
-  @XmlElement(name = "runsConceded")
   private int runsConceded;
   
-  @XmlElement(name = "ballsBowled")
   private int ballsBowled;
   
-  @XmlElement(name = "ballsFaced")
   private int ballsFaced;
   
-  @XmlElement(name = "notOut")
   private String notOut;
   
-  @XmlTransient
   private Player player;
   
- private List<BestStats> best_Stats;
+ private List<BestStats> batsman_best_Stats;
+
+ private List<BestStats> bowler_best_Stats;
+
+public Tournament() {
+	super();
+}
 
 public Tournament(int playerId, int matches, int runs, int fours, int sixes, int wickets, int runsConceded,
-		int ballsBowled, int ballsFaced, String notOut, Player player, List<BestStats> best_Stats) {
+		int ballsBowled, int ballsFaced, String notOut, Player player, List<BestStats> batsman_best_Stats,
+		List<BestStats> bowler_best_Stats) {
 	super();
 	this.playerId = playerId;
 	this.matches = matches;
@@ -63,11 +50,8 @@ public Tournament(int playerId, int matches, int runs, int fours, int sixes, int
 	this.ballsFaced = ballsFaced;
 	this.notOut = notOut;
 	this.player = player;
-	this.best_Stats = best_Stats;
-}
-
-public Tournament() {
-	super();
+	this.batsman_best_Stats = batsman_best_Stats;
+	this.bowler_best_Stats = bowler_best_Stats;
 }
 
 public int getBatsmanScoreSortData() {
@@ -88,6 +72,22 @@ public int getBatsmanFoursSortData() {
 
 public int getBatsmanSixesSortData() {
 	return 1000 * this.getSixes() - this.getMatches();
+}
+
+public List<BestStats> getBatsman_best_Stats() {
+	return batsman_best_Stats;
+}
+
+public void setBatsman_best_Stats(List<BestStats> batsman_best_Stats) {
+	this.batsman_best_Stats = batsman_best_Stats;
+}
+
+public List<BestStats> getBowler_best_Stats() {
+	return bowler_best_Stats;
+}
+
+public void setBowler_best_Stats(List<BestStats> bowler_best_Stats) {
+	this.bowler_best_Stats = bowler_best_Stats;
 }
 
 public int getPlayerId() {
@@ -178,12 +178,12 @@ public void setPlayer(Player player) {
 	this.player = player;
 }
 
-public List<BestStats> getBest_Stats() {
-	return best_Stats;
-}
-
-public void setBest_Stats(List<BestStats> best_Stats) {
-	this.best_Stats = best_Stats;
+@Override
+public String toString() {
+	return "Tournament [playerId=" + playerId + ", matches=" + matches + ", runs=" + runs + ", fours=" + fours
+			+ ", sixes=" + sixes + ", wickets=" + wickets + ", runsConceded=" + runsConceded + ", ballsBowled="
+			+ ballsBowled + ", ballsFaced=" + ballsFaced + ", notOut=" + notOut + ", player=" + player
+			+ ", batsman_best_Stats=" + batsman_best_Stats + ", bowler_best_Stats=" + bowler_best_Stats + "]";
 }
 
 @Override

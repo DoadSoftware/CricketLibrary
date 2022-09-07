@@ -190,4 +190,12 @@ public int compareTo(Player pm) {
 	return (int) (this.getPlayerPosition()-pm.getPlayerPosition());
 }
 
+@Override
+public String toString() {
+	return "Player [playerId=" + playerId + ", full_name=" + full_name + ", firstname=" + firstname + ", surname="
+			+ surname + ", ticker_name=" + ticker_name + ", role=" + role + ", bowlingStyle=" + bowlingStyle
+			+ ", battingStyle=" + battingStyle + ", teamId=" + teamId + ", Photo=" + Photo + ", playerPosition="
+			+ playerPosition + ", captainWicketKeeper=" + captainWicketKeeper + ", player_type=" + player_type + "]";
+}
+
 }

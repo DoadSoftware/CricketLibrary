@@ -1,55 +1,71 @@
 package com.cricket.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
-
-@XmlRootElement(name="bestStats")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class BestStats{
 
-  @XmlElement(name = "playerId")
   private int playerId;
   
-  @XmlElement(name = "batsmanBestEquation")
-  private int batsmanBestEquation;
+  private int bestEquation;
   
-  @XmlElement(name = "bowlerBestEquation")
-  private int bowlerBestEquation;
-  
-  @XmlElement(name = "ballsBowled")
-  private int ballsBowled;
-  
-  @XmlElement(name = "ballsFaced")
-  private int ballsFaced;
-  
-  @XmlElement(name = "opponentTeam")
   private Team opponentTeam;
+
+  private int runs;
+  private int wickets;
+  private int balls;
+  private boolean not_out;
   
-  @XmlTransient
   private Player player;
 
 public BestStats() {
 	super();
 }
 
-public BestStats(int playerId, int batsmanBestEquation, int bowlerBestEquation, int ballsBowled, int ballsFaced,
-		Team opponentTeam, Player player) {
+public BestStats(int playerId, int bestEquation, int balls, Team opponentTeam, Player player) {
 	super();
 	this.playerId = playerId;
-	this.batsmanBestEquation = batsmanBestEquation;
-	this.bowlerBestEquation = bowlerBestEquation;
-	this.ballsBowled = ballsBowled;
-	this.ballsFaced = ballsFaced;
+	this.bestEquation = bestEquation;
+	this.balls = balls;
 	this.opponentTeam = opponentTeam;
 	this.player = player;
 }
 
-public int getBatsmanBestScoreSortData() {
-	return 1000 * this.getBatsmanBestEquation() + 1000 - this.getBallsFaced();
+public boolean isNot_out() {
+	return not_out;
+}
+
+public void setNot_out(boolean not_out) {
+	this.not_out = not_out;
+}
+
+public int getRuns() {
+	return runs;
+}
+
+public void setRuns(int runs) {
+	this.runs = runs;
+}
+
+public int getWickets() {
+	return wickets;
+}
+
+public void setWickets(int wickets) {
+	this.wickets = wickets;
+}
+
+public int getBalls() {
+	return balls;
+}
+
+public void setBalls(int balls) {
+	this.balls = balls;
+}
+
+public int getBestEquation() {
+	return bestEquation;
+}
+
+public void setBestEquation(int bestEquation) {
+	this.bestEquation = bestEquation;
 }
 
 public int getPlayerId() {
@@ -58,30 +74,6 @@ public int getPlayerId() {
 
 public void setPlayerId(int playerId) {
 	this.playerId = playerId;
-}
-
-public int getBatsmanBestEquation() {
-	return batsmanBestEquation;
-}
-
-public void setBatsmanBestEquation(int batsmanBestEquation) {
-	this.batsmanBestEquation = batsmanBestEquation;
-}
-
-public int getBowlerBestEquation() {
-	return bowlerBestEquation;
-}
-
-public void setBowlerBestEquation(int bowlerBestEquation) {
-	this.bowlerBestEquation = bowlerBestEquation;
-}
-
-public int getBallsFaced() {
-	return ballsFaced;
-}
-
-public void setBallsFaced(int ballsFaced) {
-	this.ballsFaced = ballsFaced;
 }
 
 public Team getOpponentTeam() {
@@ -100,19 +92,11 @@ public void setPlayer(Player player) {
 	this.player = player;
 }
 
-public int getBallsBowled() {
-	return ballsBowled;
-}
-
-public void setBallsBowled(int ballsBowled) {
-	this.ballsBowled = ballsBowled;
-}
-
 @Override
 public String toString() {
-	return "BestStats [playerId=" + playerId + ", batsmanBestEquation=" + batsmanBestEquation + ", bowlerBestEquation="
-			+ bowlerBestEquation + ", ballsBowled=" + ballsBowled + ", ballsFaced=" + ballsFaced + ", opponentTeam="
-			+ opponentTeam + ", player=" + player + "]";
+	return "BestStats [playerId=" + playerId + ", bestEquation=" + bestEquation + ", opponentTeam=" + opponentTeam
+			+ ", runs=" + runs + ", wickets=" + wickets + ", balls=" + balls + ", not_out=" + not_out + ", player="
+			+ player + "]";
 }
 
 }
