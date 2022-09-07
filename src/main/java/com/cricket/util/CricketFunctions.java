@@ -851,27 +851,7 @@ public class CricketFunctions {
 		return Overs_text;
 		
 	}
-	public static String convertBallsintoOvers(int Balls) {
-			
-			int TotalBalls=0, WholeOv, OddBalls;
-			String Overs_text = "0.0" ;
-			
-			TotalBalls = Balls ;
-	
-			if(TotalBalls > 0) {
-				WholeOv = ((TotalBalls)/6);
-				OddBalls = (TotalBalls - 6 * (WholeOv));
-				if(OddBalls == 0) {
-					Overs_text = String.valueOf(WholeOv);
-				} else {
-					Overs_text = String.valueOf(WholeOv)+"."+String.valueOf(OddBalls);
-				}
-			}
-			
-			return Overs_text;
-			
-		}
-	
+
 	public static String processPowerPlay(String powerplay_return_type, Inning inning, int total_overs, int total_balls)
 	{
 	    int cuEcoent_over = total_overs;
@@ -1220,47 +1200,23 @@ public class CricketFunctions {
 		
 		return wicketsLeft;
 	}
-	
-	public static String generateMatchSummaryStatus(int whichInning, Match match, String teamNameType)
-	  {
-	    if (match.getMaxOvers() <= 0) {
+
+	public static String generateMatchSummaryStatus(int whichInning, Match match, String teamNameType) {
+
+		if (match.getMaxOvers() <= 0 || match.getReducedOvers() <= 0) {
 	    	System.out.println("EROR: generateMatchSummaryStatus NOT available for test matches");
-	    } else {
-	      switch (whichInning) {
-	      case 1: case 2: 
-	        break;
-	      default: 
-	        System.out.println("EROR: Selected inning is wrong [" + whichInning + "]");
-	        return null;
-	      }
-	    }
-	    
-	    String bottomLineText = generateMatchResult(match, teamNameType); // check match result first
-	    
-	    if(bottomLineText.trim().isEmpty()) { // No match result found
-	    	
-	    	String teamNameToUse = "";
-	    	if (CricketFunctions.getRequiredBalls(match) <= 0 || CricketFunctions.getWicketsLeft(match) <= 0)
-		    {
-	    		switch (teamNameType) {
-			    case CricketUtil.SHORT: 
-			    	teamNameToUse = (match.getInning().get(0)).getBatting_team().getShortname();
-			      break;
-			    default: 
-			    	teamNameToUse = (match.getInning().get(0)).getBatting_team().getFullname();
-			    	break;
-			    }
-		    }else {
-		    	switch (teamNameType) {
-			    case CricketUtil.SHORT: 
-			    	teamNameToUse = (match.getInning().get(1)).getBatting_team().getShortname();
-			      break;
-			    default: 
-			    	teamNameToUse = (match.getInning().get(1)).getBatting_team().getFullname();
-			    	break;
-			    }
-		    }
-		    
+	    	switch (whichInning) {
+	        case 1: case 2: 
+		        break;
+		    default: 
+		        System.out.println("EROR: Selected inning is wrong [" + whichInning + "]");
+	    		return CricketFunctions.generateTossResult(match, CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL);
+	    	}
+		}
+
+		String matchSummaryStatus = generateMatchResult(match, teamNameType);
+
+	    if(matchSummaryStatus.trim().isEmpty()) {
 		    switch (whichInning) {
 		    case 1: 
 		    	if (((match.getInning().get(whichInning - 1)).getTotalRuns() > 0) || 
@@ -1272,42 +1228,100 @@ public class CricketFunctions {
 		    		return CricketFunctions.generateTossResult(match, CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL);
 		    	}
 		    case 2:
-			    if ((CricketFunctions.getRequiredRuns(match) > 0) && (CricketFunctions.getRequiredBalls(match) > 0) && (CricketFunctions.getWicketsLeft(match) > 0))
-			    {
-			      switch (teamNameType)
-			      {
-			      case "SHORT": 
-			        bottomLineText = teamNameToUse + " need " + CricketFunctions.getRequiredRuns(match) + 
-			        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
-			        break;
-			      default: 
-			        bottomLineText = teamNameToUse + " need " + CricketFunctions.getRequiredRuns(match) + 
-			        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
-			      }
-			      if (CricketFunctions.getRequiredBalls(match) >= 100) {
-			    	int  remain_balls = ((match.getMaxOvers() * 6) - (match.getInning().get(1).getTotalOvers()*6 + 
-			    			match.getInning().get(1).getTotalBalls()));
-			    	
-			        bottomLineText = bottomLineText + CricketFunctions.convertBallsintoOvers(remain_balls) + " over";
-			      } else {
-			        bottomLineText = bottomLineText + CricketFunctions.getRequiredBalls(match) + 
-			        	" ball" + CricketFunctions.Plural(CricketFunctions.getRequiredBalls(match));
-			      }
+				String batTeamNm = "", bowlTeamNm = "";
+		    	switch (teamNameType) {
+			    case CricketUtil.SHORT: 
+			    	batTeamNm = (match.getInning().get(1)).getBatting_team().getShortname();
+			    	bowlTeamNm = (match.getInning().get(1)).getBowling_team().getShortname();
+			    	break;
+			    default: 
+			    	batTeamNm = (match.getInning().get(1)).getBatting_team().getFullname();
+			    	bowlTeamNm = (match.getInning().get(1)).getBowling_team().getFullname();
+			    	break;
 			    }
-			    else if (CricketFunctions.getRequiredRuns(match) <= 0)
+			    if ((CricketFunctions.getRequiredRuns(match) > 0) && (CricketFunctions.getRequiredBalls(match) > 0) 
+			    		&& (CricketFunctions.getWicketsLeft(match) > 0)) {
+
+			    	matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
+				        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
+			    	if (CricketFunctions.getRequiredBalls(match) >= 100) {
+			    		matchSummaryStatus = matchSummaryStatus + CricketFunctions.OverBalls(0,CricketFunctions.getRequiredBalls(match)) + " over";
+					} else {
+						matchSummaryStatus = matchSummaryStatus + CricketFunctions.getRequiredBalls(match) + 
+								" ball" + CricketFunctions.Plural(CricketFunctions.getRequiredBalls(match));
+					}
+			    } else if (CricketFunctions.getRequiredRuns(match) <= 0)
 			    {
-			    	bottomLineText = teamNameToUse + " win by " + CricketFunctions.getWicketsLeft(match) + 
+			    	matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match) + 
 			    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
 			    }
 			    else if (CricketFunctions.getRequiredBalls(match) <= 0 || CricketFunctions.getWicketsLeft(match) <= 0)
 			    {
-			    	bottomLineText = teamNameToUse + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
+			    	matchSummaryStatus = bowlTeamNm + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
 			    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
 			    }
+		    	break;
 		    }
 	    }
-		return bottomLineText;
+	    return matchSummaryStatus;
 	}
+	
+	/*
+	 * public static String generateMatchSummaryStatus(int whichInning, Match match,
+	 * String teamNameType) { if (match.getMaxOvers() <= 0) { System.out.
+	 * println("EROR: generateMatchSummaryStatus NOT available for test matches");
+	 * return CricketFunctions.generateTossResult(match, CricketUtil.FULL,
+	 * CricketUtil.FIELD, CricketUtil.FULL); } else { switch (whichInning) { case 1:
+	 * case 2: break; default: System.out.println("EROR: Selected inning is wrong ["
+	 * + whichInning + "]"); return CricketFunctions.generateTossResult(match,
+	 * CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL); } }
+	 * 
+	 * String bottomLineText = generateMatchResult(match, teamNameType); // check
+	 * match result first
+	 * 
+	 * if(bottomLineText.trim().isEmpty()) { // No match result found
+	 * 
+	 * String teamNameToUse = ""; if (CricketFunctions.getRequiredBalls(match) <= 0
+	 * || CricketFunctions.getWicketsLeft(match) <= 0) { switch (teamNameType) {
+	 * case CricketUtil.SHORT: teamNameToUse =
+	 * (match.getInning().get(0)).getBatting_team().getShortname(); break; default:
+	 * teamNameToUse = (match.getInning().get(0)).getBatting_team().getFullname();
+	 * break; } }else { switch (teamNameType) { case CricketUtil.SHORT:
+	 * teamNameToUse = (match.getInning().get(1)).getBatting_team().getShortname();
+	 * break; default: teamNameToUse =
+	 * (match.getInning().get(1)).getBatting_team().getFullname(); break; } }
+	 * 
+	 * switch (whichInning) { case 1: if (((match.getInning().get(whichInning -
+	 * 1)).getTotalRuns() > 0) || ((match.getInning().get(whichInning -
+	 * 1)).getTotalOvers() > 0) || ((match.getInning().get(whichInning -
+	 * 1)).getTotalBalls() > 0)) { return "Current RunRate " +
+	 * (match.getInning().get(0)).getRunRate(); } else { return
+	 * CricketFunctions.generateTossResult(match, CricketUtil.FULL,
+	 * CricketUtil.FIELD, CricketUtil.FULL); } case 2: if
+	 * ((CricketFunctions.getRequiredRuns(match) > 0) &&
+	 * (CricketFunctions.getRequiredBalls(match) > 0) &&
+	 * (CricketFunctions.getWicketsLeft(match) > 0)) { switch (teamNameType) { case
+	 * "SHORT": bottomLineText = teamNameToUse + " need " +
+	 * CricketFunctions.getRequiredRuns(match) + " run" +
+	 * CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
+	 * break; default: bottomLineText = teamNameToUse + " need " +
+	 * CricketFunctions.getRequiredRuns(match) + " run" +
+	 * CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
+	 * } if (CricketFunctions.getRequiredBalls(match) >= 100) { bottomLineText =
+	 * bottomLineText +
+	 * CricketFunctions.OverBalls(0,CricketFunctions.getRequiredBalls(match)) +
+	 * " over"; } else { bottomLineText = bottomLineText +
+	 * CricketFunctions.getRequiredBalls(match) + " ball" +
+	 * CricketFunctions.Plural(CricketFunctions.getRequiredBalls(match)); } } else
+	 * if (CricketFunctions.getRequiredRuns(match) <= 0) { bottomLineText =
+	 * teamNameToUse + " win by " + CricketFunctions.getWicketsLeft(match) +
+	 * " wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
+	 * } else if (CricketFunctions.getRequiredBalls(match) <= 0 ||
+	 * CricketFunctions.getWicketsLeft(match) <= 0) { bottomLineText = teamNameToUse
+	 * + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + " run" +
+	 * CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1); } } }
+	 * return bottomLineText; }
+	 */
 	
 	public static String getPowerPlayScore(Inning inning,int inn_number, String seperator,List<Event> events) {
 		int total_run_PP=0, total_wickets_PP=0;
