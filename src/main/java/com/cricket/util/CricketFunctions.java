@@ -1177,7 +1177,7 @@ public class CricketFunctions {
 
 	public static int getRequiredBalls(Match match) {
 		
-		int requiredBalls = (getTargetOvers(match) * 6) - (match.getInning().get(1).getTotalOvers() * 6 - match.getInning().get(1).getTotalBalls());
+		int requiredBalls = ((getTargetOvers(match) * 6) - (match.getInning().get(1).getTotalOvers() * 6)) - match.getInning().get(1).getTotalBalls();
 		if(requiredBalls <= 0) {
 			requiredBalls = 0;
 		}
