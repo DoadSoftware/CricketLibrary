@@ -37,6 +37,12 @@ public class Partnership implements Comparable<Partnership>
   
   @XmlElement(name = "totalBalls")
   private int totalBalls;
+
+  @XmlElement(name = "totalFours")
+  private int totalFours;
+
+  @XmlElement(name = "totalSixes")
+  private int totalSixes;
   
   @XmlTransient
   private Player firstPlayer;
@@ -141,6 +147,22 @@ public int getSecondBatterBalls() {
 
 public void setSecondBatterBalls(int secondBatterBalls) {
 	this.secondBatterBalls = secondBatterBalls;
+}
+
+public int getTotalFours() {
+	return totalFours;
+}
+
+public void setTotalFours(int totalFours) {
+	this.totalFours = totalFours;
+}
+
+public int getTotalSixes() {
+	return totalSixes;
+}
+
+public void setTotalSixes(int totalSixes) {
+	this.totalSixes = totalSixes;
 }
 
 @Override
