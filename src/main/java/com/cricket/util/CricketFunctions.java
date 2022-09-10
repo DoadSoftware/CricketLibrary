@@ -1318,7 +1318,7 @@ public class CricketFunctions {
 			    	matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
 				        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
 			    	if (CricketFunctions.getRequiredBalls(match) >= 100) {
-			    		matchSummaryStatus = matchSummaryStatus + CricketFunctions.OverBalls(0,CricketFunctions.getRequiredBalls(match)) + " over";
+			    		matchSummaryStatus = matchSummaryStatus + CricketFunctions.OverBalls(0,CricketFunctions.getRequiredBalls(match)) + " overs";
 					} else {
 						matchSummaryStatus = matchSummaryStatus + CricketFunctions.getRequiredBalls(match) + 
 								" ball" + CricketFunctions.Plural(CricketFunctions.getRequiredBalls(match));
@@ -1416,7 +1416,7 @@ public class CricketFunctions {
 				for(BattingCard bc : inn.getBattingCard()){
 					if(inn.getFallsOfWickets().size() > 0){
 						if(inn.getFallsOfWickets().get(inn.getFallsOfWickets().size() - 1).getFowPlayerID() == bc.getPlayerId()) {
-							return bc.getPlayer().getFull_name().toUpperCase() + " " + bc.getRuns() + " (" + bc.getBalls() + ")" + " " + 
+							return bc.getPlayer().getTicker_name().toUpperCase() + " " + bc.getRuns() + " (" + bc.getBalls() + ")" + " " + 
 									bc.getHowOutText();
 						}
 					}								
