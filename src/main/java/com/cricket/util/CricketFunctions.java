@@ -1065,7 +1065,7 @@ public class CricketFunctions {
 		return this_over;
 	}
 
-	public static List<OverByOverData> getOverByOverData(Match match, String seperatorType, List<Event> events) 
+	public static List<OverByOverData> getOverByOverData(Match match, List<Event> events) 
 	{
 		List<OverByOverData> over_by_over_data = new ArrayList<OverByOverData>();
 		
@@ -1073,14 +1073,14 @@ public class CricketFunctions {
 		
 		if ((events != null) && (events.size() > 0)) {
 			  for (int i = 0; i < events.size(); i++) {
-				  	System.out.println("Event : " + events.get(i).getEventType());
+				  	//System.out.println("Event : " + events.get(i).getEventType());
 				  
-				    switch (events.get(i).getEventType()) {
-				    case CricketUtil.CHANGE_BOWLER:
-				    	
-				    	total_runs = 0; 
-				    	total_wickets = 0; 
-				    	break;
+				    switch (events.get(i).getEventType().toUpperCase()) {
+				    //case CricketUtil.CHANGE_BOWLER:
+				    	//total_runs = 0; 
+				    	//total_wickets = 0;
+				    	//System.out.println("Over change");
+				    	//break;
 				    	
 				    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 				    case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.LOG_WICKET: case CricketUtil.WIDE: case CricketUtil.NO_BALL: 
@@ -1088,19 +1088,21 @@ public class CricketFunctions {
 				    	
 				    	total_runs = total_runs + events.get(i).getEventRuns() 
 				    		+ events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
+				    	//System.out.println("Runs : " + total_runs);
 					    
-				    	switch (events.get(i).getEventType()) {
+				    	switch (events.get(i).getEventType().toUpperCase()) {
 					    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
-							if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)
+							if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
+								&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)
 								&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT)
 								&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED)) {
 									total_wickets = total_wickets + 1;
+								//System.out.println("Wickets : " + total_wickets);
 							}
 					    }
 		  		        break;
 		  		        
 				    case CricketUtil.END_OVER:
-				    	
 				    	switch (processPowerPlay(CricketUtil.FULL, match.getInning().get(events.get(i).getEventInningNumber() - 1), 
 				    			events.get(i).getEventOverNo(), events.get(i).getEventBallNo()).replace(CricketUtil.POWERPLAY, "").trim()) {
 				    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
@@ -1112,7 +1114,8 @@ public class CricketFunctions {
 					    			total_runs, total_wickets, false));
 				    		break;
 				    	}
-				    	
+				    	total_runs = 0; 
+				    	total_wickets = 0;
 				    	break;
 				    	
 				    }
@@ -1124,14 +1127,16 @@ public class CricketFunctions {
 	    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
 		    	over_by_over_data.add(new OverByOverData(events.get(events.size()-1).getEventInningNumber(), 
 		    			events.get(events.size()-1).getEventOverNo(), total_runs, total_wickets, true));
+		    	//System.out.println("OVER BY OVER DATA 2: " + over_by_over_data);
 	    		break;
 	    	default:
 		    	over_by_over_data.add(new OverByOverData(events.get(events.size()-1).getEventInningNumber(), 
 		    			events.get(events.size()-1).getEventOverNo(), total_runs, total_wickets, false));
+		    	//System.out.println("OVER BY OVER DATA 3: " + over_by_over_data);
 	    		break;
 	    	}
 		}
-		System.out.println("OVER BY OVER DATA : " + over_by_over_data);
+		//System.out.println("SIZE : " + over_by_over_data.size());
 		return over_by_over_data;
 	}
 	
