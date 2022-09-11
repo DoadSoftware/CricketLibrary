@@ -1,6 +1,8 @@
 package com.cricket.util;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
@@ -29,6 +31,15 @@ import com.cricket.model.Tournament;
 import com.cricket.service.CricketService;
 
 public class CricketFunctions {
+	
+	public static String whenWriteStringUsingBufferedWritter_thenCorrect(String str) 
+			  throws IOException {
+			    BufferedWriter writer = new BufferedWriter(new FileWriter("C:/Temp/LogFile.txt"));
+			    writer.write(str);
+			    
+			    writer.close();
+		return "";
+	}
 	
 	public static BestStats getProcessedBatsmanBestStats(BestStats best_stats) {
 		
@@ -1062,6 +1073,7 @@ public class CricketFunctions {
 		
 		if ((events != null) && (events.size() > 0)) {
 			  for (int i = 0; i < events.size(); i++) {
+				  	System.out.println("Event : " + events.get(i).getEventType());
 				  
 				    switch (events.get(i).getEventType()) {
 				    case CricketUtil.CHANGE_BOWLER:
@@ -1119,6 +1131,7 @@ public class CricketFunctions {
 	    		break;
 	    	}
 		}
+		System.out.println("OVER BY OVER DATA : " + over_by_over_data);
 		return over_by_over_data;
 	}
 	
