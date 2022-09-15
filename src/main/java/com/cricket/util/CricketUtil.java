@@ -149,6 +149,8 @@ public class CricketUtil {
 	public final static String INNING = "INNING";
 	public final static String OVER = "OVER";
 	public final static String PROJECTED = "PROJECTED";
+	
+	public final static String TIMELINE = "TIMELINE";
 
 	public final static String FIRST = "FIRST";
 	public final static String SECOND = "SECOND";
