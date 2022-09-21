@@ -876,30 +876,41 @@ public class CricketFunctions {
 		
 	}
 
-	public static String processPowerPlay(String powerplay_return_type, Inning inning, int total_overs, int total_balls)
+	public static String processPowerPlay(String powerplay_return_type, Inning inning, int total_overs, int total_balls,Match match)
 	{
 		String return_pp_txt = "";
-	    switch (powerplay_return_type)
-	    {
-	    case CricketUtil.FULL: 
-	      return_pp_txt = CricketUtil.POWERPLAY + " ";
-	      break;
-	    case CricketUtil.SHORT: 
-	      return_pp_txt = "PP";
-	    case CricketUtil.MINI: 
-		  return_pp_txt = "P";
-	    }
 	    
 	    int BallsBowledInInnings = total_overs * 6 + total_balls;
-	    
-	    if(BallsBowledInInnings >= ((inning.getFirstPowerplayStartOver() - 1) * 6 ) && BallsBowledInInnings < (inning.getFirstPowerplayEndOver()*6)) {
-	    	return_pp_txt = return_pp_txt + CricketUtil.ONE;
-	    }else if(BallsBowledInInnings >= ((inning.getSecondPowerplayStartOver() - 1) * 6) && BallsBowledInInnings < (inning.getSecondPowerplayEndOver()*6) ) {
-	    	return_pp_txt = return_pp_txt + CricketUtil.TWO;
-	    }else if(BallsBowledInInnings >= ((inning.getThirdPowerplayStartOver() - 1) * 6) && BallsBowledInInnings < (inning.getThirdPowerplayEndOver()*6)) {
-	    	return_pp_txt = return_pp_txt + CricketUtil.THREE;
+	    if(match.getMatchType() == CricketUtil.ODI) {
+	    	if(BallsBowledInInnings >= ((inning.getFirstPowerplayStartOver() - 1) * 6 ) && BallsBowledInInnings < (inning.getFirstPowerplayEndOver()*6)) {
+		    	return_pp_txt = CricketUtil.ONE;
+		    }else if(BallsBowledInInnings >= ((inning.getSecondPowerplayStartOver() - 1) * 6) && BallsBowledInInnings < (inning.getSecondPowerplayEndOver()*6) ) {
+		    	return_pp_txt = CricketUtil.TWO;
+		    }else if(BallsBowledInInnings >= ((inning.getThirdPowerplayStartOver() - 1) * 6) && BallsBowledInInnings < (inning.getThirdPowerplayEndOver()*6)) {
+		    	return_pp_txt = CricketUtil.THREE;
+		    }
+	    }else {
+	    	if(BallsBowledInInnings >= ((inning.getFirstPowerplayStartOver() - 1) * 6 ) && BallsBowledInInnings < (inning.getFirstPowerplayEndOver()*6)) {
+		    	return_pp_txt = CricketUtil.ONE;
+		    }else {
+		    	return_pp_txt = "";
+		    }
 	    }
 	    
+	    if(!return_pp_txt.trim().isEmpty()) {
+	    	switch (powerplay_return_type)
+		    {
+		    case CricketUtil.FULL: 
+		      return_pp_txt = CricketUtil.POWERPLAY + " " + return_pp_txt;
+		      break;
+		    case CricketUtil.SHORT: 
+		      return_pp_txt = "PP" + return_pp_txt;
+		      break;
+		    case CricketUtil.MINI: 
+			  return_pp_txt = "P" + return_pp_txt;
+			  break;
+		    }
+	    }
 	    return return_pp_txt;
 	}
 	
@@ -1104,7 +1115,7 @@ public class CricketFunctions {
 			  		        
 					    case CricketUtil.END_OVER:
 					    	switch (processPowerPlay(CricketUtil.FULL, match.getInning().get(events.get(i).getEventInningNumber() - 1), 
-					    			events.get(i).getEventOverNo(), events.get(i).getEventBallNo()).replace(CricketUtil.POWERPLAY, "").trim()) {
+					    			events.get(i).getEventOverNo(), events.get(i).getEventBallNo(),match).replace(CricketUtil.POWERPLAY, "").trim()) {
 					    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
 						    	over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
 						    			total_runs, total_wickets, true));
@@ -1131,7 +1142,7 @@ public class CricketFunctions {
 		}
 		if(total_runs > 0 || total_wickets > 0) {
 	    	switch (processPowerPlay(CricketUtil.FULL, match.getInning().get(events.get(events.size()-1).getEventInningNumber() - 1), 
-	    			events.get(events.size()-1).getEventOverNo(), events.get(events.size()-1).getEventBallNo()).replace(CricketUtil.POWERPLAY, "").trim()) {
+	    			events.get(events.size()-1).getEventOverNo(), events.get(events.size()-1).getEventBallNo(),match).replace(CricketUtil.POWERPLAY, "").trim()) {
 	    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
 		    	over_by_over_data.add(new OverByOverData(events.get(events.size()-1).getEventInningNumber(), 
 		    			events.get(events.size()-1).getEventOverNo(), total_runs, total_wickets, true));
