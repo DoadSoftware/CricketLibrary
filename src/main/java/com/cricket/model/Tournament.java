@@ -35,12 +35,11 @@ public Tournament() {
 	super();
 }
 
-public Tournament(int playerId, int matches, int runs, int fours, int sixes, int wickets, int runsConceded,
+public Tournament(int playerId, int runs, int fours, int sixes, int wickets, int runsConceded,
 		int ballsBowled, int ballsFaced, String notOut, Player player, List<BestStats> batsman_best_Stats,
 		List<BestStats> bowler_best_Stats) {
 	super();
 	this.playerId = playerId;
-	this.matches = matches;
 	this.runs = runs;
 	this.fours = fours;
 	this.sixes = sixes;
