@@ -89,7 +89,18 @@ public class Event implements Comparable<Event> {
 
   @XmlElement(name = "eventDescription")
   private String eventDescription;
+
+  @XmlElement(name = "substitutionMade")
+  private String substitutionMade;
   
+public String getSubstitutionMade() {
+	return substitutionMade;
+}
+
+public void setSubstitutionMade(String substitutionMade) {
+	this.substitutionMade = substitutionMade;
+}
+
 public String getDoNotIncrementBall() {
 	return doNotIncrementBall;
 }

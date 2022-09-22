@@ -75,8 +75,9 @@ public class CricketFunctions {
 	{
 		List<Match> tournament_matches = new ArrayList<Match>();
 		for(File file : files) {
-			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService, (Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
-					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + file.getName()))));
+			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService, (Match) 
+				JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
+				new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + file.getName()))));
 		}
 		return tournament_matches;
 	}
@@ -624,60 +625,57 @@ public class CricketFunctions {
 	    }
 	}
 	
+	public static Player populatePlayer(CricketService cricketService, Player player, Match match)
+	{
+		Player this_plyr = new Player();
+		this_plyr = cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(player.getPlayerId()));
+		if(this_plyr != null) {
+			this_plyr.setPlayerPosition(player.getPlayerPosition()); this_plyr.setCaptainWicketKeeper(player.getCaptainWicketKeeper());
+			if(match.getReadPhotoColumn().equalsIgnoreCase(CricketUtil.NO)) {
+				this_plyr.setPhoto("");
+			}
+		}
+		return this_plyr;
+	}
 	public static Match populateMatchVariables(CricketService cricketService,Match match) throws IllegalAccessException, InvocationTargetException 
 	{
 		List<Player> players = new ArrayList<Player>();
-		Player this_plyr = new Player();
 		
 		for(Player plyr:match.getHomeSquad()) {
-			this_plyr = cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(plyr.getPlayerId()));
-			if(this_plyr != null) {
-				this_plyr.setPlayerPosition(plyr.getPlayerPosition()); this_plyr.setCaptainWicketKeeper(plyr.getCaptainWicketKeeper());
-				if(match.getReadPhotoColumn().equalsIgnoreCase(CricketUtil.NO)) {
-					this_plyr.setPhoto("");
-				}
-				players.add(this_plyr);
-			}
+			players.add(populatePlayer(cricketService, plyr, match));
 		}
 		match.setHomeSquad(players);
 
 		players = new ArrayList<Player>();
+		for(Player plyr:match.getHomeSubstitutes()) {
+			players.add(populatePlayer(cricketService, plyr, match));
+		}
+		match.setHomeSubstitutes(players);
+		
+		players = new ArrayList<Player>();
 		if(match.getHomeOtherSquad() != null) {
 			for(Player plyr:match.getHomeOtherSquad()) {
-				this_plyr = cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(plyr.getPlayerId()));
-				if(this_plyr != null) {
-					if(match.getReadPhotoColumn().equalsIgnoreCase(CricketUtil.NO)) {
-						this_plyr.setPhoto("");
-					}
-					players.add(this_plyr);
-				}
+				players.add(populatePlayer(cricketService, plyr, match));
 			}
 		}
 		match.setHomeOtherSquad(players);
 		
 		players = new ArrayList<Player>();
 		for(Player plyr:match.getAwaySquad()) {
-			this_plyr = cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(plyr.getPlayerId()));
-			if(this_plyr != null) {
-				this_plyr.setPlayerPosition(plyr.getPlayerPosition()); this_plyr.setCaptainWicketKeeper(plyr.getCaptainWicketKeeper());
-				if(match.getReadPhotoColumn().equalsIgnoreCase(CricketUtil.NO)) {
-					this_plyr.setPhoto("");
-				}
-				players.add(this_plyr);
-			}
+			players.add(populatePlayer(cricketService, plyr, match));
 		}
 		match.setAwaySquad(players);
 
 		players = new ArrayList<Player>();
+		for(Player plyr:match.getAwaySubstitutes()) {
+			players.add(populatePlayer(cricketService, plyr, match));
+		}
+		match.setAwaySubstitutes(players);
+		
+		players = new ArrayList<Player>();
 		if(match.getAwayOtherSquad() != null) {
 			for(Player plyr:match.getAwayOtherSquad()) {
-				this_plyr = cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(plyr.getPlayerId()));
-				if(this_plyr != null) {
-					if(match.getReadPhotoColumn().equalsIgnoreCase(CricketUtil.NO)) {
-						this_plyr.setPhoto("");
-					}
-					players.add(this_plyr);
-				}
+				players.add(populatePlayer(cricketService, plyr, match));
 			}
 		}
 		match.setAwayOtherSquad(players);

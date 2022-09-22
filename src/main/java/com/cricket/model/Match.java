@@ -13,6 +13,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Match {
 
+  @XmlElement(name = "substitutesPerTeam")
+  private int substitutesPerTeam;
+	
   @XmlElement(name = "reviewsPerTeam")
   private String reviewsPerTeam;
 	
@@ -118,10 +121,18 @@ public class Match {
   @XmlElement(name = "homeSquad")
   private List<Player> homeSquad;
 
+  @XmlElementWrapper(name = "homeSubstitutes")
+  @XmlElement(name = "homeSubstitutes")
+  private List<Player> homeSubstitutes;
+  
   @XmlElementWrapper(name = "awaySquad")
   @XmlElement(name = "awaySquad")
   private List<Player> awaySquad;
 
+  @XmlElementWrapper(name = "awaySubstitutes")
+  @XmlElement(name = "awaySubstitutes")
+  private List<Player> awaySubstitutes;
+  
   @XmlElementWrapper(name = "homeOtherSquad")
   @XmlElement(name = "homeOtherSquad")
   private List<Player> homeOtherSquad;
@@ -133,6 +144,24 @@ public class Match {
   @XmlTransient
   private List<Event> events;
   
+public List<Player> getHomeSubstitutes() {
+	return homeSubstitutes;
+}
+public void setHomeSubstitutes(List<Player> homeSubstitutes) {
+	this.homeSubstitutes = homeSubstitutes;
+}
+public List<Player> getAwaySubstitutes() {
+	return awaySubstitutes;
+}
+public void setAwaySubstitutes(List<Player> awaySubstitutes) {
+	this.awaySubstitutes = awaySubstitutes;
+}
+public int getSubstitutesPerTeam() {
+	return substitutesPerTeam;
+}
+public void setSubstitutesPerTeam(int substitutesPerTeam) {
+	this.substitutesPerTeam = substitutesPerTeam;
+}
 public String getTargetType() {
 	return targetType;
 }
