@@ -91,6 +91,12 @@ public class Match {
   @XmlElement(name = "matchTotalSeconds")
   private long matchTotalSeconds;
   
+  @XmlElement(name = "bowlerRunning")
+  private String bowlerRunning;
+
+  @XmlElement(name = "ballRelease")
+  private String ballRelease;
+  
   @XmlTransient
   private Ground ground;
   
@@ -144,6 +150,18 @@ public class Match {
   @XmlTransient
   private List<Event> events;
   
+public String getBowlerRunning() {
+	return bowlerRunning;
+}
+public void setBowlerRunning(String bowlerRunning) {
+	this.bowlerRunning = bowlerRunning;
+}
+public String getBallRelease() {
+	return ballRelease;
+}
+public void setBallRelease(String ballRelease) {
+	this.ballRelease = ballRelease;
+}
 public List<Player> getHomeSubstitutes() {
 	return homeSubstitutes;
 }

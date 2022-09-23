@@ -19,6 +19,10 @@ public class CricketUtil {
 	public final static String DOUBLE_BACKSLASH = "\\";
 	public final static String MATCH = "MATCH";
 
+	public final static String LOG_VARIOUS = "LOG_VARIOUS";
+	public final static String BOWLER_RUNNING = "BOWLER_RUNNING";
+	public final static String BALL_RELEASE = "BALL_RELEASE";
+	
 	public final static String LOG_REVIEW = "LOG_REVIEW";
 	public final static String SUCCESSFUL = "SUCCESSFUL";
 	public final static String UNSUCCESSFUL = "UNSUCCESSFUL";
