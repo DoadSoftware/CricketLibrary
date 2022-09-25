@@ -16,6 +16,7 @@ import com.cricket.model.Player;
 import com.cricket.model.Statistics;
 import com.cricket.model.StatsType;
 import com.cricket.model.Team;
+import com.cricket.model.VariousText;
 import com.cricket.service.CricketService;
 
 @Service("cricketService")
@@ -60,11 +61,6 @@ public StatsType getStatsType(int stats_type_id) {
 	return cricketDao.getStatsType(stats_type_id);
 }
 
-/*@Override
-public List<Statistics> getPlayerStatistics(int player_id) {
-	return cricketDao.getPlayerStatistics(player_id);
-}*/
-
 @Override
 public List<NameSuper> getNameSupers() {
 	return cricketDao.getNameSupers();
@@ -93,6 +89,11 @@ public List<Player> getAllPlayer() {
 @Override
 public List<Fixture> getFixtures() {
 	return cricketDao.getFixtures();
+}
+
+@Override
+public List<VariousText> getVariousTexts() {
+	return cricketDao.getVariousTexts();
 }
 
 }

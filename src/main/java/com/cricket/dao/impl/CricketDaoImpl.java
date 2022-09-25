@@ -17,6 +17,7 @@ import com.cricket.model.Player;
 import com.cricket.model.Statistics;
 import com.cricket.model.StatsType;
 import com.cricket.model.Team;
+import com.cricket.model.VariousText;
 import com.cricket.util.CricketUtil;
 
 @Transactional
@@ -77,11 +78,6 @@ public StatsType getStatsType(int stats_type_id) {
 	return (StatsType) sessionFactory.getCurrentSession().createQuery("from StatsType WHERE StatsId=" + stats_type_id).uniqueResult();  
 }
 
-/*@Override
-public List<Statistics> getPlayerStatistics(int player_id) {
-	return sessionFactory.getCurrentSession().createQuery("from Statistics WHERE playerId = " + player_id).list();  
-}*/
-
 @Override
 public List<NameSuper> getNameSupers() {
 	return sessionFactory.getCurrentSession().createQuery("from NameSuper").list();
@@ -110,6 +106,11 @@ public List<Player> getAllPlayer() {
 @Override
 public List<Fixture> getFixtures() {
 	return sessionFactory.getCurrentSession().createQuery("from Fixture").list();
+}
+
+@Override
+public List<VariousText> getVariousTexts() {
+	return sessionFactory.getCurrentSession().createQuery("from VariousText").list();
 }
 
 }

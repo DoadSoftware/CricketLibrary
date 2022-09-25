@@ -11,6 +11,7 @@ import com.cricket.model.Player;
 import com.cricket.model.Statistics;
 import com.cricket.model.StatsType;
 import com.cricket.model.Team;
+import com.cricket.model.VariousText;
 
 public interface CricketService {
   Player getPlayer(String whatToProcess, String valueToProcess);
@@ -26,5 +27,5 @@ public interface CricketService {
   List<Statistics> getAllStats();
   List<Player> getAllPlayer();
   List<Fixture> getFixtures();
-  //List<Statistics> getPlayerStatistics(int player_id);
+  List<VariousText> getVariousTexts();
 }
