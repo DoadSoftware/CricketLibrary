@@ -69,7 +69,7 @@ public class BattingCard implements Comparable<BattingCard>{
   @XmlElement(name = "strikeRate")
   private String strikeRate;
 
-  @XmlTransient
+  @XmlElement(name = "wasHowOutFielderSubstitute")
   private String WasHowOutFielderSubstitute;
   
   @XmlElement(name = "concussionPlayerId")
