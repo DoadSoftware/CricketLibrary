@@ -21,16 +21,33 @@ import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
 import com.cricket.model.BowlingCard;
 import com.cricket.model.Event;
+import com.cricket.model.Fixture;
 import com.cricket.model.Inning;
 import com.cricket.model.Match;
 import com.cricket.model.OverByOverData;
 import com.cricket.model.Partnership;
 import com.cricket.model.Player;
 import com.cricket.model.Statistics;
+import com.cricket.model.Team;
 import com.cricket.model.Tournament;
 import com.cricket.service.CricketService;
 
 public class CricketFunctions {
+	
+	public static List<Fixture> processAllFixtures(CricketService cricketService) {
+		List<Fixture> fixtures = cricketService.getFixtures();
+		for(Team tm : cricketService.getTeams()) {
+			for(Fixture fix : fixtures) {
+				if(fix.getHometeamid() == tm.getTeamId()) {
+					fix.setHome_Team(tm);
+				}
+				if(fix.getAwayteamid() == tm.getTeamId()) {
+					fix.setAway_Team(tm);
+				}
+			}
+		}
+		return fixtures;
+	}
 	
 	public static String whenWriteStringUsingBufferedWritter_thenCorrect(String str) 
 			  throws IOException {
@@ -1174,8 +1191,7 @@ public class CricketFunctions {
 			  		        break;
 			  		        
 					    case CricketUtil.END_OVER:
-					    	switch (processPowerPlay(CricketUtil.FULL, match.getInning().get(events.get(i).getEventInningNumber() - 1), 
-					    			events.get(i).getEventOverNo(), events.get(i).getEventBallNo(),match).replace(CricketUtil.POWERPLAY, "").trim()) {
+					    	switch (processPowerPlay(CricketUtil.FULL, match).replace(CricketUtil.POWERPLAY, "").trim()) {
 					    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
 						    	over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
 						    			total_runs, total_wickets, true));
@@ -1201,8 +1217,7 @@ public class CricketFunctions {
 			  }
 		}
 		if(total_runs > 0 || total_wickets > 0) {
-	    	switch (processPowerPlay(CricketUtil.FULL, match.getInning().get(events.get(events.size()-1).getEventInningNumber() - 1), 
-	    			events.get(events.size()-1).getEventOverNo(), events.get(events.size()-1).getEventBallNo(),match).replace(CricketUtil.POWERPLAY, "").trim()) {
+	    	switch (processPowerPlay(CricketUtil.FULL, match).replace(CricketUtil.POWERPLAY, "").trim()) {
 	    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
 		    	over_by_over_data.add(new OverByOverData(events.get(events.size()-1).getEventInningNumber(), 
 		    			events.get(events.size()-1).getEventOverNo(), total_runs, total_wickets, true));
