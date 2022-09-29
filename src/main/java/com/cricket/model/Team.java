@@ -13,17 +13,17 @@ public class Team implements Comparable<Team> {
   @Column(name = "TEAMID")
   private int teamId;
 	
-  @Column(name = "FULLNAME")
-  private String fullname;
+  @Column(name = "TeamName1")
+  private String teamName1;
 
-  @Column(name = "SHORTNAME")
-  private String shortname;
+  @Column(name = "TeamName2")
+  private String teamName2;
   
-  @Column(name = "FIRSTNAME")
-  private String firstname;
+  @Column(name = "TeamName3")
+  private String teamName3;
   
-  @Column(name = "LASTNAME")
-  private String lastname;
+  @Column(name = "TeamName4")
+  private String teamName4;
 
 public int getTeamId() {
 	return teamId;
@@ -33,42 +33,42 @@ public void setTeamId(int teamId) {
 	this.teamId = teamId;
 }
 
-public String getFullname() {
-	return fullname;
+public String getTeamName1() {
+	return teamName1;
 }
 
-public void setFullname(String fullname) {
-	this.fullname = fullname;
+public void setTeamName1(String teamName1) {
+	this.teamName1 = teamName1;
 }
 
-public String getShortname() {
-	return shortname;
+public String getTeamName2() {
+	return teamName2;
 }
 
-public void setShortname(String shortname) {
-	this.shortname = shortname;
+public void setTeamName2(String teamName2) {
+	this.teamName2 = teamName2;
 }
 
-public String getFirstname() {
-	return firstname;
+public String getTeamName3() {
+	return teamName3;
 }
 
-public void setFirstname(String firstname) {
-	this.firstname = firstname;
+public void setTeamName3(String teamName3) {
+	this.teamName3 = teamName3;
 }
 
-public String getLastname() {
-	return lastname;
+public String getTeamName4() {
+	return teamName4;
 }
 
-public void setLastname(String lastname) {
-	this.lastname = lastname;
+public void setTeamName4(String teamName4) {
+	this.teamName4 = teamName4;
 }
 
 @Override
 public String toString() {
-	return "Team [teamId=" + teamId + ", fullname=" + fullname + ", shortname=" + shortname + ", firstname=" + firstname
-			+ ", lastname=" + lastname + "]";
+	return "Team [teamId=" + teamId + ", teamName1=" + teamName1 + ", teamName2=" + teamName2 + ", teamName3="
+			+ teamName3 + ", teamName4=" + teamName4 + "]";
 }
 
 @Override

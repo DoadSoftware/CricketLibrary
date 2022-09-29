@@ -537,16 +537,16 @@ public class CricketFunctions {
 					switch (teamNameType) {
 					case CricketUtil.SHORT:
 						if(Integer.valueOf(match.getMatchResult().split(",")[0]) == match.getHomeTeamId()) {
-							resultToShow = match.getHomeTeam().getShortname();
+							resultToShow = match.getHomeTeam().getTeamName4();
 						} else {
-							resultToShow = match.getAwayTeam().getShortname();
+							resultToShow = match.getAwayTeam().getTeamName4();
 						}
 					    break;
 					default:
 						if(Integer.valueOf(match.getMatchResult().split(",")[0]) == match.getHomeTeamId()) {
-							resultToShow = match.getHomeTeam().getFullname();
+							resultToShow = match.getHomeTeam().getTeamName1();
 						} else {
-							resultToShow = match.getAwayTeam().getFullname();
+							resultToShow = match.getAwayTeam().getTeamName1();
 						}
 					    break;
 					}
@@ -866,42 +866,48 @@ public class CricketFunctions {
 		
 	}
 
-	public static String processPowerPlay(String powerplay_return_type, Inning inning, int total_overs, int total_balls,Match match)
+	public static String processPowerPlay(String powerplay_return_type,Match match)
 	{
 		String return_pp_txt = "";
+		int BallsBowledInInnings = 0;
 	    
-	    int BallsBowledInInnings = total_overs * 6 + total_balls;
-	    if(match.getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
-	    	
-	    	if(BallsBowledInInnings >= ((inning.getFirstPowerplayStartOver() - 1) * 6 ) && BallsBowledInInnings < (inning.getFirstPowerplayEndOver()*6)) {
-		    	return_pp_txt = CricketUtil.ONE;
-		    }else if(BallsBowledInInnings >= ((inning.getSecondPowerplayStartOver() - 1) * 6) && BallsBowledInInnings < (inning.getSecondPowerplayEndOver()*6) ) {
-		    	return_pp_txt = CricketUtil.TWO;
-		    }else if(BallsBowledInInnings >= ((inning.getThirdPowerplayStartOver() - 1) * 6) && BallsBowledInInnings < (inning.getThirdPowerplayEndOver()*6)) {
-		    	return_pp_txt = CricketUtil.THREE;
-		    }
-	    }else {
-	    	if(BallsBowledInInnings >= ((inning.getFirstPowerplayStartOver() - 1) * 6 ) && BallsBowledInInnings < (inning.getFirstPowerplayEndOver()*6)) {
-		    	return_pp_txt = "";
-		    }else {
-		    	return_pp_txt = "";
-		    }
-	    }
+		for(Inning inn : match.getInning()) {
+			if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
+				BallsBowledInInnings = inn.getTotalOvers() * 6 + inn.getTotalBalls();
+			    if(match.getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
+			    	
+			    	if(BallsBowledInInnings >= ((inn.getFirstPowerplayStartOver() - 1) * 6 ) && BallsBowledInInnings < (inn.getFirstPowerplayEndOver()*6)) {
+				    	return_pp_txt = CricketUtil.ONE;
+				    }else if(BallsBowledInInnings >= ((inn.getSecondPowerplayStartOver() - 1) * 6) && BallsBowledInInnings < (inn.getSecondPowerplayEndOver()*6) ) {
+				    	return_pp_txt = CricketUtil.TWO;
+				    }else if(BallsBowledInInnings >= ((inn.getThirdPowerplayStartOver() - 1) * 6) && BallsBowledInInnings < (inn.getThirdPowerplayEndOver()*6)) {
+				    	return_pp_txt = CricketUtil.THREE;
+				    }
+			    }else {
+			    	if(BallsBowledInInnings >= ((inn.getFirstPowerplayStartOver() - 1) * 6 ) && BallsBowledInInnings < (inn.getFirstPowerplayEndOver()*6)) {
+				    	return_pp_txt = CricketUtil.ONE;
+				    }else {
+				    	return_pp_txt = "";
+				    }
+			    }
+			    
+			    if(!return_pp_txt.trim().isEmpty()) {
+			    	switch (powerplay_return_type)
+				    {
+				    case CricketUtil.FULL: 
+				      return_pp_txt = CricketUtil.POWERPLAY + " " + return_pp_txt;
+				      break;
+				    case CricketUtil.SHORT: 
+				      return_pp_txt = "PP" + return_pp_txt;
+				      break;
+				    case CricketUtil.MINI: 
+					  return_pp_txt = "P" + return_pp_txt;
+					  break;
+				    }
+			    }
+			}
+		}
 	    
-	    if(!return_pp_txt.trim().isEmpty()) {
-	    	switch (powerplay_return_type)
-		    {
-		    case CricketUtil.FULL: 
-		      return_pp_txt = CricketUtil.POWERPLAY + " " + return_pp_txt;
-		      break;
-		    case CricketUtil.SHORT: 
-		      return_pp_txt = "PP" + return_pp_txt;
-		      break;
-		    case CricketUtil.MINI: 
-			  return_pp_txt = "P" + return_pp_txt;
-			  break;
-		    }
-	    }
 	    return return_pp_txt;
 	}
 	
@@ -1278,16 +1284,16 @@ public class CricketFunctions {
 		switch (teamNameType) {
 		case CricketUtil.SHORT:
 			if(match.getTossWinningTeam() == match.getHomeTeamId()) {
-				TeamNameToUse = match.getHomeTeam().getShortname();
+				TeamNameToUse = match.getHomeTeam().getTeamName4();
 			} else {
-				TeamNameToUse = match.getAwayTeam().getShortname();
+				TeamNameToUse = match.getAwayTeam().getTeamName4();
 			}
 		    break;
 		default:
 			if(match.getTossWinningTeam() == match.getHomeTeamId()) {
-				TeamNameToUse = match.getHomeTeam().getFullname();
+				TeamNameToUse = match.getHomeTeam().getTeamName1();
 			} else {
-				TeamNameToUse = match.getAwayTeam().getFullname();
+				TeamNameToUse = match.getAwayTeam().getTeamName1();
 			}
 		    break;
 		}
@@ -1392,12 +1398,12 @@ public class CricketFunctions {
 				String batTeamNm = "", bowlTeamNm = "";
 		    	switch (teamNameType) {
 			    case CricketUtil.SHORT: 
-			    	batTeamNm = (match.getInning().get(1)).getBatting_team().getShortname();
-			    	bowlTeamNm = (match.getInning().get(1)).getBowling_team().getShortname();
+			    	batTeamNm = (match.getInning().get(1)).getBatting_team().getTeamName4();
+			    	bowlTeamNm = (match.getInning().get(1)).getBowling_team().getTeamName4();
 			    	break;
 			    default: 
-			    	batTeamNm = (match.getInning().get(1)).getBatting_team().getFullname();
-			    	bowlTeamNm = (match.getInning().get(1)).getBowling_team().getFullname();
+			    	batTeamNm = (match.getInning().get(1)).getBatting_team().getTeamName1();
+			    	bowlTeamNm = (match.getInning().get(1)).getBowling_team().getTeamName1();
 			    	break;
 			    }
 			    if ((CricketFunctions.getRequiredRuns(match) > 0) && (CricketFunctions.getRequiredBalls(match) > 0) 
