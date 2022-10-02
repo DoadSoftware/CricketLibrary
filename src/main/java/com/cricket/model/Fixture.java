@@ -23,6 +23,9 @@ public class Fixture {
   @Column(name = "AWAYTEAM")
   private int awayteamid;
   
+  @Column(name = "Winner")
+  private String winnerteam;
+  
   @Transient
   private Team home_Team;
 
@@ -86,5 +89,12 @@ public void setAway_Team(Team away_Team) {
 	this.away_Team = away_Team;
 }
 
-  
+public String getWinnerteam() {
+	return winnerteam;
+}
+
+public void setWinnerteam(String winnerteam) {
+	this.winnerteam = winnerteam;
+}
+
 }

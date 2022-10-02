@@ -132,7 +132,7 @@ public class CricketFunctions {
 										stat.setHundreds(stat.getHundreds() + 1);
 									}
 									
-									if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+									/*if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
 										temp = String.valueOf((bc.getRuns()*2)+1);
 										if(Integer.valueOf(temp) > Integer.valueOf(stat.getBest_score())) {
 											stat.setBest_score(temp);
@@ -142,7 +142,7 @@ public class CricketFunctions {
 										if(Integer.valueOf(temp) > Integer.valueOf(stat.getBest_score())) {
 											stat.setBest_score(temp);
 										}
-									}
+									}*/
 								}
 							}
 							break;
@@ -163,7 +163,7 @@ public class CricketFunctions {
 										//player_found = true;
 										stat.setWickets(stat.getWickets() + boc.getWickets());
 										stat.setRuns_conceded(stat.getRuns_conceded() + boc.getRuns());
-										stat.setBalls_bowled(stat.getBalls_bowled() + boc.getOvers());
+										stat.setBalls_bowled(stat.getBalls_bowled() + (boc.getOvers()*6 + boc.getBalls()));
 										stat.setDotbowled(stat.getDotbowled() + boc.getDots());
 										if(boc.getWickets() < 5 && boc.getWickets() >= 3) {
 											stat.setPlus_3(stat.getPlus_3() + 1);
@@ -171,10 +171,10 @@ public class CricketFunctions {
 										else if(boc.getWickets() >= 5){
 											stat.setPlus_5(stat.getPlus_5() + 1);
 										}
-										temp = String.valueOf((1000*boc.getWickets())-boc.getRuns());
+										/*temp = String.valueOf((1000*boc.getWickets())-boc.getRuns());
 										if(Integer.valueOf(temp) > Integer.valueOf(stat.getBest_figures())) {
 											stat.setBest_figures(temp);
-										}
+										}*/
 									}
 								}							
 							}
@@ -225,7 +225,7 @@ public class CricketFunctions {
 								stat.setHundreds(stat.getHundreds() + 1);
 							}
 							
-							if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+							/*if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
 								temp = String.valueOf((bc.getRuns()*2)+1);
 								if(Integer.valueOf(temp) > Integer.valueOf(stat.getBest_score())) {
 									stat.setBest_score(temp);
@@ -235,7 +235,7 @@ public class CricketFunctions {
 								if(Integer.valueOf(temp) > Integer.valueOf(stat.getBest_score())) {
 									stat.setBest_score(temp);
 								}
-							}
+							}*/
 						}
 					}
 					break;
@@ -256,7 +256,7 @@ public class CricketFunctions {
 								player_found = true;
 								stat.setWickets(stat.getWickets() + boc.getWickets());
 								stat.setRuns_conceded(stat.getRuns_conceded() + boc.getRuns());
-								stat.setBalls_bowled(stat.getBalls_bowled() + boc.getOvers());
+								stat.setBalls_bowled(stat.getBalls_bowled() + (boc.getOvers()*6 + boc.getBalls()));
 								stat.setDotbowled(stat.getDotbowled() + boc.getDots());
 								//System.out.println(boc.getWickets());
 								if(boc.getWickets() >= 3 && boc.getWickets() < 5) {
@@ -264,10 +264,10 @@ public class CricketFunctions {
 								}else if(boc.getWickets() >= 5){
 									stat.setPlus_5(stat.getPlus_5() + 1);
 								}
-								temp = String.valueOf((1000*boc.getWickets())-boc.getRuns());
+								/*temp = String.valueOf((1000*boc.getWickets())-boc.getRuns());
 								if(Integer.valueOf(temp) > Integer.valueOf(stat.getBest_figures())) {
 									stat.setBest_figures(temp);
-								}
+								}*/
 							}
 						}							
 					}
@@ -1096,11 +1096,18 @@ public class CricketFunctions {
 		    			}
 		    		}
 		    		if(this_ball_data.isEmpty()) {
-		    			if(events.get(i).getEventRuns()>0) {
-		    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns();
+		    			if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+		    				if(events.get(i).getEventRuns()>0) {
+			    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns();
+			    			}else {
+			    				this_ball_data = events.get(i).getEventExtra();
+			    			}
 		    			}else {
-		    				this_ball_data = events.get(i).getEventExtra();
+		    				if(events.get(i).getEventRuns()>0) {
+			    				this_ball_data = String.valueOf(events.get(i).getEventRuns());
+			    			}
 		    			}
+		    			
 		    		}else {
 		    			this_ball_data = this_ball_data + events.get(i).getEventExtra();
 		    		}
@@ -1404,7 +1411,7 @@ public class CricketFunctions {
 		    	if (((match.getInning().get(whichInning - 1)).getTotalRuns() > 0) || 
 		  		      ((match.getInning().get(whichInning - 1)).getTotalOvers() > 0) || 
 		  		      ((match.getInning().get(whichInning - 1)).getTotalBalls() > 0)) {
-		  		      return "Current RunRate " + (match.getInning().get(0)).getRunRate();
+		  		      return "Current Run Rate " + (match.getInning().get(0)).getRunRate();
 		  		    }
 		    	else {
 		    		return CricketFunctions.generateTossResult(match, CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL);
