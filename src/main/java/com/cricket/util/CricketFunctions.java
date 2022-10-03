@@ -101,7 +101,6 @@ public class CricketFunctions {
 
 	public static Statistics updateTournamentDataWithStats(Statistics stat,String typeOfProfile,List<Match> tournament_matches,Match currentMatch) 
 	{
-		String temp = "";
 		boolean player_found = false;
 		for(Match match : tournament_matches) {
 			if(!match.getMatchFileName().equalsIgnoreCase(currentMatch.getMatchFileName())) {
@@ -193,7 +192,6 @@ public class CricketFunctions {
 	
 	public static Statistics updateStatisticsWithMatchData(Statistics stat, Match match, String typeOfProfile)
 	{
-		String temp = "";
 		boolean player_found = false;
 		player_found = false;
 		
@@ -1346,10 +1344,10 @@ public class CricketFunctions {
 		return targetRuns;
 	}
 
-	public static int getTargetOvers(Match match) {
+	public static String getTargetOvers(Match match) {
 		
-		int targetOvers = match.getMaxOvers();
-		if(match.getTargetOvers() > 0) {
+		String targetOvers = String.valueOf(match.getMaxOvers());
+		if(match.getTargetOvers() != null || match.getTargetOvers().trim().isEmpty()) {
 			targetOvers = match.getTargetOvers();
 		}
 		return targetOvers;
@@ -1366,7 +1364,14 @@ public class CricketFunctions {
 
 	public static int getRequiredBalls(Match match) {
 		
-		int requiredBalls = ((getTargetOvers(match) * 6) - (match.getInning().get(1).getTotalOvers() * 6)) - match.getInning().get(1).getTotalBalls();
+		int requiredBalls;
+		if(getTargetOvers(match).contains(".")) {
+			requiredBalls = ((Integer.valueOf(getTargetOvers(match).split(".")[0]) * 6) + Integer.valueOf(getTargetOvers(match).split(".")[1])) 
+					- (match.getInning().get(1).getTotalOvers() * 6) - match.getInning().get(1).getTotalBalls();
+		} else {
+			requiredBalls = ((Integer.valueOf(getTargetOvers(match)) * 6)) 
+					- (match.getInning().get(1).getTotalOvers() * 6) - match.getInning().get(1).getTotalBalls();
+		}
 		if(requiredBalls <= 0) {
 			requiredBalls = 0;
 		}

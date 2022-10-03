@@ -77,7 +77,7 @@ public class Match {
   private String targetType;
   
   @XmlElement(name = "targetOvers")
-  private int targetOvers;
+  private String targetOvers;
 
   @XmlElement(name = "venueName")
   private String venueName;
@@ -294,10 +294,10 @@ public int getTargetRuns() {
 public void setTargetRuns(int targetRuns) {
 	this.targetRuns = targetRuns;
 }
-public int getTargetOvers() {
+public String getTargetOvers() {
 	return targetOvers;
 }
-public void setTargetOvers(int targetOvers) {
+public void setTargetOvers(String targetOvers) {
 	this.targetOvers = targetOvers;
 }
 public List<Player> getHomeSquad() {
