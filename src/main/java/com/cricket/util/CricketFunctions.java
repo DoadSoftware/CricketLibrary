@@ -829,7 +829,7 @@ public class CricketFunctions {
 				bc.setHowOutPartOne(bc.getHowOutText());
 				bc.setHowOutPartTwo("");
 				break;
-			case CricketUtil.TIME_OUT:
+			case CricketUtil.TIMED_OUT:
 				bc.setHowOutText("timed out");
 				bc.setHowOutPartOne(bc.getHowOutText());
 				bc.setHowOutPartTwo("");

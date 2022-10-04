@@ -73,7 +73,7 @@ public class CricketUtil {
 	public final static String HANDLED_THE_BALL = "HANDLED_THE_BALL";
 	public final static String HIT_BALL_TWICE = "HIT_BALL_TWICE";
 	public final static String OBSTRUCTING_FIELDER = "OBSTRUCTING_FIELDER";
-	public final static String TIME_OUT = "TIME_OUT";
+	public final static String TIMED_OUT = "TIMED_OUT";
 	public final static String RETIRED_HURT = "RETIRED_HURT";
 	public final static String RETIRED_OUT = "RETIRED_OUT";
 	public final static String ABSENT_HURT = "ABSENT_HURT";
