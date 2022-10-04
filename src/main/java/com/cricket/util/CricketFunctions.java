@@ -34,6 +34,21 @@ import com.cricket.service.CricketService;
 
 public class CricketFunctions {
 	
+	public static BowlingCard getCurrentInningCurrentBowler(Match match) {
+		BowlingCard current_bowler = null;
+		for(Inning inn : match.getInning()) {
+			if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
+				for(BowlingCard boc : inn.getBowlingCard()) {
+					if(boc.getStatus().toUpperCase().equalsIgnoreCase("CURRENTBOWLER") 
+							|| boc.getStatus().toUpperCase().equalsIgnoreCase("LASTBOWLER")) {
+						current_bowler = boc;
+					}
+				}
+			}
+		}
+		return current_bowler;
+	}
+	
 	public static List<Fixture> processAllFixtures(CricketService cricketService) {
 		List<Fixture> fixtures = cricketService.getFixtures();
 		for(Team tm : cricketService.getTeams()) {
@@ -595,7 +610,7 @@ public class CricketFunctions {
 		return new SimpleDateFormat("yyyy-MM-dd").format(new Date(httpCon.getDate()));
 	}	
 
-	public static class BatsmenBestStatsComparator implements Comparator<BestStats> {
+	public static class PlayerBestStatsComparator implements Comparator<BestStats> {
 	    @Override
 	    public int compare(BestStats bs1, BestStats bs2) {
 	       return Integer.compare(bs2.getBestEquation(), bs1.getBestEquation());
@@ -926,33 +941,36 @@ public class CricketFunctions {
 	    return return_pp_txt;
 	}
 	
-	public static String lastFewOversData(String whatToProcess, List<Event> events)
+	public static String lastFewOversData(String whatToProcess, List<Event> events,int inn_number)
 	{
 	    int count_lb = 0;
 	    boolean exitLoop = false;
 	    if ((events != null) && (events.size() > 0)) {
 	      for (Event evnt : events)
 	      {
-	        if (((whatToProcess.equalsIgnoreCase(CricketUtil.BOUNDARY)) 
-	        		&& (evnt.getEventType().equalsIgnoreCase(CricketUtil.SIX))) 
-	        		|| (evnt.getEventType().equalsIgnoreCase(CricketUtil.FOUR))) {
-	          break;
-	        }
-	        switch (evnt.getEventType()) {
-	        case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.DOT: case CricketUtil.FIVE: case CricketUtil.BYE: 
-	        case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET: 
-	          count_lb += 1;
-	          break;
-	        case CricketUtil.LOG_ANY_BALL: 
-	          if (((evnt.getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (evnt.getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
-	        		  && (evnt.getEventWasABoundary() != null) &&  (evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
-	            exitLoop = true;
-	          }
-	          break;
-	        }
-	        if (exitLoop == true) {
-	          break;
-	        }
+	    	  if(evnt.getEventInningNumber() == inn_number) {
+	    		  if (((whatToProcess.equalsIgnoreCase(CricketUtil.BOUNDARY)) 
+	  	        		&& (evnt.getEventType().equalsIgnoreCase(CricketUtil.SIX))) 
+	  	        		|| (evnt.getEventType().equalsIgnoreCase(CricketUtil.FOUR))) {
+	    			  count_lb = 0;
+	  	          //break;
+	  	        }
+	  	        switch (evnt.getEventType()) {
+	  	        case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.DOT: case CricketUtil.FIVE: case CricketUtil.BYE: 
+	  	        case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET:
+	  	          count_lb += 1;
+	  	          break;
+	  	        case CricketUtil.LOG_ANY_BALL: 
+	  	          if (((evnt.getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (evnt.getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
+	  	        		  && (evnt.getEventWasABoundary() != null) &&  (evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+	  	            exitLoop = true;
+	  	          }
+	  	          break;
+	  	        }
+	  	        if (exitLoop == true) {
+	  	          break;
+	  	        }
+	    	  }
 	      }
 	    }
 	    return String.valueOf(count_lb);

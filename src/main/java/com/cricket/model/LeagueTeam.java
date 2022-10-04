@@ -11,6 +11,9 @@ public class LeagueTeam {
 	@XmlElement(name="QualifiedStatus")
 	private String QualifiedStatus;
 	
+	@XmlElement(name="Pool")
+	private String pool;
+	
 	@XmlElement(name="TeamName")
 	private String TeamName;
 	
@@ -39,6 +42,14 @@ public class LeagueTeam {
 
 	public void setQualifiedStatus(String qualifiedStatus) {
 		QualifiedStatus = qualifiedStatus;
+	}
+	
+	public String getPool() {
+		return pool;
+	}
+
+	public void setPool(String pool) {
+		this.pool = pool;
 	}
 
 	public String getTeamName() {
