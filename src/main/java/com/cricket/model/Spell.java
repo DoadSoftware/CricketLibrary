@@ -15,9 +15,6 @@ public class Spell {
   @XmlElement(name = "playerId")
   private int playerId;
 
-  @XmlElement(name = "overs")
-  private int overs;
-
   @XmlElement(name = "balls")
   private int balls;
 
@@ -54,14 +51,6 @@ public int getPlayerId() {
 
 public void setPlayerId(int playerId) {
 	this.playerId = playerId;
-}
-
-public int getOvers() {
-	return overs;
-}
-
-public void setOvers(int overs) {
-	this.overs = overs;
 }
 
 public int getBalls() {
