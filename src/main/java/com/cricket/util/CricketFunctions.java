@@ -1080,9 +1080,9 @@ public class CricketFunctions {
 		if ((events != null) && (events.size() > 0)) {
 		  for (int i = events.size() - 1; i >= 0; i--)
 		  {
-			  if (whatToProcess.equalsIgnoreCase(CricketUtil.OVER) && events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
-                  break;
-              }
+			if (whatToProcess.equalsIgnoreCase(CricketUtil.OVER) && events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
+				break;
+            }
 			  
 		    this_ball_data = "";
 		    switch (events.get(i).getEventType())
@@ -1183,6 +1183,26 @@ public class CricketFunctions {
 		//System.out.println(this_over);
 		return this_over;
 	}
+	
+	public static int getLastBallData(List<Event> events) 
+	{
+		int last_ball_run = -1;
+
+		if ((events != null) && (events.size() > 0)) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+			    switch (events.get(i).getEventType()) {
+			    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
+			    case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
+			    case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+			    	last_ball_run = events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
+			    	break;
+			    }
+			    if(last_ball_run >= 0)
+			    	break;
+			}
+		}
+		return last_ball_run;
+	}	
 
 	public static List<OverByOverData> getOverByOverData(Match match, int inn_num , String type,List<Event> events) 
 	{
