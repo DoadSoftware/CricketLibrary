@@ -634,14 +634,23 @@ public class CricketFunctions {
 	public static class BatsmenRunComparator implements Comparator<Tournament> {
 	    @Override
 	    public int compare(Tournament bc1, Tournament bc2) {
-	       return Integer.compare(bc2.getBatsmanScoreSortData(), bc1.getBatsmanScoreSortData());
+	    	if(bc2.getRuns() == bc1.getRuns()) {
+	    		return Integer.compare(bc2.getBatsmanStrikeRateSortData(), bc1.getBatsmanStrikeRateSortData());
+	    	}else {
+	    		return Integer.compare(bc2.getBatsmanScoreSortData(), bc1.getBatsmanScoreSortData());
+	    	}
 	    }
 	}
 	
 	public static class BowlerWicketsComparator implements Comparator<Tournament> {
 	    @Override
 	    public int compare(Tournament bc1, Tournament bc2) {
-	       return Integer.compare(bc2.getBowlerFigureSortData(), bc1.getBowlerFigureSortData());
+	    	if(bc2.getWickets() == bc1.getWickets()) {
+	    		return Integer.compare(bc2.getBowlerEconomySortData(), bc1.getBowlerEconomySortData());
+	    	}else {
+	    		return Integer.compare(bc2.getBowlerFigureSortData(), bc1.getBowlerFigureSortData());
+	    	}
+	       
 	    }
 	}
 	

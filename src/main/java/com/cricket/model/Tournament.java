@@ -54,15 +54,39 @@ public Tournament(int playerId, int runs, int fours, int sixes, int wickets, int
 }
 
 public int getBatsmanScoreSortData() {
-		int sortData = this.getRuns();
-		if(this.getNotOut() != null && this.getNotOut().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
-			sortData = sortData + 1;
-		}
-		return 1000 * sortData + 1000 - this.getBallsFaced();
+	int sortData = this.getRuns();
+	if(this.getNotOut() != null && this.getNotOut().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+		sortData = sortData + 1;
+	}
+	return 1000 * sortData + 1000 - this.getBallsFaced();
 }
- 
-public int getBowlerFigureSortData() {
-		return 1000 * this.getWickets() - this.getRunsConceded();
+
+public int getBatsmanStrikeRateSortData() {
+	int temp = 0;
+	if(this.getBallsFaced() >= 1) {
+		temp = (100*this.getRuns())/this.getBallsFaced();
+	}
+	if(temp > 32000) {
+		return 0 ;
+	}else {
+		return temp;
+	}
+}
+
+public int getBowlerFigureSortData() {	
+	return 1000 * this.getWickets() - this.getRunsConceded();
+}
+
+public int getBowlerEconomySortData() {
+	int temp = 0;
+	if(this.getBallsBowled()>0) {
+		temp = (1000*this.getRunsConceded())/this.getBallsBowled();
+	}
+	if(temp > 32000) {
+		return 32000;
+	}else {
+		return 20000-temp;
+	}
 }
 
 public int getBatsmanFoursSortData() {
