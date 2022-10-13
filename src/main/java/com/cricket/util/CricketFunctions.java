@@ -1380,7 +1380,9 @@ public class CricketFunctions {
 	public static String getTargetOvers(Match match) {
 		
 		String targetOvers = String.valueOf(match.getMaxOvers());
-		if(match.getTargetOvers() != null || match.getTargetOvers().trim().isEmpty()) {
+		if(match.getTargetOvers() == null || match.getTargetOvers().trim().isEmpty()) {
+			targetOvers = "0";
+		} else {
 			targetOvers = match.getTargetOvers();
 		}
 		return targetOvers;
