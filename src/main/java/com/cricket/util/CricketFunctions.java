@@ -34,7 +34,7 @@ import com.cricket.service.CricketService;
 
 public class CricketFunctions {
 	
-	public static BowlingCard getCurrentInningCurrentBowler(Match match) {
+public static BowlingCard getCurrentInningCurrentBowler(Match match) {
 		BowlingCard current_bowler = null;
 		for(Inning inn : match.getInning()) {
 			if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
@@ -904,6 +904,147 @@ public class CricketFunctions {
 		return Overs_text;
 		
 	}
+	
+	public static List<String> getSplit(int inning_number, int splitvalue, Match match,List<Event> events) {
+		int total_runs = 0, total_balls = 0 ;
+		List<String> Balls = new ArrayList<String>();
+		if((events != null) && (events.size() > 0)) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+				if(events.get(i).getEventInningNumber() == inning_number) {
+					//System.out.println("Inn Number" + inning_number);
+					int max_balls = (match.getMaxOvers() * 6);
+					int count_balls = ((match.getInning().get(inning_number-1).getTotalOvers() * 6) + match.getInning().get(inning_number-1).getTotalBalls());
+					
+					switch (events.get(i).getEventType()) {
+					case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR:  case CricketUtil.FIVE: case CricketUtil.SIX: 
+					case CricketUtil.LEG_BYE: case CricketUtil.BYE: case CricketUtil.LOG_WICKET:
+						total_balls = total_balls + 1 ;
+						total_runs = total_runs + events.get(i).getEventRuns();
+						break;
+					
+					case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.PENALTY:
+						total_runs = total_runs + events.get(i).getEventRuns();
+						break;
+					
+					case CricketUtil.LOG_ANY_BALL:
+						total_runs += events.get(i).getEventRuns();
+			          if (events.get(i).getEventExtra() != null) {
+			        	 total_runs += events.get(i).getEventExtraRuns();
+			          }
+			          if (events.get(i).getEventSubExtra() != null) {
+			        	 total_runs += events.get(i).getEventSubExtraRuns();
+			          }
+			          break;
+					}
+					
+					if(count_balls <= max_balls && total_runs >= splitvalue) {
+						
+						Balls.add(String.valueOf(total_balls));
+						total_runs = total_runs - splitvalue;
+						total_balls = 0;
+						
+						continue;
+					}
+				}
+			}
+		}
+		return Balls ;
+	}
+	
+	public static String getbattingstyle (String battingType,String FullNShort,boolean justHand,boolean men_women) {
+		
+		String HandWord="",Text="";
+		
+		if(justHand == true) {
+			HandWord = "Hand";
+		}else {
+			HandWord = "Handed";
+		}
+		
+		if(FullNShort == CricketUtil.FULL) {
+			if(men_women == true) {
+				if(battingType.charAt(0) == 'L') {
+					Text = "Left-" + HandWord + " Batter";
+				}else {
+					Text = "Right-" + HandWord + " Batter";
+				}
+			}else {
+				if(battingType.charAt(0) == 'L') {
+					Text = "Left-" + HandWord + " Batsman";
+				}else {
+					Text = "Right-" + HandWord + " Batsman";
+				}
+			}
+		}else {
+			if(battingType.charAt(0) == 'L') {
+				Text = "Left-" + HandWord + " Bat";
+			}else {
+				Text = "Right-" + HandWord + " Bat";
+			}
+		}
+
+		return Text;
+	}
+
+	public static String getbowlingstyle(String bowlingType) {
+		
+		String text="",Style="";
+		
+		if(bowlingType.charAt(0) == 'L') {
+			text = "Left Arm" ;
+		}else {
+			text = "Right Arm" ;
+		}
+		
+		if(bowlingType == "WSL") {
+			text = "Left Arm Wrist Spin";
+		}else if(bowlingType == "WSR"){
+			text = "Right Arm Wrist Spin";
+		}
+		
+		Style = bowlingType.substring(1);
+			
+		switch (Style) {
+		case "":
+			text = text + " Bowler";
+			break;
+		case "F":
+			text = text + " Fast";
+			break;
+		case "FM":
+			text = text + " Fast Medium";
+			break;
+		case "MF":
+			text = text + " Medium Fast";
+			break;
+		case "M":
+			text = text + " Medium";
+			break;
+		case "SM":
+			text = text + " Slow Medium";
+			break;
+		case "OB":
+			text = text + " Off-Break";
+			break;
+		case "LB":
+			text = text + " Leg-Break";
+			break;
+		case "CH":
+			text = text + " Chinaman";
+			break;
+		case "SO":
+			text = text + " Orthodox";
+			break;
+		case "LG":
+			text = text + " Leg-Break Googly";
+			break;
+		case "SL":
+			text = "Slow Left Arm";
+			break;
+		
+		}
+		return text;
+	}
 
 	public static String processPowerPlay(String powerplay_return_type,Match match)
 	{
@@ -1683,20 +1824,57 @@ public class CricketFunctions {
 			+ seperator + String.valueOf(fours) + seperator + String.valueOf(fives) + seperator + String.valueOf(sixes);
 	}
 	
-	public List<String> projectedScore(Match match, List<Integer> rates, String seperator) {
-
+	public static List<String> projectedScore(Match match) {
+		//rates= 6,8,10 or 8,10,12
 		List<String> proj_score = new ArrayList<String>();
-		
-		int remaining_balls_count = (match.getMaxOvers() * 6 - (match.getInning().get(0).getTotalOvers() * 6 + match.getInning().get(0).getTotalBalls()));
-		int PS_Curr = (int) ((match.getInning().get(0).getTotalRuns() + remaining_balls_count * Double.valueOf((match.getInning().get(0).getRunRate()))) / 6);
-		
-		proj_score.add(match.getInning().get(0).getRunRate());
-		proj_score.add(String.valueOf(PS_Curr));
+		String  PS_Curr="", PS_1 = "",PS_2 = "",RR_1 = "",RR_2 = "",CRR = "";
+		int Balls_val = 0;
 
-		for(Integer rate : rates) {
-			proj_score.add(rate + seperator + String.valueOf(((match.getInning().get(0).getTotalRuns()) + remaining_balls_count * rate)/6));
+		if(Double.valueOf(match.getTargetOvers()) > 0) {
+			if(match.getTargetOvers().contains(".")) {
+				Balls_val = (Integer.valueOf(match.getTargetOvers().split("\\.")[0]) * 6) + Integer.valueOf(match.getTargetOvers().split("\\.")[1]);
+			}else {
+				Balls_val = Integer.valueOf(match.getTargetOvers()) * 6;
+			}
+			//Over_val = match.getTargetOvers();
+		}else {
+			Balls_val = match.getMaxOvers()*6;
 		}
 		
+		int remaining_balls = (Balls_val - (match.getInning().get(0).getTotalOvers()*6 + match.getInning().get(0).getTotalBalls()));
+		double value = (remaining_balls * Double.valueOf(match.getInning().get(0).getRunRate()));
+		value  = value/6;
+		
+		PS_Curr = String.valueOf(Math.round(((value + match.getInning().get(0).getTotalRuns()))));
+		CRR = match.getInning().get(0).getRunRate();
+		
+		proj_score.add(CRR);
+		proj_score.add(String.valueOf(PS_Curr));
+		
+		String[] arr = (match.getInning().get(0).getRunRate().split("\\."));
+	    double[] intArr= new double[2];
+	    intArr[0]=Integer.parseInt(arr[0]);
+	  
+		for(int i=2;i<=4;i=i+2) {
+			if(i==2) {
+				value = (remaining_balls * (intArr[0] + i));
+				value = value / 6;
+				PS_1 = String.valueOf(Math.round(value + match.getInning().get(0).getTotalRuns()));
+				RR_1 = String.valueOf(((int)intArr[0] + i));
+				
+				proj_score.add(RR_1);
+				proj_score.add(PS_1);
+			}
+			else if(i==4) {
+				value = (remaining_balls * (intArr[0] + i));
+				value = value / 6;
+				PS_2 = String.valueOf(Math.round(value + match.getInning().get(0).getTotalRuns()));
+				RR_2 = String.valueOf(((int)intArr[0] + i));
+				
+				proj_score.add(RR_2);
+				proj_score.add(PS_2);
+			}
+		}
 		return proj_score ;
 	}
 

@@ -14,6 +14,9 @@ public class Fixture {
   @Column(name = "MATCHNUMBER")
   private int matchnumber;
   
+  @Column(name = "MatchFileName")
+  private String matchfilename;
+  
   @Column(name = "Date")
   private String date;
 
@@ -47,6 +50,14 @@ public int getMatchnumber() {
 
 public void setMatchnumber(int matchnumber) {
 	this.matchnumber = matchnumber;
+}
+
+public String getMatchfilename() {
+	return matchfilename;
+}
+
+public void setMatchfilename(String matchfilename) {
+	this.matchfilename = matchfilename;
 }
 
 public String getDate() {
