@@ -1580,22 +1580,48 @@ public static BowlingCard getCurrentInningCurrentBowler(Match match) {
 		return wicketsLeft;
 	}
 
-	public static String generateMatchSummaryStatus(int whichInning, Match match, String teamNameType) {
-
-		if (match.getMaxOvers() <= 0 || match.getReducedOvers() <= 0) {
-	    	System.out.println("EROR: generateMatchSummaryStatus NOT available for test matches");
-	    	switch (whichInning) {
-	        case 1: case 2: 
-		        break;
-		    default: 
-		        System.out.println("EROR: Selected inning is wrong [" + whichInning + "]");
-	    		return CricketFunctions.generateTossResult(match, CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL);
-	    	}
+	public static int getTeamRunsAhead(int inning_number, Match match)
+	{
+		int total_runs = 0, batting_team_id = 0;
+		for(Inning inn : match.getInning()) {
+			if(inn.getInningNumber() == inning_number) {
+				batting_team_id = inn.getBattingTeamId();
+			}
 		}
+		if(batting_team_id > 0) {
+			for(Inning inn : match.getInning()) {
+				if (inn.getInningNumber() <= inning_number) {
+					if(inn.getBattingTeamId() == batting_team_id) {
+						total_runs = total_runs + inn.getTotalRuns();
+					} else {
+						total_runs = total_runs - inn.getTotalRuns();
+					}
+				}
+			}
+		}
+		return total_runs;
+	}
+	
+	public static String generateMatchSummaryStatus(int whichInning, Match match, String teamNameType) {
 
 		String matchSummaryStatus = generateMatchResult(match, teamNameType);
 
 	    if(matchSummaryStatus.trim().isEmpty()) {
+	    	
+	    	int lead_by = getTeamRunsAhead(whichInning,match);
+			String batTeamNm = "", bowlTeamNm = "";
+
+			switch (teamNameType) {
+		    case CricketUtil.SHORT: 
+		    	batTeamNm = (match.getInning().get(whichInning - 1)).getBatting_team().getTeamName4();
+		    	bowlTeamNm = (match.getInning().get(whichInning - 1)).getBowling_team().getTeamName4();
+		    	break;
+		    default: 
+		    	batTeamNm = (match.getInning().get(whichInning - 1)).getBatting_team().getTeamName1();
+		    	bowlTeamNm = (match.getInning().get(whichInning - 1)).getBowling_team().getTeamName1();
+		    	break;
+		    }
+	    	
 		    switch (whichInning) {
 		    case 1: 
 		    	if (((match.getInning().get(whichInning - 1)).getTotalRuns() > 0) || 
@@ -1606,39 +1632,48 @@ public static BowlingCard getCurrentInningCurrentBowler(Match match) {
 		    	else {
 		    		return CricketFunctions.generateTossResult(match, CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL);
 		    	}
-		    case 2:
-				String batTeamNm = "", bowlTeamNm = "";
-		    	switch (teamNameType) {
-			    case CricketUtil.SHORT: 
-			    	batTeamNm = (match.getInning().get(1)).getBatting_team().getTeamName4();
-			    	bowlTeamNm = (match.getInning().get(1)).getBowling_team().getTeamName4();
-			    	break;
-			    default: 
-			    	batTeamNm = (match.getInning().get(1)).getBatting_team().getTeamName1();
-			    	bowlTeamNm = (match.getInning().get(1)).getBowling_team().getTeamName1();
-			    	break;
-			    }
-			    if ((CricketFunctions.getRequiredRuns(match) > 0) && (CricketFunctions.getRequiredBalls(match) > 0) 
-			    		&& (CricketFunctions.getWicketsLeft(match) > 0)) {
+		    case 2: case 3:
+		    	if(match.getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
+		    		if(lead_by > 0) {
+				    	matchSummaryStatus = batTeamNm + " lead by " + lead_by + " run" + Plural(lead_by);
+		    		} else if(lead_by == 0) {
+				    	matchSummaryStatus = "Scores are level";
+		    		} else {
+				    	matchSummaryStatus = batTeamNm + " trail by " + (-1 * lead_by) + " run" + Plural(-1 * lead_by);
+		    		}
+		    	} else {
+				    if ((CricketFunctions.getRequiredRuns(match) > 0) && (CricketFunctions.getRequiredBalls(match) > 0) 
+				    		&& (CricketFunctions.getWicketsLeft(match) > 0)) {
 
-			    	matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
-				        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
-			    	if (CricketFunctions.getRequiredBalls(match) >= 100) {
-			    		matchSummaryStatus = matchSummaryStatus + CricketFunctions.OverBalls(0,CricketFunctions.getRequiredBalls(match)) + " overs";
-					} else {
-						matchSummaryStatus = matchSummaryStatus + CricketFunctions.getRequiredBalls(match) + 
-								" ball" + CricketFunctions.Plural(CricketFunctions.getRequiredBalls(match));
-					}
-			    } else if (CricketFunctions.getRequiredRuns(match) <= 0)
-			    {
-			    	matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match) + 
-			    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
-			    }
-			    else if (CricketFunctions.getRequiredBalls(match) <= 0 || CricketFunctions.getWicketsLeft(match) <= 0)
-			    {
-			    	matchSummaryStatus = bowlTeamNm + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
-			    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
-			    }
+				    	matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
+					        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
+				    	if (CricketFunctions.getRequiredBalls(match) >= 100) {
+				    		matchSummaryStatus = matchSummaryStatus + CricketFunctions.OverBalls(0,CricketFunctions.getRequiredBalls(match)) + " overs";
+						} else {
+							matchSummaryStatus = matchSummaryStatus + CricketFunctions.getRequiredBalls(match) + 
+									" ball" + CricketFunctions.Plural(CricketFunctions.getRequiredBalls(match));
+						}
+				    } else if (CricketFunctions.getRequiredRuns(match) <= 0)
+				    {
+				    	matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match) + 
+				    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
+				    }
+				    else if (CricketFunctions.getRequiredBalls(match) <= 0 || CricketFunctions.getWicketsLeft(match) <= 0)
+				    {
+				    	matchSummaryStatus = bowlTeamNm + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
+				    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
+				    }
+		    	}
+		    	break;
+		    case 4:
+		    	int required_runs = 1 - lead_by;
+		    	if(required_runs > 0) {
+		    		if(match.getInning().get(whichInning - 1).getTotalRuns() == 0) {
+				    	matchSummaryStatus = batTeamNm + " need " + required_runs + " run" + CricketFunctions.Plural(required_runs) + " to win";
+		    		} else {
+				    	matchSummaryStatus = batTeamNm + " need " + required_runs + " more run" + CricketFunctions.Plural(required_runs) + " to win";
+		    		}
+		    	}
 		    	break;
 		    }
 	    }

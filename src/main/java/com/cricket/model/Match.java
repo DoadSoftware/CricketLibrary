@@ -12,6 +12,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement(name="Match")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Match {
+	
+  @XmlElement(name = "followOn")
+  private String followOn;
 
   @XmlElement(name = "substitutesPerTeam")
   private int substitutesPerTeam;
@@ -150,6 +153,12 @@ public class Match {
   @XmlTransient
   private List<Event> events;
   
+public String getFollowOn() {
+	return followOn;
+}
+public void setFollowOn(String followOn) {
+	this.followOn = followOn;
+}
 public String getBowlerRunning() {
 	return bowlerRunning;
 }
