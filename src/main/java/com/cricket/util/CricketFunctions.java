@@ -34,7 +34,7 @@ import com.cricket.service.CricketService;
 
 public class CricketFunctions {
 	
-public static BowlingCard getCurrentInningCurrentBowler(Match match) {
+	public static BowlingCard getCurrentInningCurrentBowler(Match match) {
 		BowlingCard current_bowler = null;
 		for(Inning inn : match.getInning()) {
 			if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
@@ -1481,9 +1481,9 @@ public static BowlingCard getCurrentInningCurrentBowler(Match match) {
 
 	public static String getTargetOvers(Match match) {
 		
-		String targetOvers = String.valueOf(match.getMaxOvers());
+		String targetOvers = "";
 		if(match.getTargetOvers() == null || match.getTargetOvers().trim().isEmpty()) {
-			targetOvers = "0";
+			targetOvers = String.valueOf(match.getMaxOvers());
 		} else {
 			targetOvers = match.getTargetOvers();
 		}
@@ -1817,7 +1817,7 @@ public static BowlingCard getCurrentInningCurrentBowler(Match match) {
 		String  PS_Curr="", PS_1 = "",PS_2 = "",RR_1 = "",RR_2 = "",CRR = "";
 		int Balls_val = 0;
 
-		if(Double.valueOf(match.getTargetOvers()) > 0) {
+		if(!match.getTargetOvers().isEmpty() && Double.valueOf(match.getTargetOvers()) > 0) {
 			if(match.getTargetOvers().contains(".")) {
 				Balls_val = (Integer.valueOf(match.getTargetOvers().split("\\.")[0]) * 6) + Integer.valueOf(match.getTargetOvers().split("\\.")[1]);
 			}else {
