@@ -681,7 +681,9 @@ public class CricketFunctions {
 			match.setAwayTeam(cricketService.getTeam(CricketUtil.TEAM, String.valueOf(match.getAwayTeamId())));
 		if(match.getGroundId() > 0) {
 			match.setGround(cricketService.getGround(match.getGroundId()));
-			match.setVenueName(match.getGround().getFullname());
+			if(match.getGround() != null) {
+				match.setVenueName(match.getGround().getFullname());
+			}
 		}
 		
 		for(Inning inn:match.getInning()) {
@@ -1471,12 +1473,19 @@ public class CricketFunctions {
 	}
 
 	public static int getTargetRuns(Match match) {
-		
-		int targetRuns = match.getInning().get(0).getTotalRuns() + 1;
-		if(match.getTargetRuns() > 0) {
-			targetRuns = match.getTargetRuns();
+		if(match.getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
+			int targetRuns = ((match.getInning().get(0).getTotalRuns() + match.getInning().get(2).getTotalRuns()) - (match.getInning().get(1).getTotalRuns() + match.getInning().get(3).getTotalRuns())) + 1;
+			if(match.getTargetRuns() > 0) {
+				targetRuns = match.getTargetRuns();
+			}
+			return targetRuns;
+		}else {
+			int targetRuns = match.getInning().get(0).getTotalRuns() + 1;
+			if(match.getTargetRuns() > 0) {
+				targetRuns = match.getTargetRuns();
+			}
+			return targetRuns;
 		}
-		return targetRuns;
 	}
 
 	public static String getTargetOvers(Match match) {
