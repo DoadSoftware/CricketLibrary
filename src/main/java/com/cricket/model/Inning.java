@@ -14,6 +14,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Inning {
 
+  @XmlElement(name = "isDeclared")
+  private String isDeclared;
+	
   @XmlElement(name = "inningNumber")
   private int inningNumber;
 
@@ -133,6 +136,14 @@ public Inning() {
 public Inning(int oversRemaining) {
 	super();
 	this.oversRemaining = oversRemaining;
+}
+
+public String getIsDeclared() {
+	return isDeclared;
+}
+
+public void setIsDeclared(String isDeclared) {
+	this.isDeclared = isDeclared;
 }
 
 public int getOversRemaining() {

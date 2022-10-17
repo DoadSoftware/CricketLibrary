@@ -536,14 +536,14 @@ public class CricketFunctions {
 						resultToShow = resultToShow + " win by super over";
 					} else if(match.getMatchResult().toUpperCase().contains(CricketUtil.INNING) 
 							&& match.getMatchResult().toUpperCase().contains(CricketUtil.RUN)) {
-						resultToShow = resultToShow + " win by an inning and " + Integer.valueOf(match.getMatchResult().split(",")[2]) 
-							+ " run" + Plural(Integer.valueOf(match.getMatchResult().split(",")[2]));
+						resultToShow = resultToShow + " win by an inning and " + Integer.valueOf(match.getMatchResult().split(",")[1]) 
+							+ " run" + Plural(Integer.valueOf(match.getMatchResult().split(",")[1]));
 					} else if (match.getMatchResult().toUpperCase().contains(CricketUtil.RUN)) {
-						resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatchResult().split(",")[2]) 
-							+ " run" + Plural(Integer.valueOf(match.getMatchResult().split(",")[2]));
+						resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatchResult().split(",")[1]) 
+							+ " run" + Plural(Integer.valueOf(match.getMatchResult().split(",")[1]));
 					} else if (match.getMatchResult().toUpperCase().contains(CricketUtil.WICKET)) {
-						resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatchResult().split(",")[2]) 
-							+ " wicket" + Plural(Integer.valueOf(match.getMatchResult().split(",")[2]));
+						resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatchResult().split(",")[1]) 
+							+ " wicket" + Plural(Integer.valueOf(match.getMatchResult().split(",")[1]));
 					}
 					if(match.getMatchResult().toUpperCase().contains(CricketUtil.DLS)) {
 						resultToShow = resultToShow + " (" + CricketUtil.DLS + ")";

@@ -12,10 +12,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement(name="Match")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Match {
-	
+
   @XmlElement(name = "followOn")
   private String followOn;
 
+  @XmlElement(name = "followOnThreshold")
+  private int followOnThreshold;
+  
   @XmlElement(name = "substitutesPerTeam")
   private int substitutesPerTeam;
 	
@@ -153,6 +156,12 @@ public class Match {
   @XmlTransient
   private List<Event> events;
   
+public int getFollowOnThreshold() {
+	return followOnThreshold;
+}
+public void setFollowOnThreshold(int followOnThreshold) {
+	this.followOnThreshold = followOnThreshold;
+}
 public String getFollowOn() {
 	return followOn;
 }
