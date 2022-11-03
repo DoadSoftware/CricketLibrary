@@ -510,10 +510,15 @@ public class CricketFunctions {
 						&& !match.getMatchType().equalsIgnoreCase(CricketUtil.TEST)) { // For limited over match use match tied
 					resultToShow = CricketUtil.MATCH.toLowerCase() + " " + CricketUtil.TIED.toLowerCase();
 				} else {
-					resultToShow = CricketUtil.MATCH.toLowerCase() + " " + match.getMatchResult().toLowerCase();
+					resultToShow = CricketUtil.MATCH.toLowerCase();
+					if(match.getMatchResult().toUpperCase().contains(CricketUtil.DRAWN)) {
+						resultToShow = resultToShow + " " + CricketUtil.DRAWN.toLowerCase();
+					} else if(match.getMatchResult().toUpperCase().contains(CricketUtil.ABANDONED)) {
+						resultToShow = resultToShow + " " + CricketUtil.ABANDONED.toLowerCase();
+					}
 				}
 			} else if(match.getMatchResult().toUpperCase().contains(CricketUtil.NO_RESULT)) {
-				resultToShow = match.getMatchResult().toLowerCase().replace("_", " ");
+				resultToShow = CricketUtil.NO_RESULT.toLowerCase().replace("_", " ");
 			} else {
 				if(match.getMatchResult().contains(",")) {
 					switch (teamNameType) {
