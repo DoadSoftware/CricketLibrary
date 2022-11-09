@@ -1629,6 +1629,13 @@ public class CricketFunctions {
 				    	matchSummaryStatus = bowlTeamNm + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
 				    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
 				    }
+				    if(match.getTargetType() != null) {
+						if(match.getTargetType().equalsIgnoreCase(CricketUtil.DLS)) {
+							matchSummaryStatus = matchSummaryStatus + " (" + CricketUtil.DLS + ")";
+						}else if(match.getTargetType().equalsIgnoreCase(CricketUtil.VJD)) {
+							matchSummaryStatus = matchSummaryStatus + " (" + CricketUtil.VJD + ")";
+						}
+				    }
 		    	}
 		    	break;
 		    case 4:
