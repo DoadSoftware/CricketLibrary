@@ -1153,6 +1153,9 @@ public class CricketFunctions {
 			        	break;
 			        	
 			        case CricketUtil.LOG_WICKET:
+			        	if(events.get(i).getEventRuns() > 0) {
+			        		total_runs += events.get(i).getEventRuns();
+			        	}
 			        	if(events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)) {
 			        		total_wickets += 0;
 			        	}else {
@@ -1337,7 +1340,7 @@ public class CricketFunctions {
 						    }
 			  		        break;
 			  		        
-					    case CricketUtil.END_OVER:
+					    case CricketUtil.CHANGE_BOWLER:
 					    	switch (processPowerPlay(CricketUtil.FULL, match).replace(CricketUtil.POWERPLAY, "").trim()) {
 					    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
 						    	over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
@@ -1375,6 +1378,7 @@ public class CricketFunctions {
 	    		break;
 	    	}
 		}
+		//System.out.println("over = " + over_by_over_data);
 		return over_by_over_data;
 	}
 	
