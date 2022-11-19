@@ -93,6 +93,25 @@ public class Event implements Comparable<Event> {
   @XmlElement(name = "substitutionMade")
   private String substitutionMade;
   
+public Event() {
+	super();
+}
+
+public Event(int eventNumber, int eventStatNumber, String eventType, String eventDescription, int eventInningNumber, int eventBatterNo,
+		int eventBowlerNo, int eventRuns, int eventOverNo, int eventBallNo) {
+	super();
+	this.eventNumber = eventNumber;
+	this.eventStatNumber = eventStatNumber;
+	this.eventType = eventType;
+	this.eventDescription = eventDescription;
+	this.eventInningNumber = eventInningNumber;
+	this.eventBatterNo = eventBatterNo;
+	this.eventBowlerNo = eventBowlerNo;
+	this.eventRuns = eventRuns;
+	this.eventOverNo = eventOverNo;
+	this.eventBallNo = eventBallNo;
+}
+
 public String getSubstitutionMade() {
 	return substitutionMade;
 }

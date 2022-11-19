@@ -153,9 +153,19 @@ public class Match {
   @XmlElement(name = "awayOtherSquad")
   private List<Player> awayOtherSquad;
 
+  @XmlElementWrapper(name = "shots")
+  @XmlElement(name = "shot")
+  private List<Shot> shots;
+  
   @XmlTransient
   private List<Event> events;
   
+public List<Shot> getShots() {
+	return shots;
+}
+public void setShots(List<Shot> shots) {
+	this.shots = shots;
+}
 public int getFollowOnThreshold() {
 	return followOnThreshold;
 }
