@@ -27,6 +27,9 @@ public class Configurations {
 	@XmlElement(name="vizscene")
 	private String vizscene;
 
+	@XmlElement(name="statsOption")
+	private String statsOption;
+	
 	public Configurations(String filename, String broadcaster, 
 			String sponsor, String ipAddress, int portNumber, String vizscene) {
 		super();
@@ -38,6 +41,14 @@ public class Configurations {
 		this.vizscene = vizscene;
 	}
 	
+	public String getStatsOption() {
+		return statsOption;
+	}
+
+	public void setStatsOption(String statsOption) {
+		this.statsOption = statsOption;
+	}
+
 	public Configurations() {
 		super();
 	}
