@@ -92,6 +92,9 @@ public class Event implements Comparable<Event> {
 
   @XmlElement(name = "substitutionMade")
   private String substitutionMade;
+
+  @XmlElement(name = "eventSpeed")
+  private String eventSpeed;
   
 public Event() {
 	super();
@@ -110,6 +113,14 @@ public Event(int eventNumber, int eventStatNumber, String eventType, String even
 	this.eventRuns = eventRuns;
 	this.eventOverNo = eventOverNo;
 	this.eventBallNo = eventBallNo;
+}
+
+public String getEventSpeed() {
+	return eventSpeed;
+}
+
+public void setEventSpeed(String eventSpeed) {
+	this.eventSpeed = eventSpeed;
 }
 
 public String getSubstitutionMade() {

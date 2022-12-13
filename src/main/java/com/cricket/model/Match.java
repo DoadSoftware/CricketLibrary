@@ -103,17 +103,20 @@ public class Match {
   @XmlElement(name = "ballRelease")
   private String ballRelease;
 
+  @XmlElement(name = "homeTeam")
+  private Team homeTeam;
+
+  @XmlElement(name = "awayTeam")
+  private Team awayTeam;
+
+  @XmlElement(name = "enableSpeed")
+  private String enableSpeed;
+  
   @XmlTransient
   private Ground ground;
   
   @XmlTransient
   private NameSuper nameSuper;
-
-  @XmlTransient
-  private Team homeTeam;
-
-  @XmlTransient
-  private Team awayTeam;
 
   @XmlTransient
   private int selected_inning;
@@ -166,6 +169,14 @@ public String getFollowOn() {
 
 public void setFollowOn(String followOn) {
 	this.followOn = followOn;
+}
+
+public String getEnableSpeed() {
+	return enableSpeed;
+}
+
+public void setEnableSpeed(String enableSpeed) {
+	this.enableSpeed = enableSpeed;
 }
 
 public int getFollowOnThreshold() {

@@ -8,15 +8,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-
+import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-
 import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
 import com.cricket.model.BowlingCard;
@@ -33,6 +35,12 @@ import com.cricket.model.Tournament;
 import com.cricket.service.CricketService;
 
 public class CricketFunctions {
+
+	public static String getCurrentSpeed() throws IOException {
+		return Files.newBufferedReader(Paths.get(CricketUtil.CRICKET_DIRECTORY 
+				+ CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT), StandardCharsets.UTF_8)
+				.lines().skip(1).limit(1).collect(Collectors.toList()).get(0);
+	}
 	
 	public static BowlingCard getCurrentInningCurrentBowler(Match match) {
 		BowlingCard current_bowler = null;
