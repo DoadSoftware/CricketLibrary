@@ -25,6 +25,17 @@ public class Team implements Comparable<Team> {
   @Column(name = "TeamName4")
   private String teamName4;
 
+  @Column(name = "FullHindiTeamName")
+  private String FullHindiTeamName;
+  
+public String getFullHindiTeamName() {
+	return FullHindiTeamName;
+}
+
+public void setFullHindiTeamName(String fullHindiTeamName) {
+	FullHindiTeamName = fullHindiTeamName;
+}
+
 public int getTeamId() {
 	return teamId;
 }
