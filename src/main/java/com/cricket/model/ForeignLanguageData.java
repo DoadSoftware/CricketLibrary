@@ -1,6 +1,6 @@
 package com.cricket.model;
 
-public class ForiegnLanguageData {
+public class ForeignLanguageData {
 	private String EnglishText;
 	private String HindiText;
 	private String TamilText;

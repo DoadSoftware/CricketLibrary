@@ -2,11 +2,13 @@ package com.cricket.model;
 
 import java.util.List;
 
-public class MultilanguageDatabase {
+public class MultiLanguageDatabase {
+	
 	public List<Dictionary> dictionary;
 	public List<Venue> venue;
 	public List<Team> team;
 	public List<Player> players;
+	
 	public List<Dictionary> getDictionary() {
 		return dictionary;
 	}
@@ -31,7 +33,4 @@ public class MultilanguageDatabase {
 	public void setPlayers(List<Player> players) {
 		this.players = players;
 	}
-	
-	
-	
 }

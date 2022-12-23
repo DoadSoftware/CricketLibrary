@@ -18,12 +18,30 @@ public class Dictionary  {
 
   @Column(name = "HindiSentence")
   private String HindiSentence;
+
+  @Column(name = "InsertNumbersBeforeThisHindiText")
+  private String insertBeforeFirstHindiText;
+
+  @Column(name = "InsertNumbersBeforeThisHindiText2")
+  private String insertBeforeSecondHindiText;
   
   @Column(name = "TamilSentence")
   private String TamilSentence;
+
+  @Column(name = "InsertNumbersBeforeThisTamilText")
+  private String insertBeforeFirstTamilText;
+
+  @Column(name = "InsertNumbersBeforeThisTamilText2")
+  private String insertBeforeSecondTamilText;
   
   @Column(name = "TeluguSentence")
   private String TeluguSentence;
+
+  @Column(name = "InsertNumbersBeforeThisTeluguText")
+  private String insertBeforeFirstTeluguText;
+
+  @Column(name = "InsertNumbersBeforeThisTeluguText2")
+  private String insertBeforeSecondTeluguText;
 
 public int getDictionaryId() {
 	return DictionaryId;
@@ -49,12 +67,44 @@ public void setHindiSentence(String hindiSentence) {
 	HindiSentence = hindiSentence;
 }
 
+public String getInsertBeforeFirstHindiText() {
+	return insertBeforeFirstHindiText;
+}
+
+public void setInsertBeforeFirstHindiText(String insertBeforeFirstHindiText) {
+	this.insertBeforeFirstHindiText = insertBeforeFirstHindiText;
+}
+
+public String getInsertBeforeSecondHindiText() {
+	return insertBeforeSecondHindiText;
+}
+
+public void setInsertBeforeSecondHindiText(String insertBeforeSecondHindiText) {
+	this.insertBeforeSecondHindiText = insertBeforeSecondHindiText;
+}
+
 public String getTamilSentence() {
 	return TamilSentence;
 }
 
 public void setTamilSentence(String tamilSentence) {
 	TamilSentence = tamilSentence;
+}
+
+public String getInsertBeforeFirstTamilText() {
+	return insertBeforeFirstTamilText;
+}
+
+public void setInsertBeforeFirstTamilText(String insertBeforeFirstTamilText) {
+	this.insertBeforeFirstTamilText = insertBeforeFirstTamilText;
+}
+
+public String getInsertBeforeSecondTamilText() {
+	return insertBeforeSecondTamilText;
+}
+
+public void setInsertBeforeSecondTamilText(String insertBeforeSecondTamilText) {
+	this.insertBeforeSecondTamilText = insertBeforeSecondTamilText;
 }
 
 public String getTeluguSentence() {
@@ -65,10 +115,20 @@ public void setTeluguSentence(String teluguSentence) {
 	TeluguSentence = teluguSentence;
 }
 
-@Override
-public String toString() {
-	return "Dictionary [DictionaryId=" + DictionaryId + ", EnglishSentence=" + EnglishSentence + ", HindiSentence="
-			+ HindiSentence + ", TamilSentence=" + TamilSentence + ", TeluguSentence=" + TeluguSentence + "]";
+public String getInsertBeforeFirstTeluguText() {
+	return insertBeforeFirstTeluguText;
 }
 
+public void setInsertBeforeFirstTeluguText(String insertBeforeFirstTeluguText) {
+	this.insertBeforeFirstTeluguText = insertBeforeFirstTeluguText;
+}
+
+public String getInsertBeforeSecondTeluguText() {
+	return insertBeforeSecondTeluguText;
+}
+
+public void setInsertBeforeSecondTeluguText(String insertBeforeSecondTeluguText) {
+	this.insertBeforeSecondTeluguText = insertBeforeSecondTeluguText;
+}
+  
 }

@@ -30,7 +30,7 @@ public class CricketUtil {
 	public final static String LOG_REVIEW = "LOG_REVIEW";
 	public final static String SUCCESSFUL = "SUCCESSFUL";
 	public final static String UNSUCCESSFUL = "UNSUCCESSFUL";
-	
+
 	public final static String YES = "YES";
 	public final static String NO = "NO";
 
@@ -170,4 +170,13 @@ public class CricketUtil {
 
 	public final static String PLURAL = "PLURAL";
 	public final static String COMPARE = "COMPARE";
+
+	public final static String DICTIONARY = "DICTIONARY";
+	public final static String FULLNAME = "FULLNAME";
+	public final static String FIRSTNAME = "FIRSTNAME";
+	public final static String LASTNAME = "LASTNAME";
+	public final static String SURNAME = "SURNAME";
+	public final static String TEAMNAME_2 = "TEAMNAME2";
+	public final static String TEAMNAME_3 = "TEAMNAME3";
+	public final static String TEAMNAME_4 = "TEAMNAME4";
 }

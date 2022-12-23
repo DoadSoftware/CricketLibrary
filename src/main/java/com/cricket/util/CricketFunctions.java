@@ -27,12 +27,13 @@ import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
 import com.cricket.model.BowlingCard;
 import com.cricket.model.Configuration;
+import com.cricket.model.Dictionary;
 import com.cricket.model.Event;
 import com.cricket.model.Fixture;
-import com.cricket.model.ForiegnLanguageData;
+import com.cricket.model.ForeignLanguageData;
 import com.cricket.model.Inning;
 import com.cricket.model.Match;
-import com.cricket.model.MultilanguageDatabase;
+import com.cricket.model.MultiLanguageDatabase;
 import com.cricket.model.OverByOverData;
 import com.cricket.model.Partnership;
 import com.cricket.model.Player;
@@ -43,144 +44,236 @@ import com.cricket.service.CricketService;
 
 public class CricketFunctions {
 
-	/*public ForiegnLanguageData AssembleMultiLanguageData(String whichTableInDb, String whichDBColumnToProcess, Configuration configuration, 
-			MultilanguageDatabase multiLanguage, String foreignTextToProcess, String WhatTypeOfTextToReturn)
-		{
-		//foreignTextToProcess$ = Virat Kohli;
-		ForiegnLanguageData foriegnLanguageData;
-			//List <ForiegnLanguageData> foriegnLanguageData =  new ArrayList<ForiegnLanguageData>();
+	public ForeignLanguageData AssembleMultiLanguageData(String whichTableInDb, String whichDBColumnToProcess, Configuration configuration, 
+			MultiLanguageDatabase multiLanguage, String foreignTextToProcess, String WhatTypeOfTextToReturn, List<String> InsertText,
+			int ForeignLanguageArrayIndex, int MergeArrayStartIndex, List<ForeignLanguageData> foreignLanguageDataList)
+	{
+		String englishTxt = "", hindiTxt = "", tamilTxt = "", teluguTxt = "";
+		
+		switch (whichTableInDb) {
+		case CricketUtil.PLAYER:
 			
-			switch (whichTableInDb) {
-			case "PLAYERS":
-				foreignTextToProcess = foriegnLanguageData.getEnglishText();
-			      
-				for(Player plyr :  multiLanguage.players) {
-					switch(whichDBColumnToProcess) {
-					case "FULLNAME":
-			         if(foreignTextToProcess == plyr.getFull_name()) {
-			        	 foriegnLanguageData.getHindiText() = plyr.get
-//			 		            If UCase$(Trim$(ForeignTextToProcess$)) = UCase$(Trim$(plyr.EnglishPlayerFullName)) Then
-//			 		            
-//			 		               foriegnLanguageData.HindiTextToUse$ = OtherLanguagePlayerDetails(iPlay%).HindiFullName
-//			 		               foriegnLanguageData.TamilTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TamilFullName
-//			 		               foriegnLanguageData.TeluguTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TeluguFullName
-//			 		               
-			         }
-			         switch(WhatTypeOfTextToReturn) {
-			         case "FIRSTNAME":
-						  if(foriegnLanguageData.EnglishTextToUse$.contains(" ")) {
-					             foriegnLanguageData.EnglishTextToUse$ = foriegnLanguageData.EnglishTextToUse$.split(" ")[0];
-					       }
-						  if(foriegnLanguageData.HindiTextToUse$.contains(" ")) {
-					             foriegnLanguageData.HindiTextToUse$ = foriegnLanguageData.hindiTextToUse$.split(" ")[0];
-						  }
-						  if(foriegnLanguageData.TamilTextToUse$.contains(" ")) {
-					             foriegnLanguageData.TamilTextToUse$ = foriegnLanguageData.TamilTextToUse$.split(" ")[0];
-						  }
-						  if(foriegnLanguageData.TeluguTextToUse$.contains(" ")) {
-					             foriegnLanguageData.TeluguTextToUse$ = foriegnLanguageData.TeluguTextToUse$.split(" ")[0];
-						  }
-				            break;
-		               case "LASTNAME":
-		            	   if(foriegnLanguageData.EnglishTextToUse$.contains(" ")) {
-			                  foriegnLanguageData.EnglishTextToUse$ = foriegnLanguageData.EnglishTextToUse$.split(" ")[1];
-		            	   }
-		            	   if(foriegnLanguageData.HindiTextToUse$.contains(" ")) {
-				                  foriegnLanguageData.HindiTextToUse$ = foriegnLanguageData.HindiTextToUse$.split(" ")[1];
-			            	   }
-		            	   if(foriegnLanguageData.TamilTextToUse$.contains(" ")) {
-				                  foriegnLanguageData.TamilTextToUse$ = foriegnLanguageData.TamilTextToUse$.split(" ")[1];
-			            	   }
-		            	   if(foriegnLanguageData.TeluguTextToUse$.contains(" ")) {
-				                  foriegnLanguageData.TeluguTextToUse$ = foriegnLanguageData.TeluguTextToUse$.split(" ")[1];
-			            	   }
-		                  break;
-		               case "DB-SURNAME":
-		                  EnglishTextToUse$ = plyr.EnglishPlayerSurName;
-		                  HindiTextToUse$ = plyr.HindiPlayerSurName;
-		                  TamilTextToUse$ = plyr.TamilPlayerSurName;
-		                  TeluguTextToUse$ = plyr.TeluguPlayerSurName;
-		                  break;
-			         }
-			         break;
+			Player plyr = multiLanguage.getPlayers().stream()
+				.filter(player -> foreignTextToProcess.equalsIgnoreCase(player.getFull_name()))
+				.findAny().orElse(null);
+			
+			if(plyr != null) {
+				
+				switch(whichDBColumnToProcess) {
+				case CricketUtil.FULLNAME:
+					
+					if(foreignTextToProcess.equalsIgnoreCase(plyr.getFull_name())) {
+						
+				   	 	englishTxt = foreignTextToProcess;
+			        	hindiTxt = plyr.getHindifull_name();
+			        	tamilTxt = plyr.getTamilfull_name();
+			        	teluguTxt = plyr.getTelugufull_name();
+
+			        	switch(WhatTypeOfTextToReturn) {
+						case CricketUtil.FIRSTNAME:
+				        	if(englishTxt.contains(" ")) {
+								englishTxt = englishTxt.split(" ")[0];
+						    }
+							if(hindiTxt.contains(" ")) {
+								hindiTxt = hindiTxt.split(" ")[0];
+						    }
+							if(tamilTxt.contains(" ")) {
+								tamilTxt = tamilTxt.split(" ")[0];
+						    }
+							if(teluguTxt.contains(" ")) {
+								teluguTxt = teluguTxt.split(" ")[0];
+						    }
+		  	                break;
+						case CricketUtil.LASTNAME:
+				        	if(englishTxt.contains(" ")) {
+								englishTxt = englishTxt.split(" ")[1];
+						    }
+							if(hindiTxt.contains(" ")) {
+								hindiTxt = hindiTxt.split(" ")[1];
+						    }
+							if(tamilTxt.contains(" ")) {
+								tamilTxt = tamilTxt.split(" ")[1];
+						    }
+							if(teluguTxt.contains(" ")) {
+								teluguTxt = teluguTxt.split(" ")[1];
+						    }
+		  	                break;
+						case CricketUtil.SURNAME:
+					   	 	englishTxt = plyr.getSurname();
+					   	 	hindiTxt = plyr.getHindi_surname();
+					   	 	tamilTxt = plyr.getTamil_surname();
+					   	 	teluguTxt = plyr.getTelugu_surname();
+			                break;
+				         }	
+					}
+					break;
+				
+				case CricketUtil.SURNAME:
+
+					if(foreignTextToProcess.equalsIgnoreCase(plyr.getSurname())) {
+				   	 	englishTxt = foreignTextToProcess;
+			        	hindiTxt = plyr.getHindi_surname();
+			        	tamilTxt = plyr.getTamil_surname();
+			        	teluguTxt = plyr.getTelugu_surname();
+					}
+					break;
+				
+				default:
+
+					if(foreignTextToProcess.equalsIgnoreCase(plyr.getFull_name())) {
+				   	 	englishTxt = foreignTextToProcess;
+			        	hindiTxt = plyr.getHindifull_name();
+			        	tamilTxt = plyr.getTamilfull_name();
+			        	teluguTxt = plyr.getTelugufull_name();
+					}else if(foreignTextToProcess.equalsIgnoreCase(plyr.getSurname())) {
+				   	 	englishTxt = foreignTextToProcess;
+			        	hindiTxt = plyr.getHindi_surname();
+			        	tamilTxt = plyr.getTamil_surname();
+			        	teluguTxt = plyr.getTelugu_surname();
+					}
+					break;
+				}			
+			}			
+			break;
+
+		case CricketUtil.TEAM:
+
+			Team tm = multiLanguage.getTeam().stream()
+				.filter(team -> foreignTextToProcess.equalsIgnoreCase(team.getTeamName1()))
+				.findAny().orElse(null);
+	
+			if(tm != null) {		
+				
+				switch(whichDBColumnToProcess) {
+				case CricketUtil.TEAMNAME_2: case CricketUtil.TEAMNAME_3: case CricketUtil.TEAMNAME_4:
+	                switch (whichDBColumnToProcess) {
+					case CricketUtil.TEAMNAME_2: 
+	            		englishTxt = tm.getTeamName2();
+					case CricketUtil.TEAMNAME_3: 
+	            		englishTxt = tm.getTeamName3();
+					case CricketUtil.TEAMNAME_4:
+	            		englishTxt = tm.getTeamName4();
+					}
+					hindiTxt = tm.getShortHindiTeamName();
+					tamilTxt = tm.getShortTamilTeamName();
+					teluguTxt = tm.getShortTeluguTeamName();
+					break;
+				default:
+            		englishTxt = tm.getTeamName1();
+					hindiTxt = tm.getFullHindiTeamName();
+					tamilTxt = tm.getFullTamilTeamName();
+					teluguTxt = tm.getFullTeluguTeamName();
+					break;
 				}
-				}
-				break;
-		         
-		         case "SURNAME":
-		         
-		            If UCase$(Trim$(ForeignTextToProcess$)) = UCase$(Trim$(OtherLanguagePlayerDetails(iPlay%).EnglishPlayerSurName)) Then
-		            
-		               HindiTextToUse$ = OtherLanguagePlayerDetails(iPlay%).HindiSurName
-		               TamilTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TamilSurName
-		               TeluguTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TeluguSurName
-		               
-		               NewAssembleMultiLanguageData = True
-		               
-		               If ReturnAfterSearch% = True Then
-		                  Return
-		               Else
-		                  GoTo SaveAndExitFunction
-		               End If
-		            
-		            End If
-		         break;
-		         Case Else ' When 'TableToSearch' is ALL
-		         
-		            If UCase$(Trim$(ForeignTextToProcess$)) = UCase$(Trim$(plyr.EnglishPlayerFullName)) Then
-		            
-		               HindiTextToUse$ = OtherLanguagePlayerDetails(iPlay%).HindiFullName
-		               TamilTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TamilFullName
-		               TeluguTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TeluguFullName
-		               
-				break;
-		            
-		            ElseIf UCase$(Trim$(ForeignTextToProcess$)) = UCase$(Trim$(OtherLanguagePlayerDetails(iPlay%).EnglishPlayerSurName)) Then
-		            
-		               HindiTextToUse$ = OtherLanguagePlayerDetails(iPlay%).HindiSurName
-		               TamilTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TamilSurName
-		               TeluguTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TeluguSurName
-		               
-		            End If
-		         
 			}
 
-			return foriegnLanguageData;
-		}*/
+			break;
+			
+		case CricketUtil.DICTIONARY: 
+
+			Dictionary dict = multiLanguage.getDictionary().stream()
+				.filter(dictionary -> foreignTextToProcess.equalsIgnoreCase(dictionary.getEnglishSentence()))
+				.findAny().orElse(null);
+			
+			if(dict != null) {	
+				
+				hindiTxt = dict.getHindiSentence();
+				tamilTxt = dict.getTamilSentence();
+				teluguTxt = dict.getTeluguSentence();
+				
+				if(InsertText != null) {
+					if (InsertText.size() >= 1) {
+						hindiTxt = hindiTxt.replace(dict.getInsertBeforeFirstHindiText(), 
+								InsertText.get(0) + " " + dict.getInsertBeforeFirstHindiText());
+						tamilTxt = tamilTxt.replace(dict.getInsertBeforeFirstTamilText(), 
+								InsertText.get(0) + " " + dict.getInsertBeforeFirstTamilText());
+						teluguTxt = teluguTxt.replace(dict.getInsertBeforeFirstTeluguText(), 
+								InsertText.get(0) + " " + dict.getInsertBeforeFirstTeluguText());
+					}
+					if (InsertText.size() >= 2) {
+						hindiTxt = hindiTxt.replace(dict.getInsertBeforeSecondHindiText(), 
+								InsertText.get(1) + " " + dict.getInsertBeforeSecondHindiText());
+						tamilTxt = tamilTxt.replace(dict.getInsertBeforeSecondTamilText(), 
+								InsertText.get(1) + " " + dict.getInsertBeforeSecondTamilText());
+						teluguTxt = teluguTxt.replace(dict.getInsertBeforeSecondTeluguText(), 
+								InsertText.get(1) + " " + dict.getInsertBeforeSecondTeluguText());
+					}
+				}
+				
+			}
+			
+			break;
+			
+		}
+
+		ForeignLanguageData foreignLanguageData = new ForeignLanguageData();
+	
+		if (ForeignLanguageArrayIndex <= 0) {
+			foreignLanguageData.setEnglishText(englishTxt);
+			foreignLanguageData.setHindiText(hindiTxt);
+			foreignLanguageData.setTamilText(tamilTxt);
+			foreignLanguageData.setTeluguText(teluguTxt);
+		} else {
+			foreignLanguageDataList.get(ForeignLanguageArrayIndex-1).setEnglishText(englishTxt);
+			foreignLanguageDataList.get(ForeignLanguageArrayIndex-1).setHindiText(hindiTxt);
+			foreignLanguageDataList.get(ForeignLanguageArrayIndex-1).setTamilText(tamilTxt);
+			foreignLanguageDataList.get(ForeignLanguageArrayIndex-1).setTeluguText(teluguTxt);
+	        
+			int StartLoop = 0;
+	        if (MergeArrayStartIndex > 0) {StartLoop = MergeArrayStartIndex - 1;}
+	        for(int iStr = StartLoop; iStr <= foreignLanguageDataList.size() - 1; iStr++)
+	        {
+	        	foreignLanguageData.setEnglishText(foreignLanguageData.getEnglishText() + " " + foreignLanguageDataList.get(iStr).getEnglishText());
+	        	foreignLanguageData.setHindiText(foreignLanguageData.getHindiText() + " " + foreignLanguageDataList.get(iStr).getHindiText());
+	        	foreignLanguageData.setTamilText(foreignLanguageData.getTamilText() + " " + foreignLanguageDataList.get(iStr).getTamilText());
+	        	foreignLanguageData.setTeluguText(foreignLanguageData.getTeluguText() + " " + foreignLanguageDataList.get(iStr).getTeluguText());
+	        }
+	        if (MergeArrayStartIndex > 0) {
+	        	foreignLanguageDataList.get(MergeArrayStartIndex - 1).setEnglishText(foreignLanguageData.getEnglishText());
+	        	foreignLanguageDataList.get(MergeArrayStartIndex - 1).setHindiText(foreignLanguageData.getHindiText());
+	        	foreignLanguageDataList.get(MergeArrayStartIndex - 1).setTamilText(foreignLanguageData.getTamilText());
+	        	foreignLanguageDataList.get(MergeArrayStartIndex - 1).setTeluguText(foreignLanguageData.getTeluguText());
+	        }
+		}
+		return foreignLanguageData;
+	}
 				  
+	@SuppressWarnings("resource")
 	public static List<PrintWriter> processPrintWriter(Configuration config) throws UnknownHostException, IOException
 	{
 		List<PrintWriter> print_writer = new ArrayList<PrintWriter>();
 		
-		if(config.getPrimaryIpAddress() != null && config.getPrimaryPortNumber() != 0) {
+		if(config.getPrimaryIpAddress() != null) {
 			if(!config.getPrimaryLanguage().equalsIgnoreCase("ENGLISH")) {
-				//print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getPrimaryIpAddress(), config.getPrimaryPortNumber()), StandardCharsets.UTF_8)));
-				print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getPrimaryIpAddress(), config.getPrimaryPortNumber()).getOutputStream(), StandardCharsets.UTF_8)));
+				print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getPrimaryIpAddress(), 
+						config.getPrimaryPortNumber()).getOutputStream(), StandardCharsets.UTF_8)));
 			}else {
-				print_writer.add(new PrintWriter(new Socket(config.getPrimaryIpAddress(), config.getPrimaryPortNumber()).getOutputStream(), true));
+				print_writer.add(new PrintWriter(new Socket(config.getPrimaryIpAddress(), 
+						config.getPrimaryPortNumber()).getOutputStream(), true));
 			}
 		}
 		
-		if(config.getSecondaryIpAddress() != null && config.getSecondaryPortNumber() != 0) {
+		if(config.getSecondaryIpAddress() != null) {
 			if(!config.getSecondaryLanguage().equalsIgnoreCase("ENGLISH")) {
-				//print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getPrimaryIpAddress(), config.getPrimaryPortNumber()), StandardCharsets.UTF_8)));
-				print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getSecondaryIpAddress(), config.getSecondaryPortNumber()).getOutputStream(), StandardCharsets.UTF_8)));
+				print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getSecondaryIpAddress(), 
+						config.getSecondaryPortNumber()).getOutputStream(), StandardCharsets.UTF_8)));
 			}else {
-				print_writer.add(new PrintWriter(new Socket(config.getSecondaryIpAddress(), config.getSecondaryPortNumber()).getOutputStream(), true));
+				print_writer.add(new PrintWriter(new Socket(config.getSecondaryIpAddress(), 
+						config.getSecondaryPortNumber()).getOutputStream(), true));
 			}
 		}
 		
-		if(config.getTertiaryIpAddress() != null && config.getTertiaryPortNumber() != 0) {
+		if(config.getTertiaryIpAddress() != null) {
 			if(!config.getTertiaryLanguage().equalsIgnoreCase("ENGLISH")) {
-				//print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getPrimaryIpAddress(), config.getPrimaryPortNumber()), StandardCharsets.UTF_8)));
-				print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getTertiaryIpAddress(), config.getTertiaryPortNumber()).getOutputStream(), StandardCharsets.UTF_8)));
+				print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getTertiaryIpAddress(), 
+						config.getTertiaryPortNumber()).getOutputStream(), StandardCharsets.UTF_8)));
 			}else {
-				print_writer.add(new PrintWriter(new Socket(config.getTertiaryIpAddress(), config.getTertiaryPortNumber()).getOutputStream(), true));
+				print_writer.add(new PrintWriter(new Socket(config.getTertiaryIpAddress(), 
+						config.getTertiaryPortNumber()).getOutputStream(), true));
 			}
 		}
 			
-
-	return print_writer;
+		return print_writer;
 	}
 	
 	public static String getCurrentSpeed() throws IOException {
