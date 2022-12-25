@@ -44,108 +44,40 @@ import com.cricket.service.CricketService;
 
 public class CricketFunctions {
 	
-	public static void DoadWriteSameCommandToEachViz(String SendTextIn, String session_selected_broadcaster,List<PrintWriter> session_print_writers,Configuration config) {
-		
-		switch (session_selected_broadcaster.toUpperCase()) {
-		case "DOAD-VIZ-MULTI":
-			for(int i = 0; i < session_print_writers.size(); i++) {
-				session_print_writers.get(i).println("-1 " + SendTextIn + "\0");
-			}
-			break;
+	public static void DoadWriteSameCommandToEachViz(String SendTextIn, String session_selected_broadcaster,
+			List<PrintWriter> print_writers, Configuration config) 
+	{
+		for(int i = 0; i < print_writers.size(); i++) {
+			print_writers.get(i).println("-1 " + SendTextIn + "\0");
 		}
 	}
-	public static void DoadWriteVariousLanguageTextToEachViz( String SendTextIn, Configuration config, String session_selected_broadcaster, 
-			List<PrintWriter> session_print_writers,ForeignLanguageData foreignLanguageData) {
+	public static void DoadWriteVariousLanguageTextToEachViz( String SendTextIn, Configuration config, String broadcaster, 
+			List<PrintWriter> print_writers,ForeignLanguageData foreignLanguageData) 
+	{
+		String which_language = "";
+		for(int i = 0; i < print_writers.size(); i++) {
 
-		switch (session_selected_broadcaster.toUpperCase()) {
-		case "DOAD-VIZ-MULTI":
-			for(int i = 0; i < session_print_writers.size(); i++) {
-				switch (i) {
-				case 0:
-					if(config.getPrimaryLanguage().equalsIgnoreCase("ENGLISH")) {
-						switch (session_selected_broadcaster.toUpperCase()) {
-						case "DOAD-VIZ-MULTI":
-				            session_print_writers.get(i).println("-1 " + SendTextIn + foreignLanguageData.getEnglishText() + "\0");
-							break;
-						}
-					}else if(config.getPrimaryLanguage().equalsIgnoreCase("HINDI")) {
-						switch (session_selected_broadcaster.toUpperCase()) {
-						case "DOAD-VIZ-MULTI":
-				            session_print_writers.get(i).println("-1 " + SendTextIn + foreignLanguageData.getHindiText() + "\0");
-							break;
-						}
-					}else if(config.getPrimaryLanguage().equalsIgnoreCase("TAMIL")) {
-						switch (session_selected_broadcaster.toUpperCase()) {
-						case "DOAD-VIZ-MULTI":
-				            session_print_writers.get(i).println("-1 " + SendTextIn + foreignLanguageData.getTamilText() + "\0");
-							break;
-						}
-					}else if(config.getPrimaryLanguage().equalsIgnoreCase("TELUGU")) {
-						switch (session_selected_broadcaster.toUpperCase()) {
-						case "DOAD-VIZ-MULTI":
-				            session_print_writers.get(i).println("-1 " + SendTextIn + foreignLanguageData.getTeluguText() + "\0");
-							break;
-						}
-					}
-					break;
-				case 1:
-					if(config.getSecondaryLanguage().equalsIgnoreCase("ENGLISH")) {
-						switch (session_selected_broadcaster.toUpperCase()) {
-						case "DOAD-VIZ-MULTI":
-				            session_print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language1$") + foreignLanguageData.getEnglishText() + "\0");
-							break;
-						}
-					}else if(config.getSecondaryLanguage().equalsIgnoreCase("HINDI")) {
-						switch (session_selected_broadcaster.toUpperCase()) {
-						case "DOAD-VIZ-MULTI":
-				            session_print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language3$") + foreignLanguageData.getHindiText() + "\0");
-							break;
-						}
-					}else if(config.getSecondaryLanguage().equalsIgnoreCase("TAMIL")) {
-						switch (session_selected_broadcaster.toUpperCase()) {
-						case "DOAD-VIZ-MULTI":
-				            session_print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language6$") + foreignLanguageData.getTamilText() + "\0");
-							break;
-						}
-					}else if(config.getSecondaryLanguage().equalsIgnoreCase("TELUGU")) {
-						switch (session_selected_broadcaster.toUpperCase()) {
-						case "DOAD-VIZ-MULTI":
-				            session_print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language7$") + foreignLanguageData.getTeluguText() + "\0");
-							break;
-						}
-					}
-					break;
-				case 2:
-					if(config.getTertiaryLanguage().equalsIgnoreCase("ENGLISH")) {
-						switch (session_selected_broadcaster.toUpperCase()) {
-						case "DOAD-VIZ-MULTI":
-				            session_print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language1$") + foreignLanguageData.getEnglishText() + "\0");
-							break;
-						}
-					}else if(config.getTertiaryLanguage().equalsIgnoreCase("HINDI")) {
-						switch (session_selected_broadcaster.toUpperCase()) {
-						case "DOAD-VIZ-MULTI":
-				            session_print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language3$") + foreignLanguageData.getHindiText() + "\0");
-							break;
-						}
-					}else if(config.getTertiaryLanguage().equalsIgnoreCase("TAMIL")) {
-						switch (session_selected_broadcaster.toUpperCase()) {
-						case "DOAD-VIZ-MULTI":
-				            session_print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language6$") + foreignLanguageData.getTamilText() + "\0");
-							break;
-						}
-					}else if(config.getTertiaryLanguage().equalsIgnoreCase("TELUGU")) {
-						switch (session_selected_broadcaster.toUpperCase()) {
-						case "DOAD-VIZ-MULTI":
-				            session_print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language7$") + foreignLanguageData.getTeluguText() + "\0");
-							break;
-						}
-					}
-					break;
-					}
-				}
-			break;
-			}	
+			switch (i) {
+			case 0:
+				which_language = config.getPrimaryLanguage();
+				break;
+			case 1:
+				which_language = config.getSecondaryLanguage();
+				break;
+			case 2:
+				which_language = config.getTertiaryLanguage();
+				break;
+			}
+			if(which_language.equalsIgnoreCase("ENGLISH")) {
+				print_writers.get(i).println("-1 " + SendTextIn + foreignLanguageData.getEnglishText() + "\0");
+			}else if(which_language.equalsIgnoreCase("HINDI")) {
+				print_writers.get(i).println("-1 " + SendTextIn + foreignLanguageData.getHindiText() + "\0");
+			}else if(which_language.equalsIgnoreCase("TAMIL")) {
+				print_writers.get(i).println("-1 " + SendTextIn + foreignLanguageData.getTamilText() + "\0");
+			}else if(which_language.equalsIgnoreCase("TELUGU")) {
+				print_writers.get(i).println("-1 " + SendTextIn + foreignLanguageData.getTeluguText() + "\0");
+			}
+		}
 	}			
 	public static ForeignLanguageData AssembleMultiLanguageData(String whichTableInDb, String whichDBColumnToProcess, Configuration configuration, 
 			MultiLanguageDatabase multiLanguage, String foreignTextToProcess, String WhatTypeOfTextToReturn, List<String> InsertText,
