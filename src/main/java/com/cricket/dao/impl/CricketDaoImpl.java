@@ -15,6 +15,7 @@ import com.cricket.model.Ground;
 import com.cricket.model.InfobarStats;
 import com.cricket.model.NameSuper;
 import com.cricket.model.Player;
+import com.cricket.model.Playoff;
 import com.cricket.model.Statistics;
 import com.cricket.model.StatsType;
 import com.cricket.model.Team;
@@ -124,5 +125,8 @@ public List<Venue> getVenues() {
 public List<Dictionary> getDictionary() {
 	return sessionFactory.getCurrentSession().createQuery("from Dictionary").list();
 }
-
+@Override
+public List<Playoff> getPlayOff() {
+	return sessionFactory.getCurrentSession().createQuery("from Playoff").list();
+}
 }

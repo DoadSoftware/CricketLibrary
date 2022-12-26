@@ -19,6 +19,9 @@ public class Fixture {
   
   @Column(name = "Date")
   private String date;
+  
+  @Column(name = "Time")
+  private String time;
 
   @Column(name = "HOMETEAM")
   private int hometeamid;
@@ -106,6 +109,14 @@ public String getWinnerteam() {
 
 public void setWinnerteam(String winnerteam) {
 	this.winnerteam = winnerteam;
+}
+
+public String getTime() {
+	return time;
+}
+
+public void setTime(String time) {
+	this.time = time;
 }
 
 }

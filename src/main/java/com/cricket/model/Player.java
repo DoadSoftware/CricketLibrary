@@ -62,6 +62,9 @@ public class Player implements Comparable<Player>, Diffable<Player>
 
   @Column(name = "TEAMID")
   private Integer teamId;
+  
+  @Column(name = "OverseasPlayer")
+  private Integer overseasPlayer;
 
   @Column(name = "Photo")
   private String Photo;
@@ -238,6 +241,14 @@ public void setTelugu_surname(String telugu_surname) {
 	this.telugu_surname = telugu_surname;
 }
 
+public Integer getOverseasPlayer() {
+	return overseasPlayer;
+}
+
+public void setOverseasPlayer(Integer overseasPlayer) {
+	this.overseasPlayer = overseasPlayer;
+}
+
 @Override
 public DiffResult diff(Player plyr) {
 	DiffBuilder db = new DiffBuilder(this, plyr, ToStringStyle.SHORT_PREFIX_STYLE);
@@ -260,9 +271,9 @@ public String toString() {
 			+ surname + ", ticker_name=" + ticker_name + ", hindifull_name=" + hindifull_name + ", tamilfull_name="
 			+ tamilfull_name + ", telugufull_name=" + telugufull_name + ", hindi_surname=" + hindi_surname
 			+ ", tamil_surname=" + tamil_surname + ", telugu_surname=" + telugu_surname + ", role=" + role
-			+ ", bowlingStyle=" + bowlingStyle + ", battingStyle=" + battingStyle + ", teamId=" + teamId + ", Photo="
-			+ Photo + ", playerPosition=" + playerPosition + ", captainWicketKeeper=" + captainWicketKeeper
-			+ ", player_type=" + player_type + "]";
+			+ ", bowlingStyle=" + bowlingStyle + ", battingStyle=" + battingStyle + ", teamId=" + teamId
+			+ ", overseasPlayer=" + overseasPlayer + ", Photo=" + Photo + ", playerPosition=" + playerPosition
+			+ ", captainWicketKeeper=" + captainWicketKeeper + ", player_type=" + player_type + "]";
 }
 
 }
