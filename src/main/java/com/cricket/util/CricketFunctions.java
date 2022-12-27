@@ -44,14 +44,13 @@ import com.cricket.service.CricketService;
 
 public class CricketFunctions {
 	
-	public static void DoadWriteSameCommandToEachViz(String SendTextIn, String session_selected_broadcaster,
-			List<PrintWriter> print_writers, Configuration config) 
+	public static void DoadWriteSameCommandToEachViz(String SendTextIn, List<PrintWriter> print_writers) 
 	{
 		for(int i = 0; i < print_writers.size(); i++) {
 			print_writers.get(i).println("-1 " + SendTextIn + "\0");
 		}
 	}
-	public static void DoadWriteVariousLanguageTextToEachViz( String SendTextIn, Configuration config, String broadcaster, 
+	public static void DoadWriteVariousLanguageTextToEachViz(String SendTextIn, Configuration config, String broadcaster, 
 			List<PrintWriter> print_writers,ForeignLanguageData foreignLanguageData) 
 	{
 		String which_language = "";
@@ -238,33 +237,26 @@ public class CricketFunctions {
 		}
 
 		ForeignLanguageData foreignLanguageData = new ForeignLanguageData();
-	
-		if (ForeignLanguageArrayIndex <= 0) {
-			foreignLanguageData.setEnglishText(englishTxt);
-			foreignLanguageData.setHindiText(hindiTxt);
-			foreignLanguageData.setTamilText(tamilTxt);
-			foreignLanguageData.setTeluguText(teluguTxt);
-		} else {
-			foreignLanguageDataList.get(ForeignLanguageArrayIndex-1).setEnglishText(englishTxt);
-			foreignLanguageDataList.get(ForeignLanguageArrayIndex-1).setHindiText(hindiTxt);
-			foreignLanguageDataList.get(ForeignLanguageArrayIndex-1).setTamilText(tamilTxt);
-			foreignLanguageDataList.get(ForeignLanguageArrayIndex-1).setTeluguText(teluguTxt);
-	        
+
+		foreignLanguageData.setEnglishText(englishTxt);
+		foreignLanguageData.setHindiText(hindiTxt);
+		foreignLanguageData.setTamilText(tamilTxt);
+		foreignLanguageData.setTeluguText(teluguTxt);
+
+		if (ForeignLanguageArrayIndex > 0) {
+        	foreignLanguageDataList.add(ForeignLanguageArrayIndex-1,foreignLanguageData);
 			int StartLoop = 0;
 	        if (MergeArrayStartIndex > 0) {StartLoop = MergeArrayStartIndex - 1;}
 	        for(int iStr = StartLoop; iStr <= foreignLanguageDataList.size() - 1; iStr++)
 	        {
-	        	foreignLanguageData.setEnglishText(foreignLanguageData.getEnglishText() + " " + foreignLanguageDataList.get(iStr).getEnglishText());
-	        	foreignLanguageData.setHindiText(foreignLanguageData.getHindiText() + " " + foreignLanguageDataList.get(iStr).getHindiText());
-	        	foreignLanguageData.setTamilText(foreignLanguageData.getTamilText() + " " + foreignLanguageDataList.get(iStr).getTamilText());
-	        	foreignLanguageData.setTeluguText(foreignLanguageData.getTeluguText() + " " + foreignLanguageDataList.get(iStr).getTeluguText());
+	        	foreignLanguageData.setEnglishText(foreignLanguageData.getEnglishText().trim() + " " + foreignLanguageDataList.get(iStr).getEnglishText());
+	        	foreignLanguageData.setHindiText(foreignLanguageData.getHindiText().trim() + " " + foreignLanguageDataList.get(iStr).getHindiText());
+	        	foreignLanguageData.setTamilText(foreignLanguageData.getTamilText().trim() + " " + foreignLanguageDataList.get(iStr).getTamilText());
+	        	foreignLanguageData.setTeluguText(foreignLanguageData.getTeluguText().trim() + " " + foreignLanguageDataList.get(iStr).getTeluguText());
 	        }
-	        if (MergeArrayStartIndex > 0) {
-	        	foreignLanguageDataList.get(MergeArrayStartIndex - 1).setEnglishText(foreignLanguageData.getEnglishText());
-	        	foreignLanguageDataList.get(MergeArrayStartIndex - 1).setHindiText(foreignLanguageData.getHindiText());
-	        	foreignLanguageDataList.get(MergeArrayStartIndex - 1).setTamilText(foreignLanguageData.getTamilText());
-	        	foreignLanguageDataList.get(MergeArrayStartIndex - 1).setTeluguText(foreignLanguageData.getTeluguText());
-	        }
+	        if(MergeArrayStartIndex > 0) {
+	        	foreignLanguageDataList.add(MergeArrayStartIndex-1,foreignLanguageData);
+	        } 
 		}
 		return foreignLanguageData;
 	}
