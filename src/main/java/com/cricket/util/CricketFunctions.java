@@ -43,7 +43,7 @@ import com.cricket.service.CricketService;
 
 public class CricketFunctions {
 
-	public ForiegnLanguageData AssembleMultiLanguageData(String whichTableInDb, String whichDBColumnToProcess, Configuration configuration, 
+	/*public ForiegnLanguageData AssembleMultiLanguageData(String whichTableInDb, String whichDBColumnToProcess, Configuration configuration, 
 			MultilanguageDatabase multiLanguage, String foreignTextToProcess, String WhatTypeOfTextToReturn)
 		{
 		//foreignTextToProcess$ = Virat Kohli;
@@ -146,7 +146,7 @@ public class CricketFunctions {
 			}
 
 			return foriegnLanguageData;
-		}
+		}*/
 				  
 	public static List<PrintWriter> processPrintWriter(Configuration config) throws UnknownHostException, IOException
 	{
