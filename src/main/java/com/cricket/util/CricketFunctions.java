@@ -4,10 +4,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.Socket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,10 +26,13 @@ import javax.xml.bind.JAXBException;
 import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
 import com.cricket.model.BowlingCard;
+import com.cricket.model.Configuration;
 import com.cricket.model.Event;
 import com.cricket.model.Fixture;
+import com.cricket.model.ForiegnLanguageData;
 import com.cricket.model.Inning;
 import com.cricket.model.Match;
+import com.cricket.model.MultilanguageDatabase;
 import com.cricket.model.OverByOverData;
 import com.cricket.model.Partnership;
 import com.cricket.model.Player;
@@ -36,6 +43,146 @@ import com.cricket.service.CricketService;
 
 public class CricketFunctions {
 
+	public ForiegnLanguageData AssembleMultiLanguageData(String whichTableInDb, String whichDBColumnToProcess, Configuration configuration, 
+			MultilanguageDatabase multiLanguage, String foreignTextToProcess, String WhatTypeOfTextToReturn)
+		{
+		//foreignTextToProcess$ = Virat Kohli;
+		ForiegnLanguageData foriegnLanguageData;
+			//List <ForiegnLanguageData> foriegnLanguageData =  new ArrayList<ForiegnLanguageData>();
+			
+			switch (whichTableInDb) {
+			case "PLAYERS":
+				foreignTextToProcess = foriegnLanguageData.getEnglishText();
+			      
+				for(Player plyr :  multiLanguage.players) {
+					switch(whichDBColumnToProcess) {
+					case "FULLNAME":
+			         if(foreignTextToProcess == plyr.getFull_name()) {
+			        	 foriegnLanguageData.getHindiText() = plyr.get
+//			 		            If UCase$(Trim$(ForeignTextToProcess$)) = UCase$(Trim$(plyr.EnglishPlayerFullName)) Then
+//			 		            
+//			 		               foriegnLanguageData.HindiTextToUse$ = OtherLanguagePlayerDetails(iPlay%).HindiFullName
+//			 		               foriegnLanguageData.TamilTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TamilFullName
+//			 		               foriegnLanguageData.TeluguTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TeluguFullName
+//			 		               
+			         }
+			         switch(WhatTypeOfTextToReturn) {
+			         case "FIRSTNAME":
+						  if(foriegnLanguageData.EnglishTextToUse$.contains(" ")) {
+					             foriegnLanguageData.EnglishTextToUse$ = foriegnLanguageData.EnglishTextToUse$.split(" ")[0];
+					       }
+						  if(foriegnLanguageData.HindiTextToUse$.contains(" ")) {
+					             foriegnLanguageData.HindiTextToUse$ = foriegnLanguageData.hindiTextToUse$.split(" ")[0];
+						  }
+						  if(foriegnLanguageData.TamilTextToUse$.contains(" ")) {
+					             foriegnLanguageData.TamilTextToUse$ = foriegnLanguageData.TamilTextToUse$.split(" ")[0];
+						  }
+						  if(foriegnLanguageData.TeluguTextToUse$.contains(" ")) {
+					             foriegnLanguageData.TeluguTextToUse$ = foriegnLanguageData.TeluguTextToUse$.split(" ")[0];
+						  }
+				            break;
+		               case "LASTNAME":
+		            	   if(foriegnLanguageData.EnglishTextToUse$.contains(" ")) {
+			                  foriegnLanguageData.EnglishTextToUse$ = foriegnLanguageData.EnglishTextToUse$.split(" ")[1];
+		            	   }
+		            	   if(foriegnLanguageData.HindiTextToUse$.contains(" ")) {
+				                  foriegnLanguageData.HindiTextToUse$ = foriegnLanguageData.HindiTextToUse$.split(" ")[1];
+			            	   }
+		            	   if(foriegnLanguageData.TamilTextToUse$.contains(" ")) {
+				                  foriegnLanguageData.TamilTextToUse$ = foriegnLanguageData.TamilTextToUse$.split(" ")[1];
+			            	   }
+		            	   if(foriegnLanguageData.TeluguTextToUse$.contains(" ")) {
+				                  foriegnLanguageData.TeluguTextToUse$ = foriegnLanguageData.TeluguTextToUse$.split(" ")[1];
+			            	   }
+		                  break;
+		               case "DB-SURNAME":
+		                  EnglishTextToUse$ = plyr.EnglishPlayerSurName;
+		                  HindiTextToUse$ = plyr.HindiPlayerSurName;
+		                  TamilTextToUse$ = plyr.TamilPlayerSurName;
+		                  TeluguTextToUse$ = plyr.TeluguPlayerSurName;
+		                  break;
+			         }
+			         break;
+				}
+				}
+				break;
+		         
+		         case "SURNAME":
+		         
+		            If UCase$(Trim$(ForeignTextToProcess$)) = UCase$(Trim$(OtherLanguagePlayerDetails(iPlay%).EnglishPlayerSurName)) Then
+		            
+		               HindiTextToUse$ = OtherLanguagePlayerDetails(iPlay%).HindiSurName
+		               TamilTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TamilSurName
+		               TeluguTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TeluguSurName
+		               
+		               NewAssembleMultiLanguageData = True
+		               
+		               If ReturnAfterSearch% = True Then
+		                  Return
+		               Else
+		                  GoTo SaveAndExitFunction
+		               End If
+		            
+		            End If
+		         break;
+		         Case Else ' When 'TableToSearch' is ALL
+		         
+		            If UCase$(Trim$(ForeignTextToProcess$)) = UCase$(Trim$(plyr.EnglishPlayerFullName)) Then
+		            
+		               HindiTextToUse$ = OtherLanguagePlayerDetails(iPlay%).HindiFullName
+		               TamilTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TamilFullName
+		               TeluguTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TeluguFullName
+		               
+				break;
+		            
+		            ElseIf UCase$(Trim$(ForeignTextToProcess$)) = UCase$(Trim$(OtherLanguagePlayerDetails(iPlay%).EnglishPlayerSurName)) Then
+		            
+		               HindiTextToUse$ = OtherLanguagePlayerDetails(iPlay%).HindiSurName
+		               TamilTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TamilSurName
+		               TeluguTextToUse$ = OtherLanguagePlayerDetails(iPlay%).TeluguSurName
+		               
+		            End If
+		         
+			}
+
+			return foriegnLanguageData;
+		}
+				  
+	public static List<PrintWriter> processPrintWriter(Configuration config) throws UnknownHostException, IOException
+	{
+		List<PrintWriter> print_writer = new ArrayList<PrintWriter>();
+		
+		if(config.getPrimaryIpAddress() != null && config.getPrimaryPortNumber() != 0) {
+			if(!config.getPrimaryLanguage().equalsIgnoreCase("ENGLISH")) {
+				//print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getPrimaryIpAddress(), config.getPrimaryPortNumber()), StandardCharsets.UTF_8)));
+				print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getPrimaryIpAddress(), config.getPrimaryPortNumber()).getOutputStream(), StandardCharsets.UTF_8)));
+			}else {
+				print_writer.add(new PrintWriter(new Socket(config.getPrimaryIpAddress(), config.getPrimaryPortNumber()).getOutputStream(), true));
+			}
+		}
+		
+		if(config.getSecondaryIpAddress() != null && config.getSecondaryPortNumber() != 0) {
+			if(!config.getSecondaryLanguage().equalsIgnoreCase("ENGLISH")) {
+				//print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getPrimaryIpAddress(), config.getPrimaryPortNumber()), StandardCharsets.UTF_8)));
+				print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getSecondaryIpAddress(), config.getSecondaryPortNumber()).getOutputStream(), StandardCharsets.UTF_8)));
+			}else {
+				print_writer.add(new PrintWriter(new Socket(config.getSecondaryIpAddress(), config.getSecondaryPortNumber()).getOutputStream(), true));
+			}
+		}
+		
+		if(config.getTertiaryIpAddress() != null && config.getTertiaryPortNumber() != 0) {
+			if(!config.getTertiaryLanguage().equalsIgnoreCase("ENGLISH")) {
+				//print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getPrimaryIpAddress(), config.getPrimaryPortNumber()), StandardCharsets.UTF_8)));
+				print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getTertiaryIpAddress(), config.getTertiaryPortNumber()).getOutputStream(), StandardCharsets.UTF_8)));
+			}else {
+				print_writer.add(new PrintWriter(new Socket(config.getTertiaryIpAddress(), config.getTertiaryPortNumber()).getOutputStream(), true));
+			}
+		}
+			
+
+	return print_writer;
+	}
+	
 	public static String getCurrentSpeed() throws IOException {
 		return Files.newBufferedReader(Paths.get(CricketUtil.CRICKET_DIRECTORY 
 				+ CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT), StandardCharsets.UTF_8)

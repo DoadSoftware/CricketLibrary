@@ -3,6 +3,7 @@ package com.cricket.service;
 import java.util.List;
 
 import com.cricket.model.Bugs;
+import com.cricket.model.Dictionary;
 import com.cricket.model.Fixture;
 import com.cricket.model.Ground;
 import com.cricket.model.InfobarStats;
@@ -12,6 +13,7 @@ import com.cricket.model.Statistics;
 import com.cricket.model.StatsType;
 import com.cricket.model.Team;
 import com.cricket.model.VariousText;
+import com.cricket.model.Venue;
 
 public interface CricketService {
   Player getPlayer(String whatToProcess, String valueToProcess);
@@ -26,6 +28,8 @@ public interface CricketService {
   List<Ground> getGrounds();
   List<Statistics> getAllStats();
   List<Player> getAllPlayer();
+  List<Venue> getVenues();
+  List<Dictionary> getDictionary();
   List<Fixture> getFixtures();
   List<VariousText> getVariousTexts();
 }

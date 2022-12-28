@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cricket.dao.CricketDao;
 import com.cricket.model.Bugs;
+import com.cricket.model.Dictionary;
 import com.cricket.model.Fixture;
 import com.cricket.model.Ground;
 import com.cricket.model.InfobarStats;
@@ -17,6 +18,7 @@ import com.cricket.model.Statistics;
 import com.cricket.model.StatsType;
 import com.cricket.model.Team;
 import com.cricket.model.VariousText;
+import com.cricket.model.Venue;
 import com.cricket.service.CricketService;
 
 @Service("cricketService")
@@ -94,6 +96,16 @@ public List<Fixture> getFixtures() {
 @Override
 public List<VariousText> getVariousTexts() {
 	return cricketDao.getVariousTexts();
+}
+
+@Override
+public List<Venue> getVenues() {
+	return cricketDao.getVenues();
+}
+
+@Override
+public List<Dictionary> getDictionary() {
+	return cricketDao.getDictionary();
 }
 
 }

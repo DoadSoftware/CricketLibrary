@@ -28,6 +28,21 @@ public class Team implements Comparable<Team> {
   @Column(name = "FullHindiTeamName")
   private String FullHindiTeamName;
   
+  @Column(name = "FullTamilTeamName")
+  private String FullTamilTeamName;
+  
+  @Column(name = "FullTeluguTeamName")
+  private String FullTeluguTeamName;
+  
+  @Column(name = "ShortHindiTeamName")
+  private String ShortHindiTeamName;
+  
+  @Column(name = "ShortTamilTeamName")
+  private String ShortTamilTeamName;
+  
+  @Column(name = "ShortTeluguTeamName")
+  private String ShortTeluguTeamName;
+  
 public String getFullHindiTeamName() {
 	return FullHindiTeamName;
 }
@@ -76,10 +91,55 @@ public void setTeamName4(String teamName4) {
 	this.teamName4 = teamName4;
 }
 
+public String getFullTamilTeamName() {
+	return FullTamilTeamName;
+}
+
+public void setFullTamilTeamName(String fullTamilTeamName) {
+	FullTamilTeamName = fullTamilTeamName;
+}
+
+public String getFullTeluguTeamName() {
+	return FullTeluguTeamName;
+}
+
+public void setFullTeluguTeamName(String fullTeluguTeamName) {
+	FullTeluguTeamName = fullTeluguTeamName;
+}
+
+public String getShortHindiTeamName() {
+	return ShortHindiTeamName;
+}
+
+public void setShortHindiTeamName(String shortHindiTeamName) {
+	ShortHindiTeamName = shortHindiTeamName;
+}
+
+public String getShortTamilTeamName() {
+	return ShortTamilTeamName;
+}
+
+public void setShortTamilTeamName(String shortTamilTeamName) {
+	ShortTamilTeamName = shortTamilTeamName;
+}
+
+public String getShortTeluguTeamName() {
+	return ShortTeluguTeamName;
+}
+
+public void setShortTeluguTeamName(String shortTeluguTeamName) {
+	ShortTeluguTeamName = shortTeluguTeamName;
+}
+
+
+
 @Override
 public String toString() {
 	return "Team [teamId=" + teamId + ", teamName1=" + teamName1 + ", teamName2=" + teamName2 + ", teamName3="
-			+ teamName3 + ", teamName4=" + teamName4 + "]";
+			+ teamName3 + ", teamName4=" + teamName4 + ", FullHindiTeamName=" + FullHindiTeamName
+			+ ", FullTamilTeamName=" + FullTamilTeamName + ", FullTeluguTeamName=" + FullTeluguTeamName
+			+ ", ShortHindiTeamName=" + ShortHindiTeamName + ", ShortTamilTeamName=" + ShortTamilTeamName
+			+ ", ShortTeluguTeamName=" + ShortTeluguTeamName + "]";
 }
 
 @Override
