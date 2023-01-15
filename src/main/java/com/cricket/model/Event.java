@@ -418,4 +418,23 @@ public int compareTo(Event evnt) {
 	return (int) (this.getEventNumber()-evnt.getEventNumber());
 }
 
+@Override
+public String toString() {
+	return "Event [eventNumber=" + eventNumber + ", eventStatNumber=" + eventStatNumber + ", eventWasABoundary="
+			+ eventWasABoundary + ", eventType=" + eventType + ", eventInningNumber=" + eventInningNumber
+			+ ", eventBatterNo=" + eventBatterNo + ", eventConcussionReplacePlayerId=" + eventConcussionReplacePlayerId
+			+ ", eventOnStrike=" + eventOnStrike + ", eventBatterPosition=" + eventBatterPosition
+			+ ", eventBatterPreviousPosition=" + eventBatterPreviousPosition + ", eventOtherBatterNo="
+			+ eventOtherBatterNo + ", eventBowlerNo=" + eventBowlerNo + ", eventBowlingEnd=" + eventBowlingEnd
+			+ ", eventOtherBowlerNo=" + eventOtherBowlerNo + ", eventRuns=" + eventRuns + ", eventWickets="
+			+ eventWickets + ", eventFours=" + eventFours + ", eventSixes=" + eventSixes + ", eventOverNo="
+			+ eventOverNo + ", eventBallNo=" + eventBallNo + ", eventExtra=" + eventExtra + ", eventExtraRuns="
+			+ eventExtraRuns + ", eventSubExtra=" + eventSubExtra + ", eventSubExtraRuns=" + eventSubExtraRuns
+			+ ", eventHowOut=" + eventHowOut + ", eventHowOutBatterNo=" + eventHowOutBatterNo
+			+ ", eventHowOutFielderId=" + eventHowOutFielderId + ", eventTotalRunsInAnOver=" + eventTotalRunsInAnOver
+			+ ", doNotIncrementBall=" + doNotIncrementBall + ", eventDescription=" + eventDescription
+			+ ", substitutionMade=" + substitutionMade + ", eventSpeed=" + eventSpeed + ", eventBattingCard="
+			+ eventBattingCard + ", eventBowlingCard=" + eventBowlingCard + ", eventPartnership=" + eventPartnership + "]";
+}
+
 }

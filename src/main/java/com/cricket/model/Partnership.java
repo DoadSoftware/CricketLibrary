@@ -57,6 +57,25 @@ public Partnership(int partnershipNumber, int firstBatterNo, int secondBatterNo)
 	this.secondBatterNo = secondBatterNo;
 }
 
+public Partnership(int partnershipNumber, int firstBatterNo, int secondBatterNo, int firstBatterRuns,
+		int secondBatterRuns, int firstBatterBalls, int secondBatterBalls, int totalRuns, int totalBalls,
+		int totalFours, int totalSixes, Player firstPlayer, Player secondPlayer) {
+	super();
+	this.partnershipNumber = partnershipNumber;
+	this.firstBatterNo = firstBatterNo;
+	this.secondBatterNo = secondBatterNo;
+	this.firstBatterRuns = firstBatterRuns;
+	this.secondBatterRuns = secondBatterRuns;
+	this.firstBatterBalls = firstBatterBalls;
+	this.secondBatterBalls = secondBatterBalls;
+	this.totalRuns = totalRuns;
+	this.totalBalls = totalBalls;
+	this.totalFours = totalFours;
+	this.totalSixes = totalSixes;
+	this.firstPlayer = firstPlayer;
+	this.secondPlayer = secondPlayer;
+}
+
 public Partnership() {
 	super();
 }
@@ -169,5 +188,16 @@ public void setTotalSixes(int totalSixes) {
 public int compareTo(Partnership part) {
 	return (int) (this.getPartnershipNumber()-part.getPartnershipNumber());
 }
-  
+@Override
+public Partnership clone()
+{
+    try {
+        return (Partnership) super.clone();
+    } catch (CloneNotSupportedException e) {
+        return new Partnership(partnershipNumber, firstBatterNo, secondBatterNo, 
+        		firstBatterRuns, secondBatterRuns, firstBatterBalls, secondBatterBalls, 
+        		totalRuns, totalBalls, totalFours, totalSixes, firstPlayer, secondPlayer); 
+    }	
+}
+
 }

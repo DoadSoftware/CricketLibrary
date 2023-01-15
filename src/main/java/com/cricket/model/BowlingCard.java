@@ -70,6 +70,32 @@ public class BowlingCard implements Comparable<BowlingCard> {
 public BowlingCard() {
 	super();
 }
+
+public BowlingCard(Player player, int bowlingPosition, String status, String economyRate, int bowling_end, int overs,
+		int runs, int balls, int wickets, int playerId, int wides, int noBalls, int runOuts, int stumpings,
+		int catchAsFielder, int catchAsBowler, int maidens, int dots, int totalRunsThisOver) {
+	super();
+	this.player = player;
+	this.bowlingPosition = bowlingPosition;
+	this.status = status;
+	this.economyRate = economyRate;
+	this.bowling_end = bowling_end;
+	this.overs = overs;
+	this.runs = runs;
+	this.balls = balls;
+	this.wickets = wickets;
+	this.playerId = playerId;
+	this.wides = wides;
+	this.noBalls = noBalls;
+	this.runOuts = runOuts;
+	this.stumpings = stumpings;
+	this.catchAsFielder = catchAsFielder;
+	this.catchAsBowler = catchAsBowler;
+	this.maidens = maidens;
+	this.dots = dots;
+	this.totalRunsThisOver = totalRunsThisOver;
+}
+
 public BowlingCard(Player player, int bowlingPosition, String status, int bowling_end) {
 	super();
 	this.player = player;
@@ -202,5 +228,16 @@ public void setWickets(int wickets) {
 @Override
 public int compareTo(BowlingCard bc) {
 	return (int) (this.getBowlingPosition()-bc.getBowlingPosition());
+}
+@Override
+public BowlingCard clone()
+{
+    try {
+        return (BowlingCard) super.clone();
+    } catch (CloneNotSupportedException e) {
+        return new BowlingCard(player, bowlingPosition, status, economyRate, bowling_end, 
+        		overs, runs, balls, wickets, playerId, wides, noBalls, runOuts, stumpings, 
+        		catchAsFielder, catchAsBowler, maidens, dots, totalRunsThisOver); 
+    }	
 }
 }
