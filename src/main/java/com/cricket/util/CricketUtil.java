@@ -97,6 +97,7 @@ public class CricketUtil {
 	public final static String LOAD_UNDO = "LOAD_UNDO";
 	public final static String LOAD_SETUP = "LOAD_SETUP";
 	public final static String LOG_ANY_BALL = "LOG_ANY_BALL";
+	public final static String LOG_OVERWRITE_BATTINGCARD = "LOG_OVERWRITE_BATTINGCARD";
 	public final static String LOG_OVERWRITE_TEAM_TOTAL = "LOG_OVERWRITE_TEAM_TOTAL";
 	public final static String LOG_OVERWRITE_TEAM_EXTRAS = "LOG_OVERWRITE_TEAM_EXTRAS";
 	public final static String LOG_OVERWRITE_BOWLER_FIGURES = "LOG_OVERWRITE_BOWLER_FIGURES";

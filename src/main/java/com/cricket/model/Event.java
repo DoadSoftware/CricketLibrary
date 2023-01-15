@@ -54,6 +54,15 @@ public class Event implements Comparable<Event> {
   @XmlElement(name = "eventRuns")
   private int eventRuns;
 
+  @XmlElement(name = "eventWickets")
+  private int eventWickets;
+
+  @XmlElement(name = "eventFours")
+  private int eventFours;
+
+  @XmlElement(name = "eventSixes")
+  private int eventSixes;
+  
   @XmlElement(name = "eventOverNo")
   private int eventOverNo;
   
@@ -95,6 +104,15 @@ public class Event implements Comparable<Event> {
 
   @XmlElement(name = "eventSpeed")
   private String eventSpeed;
+
+  @XmlElement(name = "eventBattingCard")
+  private BattingCard eventBattingCard;
+
+  @XmlElement(name = "eventBowlingCard")
+  private BowlingCard eventBowlingCard;
+  
+  @XmlElement(name = "eventPartnership")
+  private Partnership eventPartnership;
   
 public Event() {
 	super();
@@ -113,6 +131,54 @@ public Event(int eventNumber, int eventStatNumber, String eventType, String even
 	this.eventRuns = eventRuns;
 	this.eventOverNo = eventOverNo;
 	this.eventBallNo = eventBallNo;
+}
+
+public int getEventWickets() {
+	return eventWickets;
+}
+
+public void setEventWickets(int eventWickets) {
+	this.eventWickets = eventWickets;
+}
+
+public int getEventFours() {
+	return eventFours;
+}
+
+public void setEventFours(int eventFours) {
+	this.eventFours = eventFours;
+}
+
+public int getEventSixes() {
+	return eventSixes;
+}
+
+public void setEventSixes(int eventSixes) {
+	this.eventSixes = eventSixes;
+}
+
+public BowlingCard getEventBowlingCard() {
+	return eventBowlingCard;
+}
+
+public void setEventBowlingCard(BowlingCard eventBowlingCard) {
+	this.eventBowlingCard = eventBowlingCard;
+}
+
+public Partnership getEventPartnership() {
+	return eventPartnership;
+}
+
+public void setEventPartnership(Partnership eventPartnership) {
+	this.eventPartnership = eventPartnership;
+}
+
+public BattingCard getEventBattingCard() {
+	return eventBattingCard;
+}
+
+public void setEventBattingCard(BattingCard eventBattingCard) {
+	this.eventBattingCard = eventBattingCard;
 }
 
 public String getEventSpeed() {
