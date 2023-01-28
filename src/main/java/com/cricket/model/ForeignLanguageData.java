@@ -1,10 +1,23 @@
 package com.cricket.model;
 
 public class ForeignLanguageData {
+	
 	private String EnglishText;
 	private String HindiText;
 	private String TamilText;
 	private String TeluguText;
+	
+	public ForeignLanguageData(String englishText, String hindiText, String tamilText, String teluguText) {
+		super();
+		EnglishText = englishText;
+		HindiText = hindiText;
+		TamilText = tamilText;
+		TeluguText = teluguText;
+	}
+	public ForeignLanguageData() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public String getEnglishText() {
 		return EnglishText;
 	}

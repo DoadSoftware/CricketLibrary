@@ -43,6 +43,80 @@ import com.cricket.model.Tournament;
 import com.cricket.service.CricketService;
 
 public class CricketFunctions {
+	
+	public static ForeignLanguageData generateMatchResultForeignLanguage(Match match, String teamNameType, 
+			MultiLanguageDatabase multiLanguageDb)
+	{
+		List<ForeignLanguageData> resultToShow = new ArrayList<ForeignLanguageData>();
+		List<String> insertTxt = new ArrayList<String>();
+		
+		if(match.getMatchResult() != null) {
+			if(match.getMatchResult().toUpperCase().contains(CricketUtil.DRAWN)
+					|| match.getMatchResult().toUpperCase().contains(CricketUtil.ABANDONED)) {
+				if(match.getMatchResult().toUpperCase().contains(CricketUtil.DRAWN) 
+						&& !match.getMatchType().equalsIgnoreCase(CricketUtil.TEST)) { // For limited over match use match tied
+					resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.DICTIONARY, "", multiLanguageDb, 
+							CricketUtil.MATCH + " " + CricketUtil.TIED, "", null, 1, resultToShow);
+				} else {
+					if(match.getMatchResult().toUpperCase().contains(CricketUtil.DRAWN)) {
+						resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.DICTIONARY, "", multiLanguageDb, 
+								CricketUtil.MATCH + " " + CricketUtil.DRAWN, "", null, 1, resultToShow);
+					} else if(match.getMatchResult().toUpperCase().contains(CricketUtil.ABANDONED)) {
+						resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.DICTIONARY, "", multiLanguageDb, 
+								CricketUtil.MATCH + " " + CricketUtil.ABANDONED, "", null, 1, resultToShow);
+					}
+				}
+			} else if(match.getMatchResult().toUpperCase().contains(CricketUtil.NO_RESULT)) {
+				resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.DICTIONARY, "", multiLanguageDb, 
+						CricketUtil.NO_RESULT.replace("_", " "), "", null, 1, resultToShow);
+			} else {
+				if(match.getMatchResult().contains(",")) {
+					if(Integer.valueOf(match.getMatchResult().split(",")[0]) == match.getHomeTeamId()) {
+						resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.TEAM, teamNameType, multiLanguageDb, 
+								match.getHomeTeam().getTeamName1(), "", null, 1, resultToShow);
+					} else {
+						resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.TEAM, teamNameType, multiLanguageDb, 
+								match.getAwayTeam().getTeamName1(), "", null, 1, resultToShow);
+					}
+					if(match.getMatchResult().toUpperCase().contains(CricketUtil.SUPER_OVER)) {
+						resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.DICTIONARY, "", multiLanguageDb, 
+								"WIN THE SUPER OVER", "", null, resultToShow.size() + 1, resultToShow);
+					} else if(match.getMatchResult().toUpperCase().contains(CricketUtil.INNING) 
+							&& match.getMatchResult().toUpperCase().contains(CricketUtil.RUN)) {
+						insertTxt.add(match.getMatchResult().split(",")[1]);
+						resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.DICTIONARY, 
+								"", multiLanguageDb, "WON BY AN INNINGS AND RUN" + Plural(Integer.valueOf(match.getMatchResult().split(",")[1])), 
+								"", insertTxt, resultToShow.size() + 1, resultToShow);
+					} else if (match.getMatchResult().toUpperCase().contains(CricketUtil.RUN)) {
+						resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, match.getMatchResult().split(",")[1], 
+								"", null, resultToShow.size() + 1, resultToShow);
+						resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.DICTIONARY, 
+								"", multiLanguageDb, "WIN BY RUN" + Plural(Integer.valueOf(match.getMatchResult().split(",")[1])), 
+								"", null, resultToShow.size() + 1, resultToShow);
+					} else if (match.getMatchResult().toUpperCase().contains(CricketUtil.WICKET)) {
+						resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, match.getMatchResult().split(",")[1], 
+								"", null, resultToShow.size() + 1, resultToShow);
+						resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.DICTIONARY, 
+								"", multiLanguageDb, "WIN BY WICKET" + Plural(Integer.valueOf(match.getMatchResult().split(",")[1])), 
+								"", null, resultToShow.size() + 1, resultToShow);
+					}
+					if(match.getMatchResult().toUpperCase().contains(CricketUtil.DLS)) {
+						resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, " (" + CricketUtil.DLS + ")", 
+								"", null, resultToShow.size() + 1, resultToShow);
+					}else if(match.getMatchResult().toUpperCase().contains(CricketUtil.VJD)) {
+						resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, " (" + CricketUtil.VJD + ")", 
+								"", null, resultToShow.size() + 1, resultToShow);
+					}
+				}
+			}
+		}
+		if(resultToShow.size() > 0) {
+			return MergeForeignLanguageDataListToSingleObject(resultToShow);
+		} else {
+			return null;
+		}
+	}	
+	
 	public static void DoadWriteSameCommandToEachViz(String SendTextIn, List<PrintWriter> print_writers) 
 	{
 		for(int i = 0; i < print_writers.size(); i++) {
@@ -77,9 +151,21 @@ public class CricketFunctions {
 			}
 		}
 	}			
-	public static ForeignLanguageData AssembleMultiLanguageData(String whichTableInDb, String whichDBColumnToProcess, Configuration configuration, 
+	public static ForeignLanguageData MergeForeignLanguageDataListToSingleObject(List<ForeignLanguageData> foreignLanguageDataList) {
+		
+		ForeignLanguageData this_fd = new ForeignLanguageData();
+		
+		for(ForeignLanguageData fd : foreignLanguageDataList) {
+			this_fd.setEnglishText(this_fd.getEnglishText().trim() + " " + fd.getEnglishText().trim()); // India<b>win by 23 runs
+			this_fd.setHindiText(this_fd.getHindiText().trim() + " " + fd.getHindiText().trim());
+			this_fd.setTamilText(this_fd.getTamilText().trim() + " " + fd.getTamilText().trim());
+			this_fd.setTeluguText(this_fd.getTeluguText().trim() + " " + fd.getTeluguText().trim());
+		}
+		return this_fd;
+	}
+	public static List<ForeignLanguageData> AssembleMultiLanguageData(String whichTableInDb, String whichDBColumnToProcess,  
 			MultiLanguageDatabase multiLanguage, String foreignTextToProcess, String WhatTypeOfTextToReturn, List<String> InsertText,
-			int ForeignLanguageArrayIndex, int MergeArrayStartIndex, List<ForeignLanguageData> foreignLanguageDataList)
+			int ForeignLanguageArrayIndex, List<ForeignLanguageData> foreignLanguageDataList)
 	{
 		String englishTxt = "", hindiTxt = "", tamilTxt = "", teluguTxt = "";
 		
@@ -242,27 +328,26 @@ public class CricketFunctions {
 
 		ForeignLanguageData foreignLanguageData = new ForeignLanguageData();
 
-		foreignLanguageData.setEnglishText(englishTxt);
+		foreignLanguageData.setEnglishText(englishTxt); // win by 23 runs 
 		foreignLanguageData.setHindiText(hindiTxt);
 		foreignLanguageData.setTamilText(tamilTxt);
 		foreignLanguageData.setTeluguText(teluguTxt);
 
-		if (ForeignLanguageArrayIndex > 0) {
-        	foreignLanguageDataList.add(ForeignLanguageArrayIndex-1,foreignLanguageData);
-			int StartLoop = 0;
-	        if (MergeArrayStartIndex > 0) {StartLoop = MergeArrayStartIndex - 1;}
-	        for(int iStr = StartLoop; iStr <= foreignLanguageDataList.size() - 1; iStr++)
-	        {
-	        	foreignLanguageData.setEnglishText(foreignLanguageData.getEnglishText().trim() + " " + foreignLanguageDataList.get(iStr).getEnglishText());
-	        	foreignLanguageData.setHindiText(foreignLanguageData.getHindiText().trim() + " " + foreignLanguageDataList.get(iStr).getHindiText());
-	        	foreignLanguageData.setTamilText(foreignLanguageData.getTamilText().trim() + " " + foreignLanguageDataList.get(iStr).getTamilText());
-	        	foreignLanguageData.setTeluguText(foreignLanguageData.getTeluguText().trim() + " " + foreignLanguageDataList.get(iStr).getTeluguText());
-	        }
-	        if(MergeArrayStartIndex > 0) {
-	        	foreignLanguageDataList.add(MergeArrayStartIndex-1,foreignLanguageData);
-	        } 
+		if (ForeignLanguageArrayIndex > 0) { // 2
+
+			if(ForeignLanguageArrayIndex == 1) {
+				foreignLanguageDataList = new ArrayList<ForeignLanguageData>();
+			}
+        	foreignLanguageDataList.add(ForeignLanguageArrayIndex-1,foreignLanguageData); // India, win by 23 runs
+
+		} else {
+			
+			foreignLanguageDataList = new ArrayList<ForeignLanguageData>();
+        	foreignLanguageDataList.add(foreignLanguageData);
+        	
 		}
-		return foreignLanguageData;
+		
+		return foreignLanguageDataList;
 	}
 				  
 	@SuppressWarnings("resource")
