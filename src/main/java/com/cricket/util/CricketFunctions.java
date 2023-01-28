@@ -43,7 +43,6 @@ import com.cricket.model.Tournament;
 import com.cricket.service.CricketService;
 
 public class CricketFunctions {
-	
 	public static void DoadWriteSameCommandToEachViz(String SendTextIn, List<PrintWriter> print_writers) 
 	{
 		for(int i = 0; i < print_writers.size(); i++) {
@@ -207,12 +206,15 @@ public class CricketFunctions {
 			
 			if(dict != null) {	
 				
+				englishTxt = dict.getEnglishSentence();
 				hindiTxt = dict.getHindiSentence();
 				tamilTxt = dict.getTamilSentence();
 				teluguTxt = dict.getTeluguSentence();
 				
 				if(InsertText != null) {
 					if (InsertText.size() >= 1) {
+						englishTxt = englishTxt.replace(dict.getEnglishSentence(), 
+								InsertText.get(0) + " " + dict.getEnglishSentence());
 						hindiTxt = hindiTxt.replace(dict.getInsertBeforeFirstHindiText(), 
 								InsertText.get(0) + " " + dict.getInsertBeforeFirstHindiText());
 						tamilTxt = tamilTxt.replace(dict.getInsertBeforeFirstTamilText(), 
@@ -221,6 +223,8 @@ public class CricketFunctions {
 								InsertText.get(0) + " " + dict.getInsertBeforeFirstTeluguText());
 					}
 					if (InsertText.size() >= 2) {
+						englishTxt = englishTxt.replace(dict.getEnglishSentence(), 
+								InsertText.get(1) + " " + dict.getEnglishSentence());
 						hindiTxt = hindiTxt.replace(dict.getInsertBeforeSecondHindiText(), 
 								InsertText.get(1) + " " + dict.getInsertBeforeSecondHindiText());
 						tamilTxt = tamilTxt.replace(dict.getInsertBeforeSecondTamilText(), 
@@ -858,13 +862,13 @@ public class CricketFunctions {
 	    }
 	}
 	
-	public static class BatsmenRunComparator implements Comparator<Tournament> {
+	public static class BatsmenMostRunComparator implements Comparator<Tournament> {
 	    @Override
 	    public int compare(Tournament bc1, Tournament bc2) {
 	    	if(bc2.getRuns() == bc1.getRuns()) {
 	    		return Integer.compare(bc2.getBatsmanStrikeRateSortData(), bc1.getBatsmanStrikeRateSortData());
 	    	}else {
-	    		return Integer.compare(bc2.getBatsmanScoreSortData(), bc1.getBatsmanScoreSortData());
+	    		return Integer.compare(bc2.getRuns(), bc1.getRuns());
 	    	}
 	    }
 	}
@@ -1138,7 +1142,7 @@ public class CricketFunctions {
 		int total_runs = 0, total_balls = 0 ;
 		List<String> Balls = new ArrayList<String>();
 		if((events != null) && (events.size() > 0)) {
-			for (int i = events.size() - 1; i >= 0; i--) {
+			for (int i = 0; i <= events.size() - 1; i++) {
 				if(events.get(i).getEventInningNumber() == inning_number) {
 					//System.out.println("Inn Number" + inning_number);
 					int max_balls = (match.getMaxOvers() * 6);
@@ -1180,6 +1184,100 @@ public class CricketFunctions {
 		return Balls ;
 	}
 	
+	public static List<String> getPlayerSplit(int inning_number,int playerId ,int splitvalue, Match match,List<Event> events) {
+		int total_runs = 0, total_balls = 0 ;
+		List<String> Balls = new ArrayList<String>();
+		if((events != null) && (events.size() > 0)) {
+			for (int i = 0; i <= events.size() - 1; i++) {
+				if(events.get(i).getEventInningNumber() == inning_number) {
+					if(playerId == events.get(i).getEventBatterNo()) {
+						//System.out.println("Inn Number" + inning_number);
+						int max_balls = (match.getMaxOvers() * 6);
+						int count_balls = ((match.getInning().get(inning_number-1).getTotalOvers() * 6) + match.getInning().get(inning_number-1).getTotalBalls());
+						
+						switch (events.get(i).getEventType()) {
+						case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR:  case CricketUtil.FIVE: case CricketUtil.SIX: 
+						case CricketUtil.LEG_BYE: case CricketUtil.BYE: case CricketUtil.LOG_WICKET:
+							total_balls = total_balls + 1 ;
+							total_runs = total_runs + events.get(i).getEventRuns();
+							break;
+						
+						case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.PENALTY:
+							total_runs = total_runs + events.get(i).getEventRuns();
+							break;
+						
+						case CricketUtil.LOG_ANY_BALL:
+							total_runs += events.get(i).getEventRuns();
+				          if (events.get(i).getEventExtra() != null) {
+				        	 total_runs += events.get(i).getEventExtraRuns();
+				          }
+				          if (events.get(i).getEventSubExtra() != null) {
+				        	 total_runs += events.get(i).getEventSubExtraRuns();
+				          }
+				          break;
+						}
+						
+						if(count_balls <= max_balls && total_runs >= splitvalue) {
+							
+							Balls.add(String.valueOf(total_balls));
+							total_runs = total_runs - splitvalue;
+							total_balls = 0;
+							
+							continue;
+						}
+					}
+				}
+			}
+		}
+		return Balls ;
+	}
+	
+	public static List<String> getSplitBallls(int inning_number, int splitvalue, Match match,List<Event> events) {
+		int total_runs = 0, total_balls = 0 ;
+		List<String> Balls = new ArrayList<String>();
+		if((events != null) && (events.size() > 0)) {
+			for (int i = 0; i <= events.size() - 1; i++) {
+				if(events.get(i).getEventInningNumber() == inning_number) {
+					//System.out.println("Inn Number" + inning_number);
+					int max_balls = (match.getMaxOvers() * 6);
+					int count_balls = ((match.getInning().get(inning_number-1).getTotalOvers() * 6) + match.getInning().get(inning_number-1).getTotalBalls());
+					
+					switch (events.get(i).getEventType()) {
+					case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR:  case CricketUtil.FIVE: case CricketUtil.SIX: 
+					case CricketUtil.LEG_BYE: case CricketUtil.BYE: case CricketUtil.LOG_WICKET:
+						total_balls = total_balls + 1 ;
+						total_runs = total_runs + events.get(i).getEventRuns();
+						break;
+					
+					case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.PENALTY:
+						total_runs = total_runs + events.get(i).getEventRuns();
+						break;
+					
+					case CricketUtil.LOG_ANY_BALL:
+						total_runs += events.get(i).getEventRuns();
+			          if (events.get(i).getEventExtra() != null) {
+			        	 total_runs += events.get(i).getEventExtraRuns();
+			          }
+			          if (events.get(i).getEventSubExtra() != null) {
+			        	 total_runs += events.get(i).getEventSubExtraRuns();
+			          }
+			          break;
+					}
+					
+					if(count_balls <= max_balls && total_balls >= splitvalue) {
+						
+						Balls.add(String.valueOf(total_runs));
+						total_balls = total_balls - splitvalue;
+						total_runs = 0;
+						
+						continue;
+					}
+				}
+			}
+		}
+		return Balls ;
+	}
+	
 	public static String getbattingstyle (String battingType,String FullNShort,boolean justHand,boolean men_women) {
 		
 		String HandWord="",Text="";
@@ -1199,9 +1297,9 @@ public class CricketFunctions {
 				}
 			}else {
 				if(battingType.charAt(0) == 'L') {
-					Text = "Left-" + HandWord + " Batsman";
+					Text = "Left-" + HandWord + " Batter";
 				}else {
-					Text = "Right-" + HandWord + " Batsman";
+					Text = "Right-" + HandWord + " Batter";
 				}
 			}
 		}else {
@@ -1435,11 +1533,11 @@ public class CricketFunctions {
 			        
 			        case CricketUtil.LOG_ANY_BALL:
 			        	total_runs += events.get(i).getEventRuns();
-				          if (events.get(i).getEventExtra() != null) {
-				        	 total_runs += events.get(i).getEventExtraRuns();
+				          if (events.get(i).getEventExtra() != null && !events.get(i).getEventExtra().isEmpty()) {
+				        	  total_runs += events.get(i).getEventExtraRuns();
 				          }
-				          if (events.get(i).getEventSubExtra() != null) {
-				        	 total_runs += events.get(i).getEventSubExtraRuns();
+				          if (events.get(i).getEventSubExtra() != null && !events.get(i).getEventSubExtra().isEmpty()) {
+				        	  total_runs += events.get(i).getEventSubExtraRuns();
 				          }
 				          if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
 				        	  total_wickets += 1;
@@ -1599,7 +1697,7 @@ public class CricketFunctions {
 					    	
 					    	switch (events.get(i).getEventType().toUpperCase()) {
 						    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
-						    	total_runs = total_runs + events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
+						    	total_runs = total_runs + events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
 						    	
 								if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
 									&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)
@@ -1698,7 +1796,7 @@ public class CricketFunctions {
 		return run_rate;
 	}
 	
-	public static String generateTossResult(Match match,String TossType,String DecisionType, String teamNameType) {
+	public static String generateTossResult(Match match,String TossType,String DecisionType, String teamNameType, String electedOrChoose) {
 
 		String TeamNameToUse="", decisionText = ""; 
 		
@@ -1739,9 +1837,59 @@ public class CricketFunctions {
 		case CricketUtil.SHORT:
 			return TeamNameToUse + " won the toss and " + decisionText;
 		default:
-			return TeamNameToUse + " won the toss and choose to " + decisionText;
+			switch (electedOrChoose) {
+			case CricketUtil.ELECTED:
+				return TeamNameToUse + " won toss & elected to " + decisionText;
+			default:
+				return TeamNameToUse + " won toss & chose to " + decisionText;
+			}
 		}
 	}
+	
+//	public static String generateTossResult(Match match,String TossType,String DecisionType, String teamNameType) {
+//
+//		String TeamNameToUse="", decisionText = ""; 
+//		
+//		switch (match.getTossWinningDecision()) {
+//		case CricketUtil.BAT:
+//			decisionText = CricketUtil.BAT.toLowerCase();
+//			break;
+//		default:
+//			switch (DecisionType) {
+//			case CricketUtil.FIELD:
+//				decisionText = CricketUtil.FIELD.toLowerCase();
+//				break;
+//			default:
+//				decisionText = CricketUtil.BOWL;
+//				break;
+//			}
+//			break;
+//		}
+//		switch (teamNameType) {
+//		case CricketUtil.SHORT:
+//			if(match.getTossWinningTeam() == match.getHomeTeamId()) {
+//				TeamNameToUse = match.getHomeTeam().getTeamName4();
+//			} else {
+//				TeamNameToUse = match.getAwayTeam().getTeamName4();
+//			}
+//		    break;
+//		default:
+//			if(match.getTossWinningTeam() == match.getHomeTeamId()) {
+//				TeamNameToUse = match.getHomeTeam().getTeamName1();
+//			} else {
+//				TeamNameToUse = match.getAwayTeam().getTeamName1();
+//			}
+//		    break;
+//		}
+//		switch (TossType) {
+//		case CricketUtil.MINI:
+//			return CricketUtil.TOSS + ": " + TeamNameToUse;
+//		case CricketUtil.SHORT:
+//			return TeamNameToUse + " won the toss and " + decisionText;
+//		default:
+//			return TeamNameToUse + " won the toss and choose to " + decisionText;
+//		}
+//	}
 	
 	public static String Plural(int count){
 		if (count == 1){
@@ -1870,7 +2018,7 @@ public class CricketFunctions {
 		  		      return "Current Run Rate " + (match.getInning().get(0)).getRunRate();
 		  		    }
 		    	else {
-		    		return CricketFunctions.generateTossResult(match, CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL);
+		    		return CricketFunctions.generateTossResult(match, CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL,CricketUtil.CHOSE);
 		    	}
 		    case 2: case 3:
 		    	if(match.getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
@@ -2019,7 +2167,7 @@ public class CricketFunctions {
 	{
 		int dots = 0, ones = 0, twos = 0, threes = 0, fours = 0, fives = 0, sixes = 0;
 		boolean go_ahead = false;
-		
+		System.out.println(events.size());
 		if((events != null) && (events.size() > 0)) {
 			for (Event evnt : events) {
 				if(evnt.getEventInningNumber() == inning_number) {
@@ -2035,7 +2183,7 @@ public class CricketFunctions {
 							go_ahead = true;
 						}
 						break;
-					case CricketUtil.TEAM:
+					case "TEAM":
 						go_ahead = true;
 						break;
 					}
@@ -2102,6 +2250,8 @@ public class CricketFunctions {
 				}
 			}
 		}
+		System.out.println(String.valueOf(dots) + seperator + String.valueOf(ones) + seperator + String.valueOf(twos) + seperator + String.valueOf(threes)
+			+ seperator + String.valueOf(fours) + seperator + String.valueOf(fives) + seperator + String.valueOf(sixes));
 		return String.valueOf(dots) + seperator + String.valueOf(ones) + seperator + String.valueOf(twos) + seperator + String.valueOf(threes)
 			+ seperator + String.valueOf(fours) + seperator + String.valueOf(fives) + seperator + String.valueOf(sixes);
 	}

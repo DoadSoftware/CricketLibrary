@@ -54,15 +54,6 @@ public class Event implements Comparable<Event> {
   @XmlElement(name = "eventRuns")
   private int eventRuns;
 
-  @XmlElement(name = "eventWickets")
-  private int eventWickets;
-
-  @XmlElement(name = "eventFours")
-  private int eventFours;
-
-  @XmlElement(name = "eventSixes")
-  private int eventSixes;
-  
   @XmlElement(name = "eventOverNo")
   private int eventOverNo;
   
@@ -104,15 +95,6 @@ public class Event implements Comparable<Event> {
 
   @XmlElement(name = "eventSpeed")
   private String eventSpeed;
-
-  @XmlElement(name = "eventBattingCard")
-  private BattingCard eventBattingCard;
-
-  @XmlElement(name = "eventBowlingCard")
-  private BowlingCard eventBowlingCard;
-  
-  @XmlElement(name = "eventPartnership")
-  private Partnership eventPartnership;
   
 public Event() {
 	super();
@@ -131,54 +113,6 @@ public Event(int eventNumber, int eventStatNumber, String eventType, String even
 	this.eventRuns = eventRuns;
 	this.eventOverNo = eventOverNo;
 	this.eventBallNo = eventBallNo;
-}
-
-public int getEventWickets() {
-	return eventWickets;
-}
-
-public void setEventWickets(int eventWickets) {
-	this.eventWickets = eventWickets;
-}
-
-public int getEventFours() {
-	return eventFours;
-}
-
-public void setEventFours(int eventFours) {
-	this.eventFours = eventFours;
-}
-
-public int getEventSixes() {
-	return eventSixes;
-}
-
-public void setEventSixes(int eventSixes) {
-	this.eventSixes = eventSixes;
-}
-
-public BowlingCard getEventBowlingCard() {
-	return eventBowlingCard;
-}
-
-public void setEventBowlingCard(BowlingCard eventBowlingCard) {
-	this.eventBowlingCard = eventBowlingCard;
-}
-
-public Partnership getEventPartnership() {
-	return eventPartnership;
-}
-
-public void setEventPartnership(Partnership eventPartnership) {
-	this.eventPartnership = eventPartnership;
-}
-
-public BattingCard getEventBattingCard() {
-	return eventBattingCard;
-}
-
-public void setEventBattingCard(BattingCard eventBattingCard) {
-	this.eventBattingCard = eventBattingCard;
 }
 
 public String getEventSpeed() {
@@ -416,25 +350,6 @@ public void setEventType(String eventType) {
 @Override
 public int compareTo(Event evnt) {
 	return (int) (this.getEventNumber()-evnt.getEventNumber());
-}
-
-@Override
-public String toString() {
-	return "Event [eventNumber=" + eventNumber + ", eventStatNumber=" + eventStatNumber + ", eventWasABoundary="
-			+ eventWasABoundary + ", eventType=" + eventType + ", eventInningNumber=" + eventInningNumber
-			+ ", eventBatterNo=" + eventBatterNo + ", eventConcussionReplacePlayerId=" + eventConcussionReplacePlayerId
-			+ ", eventOnStrike=" + eventOnStrike + ", eventBatterPosition=" + eventBatterPosition
-			+ ", eventBatterPreviousPosition=" + eventBatterPreviousPosition + ", eventOtherBatterNo="
-			+ eventOtherBatterNo + ", eventBowlerNo=" + eventBowlerNo + ", eventBowlingEnd=" + eventBowlingEnd
-			+ ", eventOtherBowlerNo=" + eventOtherBowlerNo + ", eventRuns=" + eventRuns + ", eventWickets="
-			+ eventWickets + ", eventFours=" + eventFours + ", eventSixes=" + eventSixes + ", eventOverNo="
-			+ eventOverNo + ", eventBallNo=" + eventBallNo + ", eventExtra=" + eventExtra + ", eventExtraRuns="
-			+ eventExtraRuns + ", eventSubExtra=" + eventSubExtra + ", eventSubExtraRuns=" + eventSubExtraRuns
-			+ ", eventHowOut=" + eventHowOut + ", eventHowOutBatterNo=" + eventHowOutBatterNo
-			+ ", eventHowOutFielderId=" + eventHowOutFielderId + ", eventTotalRunsInAnOver=" + eventTotalRunsInAnOver
-			+ ", doNotIncrementBall=" + doNotIncrementBall + ", eventDescription=" + eventDescription
-			+ ", substitutionMade=" + substitutionMade + ", eventSpeed=" + eventSpeed + ", eventBattingCard="
-			+ eventBattingCard + ", eventBowlingCard=" + eventBowlingCard + ", eventPartnership=" + eventPartnership + "]";
 }
 
 }

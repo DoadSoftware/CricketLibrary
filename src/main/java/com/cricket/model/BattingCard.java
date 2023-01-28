@@ -93,38 +93,6 @@ public BattingCard(int playerId, int batterPosition, String status) {
 public BattingCard() {
 	super();
 }
-
-public BattingCard(int playerId, int batterPosition, String battingStyle, int runs, int fours, int sixes, int balls,
-		int howOutFielderId, int howOutBowlerId, String batsmanInningStarted, String status, String onStrike,
-		String howOutText, String howOut, String howOutPartOne, String howOutPartTwo, Player howOutFielder,
-		Player howOutBowler, String strikeRate, String wasHowOutFielderSubstitute, int concussionPlayerId,
-		Player player, Player concussion_player, long seconds) {
-	super();
-	this.playerId = playerId;
-	this.batterPosition = batterPosition;
-	this.battingStyle = battingStyle;
-	this.runs = runs;
-	this.fours = fours;
-	this.sixes = sixes;
-	this.balls = balls;
-	this.howOutFielderId = howOutFielderId;
-	this.howOutBowlerId = howOutBowlerId;
-	this.batsmanInningStarted = batsmanInningStarted;
-	this.status = status;
-	this.onStrike = onStrike;
-	this.howOutText = howOutText;
-	this.howOut = howOut;
-	this.howOutPartOne = howOutPartOne;
-	this.howOutPartTwo = howOutPartTwo;
-	this.howOutFielder = howOutFielder;
-	this.howOutBowler = howOutBowler;
-	this.strikeRate = strikeRate;
-	this.WasHowOutFielderSubstitute = wasHowOutFielderSubstitute;
-	this.concussionPlayerId = concussionPlayerId;
-	this.player = player;
-	this.concussion_player = concussion_player;
-	this.seconds = seconds;
-}
 public int getBatsmanScoreSortData() {
 	int sortData = this.getRuns();
 	if(this.getStatus() != null && this.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
@@ -291,19 +259,6 @@ public String toString() {
 @Override
 public int compareTo(BattingCard bc) {
 	return (int) (this.getBatterPosition()-bc.getBatterPosition());
-}
-
-@Override
-public BattingCard clone()
-{
-    try {
-        return (BattingCard) super.clone();
-    } catch (CloneNotSupportedException e) {
-        return new BattingCard(playerId, batterPosition, battingStyle, runs, fours, sixes, balls, 
-        	howOutFielderId, howOutBowlerId, batsmanInningStarted, status, onStrike, 
-        	howOutText, howOut, howOutPartOne, howOutPartTwo, howOutFielder, howOutBowler, 
-        	strikeRate, WasHowOutFielderSubstitute, concussionPlayerId, player, concussion_player, seconds);
-    }	
 }
 
 }

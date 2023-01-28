@@ -7,7 +7,6 @@ public class CricketUtil {
 	public final static String INFOBAR_SCENE_DIRECTORY = "D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_APL2022/Scenes/Scorebug.sum";
 	
 	public final static String CRICKET_DIRECTORY = "C:/Sports/Cricket/";
-	public final static String BACK_UP_DIRECTORY = "BackUp/";
 	public final static String EVENT_DIRECTORY = "Event/";
 	public final static String SPEED_DIRECTORY = "Speed/";
 	public final static String MATCHES_DIRECTORY = "Matches/";
@@ -23,6 +22,8 @@ public class CricketUtil {
 	public final static String BOWL = "bowl";
 	public final static String DOUBLE_BACKSLASH = "\\";
 	public final static String MATCH = "MATCH";
+	public final static String ELECTED = "ELECTED";
+	public final static String CHOSE = "CHOSE";
 
 	public final static String LOG_VARIOUS = "LOG_VARIOUS";
 	public final static String BOWLER_RUNNING = "BOWLER_RUNNING";
@@ -31,7 +32,7 @@ public class CricketUtil {
 	public final static String LOG_REVIEW = "LOG_REVIEW";
 	public final static String SUCCESSFUL = "SUCCESSFUL";
 	public final static String UNSUCCESSFUL = "UNSUCCESSFUL";
-
+	
 	public final static String YES = "YES";
 	public final static String NO = "NO";
 
@@ -97,7 +98,6 @@ public class CricketUtil {
 	public final static String LOAD_UNDO = "LOAD_UNDO";
 	public final static String LOAD_SETUP = "LOAD_SETUP";
 	public final static String LOG_ANY_BALL = "LOG_ANY_BALL";
-	public final static String LOG_OVERWRITE_BATTINGCARD = "LOG_OVERWRITE_BATTINGCARD";
 	public final static String LOG_OVERWRITE_TEAM_TOTAL = "LOG_OVERWRITE_TEAM_TOTAL";
 	public final static String LOG_OVERWRITE_TEAM_EXTRAS = "LOG_OVERWRITE_TEAM_EXTRAS";
 	public final static String LOG_OVERWRITE_BOWLER_FIGURES = "LOG_OVERWRITE_BOWLER_FIGURES";
@@ -172,7 +172,7 @@ public class CricketUtil {
 
 	public final static String PLURAL = "PLURAL";
 	public final static String COMPARE = "COMPARE";
-
+	
 	public final static String DICTIONARY = "DICTIONARY";
 	public final static String FULLNAME = "FULLNAME";
 	public final static String FIRSTNAME = "FIRSTNAME";
