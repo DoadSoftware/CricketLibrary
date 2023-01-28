@@ -117,16 +117,10 @@ public class CricketFunctions {
 		}
 	}	
 	
-	public static void DoadWriteSameCommandToEachViz(String SendTextIn, List<PrintWriter> print_writers) 
-	{
-		for(int i = 0; i < print_writers.size(); i++) {
-			print_writers.get(i).println("-1 " + SendTextIn + "\0");
-		}
-	}
-	public static void DoadWriteVariousLanguageTextToEachViz(String SendTextIn, Configuration config, String broadcaster, 
-			List<PrintWriter> print_writers,ForeignLanguageData foreignLanguageData) 
+	public static void DoadWriteSameCommandToEachViz(String SendTextIn, List<PrintWriter> print_writers, Configuration config) 
 	{
 		String which_language = "";
+//		ForeignLanguageData foreignLanguageData = new ForeignLanguageData();
 		for(int i = 0; i < print_writers.size(); i++) {
 
 			switch (i) {
@@ -141,25 +135,77 @@ public class CricketFunctions {
 				break;
 			}
 			if(which_language.equalsIgnoreCase("ENGLISH")) {
-				print_writers.get(i).println("-1 " + SendTextIn + foreignLanguageData.getEnglishText() + "\0");
+				if(SendTextIn.contains("$Language$")) {
+					print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language1$") + "\0");
+				}else {
+					print_writers.get(i).println("-1 " + SendTextIn + "\0");
+				}
 			}else if(which_language.equalsIgnoreCase("HINDI")) {
-				print_writers.get(i).println("-1 " + SendTextIn + foreignLanguageData.getHindiText() + "\0");
+				if(SendTextIn.contains("$Language$")) {
+					print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language3$") + "\0");
+				}else {
+					print_writers.get(i).println("-1 " + SendTextIn + "\0");
+				}
 			}else if(which_language.equalsIgnoreCase("TAMIL")) {
-				print_writers.get(i).println("-1 " + SendTextIn + foreignLanguageData.getTamilText() + "\0");
+				if(SendTextIn.contains("$Language$")) {
+					print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language6$") + "\0");
+				}else {
+					print_writers.get(i).println("-1 " + SendTextIn + "\0");
+				}
 			}else if(which_language.equalsIgnoreCase("TELUGU")) {
-				print_writers.get(i).println("-1 " + SendTextIn + foreignLanguageData.getTeluguText() + "\0");
+				if(SendTextIn.contains("$Language$")) {
+					print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language7$") + "\0");
+				}else {
+					print_writers.get(i).println("-1 " + SendTextIn + "\0");
+				}
+			}
+		}
+		for(int i = 0; i < print_writers.size(); i++) {
+			print_writers.get(i).println("-1 " + SendTextIn + "\0");
+		}
+	}
+	public static void DoadWriteVariousLanguageTextToEachViz(String SendTextIn, Configuration config, String broadcaster, 
+			List<PrintWriter> print_writers,List<ForeignLanguageData> foreignLanguageData) 
+	{
+		String which_language = "";
+//		ForeignLanguageData foreignLanguageData = new ForeignLanguageData();
+		for(int i = 0; i < print_writers.size(); i++) {
+
+			switch (i) {
+			case 0:
+				which_language = config.getPrimaryLanguage();
+				break;
+			case 1:
+				which_language = config.getSecondaryLanguage();
+				break;
+			case 2:
+				which_language = config.getTertiaryLanguage();
+				break;
+			}
+			if(which_language.equalsIgnoreCase("ENGLISH")) {
+				print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language1$") + foreignLanguageData.get(foreignLanguageData.size() - 1).getEnglishText() + "\0");
+			}else if(which_language.equalsIgnoreCase("HINDI")) {
+				print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language3$") + foreignLanguageData.get(foreignLanguageData.size() - 1).getHindiText() + "\0");
+			}else if(which_language.equalsIgnoreCase("TAMIL")) {
+				print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language6$") + foreignLanguageData.get(foreignLanguageData.size() - 1).getTamilText() + "\0");
+			}else if(which_language.equalsIgnoreCase("TELUGU")) {
+				print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language7$") + foreignLanguageData.get(foreignLanguageData.size() - 1).getTeluguText() + "\0");
 			}
 		}
 	}			
 	public static ForeignLanguageData MergeForeignLanguageDataListToSingleObject(List<ForeignLanguageData> foreignLanguageDataList) {
 		
 		ForeignLanguageData this_fd = new ForeignLanguageData();
-		
-		for(ForeignLanguageData fd : foreignLanguageDataList) {
-			this_fd.setEnglishText(this_fd.getEnglishText().trim() + " " + fd.getEnglishText().trim()); // India<b>win by 23 runs
-			this_fd.setHindiText(this_fd.getHindiText().trim() + " " + fd.getHindiText().trim());
-			this_fd.setTamilText(this_fd.getTamilText().trim() + " " + fd.getTamilText().trim());
-			this_fd.setTeluguText(this_fd.getTeluguText().trim() + " " + fd.getTeluguText().trim());
+		this_fd.setEnglishText(foreignLanguageDataList.get(0).getEnglishText().trim());
+		this_fd.setHindiText(foreignLanguageDataList.get(0).getHindiText().trim());
+		this_fd.setTamilText(foreignLanguageDataList.get(0).getTamilText().trim());
+		this_fd.setTeluguText(foreignLanguageDataList.get(0).getTeluguText().trim());
+//		for(ForeignLanguageData fd : foreignLanguageDataList) {
+		for(int fd = 1; fd <= foreignLanguageDataList.size() - 1; fd++) {
+			this_fd.setEnglishText(this_fd.getEnglishText().trim() + " " + foreignLanguageDataList.get(fd).getEnglishText().trim()); // India<b>win by 23 runs
+			this_fd.setHindiText(this_fd.getHindiText().trim() + " " + foreignLanguageDataList.get(fd).getHindiText().trim());
+			this_fd.setTamilText(this_fd.getTamilText().trim() + " " + foreignLanguageDataList.get(fd).getTamilText().trim());
+			this_fd.setTeluguText(this_fd.getTeluguText().trim() + " " + foreignLanguageDataList.get(fd).getTeluguText().trim());
 		}
 		return this_fd;
 	}
@@ -322,6 +368,12 @@ public class CricketFunctions {
 				
 			}
 			
+			break;
+		default:
+			englishTxt = foreignTextToProcess;
+			hindiTxt = foreignTextToProcess;
+			tamilTxt = foreignTextToProcess;
+			teluguTxt = foreignTextToProcess;
 			break;
 			
 		}
