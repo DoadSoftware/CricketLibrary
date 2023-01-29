@@ -7,6 +7,7 @@ public class CricketUtil {
 	public final static String INFOBAR_SCENE_DIRECTORY = "D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_APL2022/Scenes/Scorebug.sum";
 	
 	public final static String CRICKET_DIRECTORY = "C:/Sports/Cricket/";
+	public final static String BACK_UP_DIRECTORY = "Backup/";
 	public final static String EVENT_DIRECTORY = "Event/";
 	public final static String SPEED_DIRECTORY = "Speed/";
 	public final static String MATCHES_DIRECTORY = "Matches/";
@@ -36,6 +37,9 @@ public class CricketUtil {
 	public final static String YES = "YES";
 	public final static String NO = "NO";
 
+	public final static String RHB = "RHB";
+	public final static String LHB = "LHB";
+	
 	public final static String DOT = "0";
 	public final static String ONE = "1";
 	public final static String TWO = "2";
@@ -104,6 +108,7 @@ public class CricketUtil {
 	public final static String LOG_OVERWRITE_BATSMAN_STATS = "LOG_OVERWRITE_BATSMAN_STATS";
 	public final static String LOG_OVERWRITE_BATSMAN_HOWOUT = "LOG_OVERWRITE_BATSMAN_HOWOUT";
 	public final static String LOG_OVERWRITE_PARTNERSHIPS = "LOG_OVERWRITE_PARTNERSHIPS";
+	public final static String LOG_OVERWRITE_BATTINGCARD = "LOG_OVERWRITE_BATTINGCARD";
 	public final static String LOG_TIME = "LOG_TIME";
 	public final static String LOG_DAY_SESSION = "LOG_DAY_SESSION";
 	public final static String START_PAUSE_TIME = "START_PAUSE_TIME";

@@ -203,4 +203,13 @@ public void setWickets(int wickets) {
 public int compareTo(BowlingCard bc) {
 	return (int) (this.getBowlingPosition()-bc.getBowlingPosition());
 }
+@Override
+public BowlingCard clone() {
+    try {
+        return (BowlingCard) super.clone();
+    } catch (CloneNotSupportedException e) {
+        return new BowlingCard(this.player, this.bowlingPosition, this.status, this.bowling_end);
+    }
+}
+
 }

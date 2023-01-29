@@ -170,4 +170,13 @@ public int compareTo(Partnership part) {
 	return (int) (this.getPartnershipNumber()-part.getPartnershipNumber());
 }
   
+@Override
+public Partnership clone() {
+    try {
+        return (Partnership) super.clone();
+    } catch (CloneNotSupportedException e) {
+        return new Partnership(this.partnershipNumber, this.firstBatterNo, this.secondBatterNo);
+    }
+}
+
 }

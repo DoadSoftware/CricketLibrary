@@ -54,6 +54,15 @@ public class Event implements Comparable<Event> {
   @XmlElement(name = "eventRuns")
   private int eventRuns;
 
+  @XmlElement(name = "EventWickets")
+  private int eventWickets;
+
+  @XmlElement(name = "eventFours")
+  private int eventFours;
+
+  @XmlElement(name = "eventSixes")
+  private int eventSixes;
+  
   @XmlElement(name = "eventOverNo")
   private int eventOverNo;
   
@@ -95,7 +104,16 @@ public class Event implements Comparable<Event> {
 
   @XmlElement(name = "eventSpeed")
   private String eventSpeed;
-  
+
+  @XmlElement(name = "EventBattingCard")
+  private BattingCard EventBattingCard;
+
+  @XmlElement(name = "EventBowlingCard")
+  private BowlingCard EventBowlingCard;
+
+  @XmlElement(name = "EventPartnership")
+  private Partnership EventPartnership;
+
 public Event() {
 	super();
 }
@@ -113,6 +131,54 @@ public Event(int eventNumber, int eventStatNumber, String eventType, String even
 	this.eventRuns = eventRuns;
 	this.eventOverNo = eventOverNo;
 	this.eventBallNo = eventBallNo;
+}
+
+public int getEventWickets() {
+	return eventWickets;
+}
+
+public void setEventWickets(int eventWickets) {
+	this.eventWickets = eventWickets;
+}
+
+public int getEventFours() {
+	return eventFours;
+}
+
+public void setEventFours(int eventFours) {
+	this.eventFours = eventFours;
+}
+
+public int getEventSixes() {
+	return eventSixes;
+}
+
+public void setEventSixes(int eventSixes) {
+	this.eventSixes = eventSixes;
+}
+
+public BattingCard getEventBattingCard() {
+	return EventBattingCard;
+}
+
+public void setEventBattingCard(BattingCard eventBattingCard) {
+	EventBattingCard = eventBattingCard;
+}
+
+public BowlingCard getEventBowlingCard() {
+	return EventBowlingCard;
+}
+
+public void setEventBowlingCard(BowlingCard eventBowlingCard) {
+	EventBowlingCard = eventBowlingCard;
+}
+
+public Partnership getEventPartnership() {
+	return EventPartnership;
+}
+
+public void setEventPartnership(Partnership eventPartnership) {
+	EventPartnership = eventPartnership;
 }
 
 public String getEventSpeed() {

@@ -261,4 +261,12 @@ public int compareTo(BattingCard bc) {
 	return (int) (this.getBatterPosition()-bc.getBatterPosition());
 }
 
+@Override
+public BattingCard clone() {
+    try {
+        return (BattingCard) super.clone();
+    } catch (CloneNotSupportedException e) {
+        return new BattingCard(this.playerId, this.batterPosition, this.getStatus());
+    }
+}
 }
