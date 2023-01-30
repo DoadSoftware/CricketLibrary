@@ -120,7 +120,6 @@ public class CricketFunctions {
 	public static void DoadWriteSameCommandToEachViz(String SendTextIn, List<PrintWriter> print_writers, Configuration config) 
 	{
 		String which_language = "";
-//		ForeignLanguageData foreignLanguageData = new ForeignLanguageData();
 		for(int i = 0; i < print_writers.size(); i++) {
 
 			switch (i) {
@@ -168,7 +167,6 @@ public class CricketFunctions {
 			List<PrintWriter> print_writers,List<ForeignLanguageData> foreignLanguageData) 
 	{
 		String which_language = "";
-//		ForeignLanguageData foreignLanguageData = new ForeignLanguageData();
 		for(int i = 0; i < print_writers.size(); i++) {
 
 			switch (i) {
@@ -200,7 +198,6 @@ public class CricketFunctions {
 		this_fd.setHindiText(foreignLanguageDataList.get(0).getHindiText().trim());
 		this_fd.setTamilText(foreignLanguageDataList.get(0).getTamilText().trim());
 		this_fd.setTeluguText(foreignLanguageDataList.get(0).getTeluguText().trim());
-//		for(ForeignLanguageData fd : foreignLanguageDataList) {
 		for(int fd = 1; fd <= foreignLanguageDataList.size() - 1; fd++) {
 			this_fd.setEnglishText(this_fd.getEnglishText().trim() + " " + foreignLanguageDataList.get(fd).getEnglishText().trim()); // India<b>win by 23 runs
 			this_fd.setHindiText(this_fd.getHindiText().trim() + " " + foreignLanguageDataList.get(fd).getHindiText().trim());
@@ -440,9 +437,13 @@ public class CricketFunctions {
 	}
 	
 	public static String getCurrentSpeed() throws IOException {
-		return Files.newBufferedReader(Paths.get(CricketUtil.CRICKET_DIRECTORY 
-				+ CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT), StandardCharsets.UTF_8)
-				.lines().skip(1).limit(1).collect(Collectors.toList()).get(0);
+		if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT).exists() == true) {
+			return Files.newBufferedReader(Paths.get(CricketUtil.CRICKET_DIRECTORY 
+					+ CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT), StandardCharsets.UTF_8)
+					.lines().skip(1).limit(1).collect(Collectors.toList()).get(0);
+		} else {
+			return "";
+		}
 	}
 	
 	public static BowlingCard getCurrentInningCurrentBowler(Match match) {
@@ -1697,7 +1698,9 @@ public class CricketFunctions {
 		if ((events != null) && (events.size() > 0)) {
 		  for (int i = events.size() - 1; i >= 0; i--)
 		  {
-			if (whatToProcess.equalsIgnoreCase(CricketUtil.OVER) && events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
+			if (whatToProcess.equalsIgnoreCase(CricketUtil.OVER) 
+					&& events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)
+					&& events.get(i).getEventBallNo() <= 0) {
 				break;
             }
 			  
@@ -1846,25 +1849,28 @@ public class CricketFunctions {
 			  		        break;
 			  		        
 					    case CricketUtil.CHANGE_BOWLER:
-					    	switch (processPowerPlay(CricketUtil.FULL, match).replace(CricketUtil.POWERPLAY, "").trim()) {
-					    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
-						    	over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
-						    			total_runs, total_wickets, true));
-					    		break;
-					    	default:
-						    	over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
-						    			total_runs, total_wickets, false));
-					    		break;
+					    	
+					    	if(events.get(i).getEventBallNo() <= 0) {
+						    	switch (processPowerPlay(CricketUtil.FULL, match).replace(CricketUtil.POWERPLAY, "").trim()) {
+						    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
+							    	over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
+							    			total_runs, total_wickets, true));
+						    		break;
+						    	default:
+							    	over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
+							    			total_runs, total_wickets, false));
+						    		break;
+						    	}
+						    	switch (type.toUpperCase()) {
+								case "MANHATTAN":
+									total_runs = 0;
+									total_wickets = 0;
+									break;
+								case "WORM":
+									total_wickets = 0;
+									break;
+								}
 					    	}
-					    	switch (type.toUpperCase()) {
-							case "MANHATTAN":
-								total_runs = 0;
-								total_wickets = 0;
-								break;
-							case "WORM":
-								total_wickets = 0;
-								break;
-							}
 					    	break;
 					    	
 					    }
@@ -2254,7 +2260,8 @@ public class CricketFunctions {
 		int total_runs=0;
 		if((events != null) && (events.size() > 0)) {
 			for(int i = 0; i <= events.size() - 1; i++) {
-				if ((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER))) {
+				if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER) 
+					&& events.get(i).getEventBallNo() <= 0) {
 					break;
 				}
 				switch(events.get(i).getEventType()) {

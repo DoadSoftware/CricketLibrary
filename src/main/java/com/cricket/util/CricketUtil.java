@@ -67,6 +67,7 @@ public class CricketUtil {
 	public final static String NO_RESULT = "NO_RESULT";
 	public final static String SUPER_OVER = "SUPER_OVER";
 	public final static String SHOT = "SHOT";
+	public final static String WAGON = "WAGON";
 	
 	public final static String OUT = "OUT";
 	public final static String NOT_OUT = "NOT OUT";

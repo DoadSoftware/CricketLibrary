@@ -1,8 +1,11 @@
 package com.cricket.model;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -67,6 +70,10 @@ public class BowlingCard implements Comparable<BowlingCard> {
   @XmlElement(name = "totalRunsThisOver")
   private int totalRunsThisOver;
 
+  @XmlElementWrapper(name = "speeds")
+  @XmlElement(name = "speed")
+  private List<Speed> speeds;
+  
 public BowlingCard() {
 	super();
 }
@@ -81,7 +88,12 @@ public BowlingCard(Player player, int bowlingPosition, String status, int bowlin
 public int getBowlerFigureSortData() {
 	return 1000 * this.getWickets() - this.getRuns();
 }
-
+public List<Speed> getSpeeds() {
+	return speeds;
+}
+public void setSpeeds(List<Speed> speeds) {
+	this.speeds = speeds;
+}
 public int getTotalRunsThisOver() {
 	return totalRunsThisOver;
 }

@@ -28,9 +28,12 @@ public class Match {
   @XmlElement(name = "matchFileTimeStamp")
   private String matchFileTimeStamp;
 
+  @XmlElement(name = "useSpeed")
+  private String useSpeed;
+
   @XmlElement(name = "matchType")
   private String matchType;
-
+  
   @XmlElement(name = "matchResult")
   private String matchResult;
 
@@ -109,9 +112,6 @@ public class Match {
   @XmlElement(name = "awayTeam")
   private Team awayTeam;
 
-  @XmlElement(name = "enableSpeed")
-  private String enableSpeed;
-  
   @XmlTransient
   private Ground ground;
   
@@ -123,6 +123,9 @@ public class Match {
   
   @XmlTransient
   private int which_key_press;
+
+  @XmlTransient
+  private String current_speed;
   
   @XmlElementWrapper(name = "innings")
   @XmlElement(name = "inning")
@@ -159,9 +162,37 @@ public class Match {
   @XmlElementWrapper(name = "shots")
   @XmlElement(name = "shot")
   private List<Shot> shots;
+
+  @XmlElementWrapper(name = "wagons")
+  @XmlElement(name = "wagon")
+  private List<Wagon> wagons;
   
   @XmlTransient
   private List<Event> events;
+
+public String getCurrent_speed() {
+	return current_speed;
+}
+
+public void setCurrent_speed(String current_speed) {
+	this.current_speed = current_speed;
+}
+
+public String getUseSpeed() {
+	return useSpeed;
+}
+
+public void setUseSpeed(String useSpeed) {
+	this.useSpeed = useSpeed;
+}
+
+public List<Wagon> getWagons() {
+	return wagons;
+}
+
+public void setWagons(List<Wagon> wagons) {
+	this.wagons = wagons;
+}
 
 public String getFollowOn() {
 	return followOn;
@@ -169,14 +200,6 @@ public String getFollowOn() {
 
 public void setFollowOn(String followOn) {
 	this.followOn = followOn;
-}
-
-public String getEnableSpeed() {
-	return enableSpeed;
-}
-
-public void setEnableSpeed(String enableSpeed) {
-	this.enableSpeed = enableSpeed;
 }
 
 public int getFollowOnThreshold() {
