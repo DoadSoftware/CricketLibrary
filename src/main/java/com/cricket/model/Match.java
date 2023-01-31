@@ -112,6 +112,9 @@ public class Match {
   @XmlElement(name = "awayTeam")
   private Team awayTeam;
 
+  @XmlElement(name = "currentSpeed")
+  private String current_speed;
+  
   @XmlTransient
   private Ground ground;
   
@@ -124,9 +127,6 @@ public class Match {
   @XmlTransient
   private int which_key_press;
 
-  @XmlTransient
-  private String current_speed;
-  
   @XmlElementWrapper(name = "innings")
   @XmlElement(name = "inning")
   private List<Inning> inning;
