@@ -127,6 +127,9 @@ public class Match {
   @XmlTransient
   private int which_key_press;
 
+  @XmlTransient
+  private long speed_file_last_modified_timestamp;
+  
   @XmlElementWrapper(name = "innings")
   @XmlElement(name = "inning")
   private List<Inning> inning;
@@ -169,6 +172,14 @@ public class Match {
   
   @XmlTransient
   private List<Event> events;
+
+public long getSpeed_file_last_modified_timestamp() {
+	return speed_file_last_modified_timestamp;
+}
+
+public void setSpeed_file_last_modified_timestamp(long speed_file_last_modified_timestamp) {
+	this.speed_file_last_modified_timestamp = speed_file_last_modified_timestamp;
+}
 
 public String getCurrent_speed() {
 	return current_speed;

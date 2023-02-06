@@ -436,14 +436,27 @@ public class CricketFunctions {
 		return print_writer;
 	}
 	
-	public static String getCurrentSpeed() throws IOException {
-		if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT).exists() == true) {
-			return Files.newBufferedReader(Paths.get(CricketUtil.CRICKET_DIRECTORY 
-					+ CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT), StandardCharsets.UTF_8)
-					.lines().skip(1).limit(1).collect(Collectors.toList()).get(0);
-		} else {
-			return "";
+	public static String getCurrentSpeed(Match match) throws IOException {
+		
+		String speed_to_return = "";
+		
+		File speed_file = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT);
+		System.out.println("speed_file.exists() = " + speed_file.exists());
+		if(speed_file.exists() == true) {
+			System.out.println("match.getSpeed_file_last_modified_timestamp() = " + match.getSpeed_file_last_modified_timestamp());
+			if(match.getSpeed_file_last_modified_timestamp() > 0) {
+				System.out.println("new Date(match.getSpeed_file_last_modified_timestamp()) = " 
+						+ new Date(match.getSpeed_file_last_modified_timestamp()));
+				System.out.println("new Date(speed_file.lastModified()) = " + new Date(speed_file.lastModified()));
+				if(!new Date(match.getSpeed_file_last_modified_timestamp()).equals(new Date(speed_file.lastModified()))) {
+					speed_to_return = Files.newBufferedReader(Paths.get(CricketUtil.CRICKET_DIRECTORY 
+							+ CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT), StandardCharsets.UTF_8)
+							.lines().skip(1).limit(1).collect(Collectors.toList()).get(0);
+					System.out.println("speed_to_return = " + speed_to_return);
+				}
+			}
 		}
+		return speed_to_return;
 	}
 	
 	public static BowlingCard getCurrentInningCurrentBowler(Match match) {
