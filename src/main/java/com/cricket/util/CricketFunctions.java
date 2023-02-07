@@ -117,6 +117,116 @@ public class CricketFunctions {
 		}
 	}	
 	
+	public static ForeignLanguageData generateBattingCardForeignLanguage(String whichdata1,String howOut1,String howOut2,String howOut3, 
+			MultiLanguageDatabase multiLanguageDb)
+	{
+		List<ForeignLanguageData> resultToShow = new ArrayList<ForeignLanguageData>();
+//		List<String> insertTxt = new ArrayList<String>();
+		
+		if(whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.CAUGHT)){
+			String englishTxt = "";
+			resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, howOut1.split(" ")[0], 
+					"", null, resultToShow.size() + 1, resultToShow);
+			
+			Player plyr = multiLanguageDb.getPlayers().stream()
+					.filter(player -> howOut1.split(" ")[1].equalsIgnoreCase(player.getTicker_name()))
+					.findAny().orElse(null);
+			if(plyr != null) {
+				englishTxt = plyr.getFull_name();
+			}
+			resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.PLAYER, CricketUtil.FULLNAME, multiLanguageDb, 
+					englishTxt, CricketUtil.FIRSTNAME, null, resultToShow.size() + 1, resultToShow);
+			
+			resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, howOut2.split(" ")[0], 
+					"", null, resultToShow.size() + 1, resultToShow);
+			
+			Player plyrs = multiLanguageDb.getPlayers().stream()
+					.filter(player -> howOut2.split(" ")[1].equalsIgnoreCase(player.getTicker_name()))
+					.findAny().orElse(null);
+			if(plyrs != null) {
+				englishTxt = plyrs.getFull_name();
+			}
+			resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.PLAYER, CricketUtil.FULLNAME, multiLanguageDb, 
+					englishTxt, CricketUtil.FIRSTNAME, null, resultToShow.size() + 1, resultToShow);
+			
+		}else if(whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.CAUGHT_AND_BOWLED)){
+			String englishTxt = "";
+			resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, howOut1, 
+					"", null, resultToShow.size() + 1, resultToShow);
+			Player plyr = multiLanguageDb.getPlayers().stream()
+					.filter(player -> howOut2.equalsIgnoreCase(player.getTicker_name()))
+					.findAny().orElse(null);
+			if(plyr != null) {
+				englishTxt = plyr.getFull_name();
+			}
+			resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.PLAYER, CricketUtil.FULLNAME, multiLanguageDb, 
+					englishTxt, CricketUtil.FIRSTNAME, null, resultToShow.size() + 1, resultToShow);
+		}else if(whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.BOWLED)){
+			String englishTxt = "";
+			resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, howOut2.split(" ")[0], 
+					"", null, resultToShow.size() + 1, resultToShow);
+			Player plyr = multiLanguageDb.getPlayers().stream()
+					.filter(player -> howOut2.split(" ")[1].equalsIgnoreCase(player.getTicker_name()))
+					.findAny().orElse(null);
+			if(plyr != null) {
+				englishTxt = plyr.getFull_name();
+			}
+			resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.PLAYER, CricketUtil.FULLNAME, multiLanguageDb, 
+					englishTxt, CricketUtil.FIRSTNAME, null, resultToShow.size() + 1, resultToShow);
+		}else if(whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.RUN_OUT) || whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.MANKAD)){
+			if(!howOut3.isEmpty() && howOut3.trim() != null ) {
+				String englishTxt = "";
+				resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.DICTIONARY, "", multiLanguageDb, 
+						howOut1, "", null, resultToShow.size() + 1, resultToShow);
+				
+				resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, "(", 
+						"", null, resultToShow.size() + 1, resultToShow);
+				resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.DICTIONARY, "", multiLanguageDb, 
+						"sub", "", null, resultToShow.size() + 1, resultToShow);
+				resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, "-", 
+						"", null, resultToShow.size() + 1, resultToShow);
+				Player plyr = multiLanguageDb.getPlayers().stream()
+						.filter(player -> howOut2.split(" ")[0].equalsIgnoreCase(player.getTicker_name()))
+						.findAny().orElse(null);
+				if(plyr != null) {
+					englishTxt = plyr.getFull_name();
+				}
+				resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.PLAYER, CricketUtil.FULLNAME, multiLanguageDb, 
+						englishTxt, CricketUtil.FIRSTNAME, null, resultToShow.size() + 1, resultToShow);
+				
+				resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, ")", 
+						"", null, resultToShow.size() + 1, resultToShow);
+			}else {
+				String englishTxt = "";
+				resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.DICTIONARY, "", multiLanguageDb, 
+						howOut1, "", null, resultToShow.size() + 1, resultToShow);
+				
+				resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, "(", 
+						"", null, resultToShow.size() + 1, resultToShow);
+				
+				Player plyr = multiLanguageDb.getPlayers().stream()
+						.filter(player -> howOut2.equalsIgnoreCase(player.getTicker_name()))
+						.findAny().orElse(null);
+				if(plyr != null) {
+					englishTxt = plyr.getFull_name();
+				}
+				resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.PLAYER, CricketUtil.FULLNAME, multiLanguageDb, 
+						englishTxt, CricketUtil.FIRSTNAME, null, resultToShow.size() + 1, resultToShow);
+				
+				resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, ")", 
+						"", null, resultToShow.size() + 1, resultToShow);
+			}
+			
+		}
+		
+		if(resultToShow.size() > 0) {
+			System.out.println("data = " + resultToShow);
+			return MergeForeignLanguageDataListToSingleObject(resultToShow);
+		} else {
+			return null;
+		}
+	}
+	
 	public static void DoadWriteSameCommandToEachViz(String SendTextIn, List<PrintWriter> print_writers, Configuration config) 
 	{
 		String which_language = "";
