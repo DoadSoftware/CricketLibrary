@@ -572,5 +572,10 @@ public List<Event> getEvents() {
 public void setEvents(List<Event> events) {
 	this.events = events;
 }
-  
+
+@Override
+public String toString() {
+	return "Match [useSpeed=" + useSpeed + ", current_speed=" + current_speed + "]";
+}
+
 }
