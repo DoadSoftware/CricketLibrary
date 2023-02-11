@@ -638,7 +638,8 @@ public class CricketFunctions {
 		for(File file : files) {
 			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService, (Match) 
 				JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
-				new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + file.getName()))));
+				new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + file.getName()))));
+			//System.out.println(CricketUtil.CRICKET_SERVER_DIRECTORY);
 		}
 		return tournament_matches;
 	}

@@ -19,6 +19,15 @@ public class VariousText {
   @Column(name = "VariousText")
   private String variousText;
   
+  @Column(name = "HindiVariousText")
+  private String hindiVariousText;
+  
+  @Column(name = "TamilVariousText")
+  private String tamilVariousText;
+  
+  @Column(name = "TeluguVariousText")
+  private String teluguVariousText;
+  
   @Column(name = "UseThis")
   private String useThis;
 
@@ -44,6 +53,30 @@ public String getVariousText() {
 
 public void setVariousText(String variousText) {
 	this.variousText = variousText;
+}
+
+public String getHindiVariousText() {
+	return hindiVariousText;
+}
+
+public void setHindiVariousText(String hindiVariousText) {
+	this.hindiVariousText = hindiVariousText;
+}
+
+public String getTamilVariousText() {
+	return tamilVariousText;
+}
+
+public void setTamilVariousText(String tamilVariousText) {
+	this.tamilVariousText = tamilVariousText;
+}
+
+public String getTeluguVariousText() {
+	return teluguVariousText;
+}
+
+public void setTeluguVariousText(String teluguVariousText) {
+	this.teluguVariousText = teluguVariousText;
 }
 
 public String getUseThis() {

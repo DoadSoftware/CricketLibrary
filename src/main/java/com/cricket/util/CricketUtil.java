@@ -6,6 +6,8 @@ public class CricketUtil {
 	
 	public final static String INFOBAR_SCENE_DIRECTORY = "D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_APL2022/Scenes/Scorebug.sum";
 	
+	public final static String CRICKET_SERVER_DIRECTORY = "//DOAD-SERVER2//C//Sports//Cricket//";
+//	public final static String CRICKET_SERVER_DIRECTORY = "C:/Sports/Cricket/";
 	public final static String CRICKET_DIRECTORY = "C:/Sports/Cricket/";
 	public final static String BACK_UP_DIRECTORY = "Backup/";
 	public final static String EVENT_DIRECTORY = "Event/";

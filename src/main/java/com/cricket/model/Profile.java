@@ -18,6 +18,9 @@ public class Profile {
 
   @Column(name = "STATSTYPEID")
   private int stats_type_id;
+  
+  @Column(name = "ShortText")
+  private int ShortText;
 
 public int getProfile_id() {
 	return profile_id;
@@ -41,6 +44,14 @@ public int getStats_type_id() {
 
 public void setStats_type_id(int stats_type_id) {
 	this.stats_type_id = stats_type_id;
+}
+
+public int getShortText() {
+	return ShortText;
+}
+
+public void setShortText(int shortText) {
+	ShortText = shortText;
 }
 
 }

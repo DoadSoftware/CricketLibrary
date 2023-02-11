@@ -28,8 +28,8 @@ public class NameSuper
   @Column(name = "SURNAME")
   private String surname;
   
-  @Column(name = "SUBHEADER")
-  private String subHeader;
+  @Column(name = "Prompt")
+  private String prompt;
 
   @Column(name = "SUBLINE")
   private String subLine;
@@ -37,6 +37,24 @@ public class NameSuper
   @Column(name = "SPONSOR")
   private String sponsor;
 
+  @Column(name = "HindiFirstName")
+  private String HindiFirstName;
+  
+  @Column(name = "HindiSurName")
+  private String HindiSurName;
+  
+  @Column(name = "TamilFirstName")
+  private String TamilFirstName;
+  
+  @Column(name = "TamilSurName")
+  private String TamilSurName;
+  
+  @Column(name = "TeluguFirstName")
+  private String TeluguFirstName;
+  
+  @Column(name = "TeluguSurName")
+  private String TeluguSurName;
+  
   public NameSuper() {
 		super();
   }
@@ -70,12 +88,12 @@ public void setSurname(String surname) {
 	this.surname = surname;
 }
 
-public String getSubHeader() {
-	return subHeader;
+public String getPrompt() {
+	return prompt;
 }
 
-public void setSubHeader(String subHeader) {
-	this.subHeader = subHeader;
+public void setPrompt(String prompt) {
+	this.prompt = prompt;
 }
 
 public String getSubLine() {
@@ -92,6 +110,54 @@ public String getSponsor() {
 
 public void setSponsor(String sponsor) {
 	this.sponsor = sponsor;
+}
+
+public String getHindiFirstName() {
+	return HindiFirstName;
+}
+
+public void setHindiFirstName(String hindiFirstName) {
+	HindiFirstName = hindiFirstName;
+}
+
+public String getHindiSurName() {
+	return HindiSurName;
+}
+
+public void setHindiSurName(String hindiSurName) {
+	HindiSurName = hindiSurName;
+}
+
+public String getTamilFirstName() {
+	return TamilFirstName;
+}
+
+public void setTamilFirstName(String tamilFirstName) {
+	TamilFirstName = tamilFirstName;
+}
+
+public String getTamilSurName() {
+	return TamilSurName;
+}
+
+public void setTamilSurName(String tamilSurName) {
+	TamilSurName = tamilSurName;
+}
+
+public String getTeluguFirstName() {
+	return TeluguFirstName;
+}
+
+public void setTeluguFirstName(String teluguFirstName) {
+	TeluguFirstName = teluguFirstName;
+}
+
+public String getTeluguSurName() {
+	return TeluguSurName;
+}
+
+public void setTeluguSurName(String teluguSurName) {
+	TeluguSurName = teluguSurName;
 }
 
 }
