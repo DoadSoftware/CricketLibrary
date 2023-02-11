@@ -79,10 +79,10 @@ public class CricketFunctions {
 	  {
 		  if(match.getEvents().get(i).getEventInningNumber() >= 1 && match.getEvents().get(i).getEventInningNumber() <= max_inn) {
 			if(match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase("END_OVER") || 
-					match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase("CHANGE_BOWLER")) {
+					match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase("CHANGE_BOWLER")||
+					match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase(CricketUtil.NEW_BATSMAN)) {
 				
 			}else {
-				System.out.println(match.getEvents().get(i).getEventType().toUpperCase());
 				for(Inning inn : match.getInning()) {
 					for(Player hs : match.getHomeSquad()) {
 						if(match.getEvents().get(i).getEventBatterNo() == hs.getPlayerId()) {
@@ -152,9 +152,9 @@ public class CricketFunctions {
 //			case CricketUtil.CHANGE_BOWLER : case CricketUtil.END_OVER: case CricketUtil.NEW_BATSMAN:
 //				//line_txt = addSubString(line_txt,"0",75);
 //				break;
-			case CricketUtil.NEW_BATSMAN:
-				line_txt = addSubString(line_txt,"0",75);
-				break;
+//			case CricketUtil.NEW_BATSMAN:
+//				line_txt = addSubString(line_txt,"0",75);
+//				break;
 		    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 		    case CricketUtil.FOUR: case CricketUtil.SIX:
 		    	this_ball_data = String.valueOf(match.getEvents().get(i).getEventRuns());
@@ -163,17 +163,17 @@ public class CricketFunctions {
 		    case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
 		    	this_ball_data = String.valueOf(match.getEvents().get(i).getEventRuns() + match.getEvents().get(i).getEventSubExtraRuns()) + this_over;
 		    	line_txt = addSubString(line_txt,"0",75);
-		    	line_txt = addSubString(line_txt,this_ball_data,120);
+		    	line_txt = addSubString(line_txt,this_ball_data,116);
 		      break;
 		    case CricketUtil.LOG_WICKET:
 		    	line_txt = addSubString(line_txt,String.valueOf(match.getEvents().get(i).getEventRuns()),75);
 	    		 
 		      if (match.getEvents().get(i).getEventRuns() > 0) {
-		    	  line_txt = addSubString(line_txt,String.valueOf(match.getEvents().get(i).getEventRuns()) + this_over,109);
+		    	  line_txt = addSubString(line_txt,String.valueOf(match.getEvents().get(i).getEventRuns()) + this_over,116);
 	    		 
 		        this_ball_data = String.valueOf(match.getEvents().get(i).getEventRuns()) + this_over;
 		      } else {
-		    	  line_txt = addSubString(line_txt,this_over,109);
+		    	  line_txt = addSubString(line_txt,this_over,116);
 	    		  
 		        this_ball_data = this_over;
 		      }
@@ -194,12 +194,12 @@ public class CricketFunctions {
 		    			if(match.getEvents().get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 		    				if(match.getEvents().get(i).getEventRuns()>0) {
 		    					line_txt = addSubString(line_txt,"0",75);
-		    					line_txt = addSubString(line_txt,match.getEvents().get(i).getEventExtra() + match.getEvents().get(i).getEventRuns(),120);
+		    					line_txt = addSubString(line_txt,match.getEvents().get(i).getEventExtra() + match.getEvents().get(i).getEventRuns(),118);
 	    						
 			    				this_ball_data = match.getEvents().get(i).getEventExtra() + match.getEvents().get(i).getEventRuns();
 			    			}else {
 			    				line_txt = addSubString(line_txt,"0",75);
-			    				line_txt = addSubString(line_txt,match.getEvents().get(i).getEventExtra(),120);
+			    				line_txt = addSubString(line_txt,match.getEvents().get(i).getEventExtra(),116);
 		    					
 			    				this_ball_data = match.getEvents().get(i).getEventExtra();
 			    			}
@@ -212,7 +212,7 @@ public class CricketFunctions {
 		    		}else {
 		    			line_txt = addSubString(line_txt,"0",75);
 		    			this_ball_data = this_ball_data + match.getEvents().get(i).getEventExtra();
-		    			line_txt = addSubString(line_txt,this_ball_data,120);
+		    			line_txt = addSubString(line_txt,this_ball_data,116);
 		    		}
 		    	}
 			    if (match.getEvents().get(i).getEventSubExtra() != null && match.getEvents().get(i).getEventSubExtraRuns() > 0){
@@ -220,12 +220,12 @@ public class CricketFunctions {
 			    		if (this_ball_data.isEmpty()) {
 			    			line_txt = addSubString(line_txt,"0",75);
 				          this_ball_data = String.valueOf(match.getEvents().get(i).getEventSubExtraRuns()) + match.getEvents().get(i).getEventSubExtra();
-				          line_txt = addSubString(line_txt,this_ball_data,120);
+				          line_txt = addSubString(line_txt,this_ball_data,116);
 			        	
 				        } else {
 				        	line_txt = addSubString(line_txt,"0",75);
 				          this_ball_data = this_ball_data + "+" + String.valueOf(match.getEvents().get(i).getEventSubExtraRuns()) + match.getEvents().get(i).getEventSubExtra();
-				          line_txt = addSubString(line_txt,this_ball_data,120);
+				          line_txt = addSubString(line_txt,this_ball_data,116);
 				        }
 			    	} 
 			    }
@@ -243,7 +243,8 @@ public class CricketFunctions {
 			}
 			
 			if(match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase("END_OVER")  || 
-					match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase("CHANGE_BOWLER")) {
+					match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase("CHANGE_BOWLER")||
+					match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase(CricketUtil.NEW_BATSMAN)) {
 				
 			}else {
 				if(match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase(CricketUtil.LOG_WICKET)) {
@@ -259,7 +260,8 @@ public class CricketFunctions {
 			
 		}
 		  if(match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase("END_OVER")  || 
-					match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase("CHANGE_BOWLER")) {
+					match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase("CHANGE_BOWLER") ||
+					match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase(CricketUtil.NEW_BATSMAN)) {
 				
 			}else {
 				Files.write(file, Arrays.asList(line_txt), StandardCharsets.UTF_8,
