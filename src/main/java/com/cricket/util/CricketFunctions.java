@@ -797,6 +797,24 @@ public class CricketFunctions {
 		return speed_to_return;
 	}
 	
+	public static String getCurrentSpeedFile(Match match) throws IOException {
+		
+		String speed_to_return = "";
+		
+		File speed_file = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT);
+		if(speed_file.exists() == true) {
+			if(match.getSpeed_file_last_modified_timestamp() >= 0) {
+				if(!new Date(match.getSpeed_file_last_modified_timestamp()).equals(new Date(speed_file.lastModified()))) {
+					speed_to_return = Files.newBufferedReader(Paths.get(CricketUtil.CRICKET_DIRECTORY 
+							+ CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT), StandardCharsets.UTF_8)
+							.lines().skip(1).limit(1).collect(Collectors.toList()).get(0);
+					match.setSpeed_file_last_modified_timestamp(speed_file.lastModified());
+				}
+			}
+		}
+		return speed_to_return;
+	}
+
 	public static BowlingCard getCurrentInningCurrentBowler(Match match) {
 		BowlingCard current_bowler = null;
 		for(Inning inn : match.getInning()) {
