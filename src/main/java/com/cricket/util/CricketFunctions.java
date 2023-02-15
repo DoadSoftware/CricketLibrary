@@ -80,12 +80,14 @@ public class CricketFunctions {
 		line_txt = addSubString(line_txt,"Over",61);
 		line_txt = addSubString(line_txt,"Ball",66);
 		line_txt = addSubString(line_txt,"Runs",75);
-		line_txt = addSubString(line_txt,"Wkt",96);
-		line_txt = addSubString(line_txt,"Bat/Style",103);
-//		line_txt = addSubString(line_txt,"Shots",110);
-		line_txt = addSubString(line_txt,"OtherBatsman",132);
+		line_txt = addSubString(line_txt,"WagonX",82);
+		line_txt = addSubString(line_txt,"WagonY",89);
+		line_txt = addSubString(line_txt,"Wkt?",96);
+		line_txt = addSubString(line_txt,"LH/RH",103);
+		line_txt = addSubString(line_txt,"Shot",110);
+		line_txt = addSubString(line_txt,"Other Batsman",132);
 //		line_txt = addSubString(line_txt,"Bo/S",134);
-		line_txt = addSubString(line_txt,"ThisOver" + "\n",158);
+		line_txt = addSubString(line_txt,"ThisOver",158);
 		
 		if(new File("C://Temp//DOADInterectiveFile.txt").exists()) {
 			Files.delete(file);
@@ -114,18 +116,18 @@ public class CricketFunctions {
 				for(Inning inn : match.getInning()) {
 					for(Player hs : match.getHomeSquad()) {
 						if(match.getEvents().get(i).getEventBatterNo() == hs.getPlayerId()) {
-							batsman_style = hs.getBattingStyle().toUpperCase();
+							batsman_style = hs.getBattingStyle().toUpperCase().charAt(0) + "";
 	    				}
 						if(match.getEvents().get(i).getEventBowlerNo() == hs.getPlayerId()) {
-							bowler_handed = hs.getBowlingStyle().toUpperCase();
+							bowler_handed = hs.getBowlingStyle().toUpperCase().charAt(0) + "";
 	    				}
 					}
 					for(Player as : match.getAwaySquad()) {
 						if(match.getEvents().get(i).getEventBatterNo() == as.getPlayerId()) {
-							batsman_style = as.getBattingStyle().toUpperCase();
+							batsman_style = as.getBattingStyle().toUpperCase().charAt(0) + "";
 	    				}
 						if(match.getEvents().get(i).getEventBowlerNo() == as.getPlayerId()) {
-							bowler_handed = as.getBowlingStyle().toUpperCase();
+							bowler_handed = as.getBowlingStyle().toUpperCase().charAt(0) + "";
 	    				}
 					}
 	    			for(BattingCard bc : inn.getBattingCard()) {
@@ -173,13 +175,13 @@ public class CricketFunctions {
 	    		
 	    		if(!this_over.trim().isEmpty()) {
 	    			
-					this_over = this_over.replace("WIDE", "wd");
-					this_over = this_over.replace("NO_BALL", "nb");
-					this_over = this_over.replace("LEG_BYE", "lb");
-					this_over = this_over.replace("BYE", "b");
-					this_over = this_over.replace("PENALTY", "pn");
-					this_over = this_over.replace("LOG_WICKET", "w");
-					this_over = this_over.replace("WICKET", "w");
+					this_over = this_over.replace("WIDE", "WD");
+					this_over = this_over.replace("NO_BALL", "NB");
+					this_over = this_over.replace("LEG_BYE", "LB");
+					this_over = this_over.replace("BYE", "B");
+					this_over = this_over.replace("PENALTY", "PN");
+					this_over = this_over.replace("LOG_WICKET", "W");
+					this_over = this_over.replace("WICKET", "W");
 				}	
 			}
 			
@@ -265,11 +267,11 @@ public class CricketFunctions {
 			    }
 		      if (match.getEvents().get(i).getEventHowOut() != null && !match.getEvents().get(i).getEventHowOut().isEmpty()) {
 		        if (this_ball_data.isEmpty()) {
-		          this_ball_data = CricketUtil.WICKET;
+		          this_ball_data = CricketUtil.WICKET.charAt(0) + "";
 		          line_txt = addSubString(line_txt,this_ball_data,75);
 	        	  
 		        } else {
-		          this_ball_data = this_ball_data + "+" + CricketUtil.WICKET;
+		          this_ball_data = this_ball_data + "+" + CricketUtil.WICKET.charAt(0) + "";
 		          line_txt = addSubString(line_txt,this_ball_data,75);
 		        }
 		      }
@@ -285,14 +287,14 @@ public class CricketFunctions {
 				
 			}else {
 				if(match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase(CricketUtil.LOG_WICKET)) {
-			    	line_txt = addSubString(line_txt,"Y",96);
+			    	line_txt = addSubString(line_txt,"Y",97);
 		    		
 			    }else {
-			    	line_txt = addSubString(line_txt,"N",96);	
+			    	line_txt = addSubString(line_txt,"N",97);	
 			    }
 				line_txt = addSubString(line_txt,batsman_style,103);
-//				line_txt = addSubString(line_txt,printInitials(shots),110);
-//				line_txt = addSubString(line_txt,bowler_handed,130);
+				line_txt = addSubString(line_txt,printInitials(shots),110);
+				line_txt = addSubString(line_txt,bowler_handed,130);
 				line_txt = addSubString(line_txt,OtherBatsman,132);
 				line_txt = addSubString(line_txt,this_over_run,158);
 			}
