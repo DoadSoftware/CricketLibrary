@@ -15,6 +15,7 @@ import com.cricket.model.InfobarStats;
 import com.cricket.model.NameSuper;
 import com.cricket.model.Player;
 import com.cricket.model.Playoff;
+import com.cricket.model.Season;
 import com.cricket.model.Statistics;
 import com.cricket.model.StatsType;
 import com.cricket.model.Team;
@@ -112,5 +113,10 @@ public List<Dictionary> getDictionary() {
 @Override
 public List<Playoff> getPlayOff() {
 	return cricketDao.getPlayOff();
+}
+
+@Override
+public List<Season> getSeasons() {
+	return cricketDao.getSeasons();
 }
 }

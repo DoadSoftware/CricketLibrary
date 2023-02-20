@@ -60,12 +60,6 @@ public class BattingCard implements Comparable<BattingCard>{
   @XmlElement(name = "howOutPartTwo")
   private String howOutPartTwo;
   
-  @XmlTransient
-  private Player howOutFielder;
-  
-  @XmlTransient
-  private Player howOutBowler;
-
   @XmlElement(name = "strikeRate")
   private String strikeRate;
 
@@ -74,6 +68,9 @@ public class BattingCard implements Comparable<BattingCard>{
   
   @XmlElement(name = "concussionPlayerId")
   private int concussionPlayerId;
+
+  @XmlElement(name = "seconds")
+  private long seconds;
   
   @XmlTransient
   private Player player;
@@ -81,8 +78,11 @@ public class BattingCard implements Comparable<BattingCard>{
   @XmlTransient
   private Player concussion_player;
 
-  @XmlElement(name = "seconds")
-  private long seconds;
+  @XmlTransient
+  private Player howOutFielder;
+  
+  @XmlTransient
+  private Player howOutBowler;
   
 public BattingCard(int playerId, int batterPosition, String status) {
 	super();
@@ -92,6 +92,56 @@ public BattingCard(int playerId, int batterPosition, String status) {
 }
 public BattingCard() {
 	super();
+}
+
+public BattingCard(int playerId, int batterPosition, String battingStyle, int runs, int fours, int sixes, int balls,
+		int howOutFielderId, int howOutBowlerId, String batsmanInningStarted, String status, String onStrike,
+		String howOutText, String howOut, String howOutPartOne, String howOutPartTwo, String strikeRate,
+		String wasHowOutFielderSubstitute, int concussionPlayerId, long seconds, Player player,
+		Player concussion_player, Player howOutFielder, Player howOutBowler) {
+	super();
+	this.playerId = playerId;
+	this.batterPosition = batterPosition;
+	this.battingStyle = battingStyle;
+	this.runs = runs;
+	this.fours = fours;
+	this.sixes = sixes;
+	this.balls = balls;
+	this.howOutFielderId = howOutFielderId;
+	this.howOutBowlerId = howOutBowlerId;
+	this.batsmanInningStarted = batsmanInningStarted;
+	this.status = status;
+	this.onStrike = onStrike;
+	this.howOutText = howOutText;
+	this.howOut = howOut;
+	this.howOutPartOne = howOutPartOne;
+	this.howOutPartTwo = howOutPartTwo;
+	this.strikeRate = strikeRate;
+	WasHowOutFielderSubstitute = wasHowOutFielderSubstitute;
+	this.concussionPlayerId = concussionPlayerId;
+	this.seconds = seconds;
+	this.player = player;
+	this.concussion_player = concussion_player;
+	this.howOutFielder = howOutFielder;
+	this.howOutBowler = howOutBowler;
+}
+public BattingCard(int playerId, int howOutFielderId, int howOutBowlerId, String status, 
+		int concussionPlayerId, String how_out) {
+	super();
+	this.playerId = playerId;
+	this.howOutFielderId = howOutFielderId;
+	this.howOutBowlerId = howOutBowlerId;
+	this.status = status;
+	this.concussionPlayerId = concussionPlayerId;
+	this.howOut = how_out;
+}
+public BattingCard(int playerId, int runs, int fours, int sixes, int balls) {
+	super();
+	this.playerId = playerId;
+	this.runs = runs;
+	this.fours = fours;
+	this.sixes = sixes;
+	this.balls = balls;
 }
 public int getBatsmanScoreSortData() {
 	int sortData = this.getRuns();
@@ -261,12 +311,4 @@ public int compareTo(BattingCard bc) {
 	return (int) (this.getBatterPosition()-bc.getBatterPosition());
 }
 
-@Override
-public BattingCard clone() {
-    try {
-        return (BattingCard) super.clone();
-    } catch (CloneNotSupportedException e) {
-        return new BattingCard(this.playerId, this.batterPosition, this.getStatus());
-    }
-}
 }

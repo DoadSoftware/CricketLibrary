@@ -79,6 +79,9 @@ public class Match {
   @XmlElement(name = "groundId")
   private int groundId;
 
+  @XmlElement(name = "seasonId")
+  private int seasonId;
+  
   @XmlElement(name = "targetRuns")
   private int targetRuns;
 
@@ -172,6 +175,14 @@ public class Match {
   
   @XmlTransient
   private List<Event> events;
+
+public int getSeasonId() {
+	return seasonId;
+}
+
+public void setSeasonId(int seasonId) {
+	this.seasonId = seasonId;
+}
 
 public long getSpeed_file_last_modified_timestamp() {
 	return speed_file_last_modified_timestamp;
@@ -571,11 +582,6 @@ public List<Event> getEvents() {
 
 public void setEvents(List<Event> events) {
 	this.events = events;
-}
-
-@Override
-public String toString() {
-	return "Match [useSpeed=" + useSpeed + ", current_speed=" + current_speed + "]";
 }
 
 }

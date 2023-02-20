@@ -85,6 +85,20 @@ public BowlingCard(Player player, int bowlingPosition, String status, int bowlin
 	this.status = status;
 	this.bowling_end = bowling_end;
 }
+
+public BowlingCard(int overs, int runs, int balls, int wickets, int playerId, int wides, int noBalls, int maidens,
+		int dots) {
+	super();
+	this.overs = overs;
+	this.runs = runs;
+	this.balls = balls;
+	this.wickets = wickets;
+	this.playerId = playerId;
+	this.wides = wides;
+	this.noBalls = noBalls;
+	this.maidens = maidens;
+	this.dots = dots;
+}
 public int getBowlerFigureSortData() {
 	return 1000 * this.getWickets() - this.getRuns();
 }
@@ -215,13 +229,4 @@ public void setWickets(int wickets) {
 public int compareTo(BowlingCard bc) {
 	return (int) (this.getBowlingPosition()-bc.getBowlingPosition());
 }
-@Override
-public BowlingCard clone() {
-    try {
-        return (BowlingCard) super.clone();
-    } catch (CloneNotSupportedException e) {
-        return new BowlingCard(this.player, this.bowlingPosition, this.status, this.bowling_end);
-    }
-}
-
 }

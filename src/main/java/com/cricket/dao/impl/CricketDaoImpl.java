@@ -16,6 +16,7 @@ import com.cricket.model.InfobarStats;
 import com.cricket.model.NameSuper;
 import com.cricket.model.Player;
 import com.cricket.model.Playoff;
+import com.cricket.model.Season;
 import com.cricket.model.Statistics;
 import com.cricket.model.StatsType;
 import com.cricket.model.Team;
@@ -129,4 +130,10 @@ public List<Dictionary> getDictionary() {
 public List<Playoff> getPlayOff() {
 	return sessionFactory.getCurrentSession().createQuery("from Playoff").list();
 }
+
+@Override
+public List<Season> getSeasons() {
+	return sessionFactory.getCurrentSession().createQuery("from Season").list();  
+}
+
 }
