@@ -846,16 +846,23 @@ public class CricketFunctions {
 		String speed_to_return = "";
 		
 		File speed_file = new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT);
+//		System.out.println(speed_file);
 		if(speed_file.exists() == true) {
 			if(match.getSpeed_file_last_modified_timestamp() >= 0) {
+//				System.out.println("time = " + match.getSpeed_file_last_modified_timestamp());
+//				System.out.println("time1 = " + new Date(speed_file.lastModified()));
+//				System.out.println("time2 = " + new Date(match.getSpeed_file_last_modified_timestamp()));
 				if(!new Date(match.getSpeed_file_last_modified_timestamp()).equals(new Date(speed_file.lastModified()))) {
 					speed_to_return = Files.newBufferedReader(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY 
 							+ CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT), StandardCharsets.UTF_8)
 							.lines().skip(1).limit(1).collect(Collectors.toList()).get(0);
 					match.setSpeed_file_last_modified_timestamp(speed_file.lastModified());
+					
+//					System.out.println("speed = " + speed_to_return);
 				}
 			}
 		}
+//		System.out.println(speed_to_return);
 		return speed_to_return;
 	}
 

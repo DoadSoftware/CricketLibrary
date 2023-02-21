@@ -11,7 +11,7 @@ public class CricketUtil {
 	public final static String CRICKET_DIRECTORY = "C:/Sports/Cricket/";
 	public final static String BACK_UP_DIRECTORY = "Backup/";
 	public final static String EVENT_DIRECTORY = "Event/";
-	public final static String SPEED_DIRECTORY = "Speed/";
+	public final static String SPEED_DIRECTORY = "Speed//";
 	public final static String MATCHES_DIRECTORY = "Matches/";
 	public final static String SCENES_DIRECTORY = "Scenes/";
 	public final static String CONFIGURATIONS_DIRECTORY = "Configurations/";
@@ -19,7 +19,7 @@ public class CricketUtil {
 	public final static String OUTPUT_XML = "OUTPUT.XML";
 	public final static String LEAGUE_TABLE_DIRECTORY = "LeagueTable/";
 	public static final String LEAGUETABLE_XML = "LeagueTable.XML";
-	public final static String SPEED_TXT = "Speed.txt";
+	public final static String SPEED_TXT = "SpeedFile.txt";
 
 	public final static String PNG_EXTENSION = ".png";
 	public final static String BOWL = "bowl";
