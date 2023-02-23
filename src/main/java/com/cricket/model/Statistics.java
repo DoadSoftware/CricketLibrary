@@ -89,6 +89,12 @@ public class Statistics
   @Transient
   private StatsType stats_type;
   
+  @Transient
+  private int tournament_fours;
+  
+  @Transient
+  private int tournament_sixes;
+  
   public Integer getStatistics_id()
   {
     return statistics_id;
@@ -309,6 +315,22 @@ public String getBest_figures_venue() {
 
 public void setBest_figures_venue(String best_figures_venue) {
 	this.best_figures_venue = best_figures_venue;
+}
+
+public int getTournament_fours() {
+	return tournament_fours;
+}
+
+public void setTournament_fours(int tournament_fours) {
+	this.tournament_fours = tournament_fours;
+}
+
+public int getTournament_sixes() {
+	return tournament_sixes;
+}
+
+public void setTournament_sixes(int tournament_sixes) {
+	this.tournament_sixes = tournament_sixes;
 }
 
 }

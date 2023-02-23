@@ -946,6 +946,28 @@ public class CricketFunctions {
 		}
 		return tournament_matches;
 	}
+	public static String gettournamentFoursAndSixes(List<Match> tournament_matches,Match currentMatch) 
+	{
+		int Four = 0, Six = 0;
+		for(Match match : tournament_matches) {
+			if(!match.getMatchFileName().equalsIgnoreCase(currentMatch.getMatchFileName())) {
+				if(match.getMatchType().equalsIgnoreCase(currentMatch.getMatchType())) {
+					for(Inning inn : match.getInning()) {
+						Four = Four + inn.getTotalFours();
+						Six = Six + inn.getTotalSixes();
+					}
+				}
+			}else {
+				for(Inning inn : currentMatch.getInning()) {
+					Four = Four + inn.getTotalFours();
+					Six = Six + inn.getTotalSixes();
+				}
+			}
+		}
+		
+		return Four + "," + Six;
+	}
+	
 
 	public static Statistics updateTournamentDataWithStats(Statistics stat,List<Match> tournament_matches,Match currentMatch) 
 	{
@@ -1017,9 +1039,9 @@ public class CricketFunctions {
 		boolean player_found = false;
 		
 		if(stat.getStats_type().getStats_short_name().equalsIgnoreCase(match.getMatchType())) {
-			
+			stat.setTournament_fours(stat.getTournament_fours() + match.getInning().get(0).getTotalFours());
+			stat.setTournament_fours(stat.getTournament_fours() + match.getInning().get(1).getTotalFours());
 			for(Inning inn : match.getInning()) {
-				
 				for(BattingCard bc : inn.getBattingCard()) {
 					if(bc.getPlayerId() == stat.getPlayer_id()) {
 						player_found = true;

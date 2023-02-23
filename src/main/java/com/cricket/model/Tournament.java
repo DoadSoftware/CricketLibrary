@@ -27,6 +27,10 @@ public class Tournament implements Cloneable {
   
   private Player player;
   
+  private int tournament_fours;
+  
+  private int tournament_sixes;
+  
  private List<BestStats> batsman_best_Stats;
 
  private List<BestStats> bowler_best_Stats;
@@ -199,6 +203,22 @@ public Player getPlayer() {
 
 public void setPlayer(Player player) {
 	this.player = player;
+}
+
+public int getTournament_fours() {
+	return tournament_fours;
+}
+
+public void setTournament_fours(int tournament_fours) {
+	this.tournament_fours = tournament_fours;
+}
+
+public int getTournament_sixes() {
+	return tournament_sixes;
+}
+
+public void setTournament_sixes(int tournament_sixes) {
+	this.tournament_sixes = tournament_sixes;
 }
 
 @Override
