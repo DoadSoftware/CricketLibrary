@@ -1108,30 +1108,38 @@ public class CricketFunctions {
 		int playerId = -1;
 		int seasonID = 0;
 		List<Tournament> tournament_stats = new ArrayList<Tournament>();
+		boolean has_match_started = false;
+		
 		switch(typeOfExtraction) {
-		case "LLC1": case "Legends Cricket Season 2": case "Legends Cricket Season 3":
-			if(typeOfExtraction.equalsIgnoreCase("LLC1")) {
-				for(Season seas : ses) {
-					if(seas.getSeasonDescription().equalsIgnoreCase(typeOfExtraction)) {
-						seasonID = seas.getSeasonId();
-					}
-				}
+		case "SEASON1": case "SEASON2": case "SEASON3":
+			if(typeOfExtraction.equalsIgnoreCase("SEASON1")) {
+				seasonID = 53;
+//				for(Season seas : ses) {
+//					if(seas.getSeasonDescription().equalsIgnoreCase(typeOfExtraction)) {
+//						seasonID = seas.getSeasonId();
+//					}
+//				}
 				
-			}else if(typeOfExtraction.equalsIgnoreCase("Legends Cricket Season 2")) {
-				for(Season seas : ses) {
-					if(seas.getSeasonDescription().equalsIgnoreCase(typeOfExtraction)) {
-						seasonID = seas.getSeasonId();
-					}
-				}
-			}else if(typeOfExtraction.equalsIgnoreCase("Legends Cricket Season 3")) {
-				for(Season seas : ses) {
-					if(seas.getSeasonDescription().equalsIgnoreCase(typeOfExtraction)) {
-						seasonID = seas.getSeasonId();
-					}
-				}
+			}else if(typeOfExtraction.equalsIgnoreCase("SEASON2")) {
+				seasonID = 2;
+//				for(Season seas : ses) {
+//					if(seas.getSeasonDescription().equalsIgnoreCase(typeOfExtraction)) {
+//						seasonID = seas.getSeasonId();
+//					}
+//				}
+			}else if(typeOfExtraction.equalsIgnoreCase("SEASON3")) {
+				seasonID = 3;
+//				for(Season seas : ses) {
+//					if(seas.getSeasonDescription().equalsIgnoreCase(typeOfExtraction)) {
+//						seasonID = seas.getSeasonId();
+//					}
+//				}
 			}
 			for(Match mtch : tournament_matches) {
 				if(seasonID == mtch.getSeasonId()) {
+					if(mtch.getInning().get(0).getTotalRuns() > 0 || (6 * mtch.getInning().get(0).getTotalOvers() + mtch.getInning().get(0).getTotalBalls()) > 0) {
+						has_match_started = true;
+					}
 					for(Inning inn : mtch.getInning())
 					{
 						if(inn.getBattingCard() != null && inn.getBattingCard().size() > 0) {
@@ -1214,6 +1222,20 @@ public class CricketFunctions {
 											boc.getPlayerId(), (1000 * boc.getWickets()) - boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 
 											inn.getBatting_team(), boc.getPlayer()));
 																			
+								}
+							}
+						}
+					}
+					if(has_match_started == true) {
+						for(Tournament trmnt : tournament_stats) {
+							for(Player plyr : mtch.getHomeSquad()) {
+								if(plyr.getPlayerId() == trmnt.getPlayerId()) {
+									trmnt.setMatches(trmnt.getMatches() + 1);
+								}
+							}
+							for(Player plyr : mtch.getAwaySquad()) {
+								if(plyr.getPlayerId() == trmnt.getPlayerId()) {
+									trmnt.setMatches(trmnt.getMatches() + 1);
 								}
 							}
 						}
