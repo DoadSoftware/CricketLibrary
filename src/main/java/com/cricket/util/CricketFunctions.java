@@ -2860,7 +2860,8 @@ public class CricketFunctions {
 	public static String processThisOverRunsCount(List<Event> events) {
 		int total_runs=0;
 		if((events != null) && (events.size() > 0)) {
-			for(int i = 0; i <= events.size() - 1; i++) {
+			
+			for(int i = events.size() - 1; i >= 0; i--) {
 				if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER) 
 					&& events.get(i).getEventBallNo() <= 0) {
 					break;
