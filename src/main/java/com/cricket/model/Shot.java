@@ -15,6 +15,12 @@ public class Shot {
   @XmlElement(name = "shotType")
   private String shotType;
 
+  @XmlElement(name = "boundaryHeight")
+  private String boundaryHeight;
+
+  @XmlElement(name = "sixDistance")
+  private int sixDistance;
+  
   @XmlElement(name = "batterId")
   private int batterId;
 
@@ -37,17 +43,35 @@ public Shot() {
 	super();
 }
 
-public Shot(int shotNumber, String shotType, int batterId, int bowlerId, int runs, int inningNumber, int overNumber,
-		int ballNumber) {
+public Shot(int shotNumber, String shotType, String boundaryHeight, int sixDistance, int batterId, int bowlerId,
+		int runs, int inningNumber, int overNumber, int ballNumber) {
 	super();
 	this.shotNumber = shotNumber;
 	this.shotType = shotType;
+	this.boundaryHeight = boundaryHeight;
+	this.sixDistance = sixDistance;
 	this.batterId = batterId;
 	this.bowlerId = bowlerId;
 	this.runs = runs;
 	this.inningNumber = inningNumber;
 	this.overNumber = overNumber;
 	this.ballNumber = ballNumber;
+}
+
+public String getBoundaryHeight() {
+	return boundaryHeight;
+}
+
+public void setBoundaryHeight(String boundaryHeight) {
+	this.boundaryHeight = boundaryHeight;
+}
+
+public int getSixDistance() {
+	return sixDistance;
+}
+
+public void setSixDistance(int sixDistance) {
+	this.sixDistance = sixDistance;
 }
 
 public int getShotNumber() {
