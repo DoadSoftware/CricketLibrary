@@ -44,9 +44,11 @@ import com.cricket.model.OverByOverData;
 import com.cricket.model.Partnership;
 import com.cricket.model.Player;
 import com.cricket.model.Season;
+import com.cricket.model.Shot;
 import com.cricket.model.Statistics;
 import com.cricket.model.Team;
 import com.cricket.model.Tournament;
+import com.cricket.model.Wagon;
 import com.cricket.service.CricketService;
 
 public class CricketFunctions {
@@ -62,7 +64,7 @@ public class CricketFunctions {
 	public static String getInteractive(Match match) throws IOException {
 		String this_ball_data = "", Bowler = "", Batsman = "", OtherBatsman = "", 
 				over_number = "", over_ball = "", inning_number = "",batsman_style = "",
-				bowler_handed = "",this_over = "",shots = "",this_over_run = "" ;
+				bowler_handed = "",this_over = "",shots = "",this_over_run = "",shot = "",wagonX = "0", wagonY = "0";
 		int j = 0;
 	      
 		String line_txt = String.format("%-140s", "");
@@ -156,8 +158,13 @@ public class CricketFunctions {
 			    }
 				this_ball_data = "";
 				inning_number = String.valueOf(match.getEvents().get(i).getEventInningNumber());
-				over_number = String.valueOf(match.getEvents().get(i).getEventOverNo());
-				over_ball = String.valueOf(match.getEvents().get(i).getEventBallNo());
+				if(match.getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL)) {
+					over_number = String.valueOf(match.getEvents().get(i).getEventOverNo() + 1);
+					over_ball = String.valueOf(match.getEvents().get(i).getEventBallNo());
+				}else {
+					over_number = getOvers(match.getEvents().get(i).getEventOverNo(), match.getEvents().get(i).getEventBallNo());
+					over_ball = getBalls(match.getEvents().get(i).getEventOverNo(), match.getEvents().get(i).getEventBallNo());
+				}
 				
 				
 				line_txt = addSubString(line_txt,inning_number,2);
@@ -226,11 +233,11 @@ public class CricketFunctions {
 		    	if (match.getEvents().get(i).getEventExtra() != null) {
 		    		if(match.getEvents().get(i).getEventSubExtra() != null && match.getEvents().get(i).getEventSubExtraRuns() > 0) {
 		    			if(match.getEvents().get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
-		    				line_txt = addSubString(line_txt,String.valueOf(match.getEvents().get(i).getEventRuns() + match.getEvents().get(i).getEventExtraRuns() + 
-		    						match.getEvents().get(i).getEventSubExtraRuns()),74);
-	    					
-		    				this_ball_data = String.valueOf(match.getEvents().get(i).getEventRuns() + match.getEvents().get(i).getEventExtraRuns() + 
+		    				int runs = (match.getEvents().get(i).getEventRuns() + match.getEvents().get(i).getEventExtraRuns() + 
 		    						match.getEvents().get(i).getEventSubExtraRuns());
+		    				line_txt = addSubString(line_txt,String.valueOf(runs),74);
+	    					
+		    				this_ball_data = String.valueOf(runs);
 		    			}
 		    		}
 		    		if(this_ball_data.isEmpty()) {
@@ -294,16 +301,70 @@ public class CricketFunctions {
 					match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase(CricketUtil.SWAP_BATSMAN)) {
 				
 			}else {
+				
+				
+				 for(int k = 0; k <= match.getWagons().size() - 1; k++) {
+					 if(match.getEvents().get(i).getEventInningNumber() == match.getWagons().get(k).getInningNumber()) {
+						 if(OverBalls(match.getEvents().get(i).getEventOverNo(), match.getEvents().get(i).getEventBallNo()) == 
+								 OverBalls(match.getWagons().get(k).getOverNumber(), match.getWagons().get(k).getBallNumber())) 
+						 { 
+							 wagonX = String.valueOf(match.getWagons().get(k).getWagonXCord());
+							 wagonY = String.valueOf(match.getWagons().get(k).getWagonYCord());
+							 
+							 }
+						 } 
+					 }
+				 
+				/*if(match.getEvents().get(i+1).getEventType().toUpperCase().equalsIgnoreCase(CricketUtil.WAGON)) {
+		    		line_txt = addSubString(line_txt,String.valueOf(match.getEvents().get(i+1).getEventDescription()).split(",")[0],84);
+		    		line_txt = addSubString(line_txt,String.valueOf(match.getEvents().get(i+1).getEventDescription()).split(",")[1],90);
+		    	}else {
+		    		line_txt = addSubString(line_txt,"--",84);
+		    		line_txt = addSubString(line_txt,"--",90);
+		    	}*/
+				 line_txt = addSubString(line_txt,wagonX,84);
+				 line_txt = addSubString(line_txt,wagonY,90);
+				 
+				 wagonX = "0";
+				 wagonY = "0";
+				 
 				if(match.getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase(CricketUtil.LOG_WICKET)) {
-			    	line_txt = addSubString(line_txt,"Y",93);
+			    	line_txt = addSubString(line_txt,"Y",95);
 		    		
 			    }else {
-			    	line_txt = addSubString(line_txt,"N",93);	
+			    	line_txt = addSubString(line_txt,"N",95);	
 			    }
-				line_txt = addSubString(line_txt,"0",84);
-				line_txt = addSubString(line_txt,"0",90);
+				
 				line_txt = addSubString(line_txt,batsman_style,102);
-				line_txt = addSubString(line_txt,printInitials(shots),109);
+				
+				if(match.getEvents().get(i+2).getEventType().toUpperCase().equalsIgnoreCase(CricketUtil.SHOT)) {
+					if (match.getEvents().get(i+2).getEventDescription().contains("no_shot")) {
+						shot = "N";
+					}else if(match.getEvents().get(i+2).getEventDescription().contains("defence") || match.getEvents().get(i+2).getEventDescription().contains("nudge") ||
+							match.getEvents().get(i+2).getEventDescription().contains("off_drive") || match.getEvents().get(i+2).getEventDescription().contains("on_drive") ||
+							match.getEvents().get(i+2).getEventDescription().contains("straight_drive")) {
+						 shot = "E";
+					}else if(match.getEvents().get(i+2).getEventDescription().contains("front") || match.getEvents().get(i+2).getEventDescription().contains("back")) {
+						 shot = "P";
+					}else {
+						shot = "M";
+					}
+					
+					if (match.getEvents().get(i+2).getEventDescription().contains("no_shot")) {
+						shot = shot + "N";
+					}else if(match.getEvents().get(i+2).getEventDescription().contains("defence")) {
+						shot = shot + "D";
+					}else {
+						shot = shot + "A";
+					}
+		    		
+//		    		line_txt = addSubString(line_txt,String.valueOf(match.getEvents().get(i+1).getEventDescription()).split(",")[1],90);
+		    	}else {
+		    		shot = "-";
+		    	}
+				line_txt = addSubString(line_txt,shot,109);
+				shot = "";
+//				line_txt = addSubString(line_txt,printInitials(shots),109);
 				line_txt = addSubString(line_txt,"0",115);
 				line_txt = addSubString(line_txt,"0",121);
 				line_txt = addSubString(line_txt,"0",127);
@@ -1856,6 +1917,41 @@ public class CricketFunctions {
 		return bc;
 	}
 	
+	public static String getBalls(int Overs,int Balls) {
+		String Overs_text = "" ;
+		switch(Balls) {
+		case 0:
+			Overs_text = "6";
+			return Overs_text;
+		default:
+//			System.out.println(String.valueOf(Overs + 1) + "," + String.valueOf(Balls));
+			Overs_text = String.valueOf(Balls);
+			return Overs_text;
+		}
+	}
+	
+	public static String getOvers(int Overs,int Balls) {
+		String Overs_text = "" ;
+		switch(Balls) {
+		case 0:
+			Overs_text = String.valueOf(Overs);
+			return Overs_text;
+		default:
+//			System.out.println(String.valueOf(Overs + 1) + "," + String.valueOf(Balls));
+			Overs_text = String.valueOf(Overs + 1);
+			return Overs_text;
+		}
+	}
+	
+	/*
+	 * public static String getBallsOneToSix(int Overs,int Balls) { String
+	 * Overs_text = "" ; switch(Balls) { case 0: Overs_text = String.valueOf(Overs)
+	 * + ".6"; return Overs_text; default: //
+	 * System.out.println(String.valueOf(Overs + 1) + "," + String.valueOf(Balls));
+	 * Overs_text = String.valueOf(Overs + 1) + "." + String.valueOf(Balls); return
+	 * Overs_text; } }
+	 */
+
 	public static String OverBalls(int Overs,int Balls) {
 		
 		int TotalBalls=0, WholeOv, OddBalls;
