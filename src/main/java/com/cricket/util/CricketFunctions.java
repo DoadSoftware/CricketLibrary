@@ -2790,7 +2790,8 @@ public class CricketFunctions {
 				    	matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match) + 
 				    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
 				    }
-				    else if (CricketFunctions.getRequiredBalls(match) <= 0 || CricketFunctions.getWicketsLeft(match) <= 0)
+				    else if (CricketFunctions.getRequiredRuns(match) == 1) {}
+				    else 
 				    {
 				    	matchSummaryStatus = bowlTeamNm + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
 				    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
