@@ -3155,7 +3155,7 @@ public class CricketFunctions {
 	public static List<String> projectedScore(Match match) {
 		//rates= 6,8,10 or 8,10,12
 		List<String> proj_score = new ArrayList<String>();
-		String  PS_Curr="", PS_1 = "",PS_2 = "",RR_1 = "",RR_2 = "",CRR = "";
+		String  PS_Curr="", PS_1 = "",PS_2 = "",PS_3 = "",RR_1 = "",RR_2 = "",RR_3 = "",CRR = "";
 		int Balls_val = 0;
 
 		if(!match.getTargetOvers().isEmpty() && Double.valueOf(match.getTargetOvers()) > 0) {
@@ -3183,7 +3183,7 @@ public class CricketFunctions {
 	    double[] intArr= new double[2];
 	    intArr[0]=Integer.parseInt(arr[0]);
 	  
-		for(int i=2;i<=4;i=i+2) {
+		for(int i=2;i<=6;i=i+2) {
 			if(i==2) {
 				value = (remaining_balls * (intArr[0] + i));
 				value = value / 6;
@@ -3201,6 +3201,14 @@ public class CricketFunctions {
 				
 				proj_score.add(RR_2);
 				proj_score.add(PS_2);
+			}else if(i==6) {
+				value = (remaining_balls * (intArr[0] + i));
+				value = value / 6;
+				PS_3 = String.valueOf(Math.round(value + match.getInning().get(0).getTotalRuns()));
+				RR_3 = String.valueOf(((int)intArr[0] + i));
+				
+				proj_score.add(RR_3);
+				proj_score.add(PS_3);
 			}
 		}
 		return proj_score ;
