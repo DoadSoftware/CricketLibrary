@@ -965,11 +965,10 @@ public class CricketFunctions {
 							.lines().skip(1).limit(1).collect(Collectors.toList()).get(0);
 					match.setSpeed_file_last_modified_timestamp(speed_file.lastModified());
 					
-//					System.out.println("speed = " + speed_to_return);
+					//System.out.println("speed = " + speed_to_return);
 				}
 			}
 		}
-//		System.out.println(speed_to_return);
 		return speed_to_return;
 	}
 
