@@ -18,9 +18,12 @@ public class Match {
 
   @XmlElement(name = "followOnThreshold")
   private int followOnThreshold;
+
+  @XmlElement(name = "homeSubstitutesNumber")
+  private int homeSubstitutesNumber;
   
-  @XmlElement(name = "substitutesPerTeam")
-  private int substitutesPerTeam;
+  @XmlElement(name = "awaySubstitutesNumber")
+  private int awaySubstitutesNumber;
 	
   @XmlElement(name = "reviewsPerTeam")
   private String reviewsPerTeam;
@@ -176,6 +179,22 @@ public class Match {
   @XmlTransient
   private List<Event> events;
 
+public int getHomeSubstitutesNumber() {
+	return homeSubstitutesNumber;
+}
+
+public void setHomeSubstitutesNumber(int homeSubstitutesNumber) {
+	this.homeSubstitutesNumber = homeSubstitutesNumber;
+}
+
+public int getAwaySubstitutesNumber() {
+	return awaySubstitutesNumber;
+}
+
+public void setAwaySubstitutesNumber(int awaySubstitutesNumber) {
+	this.awaySubstitutesNumber = awaySubstitutesNumber;
+}
+
 public int getSeasonId() {
 	return seasonId;
 }
@@ -230,14 +249,6 @@ public int getFollowOnThreshold() {
 
 public void setFollowOnThreshold(int followOnThreshold) {
 	this.followOnThreshold = followOnThreshold;
-}
-
-public int getSubstitutesPerTeam() {
-	return substitutesPerTeam;
-}
-
-public void setSubstitutesPerTeam(int substitutesPerTeam) {
-	this.substitutesPerTeam = substitutesPerTeam;
 }
 
 public String getReviewsPerTeam() {

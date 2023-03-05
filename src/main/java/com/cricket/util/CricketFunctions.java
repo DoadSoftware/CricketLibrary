@@ -44,11 +44,9 @@ import com.cricket.model.OverByOverData;
 import com.cricket.model.Partnership;
 import com.cricket.model.Player;
 import com.cricket.model.Season;
-import com.cricket.model.Shot;
 import com.cricket.model.Statistics;
 import com.cricket.model.Team;
 import com.cricket.model.Tournament;
-import com.cricket.model.Wagon;
 import com.cricket.service.CricketService;
 
 public class CricketFunctions {
@@ -73,6 +71,7 @@ public class CricketFunctions {
         return "";
     }
 	
+	@SuppressWarnings("unused")
 	public static String getInteractive(Match match) throws IOException {
 		String this_ball_data = "", Bowler = "", Batsman = "", OtherBatsman = "", 
 				over_number = "", over_ball = "", inning_number = "",batsman_style = "",
@@ -2898,7 +2897,11 @@ public class CricketFunctions {
 				    	matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match) + 
 				    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
 				    }
-				    else if (CricketFunctions.getRequiredRuns(match) == 1) {}
+				    else if (CricketFunctions.getRequiredRuns(match) == 1 && (CricketFunctions.getRequiredBalls(match) <= 0 
+				    		|| CricketFunctions.getWicketsLeft(match) <= 0)) 
+				    {
+				    	matchSummaryStatus = "Match tied";
+				    } 
 				    else 
 				    {
 				    	matchSummaryStatus = bowlTeamNm + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
