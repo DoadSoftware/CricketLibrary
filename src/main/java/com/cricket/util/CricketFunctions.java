@@ -2220,7 +2220,7 @@ public class CricketFunctions {
 		case "OB":
 			text = text + " Off-Break";
 			break;
-		case "LB":
+		case "LB": case "LG":
 			text = text + " Leg-Break";
 			break;
 		case "CH":
@@ -2228,9 +2228,6 @@ public class CricketFunctions {
 			break;
 		case "SO":
 			text = text + " Orthodox";
-			break;
-		case "LG":
-			text = text + " Leg-Break Googly";
 			break;
 		case "SL":
 			text = "Slow Left Arm";
