@@ -33,6 +33,9 @@ public class Player implements Comparable<Player>, Diffable<Player>
   @Column(name = "TICKERNAME")
   private String ticker_name;
   
+  @Column(name = "Age")
+  private int age;
+  
   @Column(name = "HindiFullName")
   private String hindifull_name;
   
@@ -260,6 +263,14 @@ public void setNationality(String nationality) {
 	Nationality = nationality;
 }
 
+public int getAge() {
+	return age;
+}
+
+public void setAge(int age) {
+	this.age = age;
+}
+
 @Override
 public DiffResult diff(Player plyr) {
 	DiffBuilder db = new DiffBuilder(this, plyr, ToStringStyle.SHORT_PREFIX_STYLE);
@@ -279,10 +290,10 @@ public int compareTo(Player pm) {
 @Override
 public String toString() {
 	return "Player [playerId=" + playerId + ", full_name=" + full_name + ", firstname=" + firstname + ", surname="
-			+ surname + ", ticker_name=" + ticker_name + ", hindifull_name=" + hindifull_name + ", tamilfull_name="
-			+ tamilfull_name + ", telugufull_name=" + telugufull_name + ", hindi_surname=" + hindi_surname
-			+ ", tamil_surname=" + tamil_surname + ", telugu_surname=" + telugu_surname + ", role=" + role
-			+ ", bowlingStyle=" + bowlingStyle + ", battingStyle=" + battingStyle + ", teamId=" + teamId
+			+ surname + ", ticker_name=" + ticker_name + ", age=" + age + ", hindifull_name=" + hindifull_name
+			+ ", tamilfull_name=" + tamilfull_name + ", telugufull_name=" + telugufull_name + ", hindi_surname="
+			+ hindi_surname + ", tamil_surname=" + tamil_surname + ", telugu_surname=" + telugu_surname + ", role="
+			+ role + ", bowlingStyle=" + bowlingStyle + ", battingStyle=" + battingStyle + ", teamId=" + teamId
 			+ ", overseasPlayer=" + overseasPlayer + ", Photo=" + Photo + ", Nationality=" + Nationality
 			+ ", playerPosition=" + playerPosition + ", captainWicketKeeper=" + captainWicketKeeper + ", player_type="
 			+ player_type + "]";
