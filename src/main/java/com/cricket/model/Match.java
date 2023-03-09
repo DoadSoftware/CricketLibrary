@@ -13,6 +13,12 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Match {
 
+  @XmlElement(name = "wagonXOffSet")
+  private int wagonXOffSet;
+
+  @XmlElement(name = "wagonYOffSet")
+  private int wagonYOffSet;
+  
   @XmlElement(name = "followOn")
   private String followOn;
 
@@ -178,6 +184,22 @@ public class Match {
   
   @XmlTransient
   private List<Event> events;
+
+public int getWagonXOffSet() {
+	return wagonXOffSet;
+}
+
+public void setWagonXOffSet(int wagonXOffSet) {
+	this.wagonXOffSet = wagonXOffSet;
+}
+
+public int getWagonYOffSet() {
+	return wagonYOffSet;
+}
+
+public void setWagonYOffSet(int wagonYOffSet) {
+	this.wagonYOffSet = wagonYOffSet;
+}
 
 public int getHomeSubstitutesNumber() {
 	return homeSubstitutesNumber;
