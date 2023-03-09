@@ -2458,12 +2458,16 @@ public class CricketFunctions {
 		      this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()) + events.get(i).getEventType();
 		      break;
 		    case CricketUtil.LOG_WICKET: 
-		      if (events.get(i).getEventRuns() > 0) {
-		        this_ball_data = String.valueOf(events.get(i).getEventRuns()) + "+" + events.get(i).getEventType();
-		      } else {
-		        this_ball_data = events.get(i).getEventType();
+		      if(events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)) {
+		    	  break;
+		      }else {
+		    	  if (events.get(i).getEventRuns() > 0) {
+			        this_ball_data = String.valueOf(events.get(i).getEventRuns()) + "+" + events.get(i).getEventType();
+			      } else {
+			        this_ball_data = events.get(i).getEventType();
+			      }
+			      total_runs = total_runs + events.get(i).getEventRuns() + events.get(i).getEventExtraRuns();
 		      }
-		      total_runs = total_runs + events.get(i).getEventRuns() + events.get(i).getEventExtraRuns();
 		      break;
 		    case CricketUtil.LOG_ANY_BALL:
 		    	if (events.get(i).getEventExtra() != null) {
