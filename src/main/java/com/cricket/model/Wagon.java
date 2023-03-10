@@ -43,6 +43,12 @@ public Wagon() {
 	super();
 }
 
+public Wagon(int wagonXCord, int wagonYCord) {
+	super();
+	this.wagonXCord = wagonXCord;
+	this.wagonYCord = wagonYCord;
+}
+
 public Wagon(int wagonNumber, String wagonSector, int wagonXCord, int wagonYCord, int batterId, int bowlerId,
 		int runs, int inningNumber, int overNumber, int ballNumber) {
 	super();
