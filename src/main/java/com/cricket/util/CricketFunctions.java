@@ -954,7 +954,7 @@ public class CricketFunctions {
 			{
 				if(!file.isDirectory()) {	
 					speed_to_return = Files.newBufferedReader(Paths.get(CricketUtil.CRICKET_DIRECTORY
-						+ CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT), StandardCharsets.UTF_8)
+						+ CricketUtil.SPEED_DIRECTORY + file), StandardCharsets.UTF_8)
 						.lines().skip(1).limit(1).collect(Collectors.toList()).get(0);
 					Files.deleteIfExists(Paths.get(CricketUtil.CRICKET_DIRECTORY 
 							+ CricketUtil.SPEED_DIRECTORY + file.getName()));
@@ -965,23 +965,6 @@ public class CricketFunctions {
 			}
 		}
 		return "";
-	}
-		
-	public static String getCurrentSpeed(Match match) throws IOException {
-		
-		String speed_to_return = "";
-		
-		File speed_file = new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT);
-		if(speed_file.exists() == true) {
-			if(match.getSpeed_file_last_modified_timestamp() > 0) {
-				if(!new Date(match.getSpeed_file_last_modified_timestamp()).equals(new Date(speed_file.lastModified()))) {
-					speed_to_return = Files.newBufferedReader(Paths.get(CricketUtil.CRICKET_DIRECTORY 
-							+ CricketUtil.SPEED_DIRECTORY + CricketUtil.SPEED_TXT), StandardCharsets.UTF_8)
-							.lines().skip(1).limit(1).collect(Collectors.toList()).get(0);
-				}
-			}
-		}
-		return speed_to_return;
 	}
 	
 	public static BowlingCard getCurrentInningCurrentBowler(Match match) {
