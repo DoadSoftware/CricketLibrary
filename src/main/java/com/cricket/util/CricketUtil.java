@@ -9,6 +9,7 @@ public class CricketUtil {
 //	public final static String CRICKET_SERVER_DIRECTORY = "//DOAD-SERVER2//C//Sports//Cricket//";
 	public final static String CRICKET_SERVER_DIRECTORY = "C:/Sports/Cricket/";
 	public final static String CRICKET_DIRECTORY = "C:/Sports/Cricket/";
+	public final static String INTERACTIVE_DIRECTORY = "Interactive/";
 	public final static String BACK_UP_DIRECTORY = "Backup/";
 	public final static String EVENT_DIRECTORY = "Event/";
 	public final static String SPEED_DIRECTORY = "Speed//";
@@ -19,7 +20,6 @@ public class CricketUtil {
 	public final static String OUTPUT_XML = "OUTPUT.XML";
 	public final static String LEAGUE_TABLE_DIRECTORY = "LeagueTable/";
 	public static final String LEAGUETABLE_XML = "LeagueTable.XML";
-	public final static String SPEED_TXT = "Speed.txt";
 	public final static String FREE_TXT = "FreeText.txt";
 	public final static String AR_FREE_TXT = "ARFreeText.txt";
 	public final static String INFOBAR_FREE_TXT = "InfobarFreeText.txt";

@@ -13,6 +13,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Match {
 
+  @XmlElement(name = "generateInteractiveFile")
+  private String generateInteractiveFile;
+	
   @XmlElement(name = "wagonXOffSet")
   private int wagonXOffSet;
 
@@ -139,9 +142,6 @@ public class Match {
   @XmlTransient
   private int which_key_press;
 
-  @XmlTransient
-  private long speed_file_last_modified_timestamp;
-  
   @XmlElementWrapper(name = "innings")
   @XmlElement(name = "inning")
   private List<Inning> inning;
@@ -185,6 +185,14 @@ public class Match {
   @XmlTransient
   private List<Event> events;
 
+public String getGenerateInteractiveFile() {
+	return generateInteractiveFile;
+}
+
+public void setGenerateInteractiveFile(String generateInteractiveFile) {
+	this.generateInteractiveFile = generateInteractiveFile;
+}
+
 public int getWagonXOffSet() {
 	return wagonXOffSet;
 }
@@ -223,14 +231,6 @@ public int getSeasonId() {
 
 public void setSeasonId(int seasonId) {
 	this.seasonId = seasonId;
-}
-
-public long getSpeed_file_last_modified_timestamp() {
-	return speed_file_last_modified_timestamp;
-}
-
-public void setSpeed_file_last_modified_timestamp(long speed_file_last_modified_timestamp) {
-	this.speed_file_last_modified_timestamp = speed_file_last_modified_timestamp;
 }
 
 public String getCurrent_speed() {
