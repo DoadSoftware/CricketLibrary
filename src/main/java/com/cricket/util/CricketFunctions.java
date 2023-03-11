@@ -923,7 +923,7 @@ public class CricketFunctions {
 			{
 				if(!file.isDirectory()) {	
 					speed_to_return = Files.newBufferedReader(Paths.get(CricketUtil.CRICKET_DIRECTORY
-						+ CricketUtil.SPEED_DIRECTORY + file), StandardCharsets.UTF_8)
+						+ CricketUtil.SPEED_DIRECTORY + file.getName()), StandardCharsets.UTF_8)
 						.lines().skip(1).limit(1).collect(Collectors.toList()).get(0);
 					Files.deleteIfExists(Paths.get(CricketUtil.CRICKET_DIRECTORY 
 							+ CricketUtil.SPEED_DIRECTORY + file.getName()));
