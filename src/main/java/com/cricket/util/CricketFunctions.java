@@ -14,6 +14,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
@@ -52,6 +53,16 @@ import com.cricket.model.Tournament;
 import com.cricket.service.CricketService;
 
 public class CricketFunctions {
+	
+	public static String deletePreview() throws IOException
+    {
+		Path file = Paths.get(CricketUtil.PREVIEW);
+		
+		if(new File(CricketUtil.PREVIEW).exists()) {
+			Files.delete(file);
+		}
+        return "";
+    }
 	
 	public static String checkImpactPlayer(List<Event> events,int inning_number,int player_id) {
 		if ((events != null) && (events.size() > 0)) {
@@ -1456,9 +1467,7 @@ public class CricketFunctions {
 		case "CURRENT_MATCH_DATA":
 			
 			has_match_started = false;
-
 			if(currentMatch.getMatchType().equalsIgnoreCase(currentMatch.getMatchType())) {
-
 				if(currentMatch.getInning().get(0).getTotalRuns() > 0 || (6 * currentMatch.getInning().get(0).getTotalOvers() + currentMatch.getInning().get(0).getTotalBalls()) > 0) {
 					has_match_started = true;
 				}
@@ -1481,7 +1490,6 @@ public class CricketFunctions {
 						}
 						
 						if(playerId >= 0) {
-							
 							past_tournament_stats.get(playerId).setRuns(past_tournament_stats.get(playerId).getRuns() + bc.getRuns()); // existing record
 							past_tournament_stats.get(playerId).setBallsFaced(past_tournament_stats.get(playerId).getBallsFaced() + bc.getBalls());
 							past_tournament_stats.get(playerId).setFours(past_tournament_stats.get(playerId).getFours() + bc.getFours());

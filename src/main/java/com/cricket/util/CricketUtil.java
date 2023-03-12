@@ -24,6 +24,7 @@ public class CricketUtil {
 	public final static String FREE_TXT = "FreeText.txt";
 	public final static String AR_FREE_TXT = "ARFreeText.txt";
 	public final static String INFOBAR_FREE_TXT = "InfobarFreeText.txt";
+	public final static String PREVIEW = "C:/Temp/Preview.jpg";
 
 	public final static String PNG_EXTENSION = ".png";
 	public final static String BOWL = "bowl";
