@@ -1181,152 +1181,6 @@ public class CricketFunctions {
 		return stat;
 	}
 	
-	public static List<Tournament> extractSeasonStats(String typeOfExtraction, List<Match> tournament_matches, 
-			CricketService cricketService,Match currentMatch, List<Tournament> past_tournament_stats,List<Season> ses) 
-	{
-		int playerId = -1;
-		int seasonID = 0;
-		List<Tournament> tournament_stats = new ArrayList<Tournament>();
-		boolean has_match_started = false;
-		
-		switch(typeOfExtraction) {
-		case "SEASON1": case "SEASON2": case "SEASON3":
-			if(typeOfExtraction.equalsIgnoreCase("SEASON1")) {
-				seasonID = 1;
-//				for(Season seas : ses) {
-//					if(seas.getSeasonDescription().equalsIgnoreCase(typeOfExtraction)) {
-//						seasonID = seas.getSeasonId();
-//					}
-//				}
-				
-			}else if(typeOfExtraction.equalsIgnoreCase("SEASON2")) {
-				seasonID = 2;
-//				for(Season seas : ses) {
-//					if(seas.getSeasonDescription().equalsIgnoreCase(typeOfExtraction)) {
-//						seasonID = seas.getSeasonId();
-//					}
-//				}
-			}else if(typeOfExtraction.equalsIgnoreCase("SEASON3")) {
-				seasonID = 3;
-//				for(Season seas : ses) {
-//					if(seas.getSeasonDescription().equalsIgnoreCase(typeOfExtraction)) {
-//						seasonID = seas.getSeasonId();
-//					}
-//				}
-			}
-			for(Match mtch : tournament_matches) {
-				if(seasonID == mtch.getSeasonId()) {
-					if(mtch.getInning().get(0).getTotalRuns() > 0 || (6 * mtch.getInning().get(0).getTotalOvers() + mtch.getInning().get(0).getTotalBalls()) > 0) {
-						has_match_started = true;
-					}
-					for(Inning inn : mtch.getInning())
-					{
-						if(inn.getBattingCard() != null && inn.getBattingCard().size() > 0) {
-							
-							for(BattingCard bc : inn.getBattingCard())
-							{
-								playerId = -1;
-								for(int i=0; i<=tournament_stats.size() - 1;i++)
-								{
-									if(bc.getPlayerId() == tournament_stats.get(i).getPlayerId()) {
-										playerId = i;
-										break;
-									}
-								}
-								if(playerId >= 0) {
-									
-									tournament_stats.get(playerId).setRuns(tournament_stats.get(playerId).getRuns() + bc.getRuns()); // existing record
-									tournament_stats.get(playerId).setBallsFaced(tournament_stats.get(playerId).getBallsFaced() + bc.getBalls());
-									tournament_stats.get(playerId).setFours(tournament_stats.get(playerId).getFours() + bc.getFours());
-									tournament_stats.get(playerId).setSixes(tournament_stats.get(playerId).getSixes() + bc.getSixes());
-									
-									if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
-										tournament_stats.get(playerId).getBatsman_best_Stats().add(new BestStats(
-												bc.getPlayerId(), (bc.getRuns() * 2) + 1, bc.getBalls(), inn.getBowling_team(), bc.getPlayer()));
-										
-									}else {
-										tournament_stats.get(playerId).getBatsman_best_Stats().add(new BestStats(
-												bc.getPlayerId(), bc.getRuns() * 2, bc.getBalls(), inn.getBowling_team(), bc.getPlayer()));
-									}
-									
-								}else {
-									tournament_stats.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), 0, 0, 0, bc.getBalls(), 
-											bc.getStatus(), bc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
-									
-									if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
-										tournament_stats.get(tournament_stats.size() - 1).getBatsman_best_Stats().add(
-												new BestStats(bc.getPlayerId(), (bc.getRuns() * 2) + 1, bc.getBalls(),
-												inn.getBowling_team(), bc.getPlayer()));
-										
-									}else {
-										tournament_stats.get(tournament_stats.size() - 1).getBatsman_best_Stats().add(
-												new BestStats(bc.getPlayerId(), (bc.getRuns() * 2), bc.getBalls(),
-												inn.getBowling_team(), bc.getPlayer()));
-									}
-
-								}	
-							}
-						}
-						
-						if(inn.getBowlingCard() != null && inn.getBowlingCard().size() > 0) {
-							
-							for(BowlingCard boc : inn.getBowlingCard())
-							{
-								playerId = -1;
-								for(int i=0; i<=tournament_stats.size() - 1;i++)
-								{
-									if(boc.getPlayerId() == tournament_stats.get(i).getPlayerId()) {
-										playerId = i;
-										break;
-									}
-								}
-								
-								if(playerId >= 0) {
-									
-									tournament_stats.get(playerId).setWickets(tournament_stats.get(playerId).getWickets() + boc.getWickets());
-									tournament_stats.get(playerId).setRunsConceded(tournament_stats.get(playerId).getRunsConceded() + boc.getRuns()); // existing record
-									tournament_stats.get(playerId).setBallsBowled(tournament_stats.get(playerId).getBallsBowled() + 
-											6 * boc.getOvers() + boc.getBalls());
-
-									tournament_stats.get(playerId).getBowler_best_Stats().add(new BestStats(
-											boc.getPlayerId(), (1000 * boc.getWickets()) - boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 
-											inn.getBatting_team(), boc.getPlayer()));
-									
-								}else {
-									
-									tournament_stats.add(new Tournament(boc.getPlayerId(), 0, 0, 0, boc.getWickets(), boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 0, 
-											null, boc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
-									
-									tournament_stats.get(tournament_stats.size() - 1).getBowler_best_Stats().add(new BestStats(
-											boc.getPlayerId(), (1000 * boc.getWickets()) - boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 
-											inn.getBatting_team(), boc.getPlayer()));
-																			
-								}
-							}
-						}
-					}
-					if(has_match_started == true) {
-						for(Tournament trmnt : tournament_stats) {
-							for(Player plyr : mtch.getHomeSquad()) {
-								if(plyr.getPlayerId() == trmnt.getPlayerId()) {
-									trmnt.setMatches(trmnt.getMatches() + 1);
-								}
-							}
-							for(Player plyr : mtch.getAwaySquad()) {
-								if(plyr.getPlayerId() == trmnt.getPlayerId()) {
-									trmnt.setMatches(trmnt.getMatches() + 1);
-								}
-							}
-						}
-					}
-				}
-			}
-			break;
-		}
-//		System.out.println("tourdata = " + tournament_stats);
-		return tournament_stats;
-	}
-	
 	public static List<Tournament> extractTournamentStats(String typeOfExtraction, List<Match> tournament_matches, 
 			CricketService cricketService,Match currentMatch, List<Tournament> past_tournament_stats) 
 	{		
@@ -1947,14 +1801,151 @@ public class CricketFunctions {
 		}
 	}
 	
-	/*
-	 * public static String getBallsOneToSix(int Overs,int Balls) { String
-	 * Overs_text = "" ; switch(Balls) { case 0: Overs_text = String.valueOf(Overs)
-	 * + ".6"; return Overs_text; default: //
-	 * System.out.println(String.valueOf(Overs + 1) + "," + String.valueOf(Balls));
-	 * Overs_text = String.valueOf(Overs + 1) + "." + String.valueOf(Balls); return
-	 * Overs_text; } }
-	 */
+	public static List<Tournament> extractSeasonStats(String typeOfExtraction, List<Match> tournament_matches, 
+			CricketService cricketService,Match currentMatch, List<Tournament> past_tournament_stats,List<Season> ses) 
+	{
+		int playerId = -1;
+		int seasonID = 0;
+		List<Tournament> tournament_stats = new ArrayList<Tournament>();
+		boolean has_match_started = false;
+		
+		switch(typeOfExtraction) {
+		case "SEASON1": case "SEASON2": case "SEASON3":
+			if(typeOfExtraction.equalsIgnoreCase("SEASON1")) {
+				seasonID = 1;
+//				for(Season seas : ses) {
+//					if(seas.getSeasonDescription().equalsIgnoreCase(typeOfExtraction)) {
+//						seasonID = seas.getSeasonId();
+//					}
+//				}
+				
+			}else if(typeOfExtraction.equalsIgnoreCase("SEASON2")) {
+				seasonID = 2;
+//				for(Season seas : ses) {
+//					if(seas.getSeasonDescription().equalsIgnoreCase(typeOfExtraction)) {
+//						seasonID = seas.getSeasonId();
+//					}
+//				}
+			}else if(typeOfExtraction.equalsIgnoreCase("SEASON3")) {
+				seasonID = 3;
+//				for(Season seas : ses) {
+//					if(seas.getSeasonDescription().equalsIgnoreCase(typeOfExtraction)) {
+//						seasonID = seas.getSeasonId();
+//					}
+//				}
+			}
+			for(Match mtch : tournament_matches) {
+				if(seasonID == mtch.getSeasonId()) {
+					if(mtch.getInning().get(0).getTotalRuns() > 0 || (6 * mtch.getInning().get(0).getTotalOvers() + mtch.getInning().get(0).getTotalBalls()) > 0) {
+						has_match_started = true;
+					}
+					for(Inning inn : mtch.getInning())
+					{
+						if(inn.getBattingCard() != null && inn.getBattingCard().size() > 0) {
+							
+							for(BattingCard bc : inn.getBattingCard())
+							{
+								playerId = -1;
+								for(int i=0; i<=tournament_stats.size() - 1;i++)
+								{
+									if(bc.getPlayerId() == tournament_stats.get(i).getPlayerId()) {
+										playerId = i;
+										break;
+									}
+								}
+								if(playerId >= 0) {
+									
+									tournament_stats.get(playerId).setRuns(tournament_stats.get(playerId).getRuns() + bc.getRuns()); // existing record
+									tournament_stats.get(playerId).setBallsFaced(tournament_stats.get(playerId).getBallsFaced() + bc.getBalls());
+									tournament_stats.get(playerId).setFours(tournament_stats.get(playerId).getFours() + bc.getFours());
+									tournament_stats.get(playerId).setSixes(tournament_stats.get(playerId).getSixes() + bc.getSixes());
+									
+									if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+										tournament_stats.get(playerId).getBatsman_best_Stats().add(new BestStats(
+												bc.getPlayerId(), (bc.getRuns() * 2) + 1, bc.getBalls(), inn.getBowling_team(), bc.getPlayer()));
+										
+									}else {
+										tournament_stats.get(playerId).getBatsman_best_Stats().add(new BestStats(
+												bc.getPlayerId(), bc.getRuns() * 2, bc.getBalls(), inn.getBowling_team(), bc.getPlayer()));
+									}
+									
+								}else {
+									tournament_stats.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), 0, 0, 0, bc.getBalls(), 
+											bc.getStatus(), bc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
+									
+									if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+										tournament_stats.get(tournament_stats.size() - 1).getBatsman_best_Stats().add(
+												new BestStats(bc.getPlayerId(), (bc.getRuns() * 2) + 1, bc.getBalls(),
+												inn.getBowling_team(), bc.getPlayer()));
+										
+									}else {
+										tournament_stats.get(tournament_stats.size() - 1).getBatsman_best_Stats().add(
+												new BestStats(bc.getPlayerId(), (bc.getRuns() * 2), bc.getBalls(),
+												inn.getBowling_team(), bc.getPlayer()));
+									}
+
+								}	
+							}
+						}
+						
+						if(inn.getBowlingCard() != null && inn.getBowlingCard().size() > 0) {
+							
+							for(BowlingCard boc : inn.getBowlingCard())
+							{
+								playerId = -1;
+								for(int i=0; i<=tournament_stats.size() - 1;i++)
+								{
+									if(boc.getPlayerId() == tournament_stats.get(i).getPlayerId()) {
+										playerId = i;
+										break;
+									}
+								}
+								
+								if(playerId >= 0) {
+									
+									tournament_stats.get(playerId).setWickets(tournament_stats.get(playerId).getWickets() + boc.getWickets());
+									tournament_stats.get(playerId).setRunsConceded(tournament_stats.get(playerId).getRunsConceded() + boc.getRuns()); // existing record
+									tournament_stats.get(playerId).setBallsBowled(tournament_stats.get(playerId).getBallsBowled() + 
+											6 * boc.getOvers() + boc.getBalls());
+
+									tournament_stats.get(playerId).getBowler_best_Stats().add(new BestStats(
+											boc.getPlayerId(), (1000 * boc.getWickets()) - boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 
+											inn.getBatting_team(), boc.getPlayer()));
+									
+								}else {
+									
+									tournament_stats.add(new Tournament(boc.getPlayerId(), 0, 0, 0, boc.getWickets(), boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 0, 
+											null, boc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
+									
+									tournament_stats.get(tournament_stats.size() - 1).getBowler_best_Stats().add(new BestStats(
+											boc.getPlayerId(), (1000 * boc.getWickets()) - boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 
+											inn.getBatting_team(), boc.getPlayer()));
+																			
+								}
+							}
+						}
+					}
+					if(has_match_started == true) {
+						for(Tournament trmnt : tournament_stats) {
+							for(Player plyr : mtch.getHomeSquad()) {
+								if(plyr.getPlayerId() == trmnt.getPlayerId()) {
+									trmnt.setMatches(trmnt.getMatches() + 1);
+								}
+							}
+							for(Player plyr : mtch.getAwaySquad()) {
+								if(plyr.getPlayerId() == trmnt.getPlayerId()) {
+									trmnt.setMatches(trmnt.getMatches() + 1);
+								}
+							}
+						}
+					}
+				}
+			}
+			break;
+		}
+//		System.out.println("tourdata = " + tournament_stats);
+		return tournament_stats;
+	}
 
 	public static String OverBalls(int Overs,int Balls) {
 		
