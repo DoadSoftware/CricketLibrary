@@ -1,5 +1,6 @@
 package com.cricket.model.json;
 
+import com.cricket.model.Player;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;

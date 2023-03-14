@@ -182,7 +182,8 @@ public class Match {
   @XmlElement(name = "wagon")
   private List<Wagon> wagons;
   
-  @XmlTransient
+  @XmlElementWrapper(name = "events")
+  @XmlElement(name = "event")
   private List<Event> events;
 
 public String getGenerateInteractiveFile() {
