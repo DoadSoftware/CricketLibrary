@@ -2380,7 +2380,7 @@ public class CricketFunctions {
 		return "";
 	}
 
-	public static String getEventsText(String whatToProcess, String seperatorType, List<Event> events, int number_of_events) 
+	public static String getEventsText(String whatToProcess, int player_id,String seperatorType, List<Event> events, int number_of_events) 
 	{
 		int total_runs = 0,ball_count = 0;
 		String this_over = "";String this_ball_data = "";
@@ -2388,7 +2388,7 @@ public class CricketFunctions {
 		  for (int i = events.size() - 1; i >= 0; i--)
 		  {
 			if (whatToProcess.equalsIgnoreCase(CricketUtil.OVER) 
-					&& events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)
+					&& (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)|| events.get(i).getEventBowlerNo() != player_id)
 					&& events.get(i).getEventBallNo() <= 0) {
 				break;
             }
@@ -2954,12 +2954,12 @@ public class CricketFunctions {
 		return String.valueOf(total_run_PP) + seperator + String.valueOf(total_wickets_PP);
 	}
 
-	public static String processThisOverRunsCount(List<Event> events) {
+	public static String processThisOverRunsCount(int player_id, List<Event> events) {
 		int total_runs=0;
 		if((events != null) && (events.size() > 0)) {
 			
 			for(int i = events.size() - 1; i >= 0; i--) {
-				if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER) 
+				if ((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)|| events.get(i).getEventBowlerNo() != player_id)
 					&& events.get(i).getEventBallNo() <= 0) {
 					break;
 				}
