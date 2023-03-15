@@ -2387,11 +2387,13 @@ public class CricketFunctions {
 		if ((events != null) && (events.size() > 0)) {
 		  for (int i = events.size() - 1; i >= 0; i--)
 		  {
-			if (whatToProcess.equalsIgnoreCase(CricketUtil.OVER) 
-					&& (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)|| events.get(i).getEventBowlerNo() != player_id)
-					&& events.get(i).getEventBallNo() <= 0) {
-				break;
-            }
+			  if(!events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NEW_BATSMAN) || !events.get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+				  if (whatToProcess.equalsIgnoreCase(CricketUtil.OVER) 
+							&& (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)|| events.get(i).getEventBowlerNo() != player_id)
+							&& events.get(i).getEventBallNo() <= 0) {
+						break;
+		            }
+			  }
 			  
 		    this_ball_data = "";
 		    switch (events.get(i).getEventType())
