@@ -77,6 +77,8 @@ public class CricketFunctions {
 	public static String checkImpactPlayerBowler(List<Event> events,int inning_number,int player_id) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
+				System.out.println("player_id = " + player_id);
+				System.out.println("id = "+ events.get(i).getEventBowlerNo());
 				if(player_id == events.get(i).getEventBowlerNo() && events.get(i).getSubstitutionMade() != null) {
 					return "YES";
 				}
@@ -3102,15 +3104,15 @@ public class CricketFunctions {
 			+ seperator + String.valueOf(fours) + seperator + String.valueOf(fives) + seperator + String.valueOf(sixes);
 	}
 	
-	public static List<Integer> speedData(Match match,int whichInning,int PlayerId) {
-		List<Integer> data = new ArrayList<Integer>();
+	public static List<Double> speedData(Match match,int whichInning,int PlayerId) {
+		List<Double> data = new ArrayList<Double>();
 		for(Inning inn : match.getInning()) {
 			if (inn.getInningNumber() == whichInning) {
 				for(BowlingCard boc : inn.getBowlingCard()) {
 					if(PlayerId == boc.getPlayerId()) {
 						if(boc.getSpeeds() != null) {
 							for(int i = 0; i < boc.getSpeeds().size();i++) {
-								data.add(Integer.valueOf(boc.getSpeeds().get(i).getSpeedValue().trim()));
+								data.add(Double.valueOf(boc.getSpeeds().get(i).getSpeedValue().trim()));
 							}
 							Collections.sort(data);
 						}
