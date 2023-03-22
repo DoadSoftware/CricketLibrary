@@ -1119,7 +1119,7 @@ public class CricketFunctions {
 	public static Statistics updateStatisticsWithMatchData(Statistics stat, Match match)
 	{
 		boolean player_found = false;
-		
+//		stat.setMatches(stat.getMatches());
 		if(stat.getStats_type().getStats_short_name().equalsIgnoreCase(match.getMatchType())) {
 			stat.setTournament_fours(stat.getTournament_fours() + match.getInning().get(0).getTotalFours());
 			stat.setTournament_fours(stat.getTournament_fours() + match.getInning().get(1).getTotalFours());
@@ -2842,8 +2842,8 @@ public class CricketFunctions {
 
 			switch (teamNameType) {
 		    case CricketUtil.SHORT: 
-		    	batTeamNm = (match.getInning().get(whichInning - 1)).getBatting_team().getTeamName4();
-		    	bowlTeamNm = (match.getInning().get(whichInning - 1)).getBowling_team().getTeamName4();
+		    	batTeamNm = (match.getInning().get(whichInning - 1)).getBatting_team().getTeamName3();
+		    	bowlTeamNm = (match.getInning().get(whichInning - 1)).getBowling_team().getTeamName3();
 		    	break;
 		    default: 
 		    	batTeamNm = (match.getInning().get(whichInning - 1)).getBatting_team().getTeamName1();
