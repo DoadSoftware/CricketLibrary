@@ -1458,9 +1458,9 @@ public class CricketFunctions {
 					switch (teamNameType) {
 					case CricketUtil.SHORT:
 						if(Integer.valueOf(match.getMatchResult().split(",")[0]) == match.getHomeTeamId()) {
-							resultToShow = match.getHomeTeam().getTeamName4();
+							resultToShow = match.getHomeTeam().getTeamName3();
 						} else {
-							resultToShow = match.getAwayTeam().getTeamName4();
+							resultToShow = match.getAwayTeam().getTeamName3();
 						}
 					    break;
 					default:
@@ -2842,8 +2842,8 @@ public class CricketFunctions {
 
 			switch (teamNameType) {
 		    case CricketUtil.SHORT: 
-		    	batTeamNm = (match.getInning().get(whichInning - 1)).getBatting_team().getTeamName3();
-		    	bowlTeamNm = (match.getInning().get(whichInning - 1)).getBowling_team().getTeamName3();
+		    	batTeamNm = match.getInning().get(whichInning - 1).getBatting_team().getTeamName3();
+		    	bowlTeamNm = match.getInning().get(whichInning - 1).getBowling_team().getTeamName3();
 		    	break;
 		    default: 
 		    	batTeamNm = (match.getInning().get(whichInning - 1)).getBatting_team().getTeamName1();
