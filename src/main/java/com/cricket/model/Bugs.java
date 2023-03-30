@@ -22,6 +22,9 @@ public class Bugs
   @Column(name = "TEXT2")
   private String text2;
   
+  @Column(name = "TEXT3")
+  private String text3;
+  
   @Column(name = "HindiText1")
   private String hindiText1;
   
@@ -127,6 +130,14 @@ public String getTeluguText2() {
 
 public void setTeluguText2(String teluguText2) {
 	this.teluguText2 = teluguText2;
+}
+
+public String getText3() {
+	return text3;
+}
+
+public void setText3(String text3) {
+	this.text3 = text3;
 }
 
 }

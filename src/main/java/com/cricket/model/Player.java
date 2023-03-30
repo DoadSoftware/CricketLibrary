@@ -33,6 +33,12 @@ public class Player implements Comparable<Player>, Diffable<Player>
   @Column(name = "TICKERNAME")
   private String ticker_name;
   
+  @Column(name = "TwitterHandle")
+  private String twitterHandle;
+  
+  @Column(name = "InstagramHandle")
+  private String instagramHandle;
+  
   @Column(name = "Age")
   private int age;
   

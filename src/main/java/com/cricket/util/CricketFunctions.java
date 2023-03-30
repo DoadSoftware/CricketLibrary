@@ -2270,6 +2270,8 @@ public class CricketFunctions {
 	  	          if (((evnt.getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (evnt.getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
 	  	        		  && (evnt.getEventWasABoundary() != null) &&  (evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
 	  	            exitLoop = true;
+	  	          }else {
+	  	        	count_lb += 1;
 	  	          }
 	  	          break;
 	  	        }
@@ -3127,7 +3129,7 @@ public class CricketFunctions {
 							if(evnt.getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 								if(evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
 									switch (whatToProcess) {
-									case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
+									case CricketUtil.BATSMAN: case CricketUtil.BOWLER: 
 										dots++;
 										break;
 									}
@@ -3135,7 +3137,7 @@ public class CricketFunctions {
 								if ((evnt.getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) && (evnt.getEventWasABoundary() != null) && 
 										(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
 									switch (whatToProcess) {
-									case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
+									case CricketUtil.BATSMAN: case CricketUtil.BOWLER: case "TEAM":
 										fours++;
 										break;
 									}
@@ -3143,7 +3145,7 @@ public class CricketFunctions {
 								if ((evnt.getEventRuns() == Integer.valueOf(CricketUtil.SIX)) && (evnt.getEventWasABoundary() != null) && 
 										(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
 									switch (whatToProcess) {
-									case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
+									case CricketUtil.BATSMAN: case CricketUtil.BOWLER: case "TEAM":
 										sixes++;
 										break;
 									}
