@@ -2484,6 +2484,9 @@ public class CricketFunctions {
 		    			if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
 		    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + 
 		    						events.get(i).getEventSubExtraRuns());
+		    			}else if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL) && events.get(i).getEventRuns() <= 0) {
+		    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + 
+		    						events.get(i).getEventSubExtraRuns());
 		    			}
 		    		}
 		    		if(this_ball_data.isEmpty()) {
@@ -2505,7 +2508,7 @@ public class CricketFunctions {
 		    	}
 		    	
 			    if (events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0){
-			    	if(!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
+			    	if(!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE) && !events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 			    		if (this_ball_data.isEmpty()) {
 				          this_ball_data = String.valueOf(events.get(i).getEventSubExtraRuns()) + events.get(i).getEventSubExtra();
 				        } else {
