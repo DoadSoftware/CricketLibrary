@@ -277,6 +277,23 @@ public void setAge(int age) {
 	this.age = age;
 }
 
+
+public String getTwitterHandle() {
+	return twitterHandle;
+}
+
+public void setTwitterHandle(String twitterHandle) {
+	this.twitterHandle = twitterHandle;
+}
+
+public String getInstagramHandle() {
+	return instagramHandle;
+}
+
+public void setInstagramHandle(String instagramHandle) {
+	this.instagramHandle = instagramHandle;
+}
+
 @Override
 public DiffResult diff(Player plyr) {
 	DiffBuilder db = new DiffBuilder(this, plyr, ToStringStyle.SHORT_PREFIX_STYLE);
