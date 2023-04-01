@@ -127,6 +127,12 @@ public class Match {
   @XmlElement(name = "awayTeam")
   private Team awayTeam;
 
+  @XmlElement(name = "setupHomeTeam")
+  private String setupHomeTeam;
+
+  @XmlElement(name = "setupAwayTeam")
+  private String setupAwayTeam;
+  
   @XmlElement(name = "currentSpeed")
   private String current_speed;
   
@@ -185,6 +191,22 @@ public class Match {
   @XmlElementWrapper(name = "events")
   @XmlElement(name = "event")
   private List<Event> events;
+
+public String getSetupHomeTeam() {
+	return setupHomeTeam;
+}
+
+public void setSetupHomeTeam(String setupHomeTeam) {
+	this.setupHomeTeam = setupHomeTeam;
+}
+
+public String getSetupAwayTeam() {
+	return setupAwayTeam;
+}
+
+public void setSetupAwayTeam(String setupAwayTeam) {
+	this.setupAwayTeam = setupAwayTeam;
+}
 
 public String getGenerateInteractiveFile() {
 	return generateInteractiveFile;
