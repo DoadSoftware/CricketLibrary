@@ -17,6 +17,7 @@ public class CricketUtil {
 	public final static String SCENES_DIRECTORY = "Scenes/";
 	public final static String CONFIGURATIONS_DIRECTORY = "Configurations/";
 	public final static String COMMENTATOR_XML = "COMMENTATOR.XML";
+	public final static String CLOCK_XML = "Clock.XML";
 	public final static String DOAD_INTERACTIVE_TXT = "DOADInteractiveFile.txt";
 	public final static String OUTPUT_XML = "OUTPUT.XML";
 	public final static String LEAGUE_TABLE_DIRECTORY = "LeagueTable/";
@@ -118,6 +119,7 @@ public class CricketUtil {
 	public final static String LOG_OVERWRITE_PARTNERSHIPS = "LOG_OVERWRITE_PARTNERSHIPS";
 	public final static String LOG_OVERWRITE_BATTINGCARD = "LOG_OVERWRITE_BATTINGCARD";
 	public final static String LOG_TIME = "LOG_TIME";
+	public final static String LOG_OVERWRITE_TIME = "LOG_OVERWRITE_TIME";
 	public final static String LOG_DAY_SESSION = "LOG_DAY_SESSION";
 	public final static String START_PAUSE_TIME = "START_PAUSE_TIME";
 	public final static String LOG_OVERS_REMAINING = "LOG_OVERS_REMAINING";
