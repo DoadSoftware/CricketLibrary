@@ -33,6 +33,12 @@ public class Player implements Comparable<Player>, Diffable<Player>
   @Column(name = "TICKERNAME")
   private String ticker_name;
   
+  @Column(name = "TwitterHandle")
+  private String twitterHandle;
+  
+  @Column(name = "InstagramHandle")
+  private String instagramHandle;
+  
   @Column(name = "Age")
   private int age;
   
@@ -269,6 +275,23 @@ public int getAge() {
 
 public void setAge(int age) {
 	this.age = age;
+}
+
+
+public String getTwitterHandle() {
+	return twitterHandle;
+}
+
+public void setTwitterHandle(String twitterHandle) {
+	this.twitterHandle = twitterHandle;
+}
+
+public String getInstagramHandle() {
+	return instagramHandle;
+}
+
+public void setInstagramHandle(String instagramHandle) {
+	this.instagramHandle = instagramHandle;
 }
 
 @Override

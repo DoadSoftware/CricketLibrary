@@ -2270,6 +2270,8 @@ public class CricketFunctions {
 	  	          if (((evnt.getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (evnt.getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
 	  	        		  && (evnt.getEventWasABoundary() != null) &&  (evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
 	  	            exitLoop = true;
+	  	          }else {
+	  	        	count_lb += 1;
 	  	          }
 	  	          break;
 	  	        }
@@ -2381,6 +2383,61 @@ public class CricketFunctions {
 		}
 		return "";
 	}
+	
+	public static String compareData(Match match, int inning_number, List<Event> events,int Over) {
+		
+		int total_runs = 0, total_wickets = 0;
+		
+		if((events != null) && (events.size() > 0)) { 
+			for(int i =0; i <= events.size() - 1 ; i++) {
+				if(events.get(i).getEventInningNumber() == inning_number) {
+					if((events.get(i).getEventOverNo() < Over && events.get(i).getEventBallNo() >= 0) || (events.get(i).getEventOverNo() == Over && events.get(i).getEventBallNo() == 0)) {
+						
+						switch (events.get(i).getEventType()) {
+						case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
+				        case CricketUtil.FOUR: case CricketUtil.SIX: 
+				        	total_runs += events.get(i).getEventRuns();
+				          break;
+				         
+				        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+				        	total_runs += events.get(i).getEventRuns();
+				        	break;
+				        	
+				        case CricketUtil.LOG_WICKET:
+				        	if(events.get(i).getEventRuns() > 0) {
+				        		total_runs += events.get(i).getEventRuns();
+				        	}
+				        	if(events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)) {
+				        		total_wickets += 0;
+				        	}else {
+				        		total_wickets += 1;
+				        	}
+				        	break;
+				        
+				        case CricketUtil.LOG_ANY_BALL:
+				        	total_runs += events.get(i).getEventRuns();
+					          if (events.get(i).getEventExtra() != null && !events.get(i).getEventExtra().isEmpty()) {
+					        	  total_runs += events.get(i).getEventExtraRuns();
+					          }
+					          if (events.get(i).getEventSubExtra() != null && !events.get(i).getEventSubExtra().isEmpty()) {
+					        	  total_runs += events.get(i).getEventSubExtraRuns();
+					          }
+					          if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
+					        	  total_wickets += 1;
+					          }
+					          break;
+						}
+					}
+//					if((events.get(i).getEventOverNo() < 10 && events.get(i).getEventBallNo() >= 0) || (events.get(i).getEventOverNo() == 10 && events.get(i).getEventBallNo() == 0)) {
+//						System.out.println(total_runs);
+//						return String.valueOf(total_runs);
+//					}
+				}
+			}
+			total_runs = total_runs + 1;
+		}
+		return String.valueOf(total_runs);
+	}
 
 	public static String getEventsText(String whatToProcess, int player_id,String seperatorType, List<Event> events, int number_of_events) 
 	{
@@ -2427,6 +2484,9 @@ public class CricketFunctions {
 		    			if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
 		    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + 
 		    						events.get(i).getEventSubExtraRuns());
+		    			}else if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL) && events.get(i).getEventRuns() <= 0) {
+		    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + 
+		    						events.get(i).getEventSubExtraRuns());
 		    			}
 		    		}
 		    		if(this_ball_data.isEmpty()) {
@@ -2448,7 +2508,7 @@ public class CricketFunctions {
 		    	}
 		    	
 			    if (events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0){
-			    	if(!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
+			    	if(!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE) && !events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 			    		if (this_ball_data.isEmpty()) {
 				          this_ball_data = String.valueOf(events.get(i).getEventSubExtraRuns()) + events.get(i).getEventSubExtra();
 				        } else {
@@ -3072,7 +3132,7 @@ public class CricketFunctions {
 							if(evnt.getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 								if(evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
 									switch (whatToProcess) {
-									case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
+									case CricketUtil.BATSMAN: case CricketUtil.BOWLER: 
 										dots++;
 										break;
 									}
@@ -3080,7 +3140,7 @@ public class CricketFunctions {
 								if ((evnt.getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) && (evnt.getEventWasABoundary() != null) && 
 										(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
 									switch (whatToProcess) {
-									case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
+									case CricketUtil.BATSMAN: case CricketUtil.BOWLER: case "TEAM":
 										fours++;
 										break;
 									}
@@ -3088,7 +3148,7 @@ public class CricketFunctions {
 								if ((evnt.getEventRuns() == Integer.valueOf(CricketUtil.SIX)) && (evnt.getEventWasABoundary() != null) && 
 										(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
 									switch (whatToProcess) {
-									case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
+									case CricketUtil.BATSMAN: case CricketUtil.BOWLER: case "TEAM":
 										sixes++;
 										break;
 									}
