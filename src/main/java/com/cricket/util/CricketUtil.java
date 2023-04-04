@@ -23,6 +23,7 @@ public class CricketUtil {
 	public final static String LEAGUE_TABLE_DIRECTORY = "LeagueTable/";
 	public static final String LEAGUETABLE_XML = "LeagueTable.XML";
 	public final static String FREE_TXT = "FreeText.txt";
+	public final static String SPEED_TXT = "Speed.txt";
 	public final static String AR_FREE_TXT = "ARFreeText.txt";
 	public final static String INFOBAR_FREE_TXT = "InfobarFreeText.txt";
 	public final static String PREVIEW = "C:/Temp/Preview.jpg";

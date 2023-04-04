@@ -106,12 +106,6 @@ public class Match {
   @XmlElement(name = "venueName")
   private String venueName;
 
-  @XmlElement(name = "matchStartTime")
-  private String matchStartTime;
-
-  @XmlElement(name = "matchTimeStatus")
-  private String matchTimeStatus;
-
   @XmlElement(name = "matchTotalSeconds")
   private long matchTotalSeconds;
   
@@ -135,18 +129,6 @@ public class Match {
   
   @XmlElement(name = "currentSpeed")
   private String current_speed;
-  
-  @XmlTransient
-  private Ground ground;
-  
-  @XmlTransient
-  private NameSuper nameSuper;
-
-  @XmlTransient
-  private int selected_inning;
-  
-  @XmlTransient
-  private int which_key_press;
 
   @XmlElementWrapper(name = "innings")
   @XmlElement(name = "inning")
@@ -191,6 +173,29 @@ public class Match {
   @XmlElementWrapper(name = "events")
   @XmlElement(name = "event")
   private List<Event> events;
+
+  @XmlTransient
+  private MatchClock clock;
+  
+  @XmlTransient
+  private Ground ground;
+  
+  @XmlTransient
+  private NameSuper nameSuper;
+
+  @XmlTransient
+  private int selected_inning;
+  
+  @XmlTransient
+  private int which_key_press;
+  
+public MatchClock getClock() {
+	return clock;
+}
+
+public void setClock(MatchClock clock) {
+	this.clock = clock;
+}
 
 public String getSetupHomeTeam() {
 	return setupHomeTeam;
@@ -470,22 +475,6 @@ public String getVenueName() {
 
 public void setVenueName(String venueName) {
 	this.venueName = venueName;
-}
-
-public String getMatchStartTime() {
-	return matchStartTime;
-}
-
-public void setMatchStartTime(String matchStartTime) {
-	this.matchStartTime = matchStartTime;
-}
-
-public String getMatchTimeStatus() {
-	return matchTimeStatus;
-}
-
-public void setMatchTimeStatus(String matchTimeStatus) {
-	this.matchTimeStatus = matchTimeStatus;
 }
 
 public long getMatchTotalSeconds() {

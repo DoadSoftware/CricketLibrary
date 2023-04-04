@@ -14,7 +14,6 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
@@ -29,9 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-
 import org.apache.commons.io.FileUtils;
-
 import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
 import com.cricket.model.BowlingCard;
@@ -42,6 +39,7 @@ import com.cricket.model.Fixture;
 import com.cricket.model.ForeignLanguageData;
 import com.cricket.model.Inning;
 import com.cricket.model.Match;
+import com.cricket.model.MatchClock;
 import com.cricket.model.MultiLanguageDatabase;
 import com.cricket.model.OverByOverData;
 import com.cricket.model.Partnership;
@@ -56,10 +54,8 @@ public class CricketFunctions {
 	
 	public static String deletePreview() throws IOException
     {
-		Path file = Paths.get(CricketUtil.PREVIEW);
-		
 		if(new File(CricketUtil.PREVIEW).exists()) {
-			Files.delete(file);
+			Files.delete(Paths.get(CricketUtil.PREVIEW));
 		}
         return "";
     }
@@ -77,8 +73,6 @@ public class CricketFunctions {
 	public static String checkImpactPlayerBowler(List<Event> events,int inning_number,int player_id) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
-				System.out.println("player_id = " + player_id);
-				System.out.println("id = "+ events.get(i).getEventBowlerNo());
 				if(player_id == events.get(i).getEventBowlerNo() && events.get(i).getSubstitutionMade() != null) {
 					return "YES";
 				}
@@ -89,7 +83,8 @@ public class CricketFunctions {
 	public static String printInitials(String name)
     {
         if (name.length() > 0) {
-        	 return Character.toUpperCase(name.split("_")[0].charAt(0)) + "" + Character.toUpperCase(name.split("_")[1].charAt(0));
+        	 return Character.toUpperCase(name.split("_")[0].charAt(0)) + "" 
+        		+ Character.toUpperCase(name.split("_")[1].charAt(0));
         }
         return "";
     }
@@ -499,7 +494,6 @@ public class CricketFunctions {
 			MultiLanguageDatabase multiLanguageDb)
 	{
 		List<ForeignLanguageData> resultToShow = new ArrayList<ForeignLanguageData>();
-//		List<String> insertTxt = new ArrayList<String>();
 		
 		if(whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.CAUGHT)){
 			String englishTxt = "";
@@ -598,7 +592,6 @@ public class CricketFunctions {
 		}
 		
 		if(resultToShow.size() > 0) {
-			System.out.println("data = " + resultToShow);
 			return MergeForeignLanguageDataListToSingleObject(resultToShow);
 		} else {
 			return null;
@@ -922,6 +915,23 @@ public class CricketFunctions {
 			}
 		}
 		return print_writer;
+	}
+
+	public static MatchClock getmatchClock(Match match) throws IOException, JAXBException 
+	{
+		if(match != null) {
+			if(new File(CricketUtil.CRICKET_DIRECTORY 
+					+ CricketUtil.CLOCK_XML).exists()) {
+				MatchClock clock = (MatchClock) JAXBContext.newInstance(MatchClock.class).createUnmarshaller().unmarshal(
+						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CLOCK_XML));
+				Inning inn = match.getInning().stream().filter(in -> 
+					in.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null);
+				if(inn != null && inn.getInningNumber() == clock.getInningNumber()) {
+					return clock;
+				}
+			}
+		}
+		return null;
 	}
 	
 	public static String getCurrentSpeed(boolean cleanSpeedDirectory) throws IOException 
