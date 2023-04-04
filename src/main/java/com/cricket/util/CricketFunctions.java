@@ -919,15 +919,17 @@ public class CricketFunctions {
 
 	public static MatchClock getmatchClock(Match match) throws IOException, JAXBException 
 	{
-		if(match != null) {
+		if(match.getInning() != null && match.getInning().size() > 0) {
 			if(new File(CricketUtil.CRICKET_DIRECTORY 
 					+ CricketUtil.CLOCK_XML).exists()) {
 				MatchClock clock = (MatchClock) JAXBContext.newInstance(MatchClock.class).createUnmarshaller().unmarshal(
 						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CLOCK_XML));
-				Inning inn = match.getInning().stream().filter(in -> 
-					in.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null);
-				if(inn != null && inn.getInningNumber() == clock.getInningNumber()) {
-					return clock;
+				for(Inning inn : match.getInning()) {
+					if(inn.getIsCurrentInning() != null && inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
+						if(inn != null && clock != null && inn.getInningNumber() == clock.getInningNumber()) {
+							return clock;
+						}
+					}
 				}
 			}
 		}

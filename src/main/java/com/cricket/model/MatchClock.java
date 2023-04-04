@@ -41,5 +41,11 @@ public long getMatchTotalSeconds() {
 public void setMatchTotalSeconds(long matchTotalSeconds) {
 	this.matchTotalSeconds = matchTotalSeconds;
 }
+
+@Override
+public String toString() {
+	return "MatchClock [inningNumber=" + inningNumber + ", startOrPause=" + startOrPause + ", matchTotalSeconds="
+			+ matchTotalSeconds + "]";
+}
   
 }
