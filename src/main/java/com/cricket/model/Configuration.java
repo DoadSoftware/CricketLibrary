@@ -187,4 +187,16 @@ public class Configuration {
 	public void setTertiaryScene(String tertiaryScene) {
 		this.tertiaryScene = tertiaryScene;
 	}
+
+	@Override
+	public String toString() {
+		return "Configuration [filename=" + filename + ", broadcaster=" + broadcaster + ", primaryIpAddress="
+				+ primaryIpAddress + ", primaryPortNumber=" + primaryPortNumber + ", primaryScene=" + primaryScene
+				+ ", primaryLanguage=" + primaryLanguage + ", secondaryIpAddress=" + secondaryIpAddress
+				+ ", secondaryPortNumber=" + secondaryPortNumber + ", secondaryScene=" + secondaryScene
+				+ ", secondaryLanguage=" + secondaryLanguage + ", tertiaryIpAddress=" + tertiaryIpAddress
+				+ ", tertiaryPortNumber=" + tertiaryPortNumber + ", tertiaryScene=" + tertiaryScene
+				+ ", tertiaryLanguage=" + tertiaryLanguage + "]";
+	}
+	
 }

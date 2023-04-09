@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement(name="speeds")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -23,9 +24,17 @@ public class Speed {
 
   @XmlElement(name = "ballNumber")
   private int ballNumber;
- 
+
+  @XmlTransient
+  private long speedFileModifiedTime;
+  
 public Speed() {
 	super();
+}
+
+public Speed(long speedFileModifiedTime) {
+	super();
+	this.speedFileModifiedTime = speedFileModifiedTime;
 }
 
 public Speed(int speedNumber, String speedValue, String speedExtra, int overNumber, int ballNumber) {
@@ -35,6 +44,14 @@ public Speed(int speedNumber, String speedValue, String speedExtra, int overNumb
 	this.speedExtra = speedExtra;
 	this.overNumber = overNumber;
 	this.ballNumber = ballNumber;
+}
+
+public long getSpeedFileModifiedTime() {
+	return speedFileModifiedTime;
+}
+
+public void setSpeedFileModifiedTime(long speedFileModifiedTime) {
+	this.speedFileModifiedTime = speedFileModifiedTime;
 }
 
 public String getSpeedExtra() {
@@ -75,6 +92,13 @@ public int getBallNumber() {
 
 public void setBallNumber(int ballNumber) {
 	this.ballNumber = ballNumber;
+}
+
+@Override
+public String toString() {
+	return "Speed [speedNumber=" + speedNumber + ", speedValue=" + speedValue + ", speedExtra=" + speedExtra
+			+ ", overNumber=" + overNumber + ", ballNumber=" + ballNumber + ", speedFileModifiedTime="
+			+ speedFileModifiedTime + "]";
 }
 
 }

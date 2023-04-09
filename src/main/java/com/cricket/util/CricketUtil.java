@@ -18,6 +18,7 @@ public class CricketUtil {
 	public final static String CONFIGURATIONS_DIRECTORY = "Configurations/";
 	public final static String COMMENTATOR_XML = "COMMENTATOR.XML";
 	public final static String CLOCK_XML = "Clock.XML";
+	public final static String SPEED_XML = "Speed.XML";
 	public final static String DOAD_INTERACTIVE_TXT = "DOADInteractiveFile.txt";
 	public final static String OUTPUT_XML = "OUTPUT.XML";
 	public final static String LEAGUE_TABLE_DIRECTORY = "LeagueTable/";
@@ -77,6 +78,7 @@ public class CricketUtil {
 	public final static String SUPER_OVER = "SUPER_OVER";
 	public final static String SHOT = "SHOT";
 	public final static String WAGON = "WAGON";
+	public final static String HAWKEYE = "HAWKEYE";
 	
 	public final static String OUT = "OUT";
 	public final static String NOT_OUT = "NOT OUT";

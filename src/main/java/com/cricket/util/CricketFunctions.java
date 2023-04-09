@@ -14,6 +14,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
@@ -25,10 +26,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import org.apache.commons.io.FileUtils;
 import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
 import com.cricket.model.BowlingCard;
@@ -45,6 +45,7 @@ import com.cricket.model.OverByOverData;
 import com.cricket.model.Partnership;
 import com.cricket.model.Player;
 import com.cricket.model.Season;
+import com.cricket.model.Speed;
 import com.cricket.model.Statistics;
 import com.cricket.model.Team;
 import com.cricket.model.Tournament;
@@ -936,29 +937,58 @@ public class CricketFunctions {
 		return null;
 	}
 	
-	public static String getCurrentSpeed(boolean cleanSpeedDirectory) throws IOException 
+	public static Path findUsingNIOApi(String sdir) throws IOException {
+	    Path dir = Paths.get(sdir);
+	    if (Files.isDirectory(dir)) {
+	        Optional<Path> opPath = Files.list(dir)
+	          .filter(p -> !Files.isDirectory(p))
+	          .sorted((p1, p2)-> Long.valueOf(p2.toFile().lastModified())
+	            .compareTo(p1.toFile().lastModified()))
+	          .findFirst();
+
+	        if (opPath.isPresent()){
+	            return opPath.get();
+	        }
+	    }
+
+	    return null;
+	}
+	
+	public static Speed saveCurrentSpeed(String broadcaster, String speedSourcePath, 
+			String speedDestinationPath, Speed lastSpeed) throws IOException 
 	{
-		String speed_to_return = "";
-		if(cleanSpeedDirectory == true) {
-			FileUtils.cleanDirectory(new File(CricketUtil.CRICKET_DIRECTORY 
-					+ CricketUtil.SPEED_DIRECTORY));
-		} else {
-			for(File file : new File(CricketUtil.CRICKET_DIRECTORY 
-					+ CricketUtil.SPEED_DIRECTORY).listFiles())
-			{
-				if(!file.isDirectory()) {	
-					speed_to_return = Files.newBufferedReader(Paths.get(CricketUtil.CRICKET_DIRECTORY
-						+ CricketUtil.SPEED_DIRECTORY + file.getName()), StandardCharsets.UTF_8)
-						.lines().skip(1).limit(1).collect(Collectors.toList()).get(0);
-					Files.deleteIfExists(Paths.get(CricketUtil.CRICKET_DIRECTORY 
-							+ CricketUtil.SPEED_DIRECTORY + file.getName()));
-					if(speed_to_return.split(",").length > 0) {
-						return speed_to_return.split(",")[1];
-					}
-				}
-			}
+		Speed speed_to_return = new Speed();
+		BufferedWriter writer;
+
+		switch (broadcaster) {
+		case CricketUtil.HAWKEYE:
+
+			File this_dir = new File(speedSourcePath);
+			
+		    if (this_dir.isDirectory()) {
+		    	
+		        Optional<File> opFile = Arrays.stream(this_dir.listFiles(File::isFile))
+		          .max((f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified()));
+		        
+		        if (opFile.isPresent()){
+		        	if(lastSpeed.getSpeedFileModifiedTime() != opFile.get().lastModified()) {
+			        	for(String str_line : Files.readAllLines(Paths.get(
+			        			speedSourcePath + opFile.get().getName()), StandardCharsets.UTF_8)) {
+			        		if(str_line.contains(",")) {
+								speed_to_return.setSpeedValue(str_line.split(",")[1]);
+								speed_to_return.setSpeedFileModifiedTime(opFile.get().lastModified());
+								writer = new BufferedWriter(new FileWriter(speedDestinationPath));
+							    writer.write(str_line.split(",")[1].trim());
+							    writer.close();							
+								return speed_to_return;
+			        		}
+			        	}
+		        	}
+		        }
+		    }
+			break;
 		}
-		return "";
+		return null;
 	}
 	
 	public static BowlingCard getCurrentInningCurrentBowler(Match match) {
@@ -2398,7 +2428,7 @@ public class CricketFunctions {
 	
 	public static String compareData(Match match, int inning_number, List<Event> events,int Over) {
 		
-		int total_runs = 0, total_wickets = 0;
+		int total_runs = 0;
 		
 		if((events != null) && (events.size() > 0)) { 
 			for(int i =0; i <= events.size() - 1 ; i++) {
@@ -2419,11 +2449,6 @@ public class CricketFunctions {
 				        	if(events.get(i).getEventRuns() > 0) {
 				        		total_runs += events.get(i).getEventRuns();
 				        	}
-				        	if(events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)) {
-				        		total_wickets += 0;
-				        	}else {
-				        		total_wickets += 1;
-				        	}
 				        	break;
 				        
 				        case CricketUtil.LOG_ANY_BALL:
@@ -2434,16 +2459,9 @@ public class CricketFunctions {
 					          if (events.get(i).getEventSubExtra() != null && !events.get(i).getEventSubExtra().isEmpty()) {
 					        	  total_runs += events.get(i).getEventSubExtraRuns();
 					          }
-					          if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
-					        	  total_wickets += 1;
-					          }
 					          break;
 						}
 					}
-//					if((events.get(i).getEventOverNo() < 10 && events.get(i).getEventBallNo() >= 0) || (events.get(i).getEventOverNo() == 10 && events.get(i).getEventBallNo() == 0)) {
-//						System.out.println(total_runs);
-//						return String.valueOf(total_runs);
-//					}
 				}
 			}
 			total_runs = total_runs + 1;
