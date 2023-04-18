@@ -1287,7 +1287,7 @@ public class CricketFunctions {
 										
 									}else {
 										tournament_stats.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), 0, 0, 0, bc.getBalls(), 
-												bc.getStatus(), bc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
+												0,bc.getStatus(), bc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
 										
 										if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
 											tournament_stats.get(tournament_stats.size() - 1).getBatsman_best_Stats().add(
@@ -1321,6 +1321,7 @@ public class CricketFunctions {
 										
 										tournament_stats.get(playerId).setWickets(tournament_stats.get(playerId).getWickets() + boc.getWickets());
 										tournament_stats.get(playerId).setRunsConceded(tournament_stats.get(playerId).getRunsConceded() + boc.getRuns()); // existing record
+										tournament_stats.get(playerId).setDots(tournament_stats.get(playerId).getDots() + boc.getDots());
 										tournament_stats.get(playerId).setBallsBowled(tournament_stats.get(playerId).getBallsBowled() + 
 												6 * boc.getOvers() + boc.getBalls());
 
@@ -1331,7 +1332,7 @@ public class CricketFunctions {
 									}else {
 										
 										tournament_stats.add(new Tournament(boc.getPlayerId(), 0, 0, 0, boc.getWickets(), boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 0, 
-												null, boc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
+												boc.getDots(),null, boc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
 										
 										tournament_stats.get(tournament_stats.size() - 1).getBowler_best_Stats().add(new BestStats(
 												boc.getPlayerId(), (1000 * boc.getWickets()) - boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 
@@ -1404,7 +1405,7 @@ public class CricketFunctions {
 							
 						}else {
 							past_tournament_stats.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), 0, 0, 0, bc.getBalls(), 
-									bc.getStatus(), bc.getPlayer(), new ArrayList<BestStats>(),new ArrayList<BestStats>()));
+									0,bc.getStatus(), bc.getPlayer(), new ArrayList<BestStats>(),new ArrayList<BestStats>()));
 							
 							if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
 								past_tournament_stats.get(past_tournament_stats.size()-1).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), 
@@ -1432,6 +1433,7 @@ public class CricketFunctions {
 								
 								past_tournament_stats.get(playerId).setRunsConceded(past_tournament_stats.get(playerId).getRunsConceded() + boc.getRuns()); // existing record
 								past_tournament_stats.get(playerId).setWickets(past_tournament_stats.get(playerId).getWickets() + boc.getWickets());
+								past_tournament_stats.get(playerId).setDots(past_tournament_stats.get(playerId).getDots() + boc.getDots());
 								past_tournament_stats.get(playerId).setBallsBowled(past_tournament_stats.get(playerId).getBallsBowled() + 
 										6 * boc.getOvers() + boc.getBalls());
 
@@ -1442,7 +1444,7 @@ public class CricketFunctions {
 							}else {
 								
 								past_tournament_stats.add(new Tournament(boc.getPlayerId(), 0, 0, 0, boc.getWickets(), boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 0, 
-										null, boc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
+										boc.getDots(),null, boc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
 								
 								past_tournament_stats.get(past_tournament_stats.size() - 1).getBowler_best_Stats().add(new BestStats(boc.getPlayerId(), 
 										(1000 * boc.getWickets()) - boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 
@@ -1915,7 +1917,7 @@ public class CricketFunctions {
 									
 								}else {
 									tournament_stats.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), 0, 0, 0, bc.getBalls(), 
-											bc.getStatus(), bc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
+											0,bc.getStatus(), bc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
 									
 									if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
 										tournament_stats.get(tournament_stats.size() - 1).getBatsman_best_Stats().add(
@@ -1959,7 +1961,7 @@ public class CricketFunctions {
 								}else {
 									
 									tournament_stats.add(new Tournament(boc.getPlayerId(), 0, 0, 0, boc.getWickets(), boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 0, 
-											null, boc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
+											boc.getDots(),null, boc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
 									
 									tournament_stats.get(tournament_stats.size() - 1).getBowler_best_Stats().add(new BestStats(
 											boc.getPlayerId(), (1000 * boc.getWickets()) - boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 
@@ -2105,6 +2107,266 @@ public class CricketFunctions {
 		}
 		return Balls ;
 	}
+	
+	public static String getFirstPowerPlayScore(Match match, int inn_num, List<Event> events)
+    {
+
+        int total_run_PP = 0, total_wickets_PP = 0,ball_count = 0;
+        if((events != null) && (events.size() > 0)) 
+        {
+        	for (int i = 0; i <= events.size() - 1; i++)
+            {
+            	if(events.get(i).getEventInningNumber() == inn_num)
+                {
+            		switch(events.get(i).getEventType()) {
+					case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
+					case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.LOG_ANY_BALL: case CricketUtil.LOG_WICKET:
+						ball_count = ball_count + 1;
+						break;
+					}
+            		
+            		if(ball_count >= ((1 - 1) * 6) && ball_count < (6 * 6)) {
+            			switch (events.get(i).getEventType())
+                        {
+                            case "1": case "2": case "3": case "5": case "0": case "4": case "6":
+                                total_run_PP += events.get(i).getEventRuns();
+                                break;
+
+                            case "WIDE": case "NO_BALL": case "BYE": case "LEG_BYE": case "PENALTY":
+                                total_run_PP += events.get(i).getEventRuns();
+                                break;
+
+                            case "LOG_WICKET":
+                                if (events.get(i).getEventRuns() > 0)
+                                {
+                                    total_run_PP += events.get(i).getEventRuns();
+                                }
+                                total_wickets_PP += 1;
+                                break;
+
+                            case "LOG_ANY_BALL":
+                                total_run_PP += events.get(i).getEventRuns();
+                                if (events.get(i).getEventExtra() != null)
+                                {
+                                    total_run_PP += events.get(i).getEventExtraRuns();
+                                }
+                                if (events.get(i).getEventSubExtra() != null)
+                                {
+                                    total_run_PP += events.get(i).getEventSubExtraRuns();
+                                }
+                                if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty())
+                                {
+                                    total_wickets_PP += 1;
+                                }
+                                break;
+                        }
+            		} else if(ball_count >= ((1 - 1) * 6) && ball_count == (6 * 6)) {
+            			if(!events.get(i-2).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+            				switch (events.get(i).getEventType())
+                            {
+                                case "1": case "2": case "3": case "5": case "0": case "4": case "6":
+                                    total_run_PP += events.get(i).getEventRuns();
+                                    break;
+
+                                case "WIDE": case "NO_BALL": case "BYE": case "LEG_BYE": case "PENALTY":
+                                    total_run_PP += events.get(i).getEventRuns();
+                                    break;
+
+                                case "LOG_WICKET":
+                                    if (events.get(i).getEventRuns() > 0)
+                                    {
+                                        total_run_PP += events.get(i).getEventRuns();
+                                    }
+                                    total_wickets_PP += 1;
+                                    break;
+
+                                case "LOG_ANY_BALL":
+                                    total_run_PP += events.get(i).getEventRuns();
+                                    if (events.get(i).getEventExtra() != null)
+                                    {
+                                        total_run_PP += events.get(i).getEventExtraRuns();
+                                    }
+                                    if (events.get(i).getEventSubExtra() != null)
+                                    {
+                                        total_run_PP += events.get(i).getEventSubExtraRuns();
+                                    }
+                                    if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty())
+                                    {
+                                        total_wickets_PP += 1;
+                                    }
+                                    break;
+                            }
+            			}
+            		}
+                }
+            }
+        }
+        return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP);
+    }
+    public static String getSecPowerPlayScore(Match match, int inn_num, List<Event> events)
+    {
+
+        int total_run_PP = 0, total_wickets_PP = 0,ball_count = 0;
+        if((events != null) && (events.size() > 0)) 
+        {
+        	for (int i = 0; i <= events.size() - 1; i++)
+            {
+        		if(events.get(i).getEventInningNumber() == inn_num)
+                {
+        			switch(events.get(i).getEventType()) {
+					case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
+					case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.LOG_ANY_BALL: case CricketUtil.LOG_WICKET:
+						ball_count = ball_count + 1;
+						break;
+					}
+        			
+        			if(ball_count > ((7 - 1) * 6) && ball_count < (15 * 6)) {
+        				if(ball_count == 37) {
+        					if(events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.WIDE) || events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+        						total_run_PP += events.get(i-1).getEventRuns();
+        					}
+        				}
+            			switch (events.get(i).getEventType())
+                        {
+                            case "1": case "2": case "3": case "5": case "0": case "4": case "6":
+                                total_run_PP += events.get(i).getEventRuns();
+                                break;
+
+                            case "WIDE": case "NO_BALL": case "BYE": case "LEG_BYE": case "PENALTY":
+                                total_run_PP += events.get(i).getEventRuns();
+                                break;
+
+                            case "LOG_WICKET":
+                                if (events.get(i).getEventRuns() > 0)
+                                {
+                                    total_run_PP += events.get(i).getEventRuns();
+                                }
+                                total_wickets_PP += 1;
+                                break;
+
+                            case "LOG_ANY_BALL":
+                                total_run_PP += events.get(i).getEventRuns();
+                                if (events.get(i).getEventExtra() != null)
+                                {
+                                    total_run_PP += events.get(i).getEventExtraRuns();
+                                }
+                                if (events.get(i).getEventSubExtra() != null)
+                                {
+                                    total_run_PP += events.get(i).getEventSubExtraRuns();
+                                }
+                                if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty())
+                                {
+                                    total_wickets_PP += 1;
+                                }
+                                break;
+                        }
+            		} else if(ball_count > ((7 - 1) * 6) && ball_count == (15 * 6)) {
+            			if(!events.get(i-2).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+            				switch (events.get(i).getEventType())
+                            {
+                                case "1": case "2": case "3": case "5": case "0": case "4": case "6":
+                                    total_run_PP += events.get(i).getEventRuns();
+                                    break;
+
+                                case "WIDE": case "NO_BALL": case "BYE": case "LEG_BYE": case "PENALTY":
+                                    total_run_PP += events.get(i).getEventRuns();
+                                    break;
+
+                                case "LOG_WICKET":
+                                    if (events.get(i).getEventRuns() > 0)
+                                    {
+                                        total_run_PP += events.get(i).getEventRuns();
+                                    }
+                                    total_wickets_PP += 1;
+                                    break;
+
+                                case "LOG_ANY_BALL":
+                                    total_run_PP += events.get(i).getEventRuns();
+                                    if (events.get(i).getEventExtra() != null)
+                                    {
+                                        total_run_PP += events.get(i).getEventExtraRuns();
+                                    }
+                                    if (events.get(i).getEventSubExtra() != null)
+                                    {
+                                        total_run_PP += events.get(i).getEventSubExtraRuns();
+                                    }
+                                    if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty())
+                                    {
+                                        total_wickets_PP += 1;
+                                    }
+                                    break;
+                            }
+            			}
+            		}  
+                }
+            }
+        }
+        return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP);
+    }
+    public static String getThirdPowerPlayScore(Match match, int inn_num, List<Event> events)
+    {
+
+        int total_run_PP = 0, total_wickets_PP = 0,ball_count = 0;
+        
+        if((events != null) && (events.size() > 0)) 
+        {
+        	for (int i = 0; i <= events.size() - 1; i++)
+                {
+                	if(events.get(i).getEventInningNumber() == inn_num)
+                    {
+                		switch(events.get(i).getEventType()) {
+    					case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
+    					case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.LOG_ANY_BALL: case CricketUtil.LOG_WICKET:
+    						ball_count = ball_count + 1;
+    						break;
+    					}
+                		
+                		if(ball_count > ((16 - 1) * 6) && ball_count <= (20 * 6)) {
+                			if(ball_count == 91) {
+            					if(events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.WIDE) || events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+            						total_run_PP += events.get(i-1).getEventRuns();
+            					}
+            				}
+                			switch (events.get(i).getEventType())
+                            {
+                                case "1": case "2": case "3": case "5": case "0": case "4": case "6":
+                                    total_run_PP += events.get(i).getEventRuns();
+                                    break;
+
+                                case "WIDE": case "NO_BALL": case "BYE": case "LEG_BYE": case "PENALTY":
+                                    total_run_PP += events.get(i).getEventRuns();
+                                    break;
+
+                                case "LOG_WICKET":
+                                    if (events.get(i).getEventRuns() > 0)
+                                    {
+                                        total_run_PP += events.get(i).getEventRuns();
+                                    }
+                                    total_wickets_PP += 1;
+                                    break;
+
+                                case "LOG_ANY_BALL":
+                                    total_run_PP += events.get(i).getEventRuns();
+                                    if (events.get(i).getEventExtra() != null)
+                                    {
+                                        total_run_PP += events.get(i).getEventExtraRuns();
+                                    }
+                                    if (events.get(i).getEventSubExtra() != null)
+                                    {
+                                        total_run_PP += events.get(i).getEventSubExtraRuns();
+                                    }
+                                    if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty())
+                                    {
+                                        total_wickets_PP += 1;
+                                    }
+                                    break;
+                            }
+                		}
+                    }
+                }
+            }
+        return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP);
+    }
 	
 	public static List<String> getSplitBallls(int inning_number, int splitvalue, Match match,List<Event> events) {
 		int total_runs = 0, total_balls = 0 ;
@@ -2965,7 +3227,7 @@ public class CricketFunctions {
 				    		&& (CricketFunctions.getWicketsLeft(match) > 0)) {
 
 				    	matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
-					        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " from ";
+					        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
 				    	if (CricketFunctions.getRequiredBalls(match) >= 100) {
 				    		matchSummaryStatus = matchSummaryStatus + CricketFunctions.OverBalls(0,CricketFunctions.getRequiredBalls(match)) + " overs";
 						} else {
@@ -3012,12 +3274,18 @@ public class CricketFunctions {
 	}
 	
 	public static String getPowerPlayScore(Inning inning,int inn_number, String seperator,List<Event> events) {
-		int total_run_PP=0, total_wickets_PP=0;
+		int total_run_PP=0, total_wickets_PP=0,ball_count = 0;
 		if((events != null) && (events.size() > 0)) {
 			for(int i = 0; i <= events.size() - 1; i++) {
 				if(events.get(i).getEventInningNumber() == inn_number) {
-					int event_overs = ((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo());
-					if(event_overs <= (inning.getFirstPowerplayEndOver() * 6)) {
+					switch(events.get(i).getEventType()) {
+					case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
+					case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.LOG_ANY_BALL: case CricketUtil.LOG_WICKET:
+						ball_count = ball_count + 1;
+						break;
+					}
+					
+					if(ball_count <= (inning.getFirstPowerplayEndOver() * 6)) {
 						switch(events.get(i).getEventType()) {
 						case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 						case CricketUtil.FOUR: case CricketUtil.SIX: 
@@ -3093,8 +3361,18 @@ public class CricketFunctions {
 				for(BattingCard bc : inn.getBattingCard()){
 					if(inn.getFallsOfWickets().size() > 0){
 						if(inn.getFallsOfWickets().get(inn.getFallsOfWickets().size() - 1).getFowPlayerID() == bc.getPlayerId()) {
-							return bc.getPlayer().getTicker_name().toUpperCase() + " " + bc.getRuns() + " (" + bc.getBalls() + ")" + " " + 
-									bc.getHowOutText();
+							if(bc.getHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
+								if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
+									return bc.getPlayer().getTicker_name().toUpperCase() + " " + bc.getRuns() + " (" + bc.getBalls() + ")" + " " + 
+											bc.getHowOutPartOne() + " (sub - " + bc.getHowOutPartTwo().split(" ")[0] + " )";
+								}else {
+									return bc.getPlayer().getTicker_name().toUpperCase() + " " + bc.getRuns() + " (" + bc.getBalls() + ")" + " " + 
+											bc.getHowOutPartOne() + " ( " + bc.getHowOutPartTwo().split(" ")[0] + " )";
+								}
+							}else {
+								return bc.getPlayer().getTicker_name().toUpperCase() + " " + bc.getRuns() + " (" + bc.getBalls() + ")" + " " + 
+										bc.getHowOutText();
+							}
 						}
 					}								
 				}
