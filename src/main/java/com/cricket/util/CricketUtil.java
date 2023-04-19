@@ -158,6 +158,8 @@ public class CricketUtil {
 	public final static String IT20 = "IT20";
 	public final static String DT20 = "DT20";
 	public final static String D10 = "D10";
+	public final static String OD = "OD";
+	public final static String FC = "FC";
 
 	public final static String TOSS = "TOSS";
 	public final static String BAT = "BAT";
