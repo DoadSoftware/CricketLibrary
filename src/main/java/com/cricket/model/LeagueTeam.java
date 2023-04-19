@@ -30,10 +30,13 @@ public class LeagueTeam {
 	private int NoResult;
 	
 	@XmlElement(name="Points")
-	private int Points;
+	private String Points;
 	
 	@XmlElement(name="NetRunRate")
 	private double NetRunRate;
+	
+	@XmlElement(name="Count")
+	private String Count;
 
 	
 	public String getQualifiedStatus() {
@@ -92,11 +95,11 @@ public class LeagueTeam {
 		NoResult = noResult;
 	}
 
-	public int getPoints() {
+	public String getPoints() {
 		return Points;
 	}
 
-	public void setPoints(int points) {
+	public void setPoints(String points) {
 		Points = points;
 	}
 
@@ -107,4 +110,13 @@ public class LeagueTeam {
 	public void setNetRunRate(double netRunRate) {
 		NetRunRate = netRunRate;
 	}
+
+	public String getCount() {
+		return Count;
+	}
+
+	public void setCount(String count) {
+		Count = count;
+	}
+	
 }
