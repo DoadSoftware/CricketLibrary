@@ -40,8 +40,8 @@ public class Match {
   @XmlElement(name = "matchFileTimeStamp")
   private String matchFileTimeStamp;
 
-  @XmlElement(name = "useSpeed")
-  private String useSpeed;
+  @XmlElement(name = "speedFilePath")
+  private String speedFilePath;
 
   @XmlElement(name = "matchType")
   private String matchType;
@@ -269,12 +269,12 @@ public void setCurrent_speed(String current_speed) {
 	this.current_speed = current_speed;
 }
 
-public String getUseSpeed() {
-	return useSpeed;
+public String getSpeedFilePath() {
+	return speedFilePath;
 }
 
-public void setUseSpeed(String useSpeed) {
-	this.useSpeed = useSpeed;
+public void setSpeedFilePath(String speedFilePath) {
+	this.speedFilePath = speedFilePath;
 }
 
 public List<Wagon> getWagons() {
