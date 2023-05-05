@@ -117,7 +117,6 @@ public class CricketFunctions {
 		if(Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT))) {
 			Files.delete(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT));
 		}
-		
 		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT), 
 				Arrays.asList(txt), StandardOpenOption.CREATE);
 	
@@ -165,18 +164,34 @@ public class CricketFunctions {
 				for(Inning inn : match.getInning()) {
 					for(Player hs : match.getHomeSquad()) {
 						if(match.getEvents().get(i).getEventBatterNo() == hs.getPlayerId()) {
-							batsman_style = hs.getBattingStyle().toUpperCase().charAt(0) + "";
+							if(hs.getBattingStyle() == null) {
+								batsman_style = "";
+							}else {
+								batsman_style = hs.getBattingStyle().toUpperCase().charAt(0) + "";
+							}
 	    				}
 						if(match.getEvents().get(i).getEventBowlerNo() == hs.getPlayerId()) {
-							bowler_handed = hs.getBowlingStyle().toUpperCase().charAt(0) + "";
+							if(hs.getBowlingStyle() == null) {
+								bowler_handed = "";
+							}else {
+								bowler_handed = hs.getBowlingStyle().toUpperCase().charAt(0) + "";
+							}
 	    				}
 					}
 					for(Player as : match.getAwaySquad()) {
 						if(match.getEvents().get(i).getEventBatterNo() == as.getPlayerId()) {
-							batsman_style = as.getBattingStyle().toUpperCase().charAt(0) + "";
+							if(as.getBattingStyle() == null) {
+								batsman_style = "";
+							}else {
+								batsman_style = as.getBattingStyle().toUpperCase().charAt(0) + "";
+							}
 	    				}
 						if(match.getEvents().get(i).getEventBowlerNo() == as.getPlayerId()) {
-							bowler_handed = as.getBowlingStyle().toUpperCase().charAt(0) + "";
+							if(as.getBowlingStyle() == null) {
+								bowler_handed = "";
+							}else {
+								bowler_handed = as.getBowlingStyle().toUpperCase().charAt(0) + "";
+							}
 	    				}
 					}
 	    			for(BattingCard bc : inn.getBattingCard()) {
@@ -1259,7 +1274,7 @@ public class CricketFunctions {
 					
 					has_match_started = false;
 					
-					if(mtch.getMatchType().equalsIgnoreCase(currentMatch.getMatchType())) {
+//					if(mtch.getMatchType().equalsIgnoreCase(currentMatch.getMatchType())) {
 						if(mtch.getInning().get(0).getTotalRuns() > 0 || (6 * mtch.getInning().get(0).getTotalOvers() + mtch.getInning().get(0).getTotalBalls()) > 0) {
 							has_match_started = true;
 						}
@@ -1371,7 +1386,7 @@ public class CricketFunctions {
 								}
 							}
 						}
-					}
+//					}
 				}
 			}
 			
@@ -1380,7 +1395,7 @@ public class CricketFunctions {
 		case "CURRENT_MATCH_DATA":
 			
 			has_match_started = false;
-			if(currentMatch.getMatchType().equalsIgnoreCase(currentMatch.getMatchType())) {
+//			if(currentMatch.getMatchType().equalsIgnoreCase(currentMatch.getMatchType())) {
 				if(currentMatch.getInning().get(0).getTotalRuns() > 0 || (6 * currentMatch.getInning().get(0).getTotalOvers() + currentMatch.getInning().get(0).getTotalBalls()) > 0) {
 					has_match_started = true;
 				}
@@ -1485,7 +1500,7 @@ public class CricketFunctions {
 					}
 				}
 				
-			}
+//			}
 			
 			return past_tournament_stats;
 		}
@@ -2528,7 +2543,7 @@ public class CricketFunctions {
 		for(Inning inn : match.getInning()) {
 			if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
 				BallsBowledInInnings = inn.getTotalOvers() * 6 + inn.getTotalBalls();
-			    if(match.getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
+			    if(match.getMatchType().equalsIgnoreCase(CricketUtil.ODI) || match.getMatchType().equalsIgnoreCase("OD")) {
 			    	
 			    	if(BallsBowledInInnings >= ((inn.getFirstPowerplayStartOver() - 1) * 6 ) && BallsBowledInInnings < (inn.getFirstPowerplayEndOver()*6)) {
 				    	return_pp_txt = CricketUtil.ONE;
