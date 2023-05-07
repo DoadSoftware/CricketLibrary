@@ -1274,17 +1274,17 @@ public class CricketFunctions {
 					
 					has_match_started = false;
 					
-//					if(mtch.getMatchType().equalsIgnoreCase(currentMatch.getMatchType())) {
+					if(mtch.getMatchType().equalsIgnoreCase(currentMatch.getMatchType())) {
 						if(mtch.getInning().get(0).getTotalRuns() > 0 || (6 * mtch.getInning().get(0).getTotalOvers() + mtch.getInning().get(0).getTotalBalls()) > 0) {
 							has_match_started = true;
 						}
 						for(Inning inn : mtch.getInning())
 						{
-							/*if(inn.getTotalRuns() > 0 || (6 * inn.getTotalOvers() + inn.getTotalBalls()) > 0) {
+							if(inn.getTotalRuns() > 0 || (6 * inn.getTotalOvers() + inn.getTotalBalls()) > 0) {
 								has_match_started = true;
 								System.out.println("match file : " + mtch.getMatchFileName() + " - " + has_match_started);
 								System.out.println("Runs :" + inn.getTotalRuns());
-							}*/
+							}
 							
 							if(inn.getBattingCard() != null && inn.getBattingCard().size() > 0) {
 								
@@ -1386,7 +1386,7 @@ public class CricketFunctions {
 								}
 							}
 						}
-//					}
+					}
 				}
 			}
 			
@@ -1395,16 +1395,16 @@ public class CricketFunctions {
 		case "CURRENT_MATCH_DATA":
 			
 			has_match_started = false;
-//			if(currentMatch.getMatchType().equalsIgnoreCase(currentMatch.getMatchType())) {
+			if(currentMatch.getMatchType().equalsIgnoreCase(currentMatch.getMatchType())) {
 				if(currentMatch.getInning().get(0).getTotalRuns() > 0 || (6 * currentMatch.getInning().get(0).getTotalOvers() + currentMatch.getInning().get(0).getTotalBalls()) > 0) {
 					has_match_started = true;
 				}
 				
 				for(Inning inn : currentMatch.getInning())
 				{
-					/*if(inn.getTotalRuns() > 0 || (6 * inn.getTotalOvers() + inn.getTotalBalls()) > 0) {
+					if(inn.getTotalRuns() > 0 || (6 * inn.getTotalOvers() + inn.getTotalBalls()) > 0) {
 						has_match_started = true;
-					}*/
+					}
 
 					for(BattingCard bc : inn.getBattingCard())
 					{
@@ -1500,7 +1500,7 @@ public class CricketFunctions {
 					}
 				}
 				
-//			}
+			}
 			
 			return past_tournament_stats;
 		}

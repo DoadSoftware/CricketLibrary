@@ -182,6 +182,9 @@ public class Match {
   
   @XmlTransient
   private NameSuper nameSuper;
+  
+  @XmlTransient
+  private String LastXball;
 
   @XmlTransient
   private int selected_inning;
@@ -627,6 +630,14 @@ public List<Event> getEvents() {
 
 public void setEvents(List<Event> events) {
 	this.events = events;
+}
+
+public String getLastXball() {
+	return LastXball;
+}
+
+public void setLastXball(String lastXball) {
+	LastXball = lastXball;
 }
 
 }
