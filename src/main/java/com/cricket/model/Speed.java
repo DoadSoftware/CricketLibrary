@@ -37,6 +37,12 @@ public Speed(long speedFileModifiedTime) {
 	this.speedFileModifiedTime = speedFileModifiedTime;
 }
 
+public Speed(String speedValue, long speedFileModifiedTime) {
+	super();
+	this.speedValue = speedValue;
+	this.speedFileModifiedTime = speedFileModifiedTime;
+}
+
 public Speed(int speedNumber, String speedValue, String speedExtra, int overNumber, int ballNumber) {
 	super();
 	this.speedNumber = speedNumber;

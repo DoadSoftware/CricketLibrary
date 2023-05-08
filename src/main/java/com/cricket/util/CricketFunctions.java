@@ -969,15 +969,14 @@ public class CricketFunctions {
 	    return null;
 	}
 	public static Speed getCurrentSpeed(String speedFilePath, Speed lastSpeed) throws IOException {
-		Speed speed_to_return = new Speed();
-		File speed_file = new File(speedFilePath);
-		if(speed_file.exists()) {
-			if(lastSpeed.getSpeedFileModifiedTime() != speed_file.lastModified()) {
-	        	for(String str_line : Files.readAllLines(Paths.get(speedFilePath), StandardCharsets.UTF_8)) {
-					speed_to_return.setSpeedValue(str_line);
-					speed_to_return.setSpeedFileModifiedTime(speed_file.lastModified());
-					return speed_to_return;
-	        	}
+		if(!speedFilePath.trim().isEmpty()) {
+			File speed_file = new File(speedFilePath);
+			if(speed_file.exists()) {
+				if(lastSpeed.getSpeedFileModifiedTime() != speed_file.lastModified()) {
+		        	for(String str_line : Files.readAllLines(Paths.get(speedFilePath), StandardCharsets.UTF_8)) {
+		        		return new Speed(str_line, speed_file.lastModified());
+		        	}
+				}
 			}
 		}
 		return null;
