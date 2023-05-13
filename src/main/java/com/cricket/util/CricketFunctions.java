@@ -67,26 +67,24 @@ public class CricketFunctions {
 		
 		switch (whatToProcess) {
 		case CricketUtil.WRITE:
-			if(match.getSaveMatchFileAs().equalsIgnoreCase(CricketUtil.JSON)) {
-				System.out.println("objectWriter.writeValueAsString(match).getBytes() length = " + objectWriter.writeValueAsString(match).getBytes().length);
+			if(match.getMatchFileName() != null && match.getMatchFileName().toUpperCase().contains(CricketUtil.JSON)) {
 				Files.write(Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
 					+ match.getMatchFileName().toUpperCase().replace(".XML", ".JSON")), 
 					objectWriter.writeValueAsString(match).getBytes());
-				
-			} else if(match.getSaveMatchFileAs().equalsIgnoreCase(CricketUtil.XML)) {
+			} else if(match.getMatchFileName() != null && match.getMatchFileName().toUpperCase().contains(CricketUtil.XML)) {
 				JAXBContext.newInstance(Match.class).createMarshaller().marshal(match, 
 					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + 
 					match.getMatchFileName().toUpperCase().replace(".JSON", ".XML")));
 			}
 			break;
 		case CricketUtil.READ:
-			if(match.getSaveMatchFileAs().equalsIgnoreCase(CricketUtil.JSON)) {
+			if(match.getMatchFileName() != null && match.getMatchFileName().toUpperCase().contains(CricketUtil.JSON)) {
 				this_match = new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
 						+ match.getMatchFileName().toUpperCase().replace(".XML", ".JSON")), Match.class);
-			} else if(match.getSaveMatchFileAs().equalsIgnoreCase(CricketUtil.XML)) {
+			} else if(match.getMatchFileName() != null && match.getMatchFileName().toUpperCase().contains(CricketUtil.XML)) {
 				this_match = (Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
-					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
-					+ match.getMatchFileName().toUpperCase().replace(".JSON", ".XML")));
+						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
+						+ match.getMatchFileName().toUpperCase().replace(".JSON", ".XML")));
 			}
 			break;
 		}
