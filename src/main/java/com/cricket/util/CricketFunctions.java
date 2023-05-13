@@ -670,26 +670,26 @@ public class CricketFunctions {
 				break;
 			}
 			if(which_language.equalsIgnoreCase("ENGLISH")) {
-				if(SendTextIn.contains("$Language$")) {
-					print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language1$") + "\0");
+				if(SendTextIn.contains("$English$")) {
+					print_writers.get(i).println("-1 " + SendTextIn.replace("$English$", "$English$") + "\0");
 				}else {
 					print_writers.get(i).println("-1 " + SendTextIn + "\0");
 				}
 			}else if(which_language.equalsIgnoreCase("HINDI")) {
-				if(SendTextIn.contains("$Language$")) {
-					print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language3$") + "\0");
+				if(SendTextIn.contains("$English$")) {
+					print_writers.get(i).println("-1 " + SendTextIn.replace("$English$", "$Hindi$") + "\0");
 				}else {
 					print_writers.get(i).println("-1 " + SendTextIn + "\0");
 				}
 			}else if(which_language.equalsIgnoreCase("TAMIL")) {
-				if(SendTextIn.contains("$Language$")) {
-					print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language6$") + "\0");
+				if(SendTextIn.contains("$English$")) {
+					print_writers.get(i).println("-1 " + SendTextIn.replace("$English$", "$Tamil$") + "\0");
 				}else {
 					print_writers.get(i).println("-1 " + SendTextIn + "\0");
 				}
 			}else if(which_language.equalsIgnoreCase("TELUGU")) {
-				if(SendTextIn.contains("$Language$")) {
-					print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language7$") + "\0");
+				if(SendTextIn.contains("$English$")) {
+					print_writers.get(i).println("-1 " + SendTextIn.replace("$English$", "$Telugu$") + "\0");
 				}else {
 					print_writers.get(i).println("-1 " + SendTextIn + "\0");
 				}
@@ -717,13 +717,13 @@ public class CricketFunctions {
 				break;
 			}
 			if(which_language.equalsIgnoreCase("ENGLISH")) {
-				print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language1$") + foreignLanguageData.get(foreignLanguageData.size() - 1).getEnglishText() + "\0");
+				print_writers.get(i).println("-1 " + SendTextIn.replace("$English$", "$English$") + foreignLanguageData.get(foreignLanguageData.size() - 1).getEnglishText() + "\0");
 			}else if(which_language.equalsIgnoreCase("HINDI")) {
-				print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language3$") + foreignLanguageData.get(foreignLanguageData.size() - 1).getHindiText() + "\0");
+				print_writers.get(i).println("-1 " + SendTextIn.replace("$English$", "$Hindi$") + foreignLanguageData.get(foreignLanguageData.size() - 1).getHindiText() + "\0");
 			}else if(which_language.equalsIgnoreCase("TAMIL")) {
-				print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language6$") + foreignLanguageData.get(foreignLanguageData.size() - 1).getTamilText() + "\0");
+				print_writers.get(i).println("-1 " + SendTextIn.replace("$English$", "$Tamil$") + foreignLanguageData.get(foreignLanguageData.size() - 1).getTamilText() + "\0");
 			}else if(which_language.equalsIgnoreCase("TELUGU")) {
-				print_writers.get(i).println("-1 " + SendTextIn.replace("$Language$", "$Language7$") + foreignLanguageData.get(foreignLanguageData.size() - 1).getTeluguText() + "\0");
+				print_writers.get(i).println("-1 " + SendTextIn.replace("$English$", "$Telugu$") + foreignLanguageData.get(foreignLanguageData.size() - 1).getTeluguText() + "\0");
 			}
 		}
 	}			
