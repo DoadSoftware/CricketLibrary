@@ -7,7 +7,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.cricket.util.CricketUtil;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @XmlRootElement(name="battingCard")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class BattingCard implements Comparable<BattingCard>{
@@ -143,6 +145,7 @@ public BattingCard(int playerId, int runs, int fours, int sixes, int balls) {
 	this.sixes = sixes;
 	this.balls = balls;
 }
+
 public int getBatsmanScoreSortData() {
 	int sortData = this.getRuns();
 	if(this.getStatus() != null && this.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {

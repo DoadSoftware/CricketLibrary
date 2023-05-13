@@ -13,6 +13,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Match {
 
+  @XmlElement(name = "saveMatchFileAs")
+  private String saveMatchFileAs;
+	
   @XmlElement(name = "generateInteractiveFile")
   private String generateInteractiveFile;
 	
@@ -192,6 +195,14 @@ public class Match {
   @XmlTransient
   private int which_key_press;
   
+public String getSaveMatchFileAs() {
+	return saveMatchFileAs;
+}
+
+public void setSaveMatchFileAs(String saveMatchFileAs) {
+	this.saveMatchFileAs = saveMatchFileAs;
+}
+
 public MatchClock getClock() {
 	return clock;
 }

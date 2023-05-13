@@ -9,6 +9,9 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 @XmlRootElement(name="bowlingCard")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class BowlingCard implements Comparable<BowlingCard> {

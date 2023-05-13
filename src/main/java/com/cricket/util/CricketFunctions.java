@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
@@ -50,9 +51,47 @@ import com.cricket.model.Statistics;
 import com.cricket.model.Team;
 import com.cricket.model.Tournament;
 import com.cricket.service.CricketService;
+import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 public class CricketFunctions {
 	
+	public static ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+	
+	public static Match readOrSaveMatchFile(String whatToProcess, Match match) 
+		throws JAXBException, StreamWriteException, DatabindException, IOException, URISyntaxException
+	{
+		Match this_match = new Match();
+		
+		switch (whatToProcess) {
+		case CricketUtil.WRITE:
+			if(match.getSaveMatchFileAs().equalsIgnoreCase(CricketUtil.JSON)) {
+				System.out.println("objectWriter.writeValueAsString(match).getBytes() length = " + objectWriter.writeValueAsString(match).getBytes().length);
+				Files.write(Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
+					+ match.getMatchFileName().toUpperCase().replace(".XML", ".JSON")), 
+					objectWriter.writeValueAsString(match).getBytes());
+				
+			} else if(match.getSaveMatchFileAs().equalsIgnoreCase(CricketUtil.XML)) {
+				JAXBContext.newInstance(Match.class).createMarshaller().marshal(match, 
+					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + 
+					match.getMatchFileName().toUpperCase().replace(".JSON", ".XML")));
+			}
+			break;
+		case CricketUtil.READ:
+			if(match.getSaveMatchFileAs().equalsIgnoreCase(CricketUtil.JSON)) {
+				this_match = new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
+						+ match.getMatchFileName().toUpperCase().replace(".XML", ".JSON")), Match.class);
+			} else if(match.getSaveMatchFileAs().equalsIgnoreCase(CricketUtil.XML)) {
+				this_match = (Match) JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
+					new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
+					+ match.getMatchFileName().toUpperCase().replace(".JSON", ".XML")));
+			}
+			break;
+		}
+		return this_match;
+	}
 	public static String deletePreview() throws IOException
     {
 		if(new File(CricketUtil.PREVIEW).exists()) {
