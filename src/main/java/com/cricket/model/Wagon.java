@@ -13,7 +13,7 @@ public class Wagon {
   private int wagonNumber;
 
   @XmlElement(name = "wagonSector")
-  private String wagonSector;
+  private int wagonSector;
 
   @XmlElement(name = "wagonXCord")
   private int wagonXCord;
@@ -43,14 +43,8 @@ public Wagon() {
 	super();
 }
 
-public Wagon(int wagonXCord, int wagonYCord) {
-	super();
-	this.wagonXCord = wagonXCord;
-	this.wagonYCord = wagonYCord;
-}
-
-public Wagon(int wagonNumber, String wagonSector, int wagonXCord, int wagonYCord, int batterId, int bowlerId,
-		int runs, int inningNumber, int overNumber, int ballNumber) {
+public Wagon(int wagonNumber, int wagonSector, int wagonXCord, int wagonYCord, int batterId, int bowlerId, int runs,
+		int inningNumber, int overNumber, int ballNumber) {
 	super();
 	this.wagonNumber = wagonNumber;
 	this.wagonSector = wagonSector;
@@ -72,11 +66,11 @@ public void setWagonNumber(int wagonNumber) {
 	this.wagonNumber = wagonNumber;
 }
 
-public String getWagonSector() {
+public int getWagonSector() {
 	return wagonSector;
 }
 
-public void setWagonSector(String wagonSector) {
+public void setWagonSector(int wagonSector) {
 	this.wagonSector = wagonSector;
 }
 
