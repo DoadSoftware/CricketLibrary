@@ -10,7 +10,8 @@ public class CricketUtil {
 	public final static String INTERACTIVE_DIRECTORY = "Interactive/";
 	public final static String BACK_UP_DIRECTORY = "Backup/";
 	public final static String EVENT_DIRECTORY = "Event/";
-	public final static String SPEED_DIRECTORY = "Speed//";
+	public final static String SETUP_DIRECTORY = "Setup/";
+	public final static String SPEED_DIRECTORY = "Speed/";
 	public final static String MATCHES_DIRECTORY = "Matches/";
 	public final static String SCENES_DIRECTORY = "Scenes/";
 	public final static String CONFIGURATIONS_DIRECTORY = "Configurations/";
@@ -35,6 +36,8 @@ public class CricketUtil {
 	public final static String BOWL = "bowl";
 	public final static String DOUBLE_BACKSLASH = "\\";
 	public final static String MATCH = "MATCH";
+	public final static String SETUP = "SETUP";
+	public final static String EVENT = "EVENT";
 	public final static String ELECTED = "ELECTED";
 	public final static String CHOSE = "CHOSE";
 
