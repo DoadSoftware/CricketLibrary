@@ -2,15 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.cricket</groupId>
   <artifactId>CricketLibrary</artifactId>
-<<<<<<< Updated upstream
   <version>1.188</version>
-=======
-<<<<<<< HEAD
-  <version>1.190</version>
-=======
-  <version>1.188</version>
->>>>>>> 3ad4fc0959b98481d0ab0ccce38d9e18aed1bf64
->>>>>>> Stashed changes
   <name>CricketLibrary</name>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
