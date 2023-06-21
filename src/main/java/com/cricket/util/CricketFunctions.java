@@ -1144,14 +1144,42 @@ public class CricketFunctions {
 	
 	}
 	
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+	public static List<Match> getTournamentMatches(File[] files, CricketService cricketService) 
+			throws IllegalAccessException, InvocationTargetException, JAXBException, StreamWriteException, DatabindException, IOException, URISyntaxException
+=======
+>>>>>>> Stashed changes
 	public static List<MatchAllData> getTournamentMatches(File[] files, CricketService cricketService) 
 			throws IllegalAccessException, InvocationTargetException, JAXBException
+>>>>>>> 3ad4fc0959b98481d0ab0ccce38d9e18aed1bf64
 	{
 		List<MatchAllData> tournament_matches = new ArrayList<MatchAllData>();
 		for(File file : files) {
+<<<<<<< Updated upstream
 			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService, (MatchAllData) 
 				JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
 				new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + file.getName()))));
+=======
+<<<<<<< HEAD
+//			System.out.println("name = " + file.getName());
+//			match.setMatchFileName(file.getName().replace(".json", ""));
+//			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService, CricketFunctions.readOrSaveMatchFile(CricketUtil.READ, match)));
+//			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService, (Match)
+//				JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
+//				new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + file.getName()))));
+			
+			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService,
+					new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + 
+							file.getName().toUpperCase()), Match.class)));
+			//System.out.println(CricketUtil.CRICKET_SERVER_DIRECTORY);
+=======
+			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService, (MatchAllData) 
+				JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
+				new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + file.getName()))));
+>>>>>>> 3ad4fc0959b98481d0ab0ccce38d9e18aed1bf64
+>>>>>>> Stashed changes
 		}
 		return tournament_matches;
 	}

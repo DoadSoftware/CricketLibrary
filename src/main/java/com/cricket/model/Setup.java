@@ -2,6 +2,158 @@ package com.cricket.model;
 
 import java.util.List;
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+@XmlRootElement(name="Setup")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Setup {
+
+  @XmlElement(name = "saveMatchFileAs")
+  private String saveMatchFileAs;
+	
+  @XmlElement(name = "generateInteractiveFile")
+  private String generateInteractiveFile;
+	
+  @XmlElement(name = "wagonXOffSet")
+  private int wagonXOffSet;
+
+  @XmlElement(name = "wagonYOffSet")
+  private int wagonYOffSet;
+  
+  @XmlElement(name = "followOn")
+  private String followOn;
+
+  @XmlElement(name = "followOnThreshold")
+  private int followOnThreshold;
+
+  @XmlElement(name = "homeSubstitutesNumber")
+  private int homeSubstitutesNumber;
+  
+  @XmlElement(name = "awaySubstitutesNumber")
+  private int awaySubstitutesNumber;
+	
+  @XmlElement(name = "reviewsPerTeam")
+  private String reviewsPerTeam;
+	
+  @XmlElement(name = "matchFileTimeStamp")
+  private String matchFileTimeStamp;
+
+  @XmlElement(name = "speedFilePath")
+  private String speedFilePath;
+
+  @XmlElement(name = "matchType")
+  private String matchType;
+
+  @XmlElement(name = "readPhotoColumn")
+  private String readPhotoColumn;
+  
+  @XmlElement(name = "tossResult")
+  private String tossResult;
+
+  @XmlElement(name = "tossWinningDecision")
+  private String tossWinningDecision;
+
+  @XmlElement(name = "tournament")
+  private String tournament;
+
+  @XmlElement(name = "matchIdent")
+  private String matchIdent;
+
+  @XmlElement(name = "tossWinningTeam")
+  private int tossWinningTeam;
+
+  @XmlElement(name = "numberOfPowerplays")
+  private int numberOfPowerplays;
+  
+  @XmlElement(name = "maxOvers")
+  private int maxOvers;
+
+  @XmlElement(name = "reducedOvers")
+  private int reducedOvers;
+  
+  @XmlElement(name = "homeTeamId")
+  private int homeTeamId;
+
+  @XmlElement(name = "awayTeamId")
+  private int awayTeamId;
+
+  @XmlElement(name = "groundId")
+  private int groundId;
+
+  @XmlElement(name = "seasonId")
+  private int seasonId;
+  
+  @XmlElement(name = "targetRuns")
+  private int targetRuns;
+
+  @XmlElement(name = "targetType")
+  private String targetType;
+  
+  @XmlElement(name = "targetOvers")
+  private String targetOvers;
+
+  @XmlElement(name = "venueName")
+  private String venueName;
+
+  @XmlElement(name = "homeTeam")
+  private Team homeTeam;
+
+  @XmlElement(name = "awayTeam")
+  private Team awayTeam;
+
+  @XmlElement(name = "setupHomeTeam")
+  private String setupHomeTeam;
+
+  @XmlElement(name = "setupAwayTeam")
+  private String setupAwayTeam;
+  
+  @XmlElementWrapper(name = "homeSquad")
+  @XmlElement(name = "homeSquad")
+  private List<Player> homeSquad;
+
+  @XmlElementWrapper(name = "homeSubstitutes")
+  @XmlElement(name = "homeSubstitutes")
+  private List<Player> homeSubstitutes;
+  
+  @XmlElementWrapper(name = "awaySquad")
+  @XmlElement(name = "awaySquad")
+  private List<Player> awaySquad;
+
+  @XmlElementWrapper(name = "awaySubstitutes")
+  @XmlElement(name = "awaySubstitutes")
+  private List<Player> awaySubstitutes;
+  
+  @XmlElementWrapper(name = "homeOtherSquad")
+  @XmlElement(name = "homeOtherSquad")
+  private List<Player> homeOtherSquad;
+
+  @XmlElementWrapper(name = "awayOtherSquad")
+  @XmlElement(name = "awayOtherSquad")
+  private List<Player> awayOtherSquad;
+  
+  @XmlTransient
+  private Ground ground;
+  
+  @XmlTransient
+  private NameSuper nameSuper;
+  
+  @XmlTransient
+  private String LastXball;
+
+  @XmlTransient
+  private int selected_inning;
+  
+  @XmlTransient
+=======
+>>>>>>> Stashed changes
 public class Setup {
 
   private String saveMatchFileAs;
@@ -90,6 +242,10 @@ public class Setup {
 
   private int selected_inning;
   
+<<<<<<< Updated upstream
+=======
+>>>>>>> 3ad4fc0959b98481d0ab0ccce38d9e18aed1bf64
+>>>>>>> Stashed changes
   private int which_key_press;
   
 public String getSaveMatchFileAs() {
@@ -444,6 +600,11 @@ public void setLastXball(String lastXball) {
 	LastXball = lastXball;
 }
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
 @Override
 public String toString() {
 	return "Setup [saveMatchFileAs=" + saveMatchFileAs + ", generateInteractiveFile=" + generateInteractiveFile
@@ -464,4 +625,8 @@ public String toString() {
 			+ LastXball + ", selected_inning=" + selected_inning + ", which_key_press=" + which_key_press + "]";
 }
 
+<<<<<<< Updated upstream
+=======
+>>>>>>> 3ad4fc0959b98481d0ab0ccce38d9e18aed1bf64
+>>>>>>> Stashed changes
 }
