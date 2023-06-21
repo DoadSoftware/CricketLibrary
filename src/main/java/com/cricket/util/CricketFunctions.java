@@ -1150,7 +1150,7 @@ public class CricketFunctions {
 		List<MatchAllData> tournament_matches = new ArrayList<MatchAllData>();
 		for(File file : files) {
 			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService, (MatchAllData) 
-				JAXBContext.newInstance(Match.class).createUnmarshaller().unmarshal(
+				JAXBContext.newInstance(MatchAllData.class).createUnmarshaller().unmarshal(
 				new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + file.getName()))));
 		}
 		return tournament_matches;
