@@ -54,6 +54,7 @@ import com.cricket.model.Statistics;
 import com.cricket.model.Team;
 import com.cricket.model.Tournament;
 import com.cricket.service.CricketService;
+import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -1145,22 +1146,33 @@ public class CricketFunctions {
 	}
 	
 	public static List<MatchAllData> getTournamentMatches(File[] files, CricketService cricketService) 
-			throws IllegalAccessException, InvocationTargetException, JAXBException
+			throws IllegalAccessException, InvocationTargetException, JAXBException, StreamReadException, DatabindException, IOException
 	{
+		MatchAllData this_matchAllData = new MatchAllData();
 		List<MatchAllData> tournament_matches = new ArrayList<MatchAllData>();
 		for(File file : files) {
-			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService, (MatchAllData) 
-				JAXBContext.newInstance(MatchAllData.class).createUnmarshaller().unmarshal(
-				new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + file.getName()))));
+//			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService, (MatchAllData) 
+//				JAXBContext.newInstance(MatchAllData.class).createUnmarshaller().unmarshal(
+//				new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + file.getName()))));
+			if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + 
+							file.getName().toUpperCase()).exists()) {
+				this_matchAllData.setSetup(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + 
+							file.getName().toUpperCase()), Setup.class));
+				this_matchAllData.setMatch(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + 
+						file.getName().toUpperCase()), Match.class));
+				this_matchAllData.setEventFile(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + 
+						file.getName().toUpperCase()), EventFile.class));
+			}
+			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService,this_matchAllData));
 		}
 		return tournament_matches;
 	}
-	public static String gettournamentFoursAndSixes(List<Match> tournament_matches,MatchAllData currentMatch) 
+	public static String gettournamentFoursAndSixes(List<MatchAllData> tournament_matches,MatchAllData currentMatch) 
 	{
 		int Four = 0, Six = 0;
-		for(Match match : tournament_matches) {
-			if(!match.getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
-				for(Inning inn : match.getInning()) {
+		for(MatchAllData match : tournament_matches) {
+			if(!match.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
+				for(Inning inn : match.getMatch().getInning()) {
 					Four = Four + inn.getTotalFours();
 					Six = Six + inn.getTotalSixes();
 				}
@@ -1175,11 +1187,11 @@ public class CricketFunctions {
 		return Four + "," + Six;
 	}
 
-	public static Statistics updateTournamentDataWithStats(Statistics stat,List<MatchAllData> tournament_matches,Match currentMatch) 
+	public static Statistics updateTournamentDataWithStats(Statistics stat,List<MatchAllData> tournament_matches,MatchAllData currentMatch) 
 	{
 		boolean player_found = false;
 		for(MatchAllData match : tournament_matches) {
-			if(!match.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatchFileName())) {
+			if(!match.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
 				if(stat.getStats_type().getStats_short_name().equalsIgnoreCase(match.getSetup().getMatchType())) {
 					for(Inning inn : match.getMatch().getInning()) {
 						for(BattingCard bc : inn.getBattingCard()) {

@@ -1,117 +1,78 @@
 package com.cricket.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@XmlRootElement(name="event")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Event implements Comparable<Event> {
 
-  @XmlElement(name = "eventNumber")
   private int eventNumber;
 
-  @XmlElement(name = "eventStatNumber")
   private int eventStatNumber;
   
-  @XmlElement(name = "eventWasABoundary")
   private String eventWasABoundary;
   
-  @XmlElement(name = "eventType")
   private String eventType;
 
-  @XmlElement(name = "eventInningNumber")
   private int eventInningNumber;
   
-  @XmlElement(name = "eventBatterNo")
   private int eventBatterNo;
 
-  @XmlElement(name = "eventConcussionReplacePlayerId")
   private int eventConcussionReplacePlayerId;
   
-  @XmlElement(name = "eventOnStrike")
   private String eventOnStrike;
 
-  @XmlElement(name = "eventBatterPosition")
   private int eventBatterPosition;
 
-  @XmlElement(name = "eventBatterPreviousPosition")
   private int eventBatterPreviousPosition;
   
-  @XmlElement(name = "eventOtherBatterNo")
   private int eventOtherBatterNo;
   
-  @XmlElement(name = "eventBowlerNo")
   private int eventBowlerNo;
 
-  @XmlElement(name = "eventBowlingEnd")
   private int eventBowlingEnd;
   
-  @XmlElement(name = "eventOtherBowlerNo")
   private int eventOtherBowlerNo;
 
-  @XmlElement(name = "eventRuns")
   private int eventRuns;
 
-  @XmlElement(name = "EventWickets")
   private int eventWickets;
 
-  @XmlElement(name = "eventFours")
   private int eventFours;
 
-  @XmlElement(name = "eventSixes")
   private int eventSixes;
   
-  @XmlElement(name = "eventOverNo")
   private int eventOverNo;
   
-  @XmlElement(name = "eventBallNo")
   private int eventBallNo;
 
-  @XmlElement(name = "eventExtra")
   private String eventExtra;
   
-  @XmlElement(name = "eventExtraRuns")
   private int eventExtraRuns;
 
-  @XmlElement(name = "eventSubExtra")
   private String eventSubExtra;
   
-  @XmlElement(name = "eventSubExtraRuns")
   private int eventSubExtraRuns;
   
-  @XmlElement(name = "eventHowOut")
   private String eventHowOut;
 
-  @XmlElement(name = "eventHowOutBatterNo")
   private int eventHowOutBatterNo;
   
-  @XmlElement(name = "eventHowOutFielderId")
   private int eventHowOutFielderId;
 
-  @XmlElement(name = "eventTotalRunsInAnOver")
   private int eventTotalRunsInAnOver;
 
-  @XmlElement(name = "doNotIncrementBall")
   private String doNotIncrementBall;
 
-  @XmlElement(name = "eventDescription")
   private String eventDescription;
 
-  @XmlElement(name = "substitutionMade")
   private String substitutionMade;
 
-  @XmlElement(name = "eventSpeed")
   private String eventSpeed;
 
-  @XmlElement(name = "EventBattingCard")
   private BattingCard EventBattingCard;
 
-  @XmlElement(name = "EventBowlingCard")
   private BowlingCard EventBowlingCard;
 
-  @XmlElement(name = "EventPartnership")
   private Partnership EventPartnership;
 
 public Event() {
