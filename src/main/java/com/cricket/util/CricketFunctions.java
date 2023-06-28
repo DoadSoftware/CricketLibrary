@@ -1160,6 +1160,10 @@ public class CricketFunctions {
 							file.getName().toUpperCase()), Setup.class));
 				this_matchAllData.setMatch(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + 
 						file.getName().toUpperCase()), Match.class));
+				
+			}
+			if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + 
+					file.getName().toUpperCase()).exists()) {
 				this_matchAllData.setEventFile(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + 
 						file.getName().toUpperCase()), EventFile.class));
 			}
