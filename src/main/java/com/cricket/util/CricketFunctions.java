@@ -1151,24 +1151,22 @@ public class CricketFunctions {
 		MatchAllData this_matchAllData = new MatchAllData();
 		List<MatchAllData> tournament_matches = new ArrayList<MatchAllData>();
 		for(File file : files) {
-//			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService, (MatchAllData) 
-//				JAXBContext.newInstance(MatchAllData.class).createUnmarshaller().unmarshal(
-//				new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + file.getName()))));
-			if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + 
-							file.getName().toUpperCase()).exists()) {
+			this_matchAllData = new MatchAllData();
+			if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + file.getName().toUpperCase()).exists()) {
 				this_matchAllData.setSetup(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + 
 							file.getName().toUpperCase()), Setup.class));
 				this_matchAllData.setMatch(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY + 
 						file.getName().toUpperCase()), Match.class));
-				
 			}
-			if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + 
-					file.getName().toUpperCase()).exists()) {
+			if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + file.getName().toUpperCase()).exists()) {
 				this_matchAllData.setEventFile(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + 
 						file.getName().toUpperCase()), EventFile.class));
 			}
+			
 			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService,this_matchAllData));
+			//tournament_matches.add(this_matchAllData);
 		}
+		
 		return tournament_matches;
 	}
 	public static String gettournamentFoursAndSixes(List<MatchAllData> tournament_matches,MatchAllData currentMatch) 
@@ -1351,8 +1349,6 @@ public class CricketFunctions {
 						{
 							if(inn.getTotalRuns() > 0 || (6 * inn.getTotalOvers() + inn.getTotalBalls()) > 0) {
 								has_match_started = true;
-								System.out.println("match file : " + mtch.getMatch().getMatchFileName() + " - " + has_match_started);
-								System.out.println("Runs :" + inn.getTotalRuns());
 							}
 							
 							if(inn.getBattingCard() != null && inn.getBattingCard().size() > 0) {
@@ -3314,6 +3310,67 @@ public class CricketFunctions {
 		    }
 	    }
 	    return matchSummaryStatus;
+	}
+	
+	public static String playerStyle(String ProfileType,String bat_ball_style) {
+		String return_value="";
+		
+		switch(ProfileType) {
+		case CricketUtil.BATSMAN:
+			if(bat_ball_style.equalsIgnoreCase("RHB")) {
+				return_value= "RIGHT HANDED BATTER" ;
+			}else if(bat_ball_style.equalsIgnoreCase("LHB")) {
+				return_value= "LEFT HANDED BATTER" ;
+			}
+			break;
+		
+		case CricketUtil.BOWLER:
+			
+			if(bat_ball_style.equalsIgnoreCase("RF")) {
+				return_value = "RIGHT ARM FAST" ;
+			}else if(bat_ball_style.equalsIgnoreCase("RFM")) {
+				return_value= "RIGHT ARM FAST MEDIUM" ;
+			}else if(bat_ball_style.equalsIgnoreCase("RMF")) {
+				return_value= "RIGHT ARM MEDIUM FAST" ;
+			}else if(bat_ball_style.equalsIgnoreCase("RM")) {
+				return_value= "RIGHT ARM MEDIUM" ;
+			}else if(bat_ball_style.equalsIgnoreCase("RSM")) {
+				return_value= "RIGHT ARM SLOW MEDIUM" ;
+			}else if(bat_ball_style.equalsIgnoreCase("ROB")) {
+				return_value= "RIGHT ARM OFF-BREAK" ;
+			}else if(bat_ball_style.equalsIgnoreCase("RLB")) {
+				return_value= "RIGHT ARM LEG-BREAK" ;
+			}
+			else if(bat_ball_style.equalsIgnoreCase("RAB")) {
+				return_value= "RIGHT ARM BOWLER" ;
+			}
+			else if(bat_ball_style.equalsIgnoreCase("LAB")) {
+				return_value= "LEFT ARM BOWLER";
+			}
+			else if(bat_ball_style.equalsIgnoreCase("LF")) {
+				return_value= "LEFT ARM FAST" ;
+			}else if(bat_ball_style.equalsIgnoreCase("LFM")) {
+				return_value= "LEFT ARM FAST MEDIUM" ;
+			}else if(bat_ball_style.equalsIgnoreCase("LMF")) {
+				return_value= "LEFT ARM MEDIUM FAST" ;
+			}else if(bat_ball_style.equalsIgnoreCase("LM")) {
+				return_value= "LEFT ARM MEDIUM" ;
+			}else if(bat_ball_style.equalsIgnoreCase("LSL")) {
+				return_value= "SLOW LEFT ARM" ;
+			}else if(bat_ball_style.equalsIgnoreCase("WSL")) {
+				return_value= "LEFT ARM WRIST SPIN" ;
+			}else if(bat_ball_style.equalsIgnoreCase("LCH")) {
+				return_value= "LEFT ARM CHINAMAN" ;
+			}else if(bat_ball_style.equalsIgnoreCase("RLG")) {
+				return_value= "RIGHT ARM LEG-BREAK" ;
+			}else if(bat_ball_style.equalsIgnoreCase("WSR")) {
+				return_value= "RIGHT ARM WRIST SPIN" ;
+			}else if(bat_ball_style.equalsIgnoreCase("LSO")) {
+				return_value= "LEFT ARM ORTHODOX" ;
+			}
+			break;
+		}
+		return return_value ;
 	}
 	
 	public static String getPowerPlayScore(Inning inning,int inn_number, String seperator,List<Event> events) {

@@ -27,6 +27,7 @@ public EventFile getEventFile() {
 public void setEventFile(EventFile eventFile) {
 	this.eventFile = eventFile;
 }
+
 @Override
 public String toString() {
 	return "MatchAllData [match=" + match + ", setup=" + setup + ", eventFile=" + eventFile + "]";
