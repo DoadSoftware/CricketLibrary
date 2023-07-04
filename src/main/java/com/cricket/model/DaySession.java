@@ -1,39 +1,23 @@
 package com.cricket.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement(name="daySession")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class DaySession {
 
-  @XmlElement(name = "dayNumber")
   private int dayNumber;
 
-  @XmlElement(name = "sessionNumber")
   private int sessionNumber;
 
-  @XmlElement(name = "isCurrentSession")
   private String isCurrentSession;
   
-  @XmlElement(name = "totalRuns")
   private int totalRuns;
 
-  @XmlElement(name = "totalBalls")
   private int totalBalls;
 
-  @XmlElement(name = "totalWickets")
   private int totalWickets;
 
-  @XmlElement(name = "totalFours")
   private int totalFours;
 
-  @XmlElement(name = "totalSixes")
   private int totalSixes;
 
-  @XmlElement(name = "totalSeconds")
   private long totalSeconds;
 
 public DaySession() {

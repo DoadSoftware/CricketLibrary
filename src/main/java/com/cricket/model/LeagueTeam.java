@@ -1,41 +1,28 @@
 package com.cricket.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@XmlRootElement(name="LeagueTeam")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class LeagueTeam {
-	@XmlElement(name="QualifiedStatus")
+
 	private String QualifiedStatus;
 	
-	@XmlElement(name="Pool")
 	private String pool;
 	
-	@XmlElement(name="TeamName")
 	private String TeamName;
 	
-	@XmlElement(name="Played")
 	private int Played;
 	
-	@XmlElement(name="Won")
 	private int Won;
 	
-	@XmlElement(name="Lost")
 	private int Lost;
 	
-	@XmlElement(name="NoResult")
 	private int NoResult;
 	
-	@XmlElement(name="Points")
 	private String Points;
 	
-	@XmlElement(name="NetRunRate")
 	private double NetRunRate;
 	
-	@XmlElement(name="Count")
 	private String Count;
 
 	

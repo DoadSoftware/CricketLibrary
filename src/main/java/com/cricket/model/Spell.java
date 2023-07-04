@@ -1,30 +1,20 @@
 package com.cricket.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@XmlRootElement(name="spell")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Spell {
 
-  @XmlElement(name = "spellNumber")
   private int spellNumber;
 
-  @XmlElement(name = "playerId")
   private int playerId;
 
-  @XmlElement(name = "balls")
   private int balls;
 
-  @XmlElement(name = "runs")
   private int runs;
   
-  @XmlElement(name = "wickets")
   private int wickets;
 
-  @XmlElement(name = "maidens")
   private int maidens;
 
 public Spell() {

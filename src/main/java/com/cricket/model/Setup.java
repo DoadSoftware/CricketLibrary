@@ -1,7 +1,7 @@
 package com.cricket.model;
 
 import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -65,8 +65,10 @@ public class Setup {
 
   private String venueName;
 
+  @JsonIgnore
   private Team homeTeam;
 
+  @JsonIgnore
   private Team awayTeam;
 
   private String setupHomeTeam;
@@ -85,14 +87,19 @@ public class Setup {
 
   private List<Player> awayOtherSquad;
 
+  @JsonIgnore
   private Ground ground;
   
+  @JsonIgnore
   private NameSuper nameSuper;
   
+  @JsonIgnore
   private String LastXball;
 
+  @JsonIgnore
   private int selected_inning;
   
+  @JsonIgnore
   private int which_key_press;
   
 public String getSaveMatchFileAs() {

@@ -1,31 +1,22 @@
 package com.cricket.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@XmlRootElement(name="speeds")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Speed {
 
-  @XmlElement(name = "speedNumber")
   private int speedNumber;
 
-  @XmlElement(name = "speedValue")
   private String speedValue;
 
-  @XmlElement(name = "speedExtra")
   private String speedExtra;
   
-  @XmlElement(name = "overNumber")
   private int overNumber;
 
-  @XmlElement(name = "ballNumber")
   private int ballNumber;
 
-  @XmlTransient
+  @JsonIgnore
   private long speedFileModifiedTime;
   
 public Speed() {

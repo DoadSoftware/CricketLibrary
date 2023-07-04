@@ -1,89 +1,62 @@
 package com.cricket.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
 import com.cricket.util.CricketUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@XmlRootElement(name="battingCard")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class BattingCard implements Comparable<BattingCard>{
 
-  @XmlElement(name = "playerId")
   private int playerId;
   
-  @XmlElement(name = "batterPosition")
   private int batterPosition;
   
-  @XmlElement(name = "battingStyle")
   private String battingStyle;
   
-  @XmlElement(name = "runs")
   private int runs;
   
-  @XmlElement(name = "fours")
   private int fours;
   
-  @XmlElement(name = "sixes")
   private int sixes;
   
-  @XmlElement(name = "balls")
   private int balls;
   
-  @XmlElement(name = "howOutFielderId")
   private int howOutFielderId;
   
-  @XmlElement(name = "howOutBowlerId")
   private int howOutBowlerId;
 
-  @XmlElement(name = "batsmanInningStarted")
   private String batsmanInningStarted;
   
-  @XmlElement(name = "status")
   private String status;
   
-  @XmlElement(name = "onStrike")
   private String onStrike;
   
-  @XmlElement(name = "howOutText")
   private String howOutText;
   
-  @XmlElement(name = "howOut")
   private String howOut;
 
-  @XmlElement(name = "howOutPartOne")
   private String howOutPartOne;
 
-  @XmlElement(name = "howOutPartTwo")
   private String howOutPartTwo;
   
-  @XmlElement(name = "strikeRate")
   private String strikeRate;
 
-  @XmlElement(name = "wasHowOutFielderSubstitute")
   private String WasHowOutFielderSubstitute;
   
-  @XmlElement(name = "concussionPlayerId")
   private int concussionPlayerId;
 
-  @XmlElement(name = "seconds")
   private long seconds;
   
-  @XmlTransient
+  @JsonIgnore
   private Player player;
 
-  @XmlTransient
+  @JsonIgnore
   private Player concussion_player;
 
-  @XmlTransient
+  @JsonIgnore
   private Player howOutFielder;
   
-  @XmlTransient
+  @JsonIgnore
   private Player howOutBowler;
   
 public BattingCard(int playerId, int batterPosition, String status) {

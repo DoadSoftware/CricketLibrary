@@ -12,7 +12,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.Column;
 
-
 @SuppressWarnings("unused")
 @Entity
 @Table(name = "NameSupers")

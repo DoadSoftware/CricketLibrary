@@ -28,7 +28,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
@@ -994,10 +993,11 @@ public class CricketFunctions {
 
 	public static MatchClock getMatchClock(MatchAllData match) throws IOException, JAXBException 
 	{
+		MatchClock clock;
 		if(match.getMatch().getInning() != null && match.getMatch().getInning().size() > 0) {
-			if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CLOCK_XML).exists()) {
-				MatchClock clock = (MatchClock) JAXBContext.newInstance(MatchClock.class).createUnmarshaller().unmarshal(
-						new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CLOCK_XML));
+			if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.CLOCK_XML.toUpperCase().replace(".XML", ".JSON")).exists()) {
+				clock = (MatchClock) new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY 
+					+ CricketUtil.CLOCK_XML.toUpperCase().replace(".XML", ".JSON")), MatchClock.class);
 				for(Inning inn : match.getMatch().getInning()) {
 					if(inn.getIsCurrentInning() != null && inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
 						if(inn != null && clock != null && inn.getInningNumber() == clock.getInningNumber()) {

@@ -1,24 +1,16 @@
 package com.cricket.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@XmlRootElement(name="review")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Review {
 
-  @XmlElement(name = "reviewNumber")
   private int reviewNumber;
 
-  @XmlElement(name = "reviewTeamId")
   private int reviewTeamId;
 
-  @XmlElement(name = "reviewStatus")
   private String reviewStatus;
 
-  @XmlElement(name = "reviewRetained")
   private String reviewRetained;
 
 public Review() {

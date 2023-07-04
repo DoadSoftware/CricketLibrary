@@ -1,80 +1,51 @@
 package com.cricket.model;
 
 import java.util.List;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@XmlRootElement(name="bowlingCard")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class BowlingCard implements Comparable<BowlingCard> {
 
-  @XmlTransient
+  @JsonIgnore
   private Player player;
 
-  @XmlElement(name = "bowlingPosition")
   private int bowlingPosition;
   
-  @XmlElement(name = "status")
   private String status;
 
-  @XmlElement(name = "economyRate")
   private String economyRate;
   
-  @XmlElement(name = "bowling_end")
   private int bowling_end;
   
-  @XmlElement(name = "overs")
   private int overs;
 
-  @XmlElement(name = "runs")
   private int runs;
   
-  @XmlElement(name = "balls")
   private int balls;
 
-  @XmlElement(name = "wickets")
   private int wickets;
 
-  @XmlElement(name = "playerId")
   private int playerId;
   
-  @XmlElement(name = "wides")
   private int wides;
   
-  @XmlElement(name = "noBalls")
   private int noBalls;
   
-  @XmlElement(name = "runOuts")
   private int runOuts;
   
-  @XmlElement(name = "stumpings")
   private int stumpings;
   
-  @XmlElement(name = "catchAsFielder")
   private int catchAsFielder;
   
-  @XmlElement(name = "catchAsBowler")
   private int catchAsBowler;
 
-  @XmlElement(name = "maidens")
   private int maidens;
 
-  @XmlElement(name = "dots")
   private int dots;
 
-  @XmlElement(name = "totalRunsThisOver")
   private int totalRunsThisOver;
 
-  @XmlElementWrapper(name = "speeds")
-  @XmlElement(name = "speed")
   private List<Speed> speeds;
   
 public BowlingCard() {

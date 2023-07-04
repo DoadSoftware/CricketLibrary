@@ -2,6 +2,7 @@ package com.cricket.model;
 
 import java.util.List;
 import com.cricket.util.CricketUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Tournament implements Cloneable {
 
@@ -27,15 +28,16 @@ public class Tournament implements Cloneable {
   
   private String notOut;
   
+  @JsonIgnore
   private Player player;
   
   private int tournament_fours;
   
   private int tournament_sixes;
   
- private List<BestStats> batsman_best_Stats;
+  private List<BestStats> batsman_best_Stats;
 
- private List<BestStats> bowler_best_Stats;
+  private List<BestStats> bowler_best_Stats;
 
 public Tournament() {
 	super();

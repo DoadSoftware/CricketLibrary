@@ -1,53 +1,37 @@
 package com.cricket.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@XmlRootElement(name="partnership")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Partnership implements Comparable<Partnership>
 {
-
-  @XmlElement(name = "partnershipNumber")
   private int partnershipNumber;
   
-  @XmlElement(name = "firstBatterNo")
   private int firstBatterNo;
 
-  @XmlElement(name = "secondBatterNo")
   private int secondBatterNo;
   
-  @XmlElement(name = "firstBatterRuns")
   private int firstBatterRuns;
 
-  @XmlElement(name = "secondBatterRuns")
   private int secondBatterRuns;
 
-  @XmlElement(name = "firstBatterBalls")
   private int firstBatterBalls;
 
-  @XmlElement(name = "secondBatterBalls")
   private int secondBatterBalls;
   
-  @XmlElement(name = "totalRuns")
   private int totalRuns;
   
-  @XmlElement(name = "totalBalls")
   private int totalBalls;
 
-  @XmlElement(name = "totalFours")
   private int totalFours;
 
-  @XmlElement(name = "totalSixes")
   private int totalSixes;
   
-  @XmlTransient
+  @JsonIgnore
   private Player firstPlayer;
   
-  @XmlTransient
+  @JsonIgnore
   private Player secondPlayer;
   
 public Partnership(int partnershipNumber, int firstBatterNo, int secondBatterNo) {

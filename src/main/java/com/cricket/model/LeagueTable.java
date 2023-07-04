@@ -1,21 +1,12 @@
 package com.cricket.model;
 
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-
-
-@XmlRootElement(name="LeagueTable")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class LeagueTable {
 	
-	@XmlElementWrapper(name = "LeagueTeams")
-	  @XmlElement(name = "LeagueTeam")
-	  private List<LeagueTeam> LeagueTeams;
+    private List<LeagueTeam> LeagueTeams;
 
 	public List<LeagueTeam> getLeagueTeams() {
 		return LeagueTeams;

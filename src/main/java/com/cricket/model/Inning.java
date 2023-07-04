@@ -3,130 +3,85 @@ package com.cricket.model;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@XmlRootElement(name="inning")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Inning {
 
-  @XmlElement(name = "isDeclared")
   private String isDeclared;
 	
-  @XmlElement(name = "inningNumber")
   private int inningNumber;
 
-  @XmlElement(name = "battingTeamId")
   private int battingTeamId;
 
-  @XmlElement(name = "bowlingTeamId")
   private int bowlingTeamId;
 
-  @XmlElement(name = "totalRuns")
   private int totalRuns;
 
-  @XmlElement(name = "totalWickets")
   private int totalWickets;
 
-  @XmlElement(name = "totalOvers")
   private int totalOvers;
 
-  @XmlElement(name = "totalBalls")
   private int totalBalls;
 
-  @XmlElement(name = "totalExtras")
   private int totalExtras;
 
-  @XmlElement(name = "totalWides")
   private int totalWides;
 
-  @XmlElement(name = "totalNoBalls")
   private int totalNoBalls;
 
-  @XmlElement(name = "totalByes")
   private int totalByes;
 
-  @XmlElement(name = "totalLegByes")
   private int totalLegByes;
 
-  @XmlElement(name = "totalPenalties")
   private int totalPenalties;
 
-  @XmlElement(name = "totalFours")
   private int totalFours;
 
-  @XmlElement(name = "totalSixes")
   private int totalSixes;
 
-  @XmlElement(name = "runRate")
   private String runRate;
   
-  @XmlElement(name = "isCurrentInning")
   private String isCurrentInning;
 
-  @XmlElement(name = "inningStatus")
   private String inningStatus;
 
-  @XmlElement(name = "firstPowerplayStartOver")
   private int firstPowerplayStartOver;
 
-  @XmlElement(name = "firstPowerplayEndOver")
   private int firstPowerplayEndOver;
 
-  @XmlElement(name = "secondPowerplayStartOver")
   private int secondPowerplayStartOver;
 
-  @XmlElement(name = "secondPowerplayEndOver")
   private int secondPowerplayEndOver;
 
-  @XmlElement(name = "thirdPowerplayStartOver")
   private int thirdPowerplayStartOver;
 
-  @XmlElement(name = "thirdPowerplayEndOver")
   private int thirdPowerplayEndOver;
 
-  @XmlElement(name = "oversRemaining")
   private int oversRemaining;
   
-  @XmlTransient
+  @JsonIgnore
   private Team batting_team;
 
-  @XmlTransient
+  @JsonIgnore
   private Team bowling_team;
   
-  @XmlElementWrapper(name = "battingCard")
-  @XmlElement(name = "batter")
   private List<BattingCard> battingCard;
 
-  @XmlElementWrapper(name = "partnerships")
-  @XmlElement(name = "partnership")
   private List<Partnership> partnerships;
   
-  @XmlElementWrapper(name = "bowlingCard")
-  @XmlElement(name = "bowler")
   private List<BowlingCard> bowlingCard;
 
-  @XmlElementWrapper(name = "fielders")
-  @XmlElement(name = "fielder")
   private List<Player> fielders;
 
-  @XmlElementWrapper(name = "reviews")
-  @XmlElement(name = "review")
   private List<Review> reviews;
 
-  @XmlElementWrapper(name = "fallsOfWickets")
-  @XmlElement(name = "fallsOfWicket")
   private List<FallOfWicket> fallsOfWickets;
 
-  @XmlElementWrapper(name = "spell")
-  @XmlElement(name = "spell")
   private List<Spell> spells;
   
-  @XmlTransient
+  @JsonIgnore
   private Map<String, String> stats;
   
 public Inning() {

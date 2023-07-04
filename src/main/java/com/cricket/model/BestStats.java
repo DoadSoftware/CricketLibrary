@@ -1,5 +1,7 @@
 package com.cricket.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class BestStats{
 
   private int playerId;
@@ -13,6 +15,7 @@ public class BestStats{
   private int balls;
   private boolean not_out;
   
+  @JsonIgnore
   private Player player;
 
 public BestStats() {

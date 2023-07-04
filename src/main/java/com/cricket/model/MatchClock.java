@@ -1,21 +1,14 @@
 package com.cricket.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@XmlRootElement(name="MatchClock")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MatchClock {
 
-  @XmlElement(name = "inningNumber")
   private int inningNumber;
 	
-  @XmlElement(name = "startOrPause")
   private String startOrPause;
 
-  @XmlElement(name = "matchTotalSeconds")
   private long matchTotalSeconds;
 
 public int getInningNumber() {

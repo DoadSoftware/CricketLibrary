@@ -1,42 +1,28 @@
 package com.cricket.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@XmlRootElement(name="wagons")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Wagon {
 
-  @XmlElement(name = "wagonNumber")
   private int wagonNumber;
 
-  @XmlElement(name = "wagonSector")
   private int wagonSector;
 
-  @XmlElement(name = "wagonXCord")
   private int wagonXCord;
 
-  @XmlElement(name = "wagonYCord")
   private int wagonYCord;
   
-  @XmlElement(name = "batterId")
   private int batterId;
 
-  @XmlElement(name = "bowlerId")
   private int bowlerId;
 
-  @XmlElement(name = "runs")
   private int runs;
   
-  @XmlElement(name = "inningNumber")
   private int inningNumber;
 
-  @XmlElement(name = "overNumber")
   private int overNumber;
 
-  @XmlElement(name = "ballNumber")
   private int ballNumber;
 
 public Wagon() {

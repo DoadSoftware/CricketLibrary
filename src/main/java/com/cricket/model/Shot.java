@@ -1,42 +1,28 @@
 package com.cricket.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@XmlRootElement(name="shots")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Shot {
 
-  @XmlElement(name = "shotNumber")
   private int shotNumber;
 
-  @XmlElement(name = "shotType")
   private String shotType;
 
-  @XmlElement(name = "boundaryHeight")
   private String boundaryHeight;
 
-  @XmlElement(name = "sixDistance")
   private int sixDistance;
   
-  @XmlElement(name = "batterId")
   private int batterId;
 
-  @XmlElement(name = "bowlerId")
   private int bowlerId;
 
-  @XmlElement(name = "runs")
   private int runs;
   
-  @XmlElement(name = "inningNumber")
   private int inningNumber;
 
-  @XmlElement(name = "overNumber")
   private int overNumber;
 
-  @XmlElement(name = "ballNumber")
   private int ballNumber;
  
 public Shot() {

@@ -1,28 +1,16 @@
 package com.cricket.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement(name="fallOfWicket")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class FallOfWicket implements Comparable<FallOfWicket>
 {
 
-  @XmlElement(name = "fowNumber")
   private int fowNumber;
   
-  @XmlElement(name = "fowPlayerID")
   private int fowPlayerID;
 
-  @XmlElement(name = "fowRuns")
   private int fowRuns;
   
-  @XmlElement(name = "fowOvers")
   private int fowOvers;
 
-  @XmlElement(name = "fowBalls")
   private int fowBalls;
 
 public FallOfWicket() {

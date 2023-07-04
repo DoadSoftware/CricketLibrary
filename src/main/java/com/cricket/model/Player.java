@@ -16,7 +16,6 @@ import javax.persistence.Column;
 @Table(name = "Players")
 public class Player implements Comparable<Player>, Diffable<Player>
 {
-
   @Id
   @Column(name = "PLAYERID")
   private int playerId;
