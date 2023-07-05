@@ -65,10 +65,8 @@ public class Setup {
 
   private String venueName;
 
-  @JsonIgnore
   private Team homeTeam;
 
-  @JsonIgnore
   private Team awayTeam;
 
   private String setupHomeTeam;
