@@ -29,11 +29,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.xml.bind.JAXBException;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
 import com.cricket.model.BowlingCard;
 import com.cricket.model.Configuration;
 import com.cricket.model.Dictionary;
+import com.cricket.model.DuckWorthLewis;
 import com.cricket.model.Event;
 import com.cricket.model.EventFile;
 import com.cricket.model.Fixture;
@@ -3680,6 +3685,50 @@ public class CricketFunctions {
 			}
 		}
 		return players;
+	}
+	public static List<DuckWorthLewis> populateDuckWorthLewis(MatchAllData match) throws InterruptedException 
+	{
+		Document htmlFile = null; 
+		try {
+			for(Inning inn : match.getMatch().getInning()) {
+				if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
+					int totalball = 0;
+					totalball =((inn.getTotalOvers()*6) + inn.getTotalBalls());
+					if(totalball < 42) {
+						htmlFile = Jsoup.parse(new File("C:\\Sports\\ParScores BB.html"), "ISO-8859-1");
+
+					}else if(totalball >= 42) {
+						htmlFile = Jsoup.parse(new File("C:\\Sports\\ParScores OO.html"), "ISO-8859-1");
+
+					}
+				}
+			}
+			
+		} catch (IOException e) {  
+			e.printStackTrace(); 
+		} 
+		
+		List<DuckWorthLewis> this_dls = new ArrayList<DuckWorthLewis>();
+		for(int i=14; i<htmlFile.body().getElementsByTag("font").size() - 1;i++) {
+			if(htmlFile.body().getElementsByTag("font").get(i).text().contains("TableID")) {
+				i = i + 15;
+				if(i > htmlFile.body().getElementsByTag("font").size()) {
+					break;
+				}
+			}
+			
+			for(Inning inn : match.getMatch().getInning()) {
+				if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
+					this_dls.add(new DuckWorthLewis(htmlFile.body().getElementsByTag("font").get(i).text(),
+							htmlFile.body().getElementsByTag("font").get(i+(2+(inn.getTotalWickets()))).text()));
+				}
+				
+			}
+			i = i +11;
+			
+		}
+		
+		return this_dls;
 	}
 	
 }
