@@ -58,9 +58,11 @@ import com.cricket.model.Statistics;
 import com.cricket.model.Team;
 import com.cricket.model.Tournament;
 import com.cricket.service.CricketService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
@@ -1259,9 +1261,14 @@ public class CricketFunctions {
 		return stat;
 	}
 	
-	public static Statistics updateStatisticsWithMatchData(Statistics stat, MatchAllData match)
+	public static Statistics updateStatisticsWithMatchData(Statistics stats, MatchAllData match) throws JsonMappingException, JsonProcessingException
 	{
 		boolean player_found = false;
+		
+		Statistics statsdata = stats;
+		ObjectMapper objectMapper = new ObjectMapper();    
+		Statistics stat = objectMapper.readValue(objectMapper.writeValueAsString(statsdata), Statistics.class);
+		
 		if(stat.getStats_type().getStats_short_name().equalsIgnoreCase(match.getSetup().getMatchType())) {
 			stat.setTournament_fours(stat.getTournament_fours() + match.getMatch().getInning().get(0).getTotalFours());
 			stat.setTournament_fours(stat.getTournament_fours() + match.getMatch().getInning().get(1).getTotalFours());
