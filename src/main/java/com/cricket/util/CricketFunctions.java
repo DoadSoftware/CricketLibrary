@@ -2656,6 +2656,7 @@ public class CricketFunctions {
 	    		  if (((whatToProcess.equalsIgnoreCase(CricketUtil.BOUNDARY)) 
 	  	        		&& (evnt.getEventType().equalsIgnoreCase(CricketUtil.SIX))) 
 	  	        		|| (evnt.getEventType().equalsIgnoreCase(CricketUtil.FOUR))) {
+	    			  
 	    			  count_lb = 0;
 	  	          //break;
 	  	        }
@@ -3245,8 +3246,8 @@ public class CricketFunctions {
 
 			switch (teamNameType) {
 		    case CricketUtil.SHORT: 
-		    	batTeamNm = match.getMatch().getInning().get(whichInning - 1).getBatting_team().getTeamName3();
-		    	bowlTeamNm = match.getMatch().getInning().get(whichInning - 1).getBowling_team().getTeamName3();
+		    	batTeamNm = match.getMatch().getInning().get(whichInning - 1).getBatting_team().getTeamName4();
+		    	bowlTeamNm = match.getMatch().getInning().get(whichInning - 1).getBowling_team().getTeamName4();
 		    	break;
 		    default: 
 		    	batTeamNm = (match.getMatch().getInning().get(whichInning - 1)).getBatting_team().getTeamName1();
@@ -3428,7 +3429,51 @@ public class CricketFunctions {
 		}
 		return String.valueOf(total_run_PP) + seperator + String.valueOf(total_wickets_PP);
 	}
-
+	
+	public static String previousBowler(MatchAllData match ,List<Event> events) {
+		String bowler="";
+		if((events != null) && (events.size() > 0)) {
+			
+			for(int i = events.size() - 1; i >= 0; i--) {
+				if ((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER))) {
+					for(Inning inn : match.getMatch().getInning()) {
+						if(inn.getIsCurrentInning().equalsIgnoreCase("YES")) {
+							for(BowlingCard boc : inn.getBowlingCard()) {
+								if(boc.getPlayerId() == events.get(i).getEventBowlerNo()) {
+									bowler = boc.getPlayer().getTicker_name() + ',' + boc.getWickets() + '-' + boc.getRuns() + ',' + boc.getDots() + ',' +
+											boc.getEconomyRate() + ',' + OverBalls(boc.getOvers(), boc.getBalls());
+								}
+							}
+						}
+					}
+					break;
+				}
+			}
+		}
+		return bowler;
+	}
+	public static String otherBowler(MatchAllData match ,List<Event> events) {
+		String bowler="";
+		if((events != null) && (events.size() > 0)) {
+			
+			for(int i = events.size() - 2; i >= 0; i--) {
+				if ((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER))) {
+					for(Inning inn : match.getMatch().getInning()) {
+						if(inn.getIsCurrentInning().equalsIgnoreCase("YES")) {
+							for(BowlingCard boc : inn.getBowlingCard()) {
+								if(boc.getPlayerId() == events.get(i).getEventBowlerNo()) {
+									bowler = boc.getPlayer().getTicker_name() + ',' + boc.getWickets() + '-' + boc.getRuns() + ',' + boc.getDots() + ',' +
+											boc.getEconomyRate() + ',' + OverBalls(boc.getOvers(), boc.getBalls());
+								}
+							}
+						}
+					}
+					break;
+				}
+			}
+		}
+		return bowler;
+	}
 	public static String processThisOverRunsCount(int player_id, List<Event> events) {
 		int total_runs=0;
 		if((events != null) && (events.size() > 0)) {
