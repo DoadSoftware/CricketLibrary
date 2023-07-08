@@ -28,6 +28,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
 import javax.xml.bind.JAXBException;
 
 import org.jsoup.Jsoup;
@@ -2543,7 +2545,7 @@ public class CricketFunctions {
 		return Text;
 	}
 
-	public static String getbowlingstyle(String bowlingType) {
+	public static String getbowlingstyle(String bowlingType) throws InterruptedException {
 		
 		String text="",Style="";
 		
@@ -2559,9 +2561,7 @@ public class CricketFunctions {
 			text = "Right Arm Wrist Spin";
 		}
 		
-		Style = bowlingType.substring(1);
-			
-		switch (Style) {
+		switch (bowlingType.substring(1).trim()) {
 		case "":
 			text = text + " Bowler";
 			break;
