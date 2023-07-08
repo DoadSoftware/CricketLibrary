@@ -43,10 +43,10 @@ public class Team implements Comparable<Team> {
   @Column(name = "ShortTeluguTeamName")
   private String ShortTeluguTeamName;
   
-public Team(String string, Integer valueOf, Integer valueOf2, Integer valueOf3, String string2, String string3,
-		String string4, Integer valueOf4, Integer valueOf5, Integer valueOf6) {
-	// TODO Auto-generated constructor stub
-}
+//public Team(String string, Integer valueOf, Integer valueOf2, Integer valueOf3, String string2, String string3,
+//		String string4, Integer valueOf4, Integer valueOf5, Integer valueOf6) {
+//	// TODO Auto-generated constructor stub
+//}
 
 public String getFullHindiTeamName() {
 	return FullHindiTeamName;

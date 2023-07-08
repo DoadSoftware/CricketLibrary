@@ -21,7 +21,7 @@ public class CricketUtil {
 	public final static String DOAD_INTERACTIVE_TXT = "DOADInteractiveFile.txt";
 	public final static String OUTPUT_XML = "OUTPUT.XML";
 	public final static String LEAGUE_TABLE_DIRECTORY = "LeagueTable/";
-	public static final String LEAGUETABLE_XML = "LeagueTable.XML";
+	public static final String LEAGUETABLE_XML = "LeagueTable.xml";
 	public final static String FREE_TXT = "FreeText.txt";
 	public final static String SPEED_TXT = "Speed.txt";
 	public final static String AR_FREE_TXT = "ARFreeText.txt";
