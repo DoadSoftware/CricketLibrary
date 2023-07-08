@@ -2,6 +2,7 @@ package com.cricket.util;
 
 import java.io.BufferedWriter;
 import java.io.File;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -28,8 +29,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-
 import javax.xml.bind.JAXBException;
 
 import org.jsoup.Jsoup;
@@ -67,6 +66,9 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 public class CricketFunctions {
 	
@@ -127,6 +129,7 @@ public class CricketFunctions {
         return "";
     }
 	
+
 	public static String checkImpactPlayer(List<Event> events,int inning_number,int player_id) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
@@ -228,6 +231,7 @@ public class CricketFunctions {
 			}else {
 				line_txt = String.format("%-140s", "");
 				j = j + 1;
+				System.out.println(match.getMatch().getInning());
 				for(Inning inn : match.getMatch().getInning()) {
 					for(Player hs : match.getSetup().getHomeSquad()) {
 						if(match.getEventFile().getEvents().get(i).getEventBatterNo() == hs.getPlayerId()) {
@@ -1085,6 +1089,7 @@ public class CricketFunctions {
 		}
 		return null;
 	}
+	
 	
 	public static BowlingCard getCurrentInningCurrentBowler(MatchAllData match) {
 		BowlingCard current_bowler = null;
@@ -2155,6 +2160,7 @@ public class CricketFunctions {
 		return Balls ;
 	}
 	
+	
 	public static List<String> getPlayerSplit(int inning_number,int playerId ,int splitvalue, MatchAllData match,List<Event> events) {
 		int total_runs = 0, total_balls = 0 ;
 		List<String> Balls = new ArrayList<String>();
@@ -2165,7 +2171,7 @@ public class CricketFunctions {
 						int max_balls = (match.getSetup().getMaxOvers() * 6);
 						int count_balls = ((match.getMatch().getInning().get(inning_number-1).getTotalOvers() * 6) 
 								+ match.getMatch().getInning().get(inning_number-1).getTotalBalls());
-						
+						System.out.println(match.getMatch());
 						switch (events.get(i).getEventType()) {
 						case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR:  case CricketUtil.FIVE: case CricketUtil.SIX: 
 						case CricketUtil.LEG_BYE: case CricketUtil.BYE: case CricketUtil.LOG_WICKET:

@@ -207,4 +207,12 @@ public class CricketUtil {
 	public final static String TEAMNAME_2 = "TEAMNAME2";
 	public final static String TEAMNAME_3 = "TEAMNAME3";
 	public final static String TEAMNAME_4 = "TEAMNAME4";
+
+	public static final String RESET_CLOCK = "RESET_CLOCK";
+
+	public static final String LOG_CLOCK_STATUS = "LOG_CLOCK_STATUS";
+
+	public static final String LOG_OVERWRITE_MATCH_TIME = "LOG_OVERWRITE_MATCH_TIME";
+
+	public static final String READ_CLOCK = "READ_CLOCK";
 }

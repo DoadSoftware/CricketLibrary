@@ -15,6 +15,9 @@ public class Configuration {
 	@XmlElement(name="broadcaster")
 	private String broadcaster;
 	
+	@XmlElement(name="Cricket Source")
+	private String cricketSource;
+	
 	@XmlElement(name="primaryIpAddress")
 	private String primaryIpAddress;
 	
@@ -55,13 +58,15 @@ public class Configuration {
 		super();
 	}
 
-	public Configuration(String filename, String broadcaster, String primaryIpAddress, int primaryPortNumber,
-			String primaryScene, String primaryLanguage, String secondaryIpAddress, int secondaryPortNumber,
-			String secondaryScene, String secondaryLanguage, String tertiaryIpAddress, int tertiaryPortNumber,
-			String tertiaryScene, String tertiaryLanguage) {
+	
+	public Configuration(String filename, String broadcaster, String cricketSource, String primaryIpAddress,
+			int primaryPortNumber, String primaryScene, String primaryLanguage, String secondaryIpAddress,
+			int secondaryPortNumber, String secondaryScene, String secondaryLanguage, String tertiaryIpAddress,
+			int tertiaryPortNumber, String tertiaryScene, String tertiaryLanguage) {
 		super();
 		this.filename = filename;
 		this.broadcaster = broadcaster;
+		this.cricketSource = cricketSource;
 		this.primaryIpAddress = primaryIpAddress;
 		this.primaryPortNumber = primaryPortNumber;
 		this.primaryScene = primaryScene;
@@ -74,6 +79,14 @@ public class Configuration {
 		this.tertiaryPortNumber = tertiaryPortNumber;
 		this.tertiaryScene = tertiaryScene;
 		this.tertiaryLanguage = tertiaryLanguage;
+	}
+
+	public String getCricketSource() {
+		return cricketSource;
+	}
+
+	public void setCricketSource(String cricketSource) {
+		this.cricketSource = cricketSource;
 	}
 
 	public String getPrimaryLanguage() {

@@ -18,6 +18,12 @@
     <version>2.14.2</version>
 </dependency>
 
+<dependency>
+      <groupId>com.googlecode.json-simple</groupId>
+      <artifactId>json-simple</artifactId>
+      <version>1.1.1</version>
+</dependency>
+
 <!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
 <dependency>
     <groupId>commons-net</groupId>
