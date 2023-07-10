@@ -2160,7 +2160,6 @@ public class CricketFunctions {
 		return Balls ;
 	}
 	
-	
 	public static List<String> getPlayerSplit(int inning_number,int playerId ,int splitvalue, MatchAllData match,List<Event> events) {
 		int total_runs = 0, total_balls = 0 ;
 		List<String> Balls = new ArrayList<String>();
