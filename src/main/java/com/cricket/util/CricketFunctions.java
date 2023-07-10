@@ -2673,7 +2673,8 @@ public class CricketFunctions {
 	  	        case CricketUtil.LOG_ANY_BALL: 
 	  	          if (((evnt.getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (evnt.getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
 	  	        		  && (evnt.getEventWasABoundary() != null) &&  (evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
-	  	            exitLoop = true;
+	  	        	count_lb = 0;
+	  	            //exitLoop = true;
 	  	          }else {
 	  	        	count_lb += 1;
 	  	          }
@@ -2842,12 +2843,12 @@ public class CricketFunctions {
 			  if(events.get(i).getEventBowlerNo() != 0) {
 				  if (whatToProcess.equalsIgnoreCase(CricketUtil.OVER) 
 							&& (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)|| events.get(i).getEventBowlerNo() != player_id)
-							&& events.get(i).getEventBallNo() <= 0) {
+							&& events.get(i).getEventBallNo() <= 0 && !events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL)) {
 						break;
 		          }
 			 }
-			  
 		    this_ball_data = "";
+		    
 		    switch (events.get(i).getEventType())
 		    {
 		    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
@@ -2917,6 +2918,7 @@ public class CricketFunctions {
 		        }
 		      }
 		    }
+		    
 		    if (!this_ball_data.isEmpty()) {
 		    	ball_count = ball_count + 1;
 		    	switch(whatToProcess.toUpperCase()) {
@@ -3787,5 +3789,57 @@ public class CricketFunctions {
 		
 		return this_dls;
 	}
-	
+	public static String populateDls(MatchAllData match) throws InterruptedException 
+	{
+		String team="",ahead_behind="";
+		int runs = 0;
+		for(Inning inn : match.getMatch().getInning()) {
+			if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
+				if(inn.getBattingTeamId() == match.getSetup().getHomeTeamId()) {
+					team = match.getSetup().getHomeTeam().getTeamName4();
+				}
+				if(inn.getBattingTeamId() == match.getSetup().getAwayTeamId()) {
+					team = match.getSetup().getAwayTeam().getTeamName4();
+				}
+				
+				for(int i = 0; i<= CricketFunctions.populateDuckWorthLewis(match).size() -1;i++) {
+					if(CricketFunctions.populateDuckWorthLewis(match).get(i).getOver_left().equalsIgnoreCase(CricketFunctions.OverBalls(inn.getTotalOvers(),inn.getTotalBalls()))) {
+						runs = (inn.getTotalRuns() - Integer.valueOf(CricketFunctions.populateDuckWorthLewis(match).get(i).getWkts_down()));
+					}
+				}
+				if(runs < 0)
+                {
+                    ahead_behind = team + " is " + (Math.abs(runs)) + " runs behind";
+                }
+
+                if (runs > 0)
+                {
+                    ahead_behind = team + " is " + runs + " runs ahead";
+                }
+                
+                if (runs == 0)
+                {
+                	ahead_behind = "DLS score is level";
+                }
+			}
+		}
+		return ahead_behind;
+	}
+	public static String populateRetiredHurt(MatchAllData match,List<Event> events) throws InterruptedException 
+	{
+		String team="",ahead_behind="";
+		int runs = 0;
+		if ((events != null) && (events.size() > 0)) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+				switch(events.get(events.size() - 1).getEventType()) {
+				case CricketUtil.LOG_WICKET:
+					if(events.get(events.size() - 1).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)) {
+						
+					}
+					break;
+				}
+			}
+		}
+		return ahead_behind;
+	}
 }
