@@ -55,6 +55,11 @@ public class Configuration {
 		super();
 	}
 
+	public Configuration(String broadcaster) {
+		super();
+		this.broadcaster = broadcaster;
+	}
+
 	public Configuration(String filename, String broadcaster, String primaryIpAddress, int primaryPortNumber,
 			String primaryScene, String primaryLanguage, String secondaryIpAddress, int secondaryPortNumber,
 			String secondaryScene, String secondaryLanguage, String tertiaryIpAddress, int tertiaryPortNumber,

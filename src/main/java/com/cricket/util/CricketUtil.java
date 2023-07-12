@@ -19,6 +19,7 @@ public class CricketUtil {
 	public final static String CLOCK_XML = "Clock.XML";
 	public final static String SPEED_XML = "Speed.XML";
 	public final static String DOAD_INTERACTIVE_TXT = "DOADInteractiveFile.txt";
+	public final static String CRIC_ARCHIVE_XML = "CricArchive.XML";
 	public final static String OUTPUT_XML = "OUTPUT.XML";
 	public final static String LEAGUE_TABLE_DIRECTORY = "LeagueTable/";
 	public static final String LEAGUETABLE_XML = "LeagueTable.XML";
@@ -207,4 +208,7 @@ public class CricketUtil {
 	public final static String TEAMNAME_2 = "TEAMNAME2";
 	public final static String TEAMNAME_3 = "TEAMNAME3";
 	public final static String TEAMNAME_4 = "TEAMNAME4";
+	
+	public final static String CRIC_INFO = "CRIC_INFO";
+	
 }
