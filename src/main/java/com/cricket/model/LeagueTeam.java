@@ -1,31 +1,44 @@
 package com.cricket.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@XmlRootElement(name="LeagueTeam")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class LeagueTeam {
 
+	@XmlElement(name="QualifiedStatus")
 	private String QualifiedStatus;
 	
+	@XmlElement(name="pool")
 	private String pool;
 	
+	@XmlElement(name="TeamName")
 	private String TeamName;
 	
+	@XmlElement(name="Played")
 	private int Played;
 	
+	@XmlElement(name="Won")
 	private int Won;
 	
+	@XmlElement(name="Lost")
 	private int Lost;
 	
+	@XmlElement(name="NoResult")
 	private int NoResult;
 	
-	private String Points;
+	@XmlElement(name="Points")
+	private int Points;
 	
+	@XmlElement(name="NetRunRate")
 	private double NetRunRate;
 	
-	private String Count;
+	@XmlElement(name="Count")
+	private int count;
 
-	
 	public String getQualifiedStatus() {
 		return QualifiedStatus;
 	}
@@ -33,7 +46,7 @@ public class LeagueTeam {
 	public void setQualifiedStatus(String qualifiedStatus) {
 		QualifiedStatus = qualifiedStatus;
 	}
-	
+
 	public String getPool() {
 		return pool;
 	}
@@ -82,11 +95,11 @@ public class LeagueTeam {
 		NoResult = noResult;
 	}
 
-	public String getPoints() {
+	public int getPoints() {
 		return Points;
 	}
 
-	public void setPoints(String points) {
+	public void setPoints(int points) {
 		Points = points;
 	}
 
@@ -98,12 +111,12 @@ public class LeagueTeam {
 		NetRunRate = netRunRate;
 	}
 
-	public String getCount() {
-		return Count;
+	public int getCount() {
+		return count;
 	}
 
-	public void setCount(String count) {
-		Count = count;
+	public void setCount(int count) {
+		this.count = count;
 	}
 	
 }

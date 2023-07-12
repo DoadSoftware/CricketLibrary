@@ -2,6 +2,7 @@ package com.cricket.util;
 
 import java.io.BufferedWriter;
 import java.io.File;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -29,11 +30,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.xml.bind.JAXBException;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
 import com.cricket.model.BowlingCard;
 import com.cricket.model.Configuration;
 import com.cricket.model.Dictionary;
+import com.cricket.model.DuckWorthLewis;
 import com.cricket.model.Event;
 import com.cricket.model.EventFile;
 import com.cricket.model.Fixture;
@@ -53,11 +59,16 @@ import com.cricket.model.Statistics;
 import com.cricket.model.Team;
 import com.cricket.model.Tournament;
 import com.cricket.service.CricketService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 public class CricketFunctions {
 	
@@ -118,6 +129,7 @@ public class CricketFunctions {
         return "";
     }
 	
+
 	public static String checkImpactPlayer(List<Event> events,int inning_number,int player_id) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
@@ -219,6 +231,7 @@ public class CricketFunctions {
 			}else {
 				line_txt = String.format("%-140s", "");
 				j = j + 1;
+				System.out.println(match.getMatch().getInning());
 				for(Inning inn : match.getMatch().getInning()) {
 					for(Player hs : match.getSetup().getHomeSquad()) {
 						if(match.getEventFile().getEvents().get(i).getEventBatterNo() == hs.getPlayerId()) {
@@ -1077,6 +1090,7 @@ public class CricketFunctions {
 		return null;
 	}
 	
+	
 	public static BowlingCard getCurrentInningCurrentBowler(MatchAllData match) {
 		BowlingCard current_bowler = null;
 		for(Inning inn : match.getMatch().getInning()) {
@@ -1254,9 +1268,14 @@ public class CricketFunctions {
 		return stat;
 	}
 	
-	public static Statistics updateStatisticsWithMatchData(Statistics stat, MatchAllData match)
+	public static Statistics updateStatisticsWithMatchData(Statistics stats, MatchAllData match) throws JsonMappingException, JsonProcessingException
 	{
 		boolean player_found = false;
+		
+		Statistics statsdata = stats;
+		ObjectMapper objectMapper = new ObjectMapper();    
+		Statistics stat = objectMapper.readValue(objectMapper.writeValueAsString(statsdata), Statistics.class);
+		
 		if(stat.getStats_type().getStats_short_name().equalsIgnoreCase(match.getSetup().getMatchType())) {
 			stat.setTournament_fours(stat.getTournament_fours() + match.getMatch().getInning().get(0).getTotalFours());
 			stat.setTournament_fours(stat.getTournament_fours() + match.getMatch().getInning().get(1).getTotalFours());
@@ -2151,7 +2170,7 @@ public class CricketFunctions {
 						int max_balls = (match.getSetup().getMaxOvers() * 6);
 						int count_balls = ((match.getMatch().getInning().get(inning_number-1).getTotalOvers() * 6) 
 								+ match.getMatch().getInning().get(inning_number-1).getTotalBalls());
-						
+						System.out.println(match.getMatch());
 						switch (events.get(i).getEventType()) {
 						case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR:  case CricketUtil.FIVE: case CricketUtil.SIX: 
 						case CricketUtil.LEG_BYE: case CricketUtil.BYE: case CricketUtil.LOG_WICKET:
@@ -2531,7 +2550,7 @@ public class CricketFunctions {
 		return Text;
 	}
 
-	public static String getbowlingstyle(String bowlingType) {
+	public static String getbowlingstyle(String bowlingType) throws InterruptedException {
 		
 		String text="",Style="";
 		
@@ -2547,9 +2566,7 @@ public class CricketFunctions {
 			text = "Right Arm Wrist Spin";
 		}
 		
-		Style = bowlingType.substring(1);
-			
-		switch (Style) {
+		switch (bowlingType.substring(1).trim()) {
 		case "":
 			text = text + " Bowler";
 			break;
@@ -2644,6 +2661,7 @@ public class CricketFunctions {
 	    		  if (((whatToProcess.equalsIgnoreCase(CricketUtil.BOUNDARY)) 
 	  	        		&& (evnt.getEventType().equalsIgnoreCase(CricketUtil.SIX))) 
 	  	        		|| (evnt.getEventType().equalsIgnoreCase(CricketUtil.FOUR))) {
+	    			  
 	    			  count_lb = 0;
 	  	          //break;
 	  	        }
@@ -2655,7 +2673,8 @@ public class CricketFunctions {
 	  	        case CricketUtil.LOG_ANY_BALL: 
 	  	          if (((evnt.getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (evnt.getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
 	  	        		  && (evnt.getEventWasABoundary() != null) &&  (evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
-	  	            exitLoop = true;
+	  	        	count_lb = 0;
+	  	            //exitLoop = true;
 	  	          }else {
 	  	        	count_lb += 1;
 	  	          }
@@ -2824,12 +2843,12 @@ public class CricketFunctions {
 			  if(events.get(i).getEventBowlerNo() != 0) {
 				  if (whatToProcess.equalsIgnoreCase(CricketUtil.OVER) 
 							&& (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)|| events.get(i).getEventBowlerNo() != player_id)
-							&& events.get(i).getEventBallNo() <= 0) {
+							&& events.get(i).getEventBallNo() <= 0 && !events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL)) {
 						break;
 		          }
 			 }
-			  
 		    this_ball_data = "";
+		    
 		    switch (events.get(i).getEventType())
 		    {
 		    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
@@ -2899,6 +2918,7 @@ public class CricketFunctions {
 		        }
 		      }
 		    }
+		    
 		    if (!this_ball_data.isEmpty()) {
 		    	ball_count = ball_count + 1;
 		    	switch(whatToProcess.toUpperCase()) {
@@ -3233,8 +3253,8 @@ public class CricketFunctions {
 
 			switch (teamNameType) {
 		    case CricketUtil.SHORT: 
-		    	batTeamNm = match.getMatch().getInning().get(whichInning - 1).getBatting_team().getTeamName3();
-		    	bowlTeamNm = match.getMatch().getInning().get(whichInning - 1).getBowling_team().getTeamName3();
+		    	batTeamNm = match.getMatch().getInning().get(whichInning - 1).getBatting_team().getTeamName4();
+		    	bowlTeamNm = match.getMatch().getInning().get(whichInning - 1).getBowling_team().getTeamName4();
 		    	break;
 		    default: 
 		    	batTeamNm = (match.getMatch().getInning().get(whichInning - 1)).getBatting_team().getTeamName1();
@@ -3416,7 +3436,51 @@ public class CricketFunctions {
 		}
 		return String.valueOf(total_run_PP) + seperator + String.valueOf(total_wickets_PP);
 	}
-
+	
+	public static String previousBowler(MatchAllData match ,List<Event> events) {
+		String bowler="";
+		if((events != null) && (events.size() > 0)) {
+			
+			for(int i = events.size() - 1; i >= 0; i--) {
+				if ((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER))) {
+					for(Inning inn : match.getMatch().getInning()) {
+						if(inn.getIsCurrentInning().equalsIgnoreCase("YES")) {
+							for(BowlingCard boc : inn.getBowlingCard()) {
+								if(boc.getPlayerId() == events.get(i).getEventBowlerNo()) {
+									bowler = boc.getPlayer().getTicker_name() + ',' + boc.getWickets() + '-' + boc.getRuns() + ',' + boc.getDots() + ',' +
+											boc.getEconomyRate() + ',' + OverBalls(boc.getOvers(), boc.getBalls());
+								}
+							}
+						}
+					}
+					break;
+				}
+			}
+		}
+		return bowler;
+	}
+	public static String otherBowler(MatchAllData match ,List<Event> events) {
+		String bowler="";
+		if((events != null) && (events.size() > 0)) {
+			
+			for(int i = events.size() - 2; i >= 0; i--) {
+				if ((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER))) {
+					for(Inning inn : match.getMatch().getInning()) {
+						if(inn.getIsCurrentInning().equalsIgnoreCase("YES")) {
+							for(BowlingCard boc : inn.getBowlingCard()) {
+								if(boc.getPlayerId() == events.get(i).getEventBowlerNo()) {
+									bowler = boc.getPlayer().getTicker_name() + ',' + boc.getWickets() + '-' + boc.getRuns() + ',' + boc.getDots() + ',' +
+											boc.getEconomyRate() + ',' + OverBalls(boc.getOvers(), boc.getBalls());
+								}
+							}
+						}
+					}
+					break;
+				}
+			}
+		}
+		return bowler;
+	}
 	public static String processThisOverRunsCount(int player_id, List<Event> events) {
 		int total_runs=0;
 		if((events != null) && (events.size() > 0)) {
@@ -3681,5 +3745,101 @@ public class CricketFunctions {
 		}
 		return players;
 	}
-	
+	public static List<DuckWorthLewis> populateDuckWorthLewis(MatchAllData match) throws InterruptedException 
+	{
+		Document htmlFile = null; 
+		try {
+			for(Inning inn : match.getMatch().getInning()) {
+				if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
+					int totalball = 0;
+					totalball =((inn.getTotalOvers()*6) + inn.getTotalBalls());
+					if(totalball < 42) {
+						htmlFile = Jsoup.parse(new File("C:\\Sports\\ParScores BB.html"), "ISO-8859-1");
+
+					}else if(totalball >= 42) {
+						htmlFile = Jsoup.parse(new File("C:\\Sports\\ParScores OO.html"), "ISO-8859-1");
+
+					}
+				}
+			}
+			
+		} catch (IOException e) {  
+			e.printStackTrace(); 
+		} 
+		
+		List<DuckWorthLewis> this_dls = new ArrayList<DuckWorthLewis>();
+		for(int i=14; i<htmlFile.body().getElementsByTag("font").size() - 1;i++) {
+			if(htmlFile.body().getElementsByTag("font").get(i).text().contains("TableID")) {
+				i = i + 15;
+				if(i > htmlFile.body().getElementsByTag("font").size()) {
+					break;
+				}
+			}
+			
+			for(Inning inn : match.getMatch().getInning()) {
+				if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
+					this_dls.add(new DuckWorthLewis(htmlFile.body().getElementsByTag("font").get(i).text(),
+							htmlFile.body().getElementsByTag("font").get(i+(2+(inn.getTotalWickets()))).text()));
+				}
+				
+			}
+			i = i +11;
+			
+		}
+		
+		return this_dls;
+	}
+	public static String populateDls(MatchAllData match) throws InterruptedException 
+	{
+		String team="",ahead_behind="";
+		int runs = 0;
+		for(Inning inn : match.getMatch().getInning()) {
+			if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
+				if(inn.getBattingTeamId() == match.getSetup().getHomeTeamId()) {
+					team = match.getSetup().getHomeTeam().getTeamName4();
+				}
+				if(inn.getBattingTeamId() == match.getSetup().getAwayTeamId()) {
+					team = match.getSetup().getAwayTeam().getTeamName4();
+				}
+				
+				for(int i = 0; i<= CricketFunctions.populateDuckWorthLewis(match).size() -1;i++) {
+					if(CricketFunctions.populateDuckWorthLewis(match).get(i).getOver_left().equalsIgnoreCase(CricketFunctions.OverBalls(inn.getTotalOvers(),inn.getTotalBalls()))) {
+						runs = (inn.getTotalRuns() - Integer.valueOf(CricketFunctions.populateDuckWorthLewis(match).get(i).getWkts_down()));
+					}
+				}
+				if(runs < 0)
+                {
+                    ahead_behind = team + " is " + (Math.abs(runs)) + " runs behind";
+                }
+
+                if (runs > 0)
+                {
+                    ahead_behind = team + " is " + runs + " runs ahead";
+                }
+                
+                if (runs == 0)
+                {
+                	ahead_behind = "DLS score is level";
+                }
+			}
+		}
+		return ahead_behind;
+	}
+	public static String populateRetiredHurt(MatchAllData match,List<Event> events) throws InterruptedException 
+	{
+		String team="",ahead_behind="";
+		int runs = 0;
+		if ((events != null) && (events.size() > 0)) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+				switch(events.get(events.size() - 1).getEventType()) {
+				case CricketUtil.LOG_WICKET:
+					if(events.get(events.size() - 1).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)) {
+						
+					}
+					break;
+				}
+			}
+		}
+		return ahead_behind;
+	}
 }

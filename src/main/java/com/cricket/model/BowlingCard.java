@@ -51,10 +51,10 @@ public class BowlingCard implements Comparable<BowlingCard> {
 public BowlingCard() {
 	super();
 }
-public BowlingCard(Player player, int bowlingPosition, String status, int bowling_end) {
+
+public BowlingCard(int playerId,int bowlingPosition, String status, int bowling_end) {
 	super();
-	this.player = player;
-	this.playerId = player.getPlayerId();
+	this.playerId = playerId;
 	this.bowlingPosition = bowlingPosition;
 	this.status = status;
 	this.bowling_end = bowling_end;

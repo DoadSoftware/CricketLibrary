@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.cricket</groupId>
   <artifactId>CricketLibrary</artifactId>
-  <version>1.195</version>
+  <version>1.199</version>
   <name>CricketLibrary</name>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -18,11 +18,24 @@
     <version>2.14.2</version>
 </dependency>
 
+<dependency>
+      <groupId>com.googlecode.json-simple</groupId>
+      <artifactId>json-simple</artifactId>
+      <version>1.1.1</version>
+</dependency>
+
 <!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
 <dependency>
     <groupId>commons-net</groupId>
     <artifactId>commons-net</artifactId>
     <version>3.8.0</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+<dependency>
+    <groupId>org.jsoup</groupId>
+    <artifactId>jsoup</artifactId>
+    <version>1.16.1</version>
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
