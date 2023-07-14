@@ -2989,7 +2989,7 @@ public class CricketFunctions {
 					    	
 					    	switch (events.get(i).getEventType().toUpperCase()) {
 						    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
-						    	total_runs = total_runs + events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
+						    	total_runs = total_runs + events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
 						    	
 								if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
 									&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)

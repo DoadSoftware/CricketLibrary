@@ -24,6 +24,9 @@ public class Team implements Comparable<Team> {
   
   @Column(name = "TeamName4")
   private String teamName4;
+  
+  @Column(name = "TeamLogo")
+  private String teamLogo;
 
   @Column(name = "FullHindiTeamName")
   private String FullHindiTeamName;
@@ -136,15 +139,21 @@ public void setShortTeluguTeamName(String shortTeluguTeamName) {
 	ShortTeluguTeamName = shortTeluguTeamName;
 }
 
+public String getTeamLogo() {
+	return teamLogo;
+}
 
+public void setTeamLogo(String teamLogo) {
+	this.teamLogo = teamLogo;
+}
 
 @Override
 public String toString() {
 	return "Team [teamId=" + teamId + ", teamName1=" + teamName1 + ", teamName2=" + teamName2 + ", teamName3="
-			+ teamName3 + ", teamName4=" + teamName4 + ", FullHindiTeamName=" + FullHindiTeamName
-			+ ", FullTamilTeamName=" + FullTamilTeamName + ", FullTeluguTeamName=" + FullTeluguTeamName
-			+ ", ShortHindiTeamName=" + ShortHindiTeamName + ", ShortTamilTeamName=" + ShortTamilTeamName
-			+ ", ShortTeluguTeamName=" + ShortTeluguTeamName + "]";
+			+ teamName3 + ", teamName4=" + teamName4 + ", teamLogo=" + teamLogo + ", FullHindiTeamName="
+			+ FullHindiTeamName + ", FullTamilTeamName=" + FullTamilTeamName + ", FullTeluguTeamName="
+			+ FullTeluguTeamName + ", ShortHindiTeamName=" + ShortHindiTeamName + ", ShortTamilTeamName="
+			+ ShortTamilTeamName + ", ShortTeluguTeamName=" + ShortTeluguTeamName + "]";
 }
 
 @Override
