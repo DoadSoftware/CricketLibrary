@@ -2,7 +2,6 @@ package com.cricket.util;
 
 import java.io.BufferedWriter;
 import java.io.File;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -30,10 +29,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.xml.bind.JAXBException;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import com.cricket.archive.ArchiveData;
 import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
 import com.cricket.model.BowlingCard;
@@ -67,12 +69,43 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 public class CricketFunctions {
 	
 	public static ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+	
+	public static List<ArchiveData> getStatsFromWebsite(String whatToProcess, String broadcaster, String valueToProcess)
+	{
+		List<ArchiveData> all_stats = new ArrayList<ArchiveData>();
+		WebDriver driver = new ChromeDriver();
+
+		switch (broadcaster.toUpperCase()) {
+		case CricketUtil.CRIC_INFO:
+			switch (whatToProcess) {
+			case "GET-SEASON-SERIES-DATA":
+				driver.get("https://www.espncricinfo.com/ci/engine/series/index.html?season=" 
+						+ valueToProcess.replaceAll("/", "%2F") + ";view=season");
+				for(WebElement section : driver.findElements(By.className("series-summary-block")))
+				{
+					all_stats.add(new ArchiveData(section.findElement(By.tagName("a")).getText(), 
+							section.findElement(By.tagName("a")).getAttribute("href")));
+				}
+				break;
+			case "GET-ALL-SEASONS":
+				driver.get("https://www.espncricinfo.com/ci/engine/series/index.html");
+				for(WebElement section : driver.findElements(By.className("season-links")))
+				{
+					for(WebElement anchor : section.findElements(By.tagName("a")))
+					{
+						all_stats.add(new ArchiveData(anchor.getText(), anchor.getAttribute("href")));
+					}
+				}
+				break;
+			}
+			driver.quit();
+			break;
+		}
+		return all_stats;
+	}
 	
 	public static MatchAllData readOrSaveMatchFile(String whatToProcess, String whichFileToProcess, MatchAllData match) 
 		throws JAXBException, StreamWriteException, DatabindException, IOException, URISyntaxException
@@ -2552,7 +2585,7 @@ public class CricketFunctions {
 
 	public static String getbowlingstyle(String bowlingType) throws InterruptedException {
 		
-		String text="",Style="";
+		String text="";
 		
 		if(bowlingType.charAt(0) == 'L') {
 			text = "Left Arm" ;
@@ -3827,8 +3860,7 @@ public class CricketFunctions {
 	}
 	public static String populateRetiredHurt(MatchAllData match,List<Event> events) throws InterruptedException 
 	{
-		String team="",ahead_behind="";
-		int runs = 0;
+		String ahead_behind="";
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
 				switch(events.get(events.size() - 1).getEventType()) {
