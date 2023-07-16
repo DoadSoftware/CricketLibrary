@@ -60,6 +60,17 @@ public BowlingCard(int playerId,int bowlingPosition, String status, int bowling_
 	this.bowling_end = bowling_end;
 }
 
+public BowlingCard(Player player,int bowlingPosition, String status, int bowling_end) {
+	super();
+	if(player != null) {
+		this.playerId = player.getPlayerId();
+	}
+	this.player = player;
+	this.bowlingPosition = bowlingPosition;
+	this.status = status;
+	this.bowling_end = bowling_end;
+}
+
 public BowlingCard(int overs, int runs, int balls, int wickets, int playerId, int wides, int noBalls, int maidens,
 		int dots) {
 	super();
