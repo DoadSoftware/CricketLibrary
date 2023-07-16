@@ -77,29 +77,51 @@ public class CricketFunctions {
 	{
 		List<ArchiveData> all_stats = new ArrayList<ArchiveData>();
 		WebDriver driver = new ChromeDriver();
-
+		String this_url = "";
+		
 		switch (broadcaster.toUpperCase()) {
 		case CricketUtil.CRIC_INFO:
+			
 			switch (whatToProcess) {
-			case "GET-SEASON-SERIES-DATA":
-				driver.get("https://www.espncricinfo.com/ci/engine/series/index.html?season=" 
-						+ valueToProcess.replaceAll("/", "%2F") + ";view=season");
-				for(WebElement section : driver.findElements(By.className("series-summary-block")))
+			case "GET-SERIES-MATCHES-DATA":
+
+				driver.get(valueToProcess);
+				for(WebElement anchor : driver.findElements(By.tagName("a")))
 				{
-					all_stats.add(new ArchiveData(section.findElement(By.tagName("a")).getText(), 
-							section.findElement(By.tagName("a")).getAttribute("href")));
+					if(anchor.getAttribute("href").contains("/full-scorecard")) {
+						this_url = anchor.getAttribute("href").split("/")[anchor.getAttribute("href").split("/").length - 2];
+						if(this_url.contains("-")) {
+							all_stats.add(new ArchiveData(Long.valueOf(this_url.split("-")[this_url.split("-").length-1]), 
+								this_url, anchor.getAttribute("href")));
+						}
+					}
 				}
 				break;
+				
+			case "GET-SEASON-SERIES-DATA":
+				
+				driver.get("https://www.espncricinfo.com/ci/engine/series/index.html?season=" 
+					+ valueToProcess + ";view=season");
+				for(WebElement section : driver.findElements(By.className("series-summary-block")))
+				{
+					all_stats.add(new ArchiveData(Long.valueOf(section.getAttribute("data-series-id")), 
+						section.findElement(By.tagName("a")).getText(), 
+						section.findElement(By.tagName("a")).getAttribute("href")));
+				}
+				break;
+				
 			case "GET-ALL-SEASONS":
+				
 				driver.get("https://www.espncricinfo.com/ci/engine/series/index.html");
 				for(WebElement section : driver.findElements(By.className("season-links")))
 				{
 					for(WebElement anchor : section.findElements(By.tagName("a")))
 					{
-						all_stats.add(new ArchiveData(anchor.getText(), anchor.getAttribute("href")));
+						all_stats.add(new ArchiveData(0,anchor.getText(), anchor.getAttribute("href")));
 					}
 				}
 				break;
+				
 			}
 			driver.quit();
 			break;

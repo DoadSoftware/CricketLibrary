@@ -2,9 +2,16 @@ package com.cricket.archive;
 
 public class ArchiveData{
 
+  private long id;
   private String label;
   private String url;
   
+public long getId() {
+	return id;
+}
+public void setId(long id) {
+	this.id = id;
+}
 public String getLabel() {
 	return label;
 }
@@ -21,11 +28,15 @@ public ArchiveData() {
 	super();
 	// TODO Auto-generated constructor stub
 }
-public ArchiveData(String label, String url) {
+public ArchiveData(long id, String label, String url) {
 	super();
+	this.id = id;
 	this.label = label;
 	this.url = url;
 }
-  
+@Override
+public String toString() {
+	return "ArchiveData [id=" + id + ", label=" + label + ", url=" + url + "]";
+}
   
 }
