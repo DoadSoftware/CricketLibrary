@@ -186,6 +186,8 @@ public class CricketUtil {
 	public final static String POWERPLAY = "POWERPLAY";
 	public final static String INNING = "INNING";
 	public final static String OVER = "OVER";
+	public final static String EXTRAS = "EXTRAS";
+	public final static String TOTAL = "TOTAL";
 	public final static String PROJECTED = "PROJECTED";
 	
 	public final static String TIMELINE = "TIMELINE";

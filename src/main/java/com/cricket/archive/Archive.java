@@ -2,13 +2,22 @@ package com.cricket.archive;
 
 import java.util.List;
 
+import com.cricket.model.MatchAllData;
+
 public class Archive{
 
   private List<ArchiveData> seasons;
   private List<ArchiveData> series;
   private List<ArchiveData> matches;
-
-  public List<ArchiveData> getMatches() {
+  private MatchAllData matchAllData;
+  
+  public MatchAllData getMatchAllData() {
+	return matchAllData;
+}
+public void setMatchAllData(MatchAllData matchAllData) {
+	this.matchAllData = matchAllData;
+}
+public List<ArchiveData> getMatches() {
 	return matches;
 }
 public void setMatches(List<ArchiveData> matches) {
