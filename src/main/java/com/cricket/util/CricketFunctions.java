@@ -2537,15 +2537,16 @@ public class CricketFunctions {
 				if(events.get(i).getEventInningNumber() == inning_number) {
 					if(playerId == events.get(i).getEventBatterNo()) {
 						switch (events.get(i).getEventType()) {
-						case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR:  case CricketUtil.FIVE: case CricketUtil.SIX: 
-						case CricketUtil.LEG_BYE: case CricketUtil.BYE: case CricketUtil.LOG_WICKET:
+						case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR:  case CricketUtil.FIVE:
+						case CricketUtil.SIX: case CricketUtil.LOG_WICKET:
 							total_balls = total_balls + 1 ;
 							count_balls = count_balls + 1 ;
 							total_runs = total_runs + events.get(i).getEventRuns();
 							break;
 						
-						case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.PENALTY:
-							total_runs = total_runs + events.get(i).getEventRuns();
+						case CricketUtil.LEG_BYE: case CricketUtil.BYE:
+							total_balls = total_balls + 1 ;
+							count_balls = count_balls + 1 ;
 							break;
 						
 						case CricketUtil.LOG_ANY_BALL:
@@ -2561,7 +2562,6 @@ public class CricketFunctions {
 						
 						if((count_balls < plyr_balls_count && total_runs >= splitvalue) || (count_balls == plyr_balls_count)) {
 							
-							//System.out.println(total_balls);
 							Balls.add(String.valueOf(total_balls));
 							total_runs = total_runs - splitvalue;
 							total_balls = 0;
