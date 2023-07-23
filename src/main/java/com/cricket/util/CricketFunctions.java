@@ -1804,6 +1804,7 @@ public class CricketFunctions {
 		case "PAST_MATCHES_DATA":
 			
 			for(MatchAllData mtch : tournament_matches) {
+				
 				if(!mtch.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
 					
 					has_match_started = false;
@@ -1848,7 +1849,7 @@ public class CricketFunctions {
 										}
 										
 										
-										getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), playerId, cricketService, tournament_stats, mtch);
+										//getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), playerId, cricketService, tournament_stats, mtch);
 										
 									}else {
 										tournament_stats.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), 0, 0, 0, bc.getBalls(), 
@@ -1862,7 +1863,7 @@ public class CricketFunctions {
 													bc.getBalls(),inn.getBowling_team(), bc.getPlayer()));
 										}
 										
-										getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), (tournament_stats.size() - 1), cricketService, tournament_stats, mtch);
+										//getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), (tournament_stats.size() - 1), cricketService, tournament_stats, mtch);
 									}	
 								}
 							}
@@ -1967,7 +1968,7 @@ public class CricketFunctions {
 										bc.getBalls(), inn.getBowling_team(), bc.getPlayer()));
 							}
 							
-							getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), playerId, cricketService, past_tournament_stats, currentMatch);
+							//getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), playerId, cricketService, past_tournament_stats, currentMatch);
 							
 						}else {
 							past_tournament_stats.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), 0, 0, 0, bc.getBalls(), 
@@ -1981,7 +1982,7 @@ public class CricketFunctions {
 										(bc.getRuns() * 2), bc.getBalls(), inn.getBowling_team(), bc.getPlayer()));
 							}
 							
-							getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), (past_tournament_stats.size()-1), cricketService, past_tournament_stats, currentMatch);
+							//getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), (past_tournament_stats.size()-1), cricketService, past_tournament_stats, currentMatch);
 						}	
 					}
 
