@@ -34,7 +34,6 @@ import org.jsoup.nodes.Document;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import com.cricket.archive.ArchiveData;
 import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
@@ -74,7 +73,8 @@ public class CricketFunctions {
 	
 	public static ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 	
-	public static MatchAllData getMatchDataFromWebsite(String whatToProcess, String broadcaster, String valueToProcess)
+	public static MatchAllData getMatchDataFromWebsite(WebDriver driver, String whatToProcess, 
+		String broadcaster, String valueToProcess)
 	{
 		MatchAllData this_match = new MatchAllData();
 		this_match.setMatch(new Match());
@@ -84,10 +84,9 @@ public class CricketFunctions {
 		List<Inning> this_inn = new ArrayList<Inning>();
 		List<BowlingCard> this_bowlingcard = new ArrayList<BowlingCard>();
 		Player this_player = new Player();
-		WebDriver driver = new ChromeDriver();
 
-		int table_count = 0, column_data_count = 0;
-		boolean extras_found = false, total_found = false, foW_found = false;
+		int column_data_count = 0;
+		boolean extras_found = false, total_found = false, data_found = false;
 		String data_to_process = "";
 		
 		switch (broadcaster.toUpperCase()) {
@@ -95,157 +94,210 @@ public class CricketFunctions {
 			
 			switch (whatToProcess) {
 			case "GET-SINGLE-MATCH-DATA":
-				System.out.println("valueToProcess = " + valueToProcess);
+				
 				driver.get(valueToProcess);
-				for(WebElement table : driver.findElements(By.className("ci-scorecard-table")))
-				{
-					table_count++;
-					switch (table_count) {
-					case 1: case 3:
-						this_inn.add(new Inning()); // Add new inning when batting card is detected
-						this_battingcard = new ArrayList<BattingCard>();
-						break;
-					case 2: case 4:
-						this_bowlingcard = new ArrayList<BowlingCard>();
-						break;
-					}
-					for(WebElement row : table.findElements(By.xpath("./tbody/tr")))
+				
+				for (WebElement batting_card_table : driver.findElements(By.className("ci-scorecard-table"))) {
+
+					this_inn.add(new Inning()); // Add new inning when batting card is detected
+					this_battingcard = new ArrayList<BattingCard>();
+					
+					for(WebElement row : batting_card_table.findElements(By.xpath("./tbody/tr")))
 					{
 						column_data_count = 0;
 						for(WebElement column : row.findElements(By.tagName("td")))
 						{
-							switch (table_count) {
-							case 1: case 3: // Batting card
-
-								System.out.println("column.getText() = " + column.getText());
+							System.out.println("column.getText() = " + column.getText());
+							
+							if(column.getText().equalsIgnoreCase(CricketUtil.EXTRAS)) {
+								extras_found = true;
+							} else if(column.getText().equalsIgnoreCase(CricketUtil.TOTAL)) {
+								total_found = true;
+							}
+							if(extras_found == true) {
 								
-								if(column.getText().equalsIgnoreCase(CricketUtil.EXTRAS)) {
-									extras_found = true;
-								} else if(column.getText().equalsIgnoreCase(CricketUtil.TOTAL)) {
-									total_found = true;
-								} else if(column.getText().toUpperCase().contains("FALL OF WICKETS")) {
-									foW_found = true;
-								}
-								System.out.println("extras_found = " + extras_found);
-								System.out.println("total_found = " + total_found);
-								System.out.println("foW_found = " + foW_found);
-								if(extras_found == true) {
+								if(!column.getText().isEmpty() && column.getText().contains("(")
+									&& column.getText().contains(")")) {
 									
-									if(!column.getText().isEmpty() && column.getText().contains("(")
-										&& column.getText().contains(")")) {
-										
-										data_to_process = column.getText().replace("(", "");
-										data_to_process = data_to_process.replace(")", "");
-										System.out.println("Extra data_to_process = " + data_to_process);
-										if(data_to_process.contains(",")) {
-											for (String ext : data_to_process.split(",")) {
-												if(ext.toUpperCase().contains("LB")) {
-													this_inn.get(this_inn.size()-1).setTotalLegByes(
-														Integer.valueOf(ext.toUpperCase().replace("LB", "").trim()));
-												}else if(ext.toUpperCase().contains("B")) {
-													this_inn.get(this_inn.size()-1).setTotalByes(
-														Integer.valueOf(ext.toUpperCase().replace("B", "").trim()));
-												}else if(ext.toUpperCase().contains("W")) {
-													this_inn.get(this_inn.size()-1).setTotalWides(
-														Integer.valueOf(ext.toUpperCase().replace("W", "").trim()));
-												}else if(ext.toUpperCase().contains("NB")) {
-													this_inn.get(this_inn.size()-1).setTotalNoBalls(
-														Integer.valueOf(ext.toUpperCase().replace("NB", "").trim()));
-												}
-											}
-										} else {
-											if(data_to_process.toUpperCase().contains("LB")) {
+									data_to_process = column.getText().replace("(", "");
+									data_to_process = data_to_process.replace(")", "");
+									System.out.println("Extra data_to_process = " + data_to_process);
+									if(data_to_process.contains(",")) {
+										for (String ext : data_to_process.split(",")) {
+											if(ext.toUpperCase().contains("LB")) {
 												this_inn.get(this_inn.size()-1).setTotalLegByes(
-													Integer.valueOf(data_to_process.toUpperCase().replace("LB", "").trim()));
-											}else if(data_to_process.toUpperCase().contains("B")) {
+													Integer.valueOf(ext.toUpperCase().replace("LB", "").trim()));
+											}else if(ext.toUpperCase().contains("B")) {
 												this_inn.get(this_inn.size()-1).setTotalByes(
-													Integer.valueOf(data_to_process.toUpperCase().replace("B", "").trim()));
-											}else if(data_to_process.toUpperCase().contains("W")) {
+													Integer.valueOf(ext.toUpperCase().replace("B", "").trim()));
+											}else if(ext.toUpperCase().contains("W")) {
 												this_inn.get(this_inn.size()-1).setTotalWides(
-													Integer.valueOf(data_to_process.toUpperCase().replace("W", "").trim()));
-											}else if(data_to_process.toUpperCase().contains("NB")) {
+													Integer.valueOf(ext.toUpperCase().replace("W", "").trim()));
+											}else if(ext.toUpperCase().contains("NB")) {
 												this_inn.get(this_inn.size()-1).setTotalNoBalls(
-													Integer.valueOf(data_to_process.toUpperCase().replace("NB", "").trim()));
-											}
-										}
-										
-									} else if(!column.findElements(By.tagName("strong")).isEmpty()) {
-										
-										this_inn.get(this_inn.size()-1).setTotalExtras(
-											Integer.valueOf(column.getText()));
-										
-										extras_found = false;
-										
-									} 
-
-									
-								} else if(total_found == true) {
-									
-									if(!column.findElements(By.tagName("span")).isEmpty()) {
-										for (WebElement this_span : column.findElements(By.tagName("span"))) {
-											System.out.println("TOTAL OVERS = " + this_span.getText());
-											if(this_span.getText().toUpperCase().contains(" OV")) {
-												if(this_span.getText().contains(".")) {
-													this_inn.get(this_inn.size()-1).setTotalOvers(
-														Integer.valueOf(this_span.getText().split(".")[0]));
-													this_inn.get(this_inn.size()-1).setTotalBalls(
-														Integer.valueOf(this_span.getText().split(".")[1]));
-												}
-											} else {
-												if(this_span.getText().toUpperCase().contains("(RR:")) {
-													data_to_process = this_span.getText().toUpperCase().replace("(RR:", "");
-													data_to_process = data_to_process.replace(")", "").trim();
-													this_inn.get(this_inn.size()-1).setRunRate(data_to_process);
-												}
+													Integer.valueOf(ext.toUpperCase().replace("NB", "").trim()));
 											}
 										}
 									} else {
-										System.out.println("TOTAL = " + column.getText());
-										data_to_process = column.getText().replace("<!-- -->", "");
-										if(data_to_process.contains("/")) {
-											this_inn.get(this_inn.size()-1).setTotalRuns(
-												Integer.valueOf(column.getText().replace("<!-- -->", "").split("/")[0]));
-											this_inn.get(this_inn.size()-1).setTotalWickets(
-													Integer.valueOf(column.getText().replace("<!-- -->", "").split("/")[1]));
-											total_found = false;
+										if(data_to_process.toUpperCase().contains("LB")) {
+											this_inn.get(this_inn.size()-1).setTotalLegByes(
+												Integer.valueOf(data_to_process.toUpperCase().replace("LB", "").trim()));
+										}else if(data_to_process.toUpperCase().contains("B")) {
+											this_inn.get(this_inn.size()-1).setTotalByes(
+												Integer.valueOf(data_to_process.toUpperCase().replace("B", "").trim()));
+										}else if(data_to_process.toUpperCase().contains("W")) {
+											this_inn.get(this_inn.size()-1).setTotalWides(
+												Integer.valueOf(data_to_process.toUpperCase().replace("W", "").trim()));
+										}else if(data_to_process.toUpperCase().contains("NB")) {
+											this_inn.get(this_inn.size()-1).setTotalNoBalls(
+												Integer.valueOf(data_to_process.toUpperCase().replace("NB", "").trim()));
 										}
 									}
 									
-								} else if(foW_found == true) {
+								} else if(!column.findElements(By.tagName("strong")).isEmpty()) {
+									
+									this_inn.get(this_inn.size()-1).setTotalExtras(
+										Integer.valueOf(column.getText()));
+									
+									extras_found = false;
+									
+								} 
 
-									for(WebElement foW : column.findElements(By.tagName("span")))
-									{
-										for (BattingCard bc : this_battingcard) {
-
-											if(bc.getPlayer() != null && bc.getPlayer().getFull_name() != null
-												&& bc.getPlayer().getFull_name().equalsIgnoreCase(
-												foW.getText().substring(foW.getText().indexOf("(") + 1, foW.getText().indexOf(",") + 1))) {
-												
-												data_to_process = foW.getText().substring(foW.getText().indexOf(",") + 1, 
-													foW.getText().toUpperCase().indexOf(" OV") + 1);
-												
-												this_FoWs.add(new FallOfWicket(Integer.valueOf(foW.getText().substring(0, foW.getText().indexOf("-"))), 
-														bc.getPlayer().getPlayerId(), Integer.valueOf(foW.getText().substring(foW.getText().indexOf("-") + 1, 
-														foW.getText().indexOf("(") - foW.getText().indexOf("-"))), 
-														Integer.valueOf(data_to_process.split(".")[0].trim()), 
-														Integer.valueOf(data_to_process.split(".")[1].trim())));
-												System.out.println("FoW Web = " + foW.getText());
-												System.out.println("FoW Variable = " + this_FoWs.get(this_FoWs.size()-1));
+								
+							} else if(total_found == true) {
+								
+								if(!column.findElements(By.tagName("span")).isEmpty()) {
+									for (WebElement this_span : column.findElements(By.tagName("span"))) {
+										System.out.println("TOTAL OVERS = " + this_span.getText());
+										if(this_span.getText().toUpperCase().contains(" OV")) {
+											data_to_process = this_span.getText().toUpperCase().replace("OV", "").trim();
+											System.out.println("Overs = " + data_to_process);
+											if(data_to_process.contains(".")) {
+												System.out.println("Over no = " + data_to_process.substring(0,data_to_process.indexOf(".")));
+												System.out.println("Ball no = " + data_to_process.substring(data_to_process.indexOf(".")+1));
+												this_inn.get(this_inn.size()-1).setTotalOvers(
+													Integer.valueOf(data_to_process.substring(0,data_to_process.indexOf("."))));
+												this_inn.get(this_inn.size()-1).setTotalBalls(
+														Integer.valueOf(data_to_process.substring(data_to_process.indexOf(".")+1)));
+											}
+										} else {
+											if(this_span.getText().toUpperCase().contains("(RR:")) {
+												data_to_process = this_span.getText().toUpperCase().replace("(RR:", "");
+												data_to_process = data_to_process.replace(")", "").trim();
+												this_inn.get(this_inn.size()-1).setRunRate(data_to_process);
 											}
 										}
 									}
-									foW_found = false;
+								} else {
+									System.out.println("TOTAL = " + column.getText());
+									data_to_process = column.getText().trim();
+									if(data_to_process.contains("/")) {
+										System.out.println("Total Score = " + data_to_process);
+										System.out.println("Runs = " + data_to_process.substring(0,data_to_process.indexOf("/")));
+										System.out.println("Wickets = " + data_to_process.substring(data_to_process.indexOf("/")+1));
+										this_inn.get(this_inn.size()-1).setTotalRuns(
+											Integer.valueOf(data_to_process.substring(0,data_to_process.indexOf("/"))));
+										this_inn.get(this_inn.size()-1).setTotalWickets(
+											Integer.valueOf(data_to_process.substring(data_to_process.indexOf("/")+1)));
+										total_found = false;
+									}
+								}
+								
+							} else { // Batting card data
+								
+								if(column.getText().toUpperCase().contains("FALL OF WICKETS:")) {
 									
-								} else { // Batting card data
+									data_to_process = column.getText().toUpperCase().replace("FALL OF WICKETS:", "").trim();
+									System.out.println("FoW -> data_to_process = " + data_to_process);
+									for(int i=0; i < data_to_process.split(",").length; i++) {
+										
+										System.out.println("data_to_process 1 = " + data_to_process.split(",")[i]);
+										System.out.println("foW wicket = " + data_to_process.split(",")[i].substring(0, 
+											data_to_process.split(",")[i].indexOf("-")));
+										System.out.println("foW runs = " + data_to_process.split(",")[i].substring(data_to_process.split(",")[i].indexOf("-") + 1, 
+											data_to_process.split(",")[i].indexOf("(") - data_to_process.split(",")[i].indexOf("-") + 1));
+										System.out.println("foW player name = " + data_to_process.split(",")[i].substring(
+											data_to_process.split(",")[i].indexOf("(") + 1));
+										System.out.println("data_to_process 2 = " + data_to_process.split(",")[i+1]);
+										System.out.println("foW over = " + data_to_process.split(",")[i+1].toUpperCase()
+											.replace("OV)", "").substring(0,data_to_process.split(",")[i+1].indexOf(".")).trim());
+										System.out.println("foW ball = " + data_to_process.split(",")[i+1].toUpperCase()
+												.replace("OV)", "").substring(data_to_process.split(",")[i+1].indexOf(".")+1).trim());
+										
+										for (BattingCard bc : this_battingcard) {
+
+											if(bc.getPlayer() != null && bc.getPlayer().getFull_name() != null
+												&& bc.getPlayer().getFull_name().equalsIgnoreCase(data_to_process.split(",")[i].substring(
+														data_to_process.split(",")[i].indexOf("(") + 1))) {
+												
+												this_FoWs.add(new FallOfWicket(Integer.valueOf(data_to_process.split(",")[i].substring(0, 
+														data_to_process.split(",")[i].indexOf("-")).trim()), 
+													bc.getPlayer().getPlayerId(), Integer.valueOf(data_to_process.split(",")[i].substring(
+													data_to_process.split(",")[i].indexOf("-") + 1, data_to_process.split(",")[i].indexOf("(") 
+													- data_to_process.split(",")[i].indexOf("-") + 1).trim()), 
+													Integer.valueOf(data_to_process.split(",")[i+1].toUpperCase()
+													.replace("OV)", "").substring(0,data_to_process.split(",")[i+1].indexOf(".")).trim()), 
+													Integer.valueOf(data_to_process.split(",")[i+1].toUpperCase()
+													.replace("OV)", "").substring(data_to_process.split(",")[i+1].indexOf(".")+1).trim())));
+												i++;
+												System.out.println("FoW Variable = " + this_FoWs.get(this_FoWs.size()-1).toString());
+												break;
+											}
+										}										
+										
+									}
+//									for (String foW_str : data_to_process.split("),")) {
+//										System.out.println("foW_str = " + foW_str);
+//										System.out.println("foW player name = " + foW_str.substring(foW_str.indexOf("(") + 1, foW_str.indexOf(",") + 1));
+//										System.out.println("foW wicket = " + foW_str.substring(0, foW_str.indexOf("-")));
+//										System.out.println("foW runs = " + foW_str.substring(foW_str.indexOf("-") + 1, 
+//												foW_str.indexOf("(") - foW_str.indexOf("-")));
+//										System.out.println("foW over = " + foW_str.substring(foW_str.indexOf(",") + 1, foW_str.length()).split(".")[0].trim());
+//										System.out.println("foW ball = " + foW_str.substring(foW_str.indexOf(",") + 1, 
+//											foW_str.length()).split(".")[1].replace("OV", "").trim());
+//										for (BattingCard bc : this_battingcard) {
+//
+//											if(bc.getPlayer() != null && bc.getPlayer().getFull_name() != null
+//												&& bc.getPlayer().getFull_name().equalsIgnoreCase(
+//												foW_str.substring(foW_str.indexOf("(") + 1, foW_str.indexOf(",") + 1))) {
+//												
+//												this_FoWs.add(new FallOfWicket(Integer.valueOf(foW_str.substring(0, foW_str.indexOf("-"))), 
+//													bc.getPlayer().getPlayerId(), Integer.valueOf(foW_str.substring(foW_str.indexOf("-") + 1, 
+//													foW_str.indexOf("(") - foW_str.indexOf("-"))), 
+//													Integer.valueOf(foW_str.substring(foW_str.indexOf(",") + 1, foW_str.length()).split(".")[0].trim()), 
+//													Integer.valueOf(foW_str.substring(foW_str.indexOf(",") + 1, 
+//														foW_str.length()).split(".")[1].replace("OV", "").trim())));
+//												System.out.println("FoW Variable = " + this_FoWs.get(this_FoWs.size()-1));
+//											}
+//										}
+//									}
 									
-									if(!column.findElements(By.tagName("a")).isEmpty())  
-									{
+								} else if(column.getText().toUpperCase().contains("DID NOT BAT:")) {
+									for (WebElement did_not_bat_anchor : column.findElements(By.tagName("a"))) {
+										if(did_not_bat_anchor.getAttribute("href").contains("/cricketers/")
+												&& did_not_bat_anchor.getAttribute("href").contains("-")) {
+											System.out.println("did_not_bat_anchor = " + did_not_bat_anchor.getAttribute("href"));
+											System.out.println("did_not_bat_anchor span->span = " + did_not_bat_anchor.findElement(
+												By.xpath("./span/span")).getText());
+											this_player = new Player();
+											this_player.setPlayerId(Integer.valueOf(did_not_bat_anchor.getAttribute("href").split("-")[
+											    did_not_bat_anchor.getAttribute("href").split("-").length-1]));
+											this_player.setFull_name(did_not_bat_anchor.findElement(
+												By.xpath("./span/span")).getText().replace(",", "").trim());
+											this_battingcard.add(new BattingCard(this_player.getPlayerId(), 
+												this_battingcard.size() + 1,CricketUtil.STILL_TO_BAT));
+											this_battingcard.get(this_battingcard.size()-1).setPlayer(this_player);
+										}
+									}
+								} else {
+									if(!column.findElements(By.tagName("a")).isEmpty()) {
 										if(column.findElement(By.tagName("a")).getAttribute("href").contains("/cricketers/")
 											&& column.findElement(By.tagName("a")).getAttribute("href").contains("-")) {
 										
 											System.out.println("Bat anchor HREF = " + column.findElement(
 													By.tagName("a")).getAttribute("href"));
-											System.out.println("Bat player full name = " + column.findElement(By.tagName("a")).findElement(By.tagName("span")).getText());
+											System.out.println("Bat player full name = " + column.findElement(By.tagName("a")).
+												findElement(By.tagName("span")).getText());
 											this_battingcard.add(new BattingCard(Integer.valueOf(column.findElement(
 												By.tagName("a")).getAttribute("href").split("-")[
 												column.findElement(By.tagName("a")).getAttribute("href").split("-").length-1]), 
@@ -316,81 +368,97 @@ public class CricketFunctions {
 										}
 									}
 								}
-								
-								break;
-								
-							case 2: case 4:
-								
-								if(!column.findElements(By.tagName("a")).isEmpty())  
-								{
-									if(column.findElement(By.tagName("a")).getAttribute("href").contains("/cricketers/")
-										&& column.findElement(By.tagName("a")).getAttribute("href").contains("-")) {
-										
-										System.out.println("Bowling anchor HREF = " + column.findElement(By.tagName("a")).getAttribute("href"));
-										System.out.println("Bowling player full name = " + column.findElement(By.tagName("a")).findElement(By.tagName("span")).getText());
-										this_bowlingcard.add(new BowlingCard(Integer.valueOf(column.findElement(
-												By.tagName("a")).getAttribute("href").split("-")[
-												column.findElement(By.tagName("a")).getAttribute("href").split("-").length-1]), 
-												this_bowlingcard.size() + 1, CricketUtil.LAST, 0));
-										
-										this_player = new Player();
-										this_player.setPlayerId(Integer.valueOf(column.findElement(
-												By.tagName("a")).getAttribute("href").split("-")[
-												column.findElement(By.tagName("a")).getAttribute("href").split("-").length-1]));
-										this_player.setFull_name(column.findElement(By.tagName("a")).findElement(By.tagName("span")).getText());
-										this_bowlingcard.get(this_bowlingcard.size()-1).setPlayer(this_player);
-										
-										column_data_count = 0;
-										
-									}
-								} else {
-									
-									column_data_count++;
-									System.out.println("Bowl column_data_count = " + column_data_count + " -> " + column.getText());
-									switch (column_data_count) {
-									case 1:
-										if(column.getText().contains(".")) {
-											this_bowlingcard.get(this_bowlingcard.size()-1).setOvers(
-												Integer.valueOf(column.getText().split(".")[0]));
-											this_bowlingcard.get(this_bowlingcard.size()-1).setBalls((
-												Integer.valueOf(column.getText().split(".")[1])));
-										} else {
-											this_bowlingcard.get(this_bowlingcard.size()-1).setOvers(Integer.valueOf(column.getText()));
-										}
-										break;
-									case 2: 
-										this_bowlingcard.get(this_bowlingcard.size()-1).setMaidens(Integer.valueOf(column.getText()));
-										break;
-									case 3:
-										this_bowlingcard.get(this_bowlingcard.size()-1).setRuns(Integer.valueOf(column.getText()));
-										break;
-									case 4:
-										this_bowlingcard.get(this_bowlingcard.size()-1).setWickets(Integer.valueOf(column.getText()));
-										break;
-									case 5:
-										this_bowlingcard.get(this_bowlingcard.size()-1).setEconomyRate(column.getText());
-										break;
-									case 6:
-										this_bowlingcard.get(this_bowlingcard.size()-1).setWides(Integer.valueOf(column.getText()));
-										break;
-									case 7:
-										this_bowlingcard.get(this_bowlingcard.size()-1).setNoBalls(Integer.valueOf(column.getText()));
-										break;
-									}
-									
-								}
+							}
+						}
+					}
+					this_inn.get(this_inn.size() - 1).setBattingCard(this_battingcard);
+					this_inn.get(this_inn.size() - 1).setFallsOfWickets(this_FoWs);
+				}
+				
+				for (WebElement bowling_card_table : driver.findElements(By.tagName("table"))) {
+					data_found = false;
+					System.out.println("Table head:row:th found = " + bowling_card_table.findElements(By.xpath("./thead/tr/th")).size());
+					if(bowling_card_table.findElements(By.xpath("./thead/tr/th")).size() > 0) {
+						for (WebElement table_header : bowling_card_table.findElements(By.xpath("./thead/tr/th"))) {
+							System.out.println("table_header.getText() = " + table_header.getText());
+							if(table_header.getText().equalsIgnoreCase("BOWLING")) {
+								data_found = true;
 								break;
 							}
 						}
 					}
-					switch (table_count) {
-					case 1: case 3:
-						this_inn.get(this_inn.size() - 1).setBattingCard(this_battingcard);
-						this_inn.get(this_inn.size() - 1).setFallsOfWickets(this_FoWs);
-						break;
-					case 2: case 4:
+					if(data_found == true) {
+						
+						this_bowlingcard = new ArrayList<BowlingCard>();
+						
+						for(WebElement row : bowling_card_table.findElements(By.xpath("./tbody/tr")))
+						{
+							System.out.println("row.getAttribute(class) = " + row.getAttribute("class"));
+							if(!row.getAttribute("class").toLowerCase().contains("ds-hidden")) {
+								column_data_count = 0;
+								for(WebElement column : row.findElements(By.tagName("td")))
+								{
+									if(!column.findElements(By.tagName("a")).isEmpty())  
+									{
+										if(column.findElement(By.tagName("a")).getAttribute("href").contains("/cricketers/")
+											&& column.findElement(By.tagName("a")).getAttribute("href").contains("-")) {
+											
+											System.out.println("Bowling anchor HREF = " + column.findElement(By.tagName("a")).getAttribute("href"));
+											System.out.println("Bowling player full name = " + column.findElement(By.tagName("a")).findElement(By.tagName("span")).getText());
+											this_bowlingcard.add(new BowlingCard(Integer.valueOf(column.findElement(
+													By.tagName("a")).getAttribute("href").split("-")[
+													column.findElement(By.tagName("a")).getAttribute("href").split("-").length-1]), 
+													this_bowlingcard.size() + 1, CricketUtil.LAST, 0));
+											
+											this_player = new Player();
+											this_player.setPlayerId(Integer.valueOf(column.findElement(
+													By.tagName("a")).getAttribute("href").split("-")[
+													column.findElement(By.tagName("a")).getAttribute("href").split("-").length-1]));
+											this_player.setFull_name(column.findElement(By.tagName("a")).findElement(By.tagName("span")).getText());
+											this_bowlingcard.get(this_bowlingcard.size()-1).setPlayer(this_player);
+											
+											column_data_count = 0;
+											
+										}
+									} else {
+										
+										column_data_count++;
+										System.out.println("Bowl column_data_count = " + column_data_count + " -> " + column.getText());
+										switch (column_data_count) {
+										case 1:
+											if(column.getText().contains(".")) {
+												this_bowlingcard.get(this_bowlingcard.size()-1).setOvers(
+													Integer.valueOf(column.getText().substring(0,column.getText().indexOf("."))));
+												this_bowlingcard.get(this_bowlingcard.size()-1).setBalls((
+													Integer.valueOf(column.getText().substring(column.getText().indexOf(".")+1))));
+											} else {
+												this_bowlingcard.get(this_bowlingcard.size()-1).setOvers(Integer.valueOf(column.getText()));
+											}
+											break;
+										case 2: 
+											this_bowlingcard.get(this_bowlingcard.size()-1).setMaidens(Integer.valueOf(column.getText()));
+											break;
+										case 3:
+											this_bowlingcard.get(this_bowlingcard.size()-1).setRuns(Integer.valueOf(column.getText()));
+											break;
+										case 4:
+											this_bowlingcard.get(this_bowlingcard.size()-1).setWickets(Integer.valueOf(column.getText()));
+											break;
+										case 5:
+											this_bowlingcard.get(this_bowlingcard.size()-1).setEconomyRate(column.getText());
+											break;
+										case 6:
+											this_bowlingcard.get(this_bowlingcard.size()-1).setWides(Integer.valueOf(column.getText()));
+											break;
+										case 7:
+											this_bowlingcard.get(this_bowlingcard.size()-1).setNoBalls(Integer.valueOf(column.getText()));
+											break;
+										}
+									}
+								}
+							}
+						}
 						this_inn.get(this_inn.size() - 1).setBowlingCard(this_bowlingcard);
-						break;
 					}
 				}
 				this_match.getMatch().setInning(this_inn);
@@ -398,17 +466,15 @@ public class CricketFunctions {
 			}
 			break;
 		}
-		driver.quit();
 		return this_match;
 	}
-	public static List<ArchiveData> getStatsFromWebsite(String whatToProcess, 
+	public static List<ArchiveData> getStatsFromWebsite(WebDriver driver, String whatToProcess, 
 			String broadcaster, String valueToProcess, CricketService cricketService)
 	{
 		List<ArchiveData> all_stats = new ArrayList<ArchiveData>();
 		String this_url = "";
 		List<String> this_teams = new ArrayList<String>();
 		int teams_found_count = 0;
-		WebDriver driver = new ChromeDriver();
 		
 		switch (broadcaster.toUpperCase()) {
 		case CricketUtil.CRIC_INFO:
@@ -472,7 +538,6 @@ public class CricketFunctions {
 			}
 			break;
 		}
-		driver.quit();
 		return all_stats;
 	}
 	

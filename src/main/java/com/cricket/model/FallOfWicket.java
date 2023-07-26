@@ -71,4 +71,10 @@ public int compareTo(FallOfWicket fow) {
 	return (int) (this.getFowNumber()-fow.getFowNumber());
 }
 
+@Override
+public String toString() {
+	return "FallOfWicket [fowNumber=" + fowNumber + ", fowPlayerID=" + fowPlayerID + ", fowRuns=" + fowRuns
+			+ ", fowOvers=" + fowOvers + ", fowBalls=" + fowBalls + "]";
+}
+
 }
