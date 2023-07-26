@@ -214,4 +214,15 @@ public void setWickets(int wickets) {
 public int compareTo(BowlingCard bc) {
 	return (int) (this.getBowlingPosition()-bc.getBowlingPosition());
 }
+
+@Override
+public String toString() {
+	return "BowlingCard [player=" + player + ", bowlingPosition=" + bowlingPosition + ", status=" + status
+			+ ", economyRate=" + economyRate + ", bowling_end=" + bowling_end + ", overs=" + overs + ", runs=" + runs
+			+ ", balls=" + balls + ", wickets=" + wickets + ", playerId=" + playerId + ", wides=" + wides + ", noBalls="
+			+ noBalls + ", runOuts=" + runOuts + ", stumpings=" + stumpings + ", catchAsFielder=" + catchAsFielder
+			+ ", catchAsBowler=" + catchAsBowler + ", maidens=" + maidens + ", dots=" + dots + ", totalRunsThisOver="
+			+ totalRunsThisOver + ", speeds=" + speeds + "]";
+}
+
 }
