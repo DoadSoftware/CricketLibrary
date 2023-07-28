@@ -405,17 +405,17 @@ public class CricketFunctions {
 					case 1:
 						if(this_match.getSetup().getHomeTeam() != null) {
 							this_inn.get(this_inn.size() - 1).setBatting_team(this_match.getSetup().getHomeTeam());
-							this_inn.get(this_inn.size() - 1).setBattingTeamId(this_match.getSetup().getHomeTeam().getTeamId());
-							this_inn.get(this_inn.size() - 1).setBowling_team(this_match.getSetup().getAwayTeam());
-							this_inn.get(this_inn.size() - 1).setBowlingTeamId(this_match.getSetup().getAwayTeam().getTeamId());
+							this_inn.get(this_inn.size() - 1).setBattingTeamId(this_match.getSetup().getHomeTeamId());
+							this_inn.get(this_inn.size() - 1).setBowling_team(this_match.getSetup().getHomeTeam());
+							this_inn.get(this_inn.size() - 1).setBowlingTeamId(this_match.getSetup().getHomeTeamId());
 						}
 						break;
 					case 2:
 						if(this_match.getSetup().getAwayTeam() != null) {
 							this_inn.get(this_inn.size() - 1).setBatting_team(this_match.getSetup().getAwayTeam());
-							this_inn.get(this_inn.size() - 1).setBattingTeamId(this_match.getSetup().getAwayTeam().getTeamId());
-							this_inn.get(this_inn.size() - 1).setBowling_team(this_match.getSetup().getHomeTeam());
-							this_inn.get(this_inn.size() - 1).setBowlingTeamId(this_match.getSetup().getHomeTeam().getTeamId());
+							this_inn.get(this_inn.size() - 1).setBattingTeamId(this_match.getSetup().getAwayTeamId());
+							this_inn.get(this_inn.size() - 1).setBowling_team(this_match.getSetup().getAwayTeam());
+							this_inn.get(this_inn.size() - 1).setBowlingTeamId(this_match.getSetup().getAwayTeamId());
 						}
 						break;
 					}
