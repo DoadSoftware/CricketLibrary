@@ -34,6 +34,8 @@ import org.jsoup.nodes.Document;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import com.cricket.archive.Archive;
 import com.cricket.archive.ArchiveData;
 import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
@@ -74,7 +76,7 @@ public class CricketFunctions {
 	public static ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 	
 	public static MatchAllData getMatchDataFromWebsite(WebDriver driver, String whatToProcess, 
-		String broadcaster, String valueToProcess, List<Team> all_teams)
+		String broadcaster, String valueToProcess, List<Team> all_teams) throws StreamWriteException, DatabindException, JAXBException, IOException, URISyntaxException
 	{
 		List<BattingCard> this_battingcard = new ArrayList<BattingCard>();
 		List<FallOfWicket> this_FoWs = new ArrayList<FallOfWicket>();
@@ -82,13 +84,15 @@ public class CricketFunctions {
 		List<BowlingCard> this_bowlingcard = new ArrayList<BowlingCard>();
 		Player this_player = new Player();
 		WebElement this_webElement;
-		int column_data_count = 0;
+		int column_data_count = 0,bowling_card_count = 1;
 		boolean extras_found = false, total_found = false;
 		String data_to_process = "";
 
 		MatchAllData this_match = new MatchAllData();
 		this_match.setMatch(new Match());
 		this_match.setSetup(new Setup());
+		
+		
 		if(valueToProcess.toUpperCase().contains("-" + CricketUtil.TEST + "-")) {
 			this_match.getSetup().setMatchType(CricketUtil.TEST);
 			this_match.getSetup().setMaxOvers(CricketUtil.TEST_MAXIMUM_OVERS);
@@ -99,7 +103,10 @@ public class CricketFunctions {
 			this_match.getSetup().setMatchType(CricketUtil.IT20);
 			this_match.getSetup().setMaxOvers(CricketUtil.T20_MAXIMUM_OVERS);
 		}
-		
+		System.out.println(valueToProcess);
+		this_match.getSetup().setSaveMatchFileAs("JSON");
+		this_match.getSetup().setMatchIdent(valueToProcess.split("/")[valueToProcess.split("/").length-2]);
+		this_match.getSetup().setTournament(valueToProcess.split("/")[valueToProcess.split("/").length-2]);
 		switch (broadcaster.toUpperCase()) {
 		case CricketUtil.CRIC_INFO:
 			
@@ -118,7 +125,7 @@ public class CricketFunctions {
 							this_match.getMatch().setMatchResult(this_webElement.findElement(By.xpath("./p/span")).getText());
 						}
 					}
-					column_data_count = 0;
+					//column_data_count = 0;
 					for (WebElement team_anchor : this_team.findElements(By.tagName("a"))) {
 						if(team_anchor.getAttribute("href").contains("/team/")
 							&& team_anchor.getAttribute("href").contains("-")) {
@@ -129,14 +136,22 @@ public class CricketFunctions {
 							for (Team team : all_teams) {
 								if(team_anchor.findElement(By.tagName("span")).getText().toLowerCase().contains(team.getTeamName1().toLowerCase())
 										|| team_anchor.findElement(By.tagName("span")).getText().toLowerCase().contains(team.getTeamName4().toLowerCase())) {
-									column_data_count++;
+									
+									column_data_count = column_data_count + 1;
+									
 									switch (column_data_count) {
 									case 1:
+										System.out.println("column_data_count1 = " + column_data_count);
+										System.out.println(team_anchor.findElement(By.tagName("span")).getText().toLowerCase());
+										System.out.println("teams = " + team.getTeamName4().toLowerCase());
 										this_match.getSetup().setHomeTeam(team);
 										this_match.getSetup().getHomeTeam().setTeamId(Integer.valueOf(data_to_process.split("-")[data_to_process.split("-").length-1]));
 										this_match.getSetup().setHomeTeamId(Integer.valueOf(data_to_process.split("-")[data_to_process.split("-").length-1]));
 										break;
 									case 2:
+										System.out.println("column_data_count2 = " + column_data_count);
+										System.out.println(team_anchor.findElement(By.tagName("span")).getText().toLowerCase());
+										System.out.println("teams = " + team.getTeamName4().toLowerCase());
 										this_match.getSetup().setAwayTeam(team);
 										this_match.getSetup().getAwayTeam().setTeamId(Integer.valueOf(data_to_process.split("-")[data_to_process.split("-").length-1]));
 										this_match.getSetup().setAwayTeamId(Integer.valueOf(data_to_process.split("-")[data_to_process.split("-").length-1]));
@@ -146,7 +161,7 @@ public class CricketFunctions {
 								}
 							}
 						}
-						if(column_data_count >= 2) {
+						if(column_data_count > 2) {
 							break;
 						}
 					}
@@ -183,30 +198,30 @@ public class CricketFunctions {
 											if(ext.toUpperCase().contains("LB")) {
 												this_inn.get(this_inn.size()-1).setTotalLegByes(
 													Integer.valueOf(ext.toUpperCase().replace("LB", "").trim()));
+											}else if(ext.toUpperCase().contains("NB")) {
+												this_inn.get(this_inn.size()-1).setTotalNoBalls(
+													Integer.valueOf(ext.toUpperCase().replace("NB", "").trim()));
 											}else if(ext.toUpperCase().contains("B")) {
 												this_inn.get(this_inn.size()-1).setTotalByes(
 													Integer.valueOf(ext.toUpperCase().replace("B", "").trim()));
 											}else if(ext.toUpperCase().contains("W")) {
 												this_inn.get(this_inn.size()-1).setTotalWides(
 													Integer.valueOf(ext.toUpperCase().replace("W", "").trim()));
-											}else if(ext.toUpperCase().contains("NB")) {
-												this_inn.get(this_inn.size()-1).setTotalNoBalls(
-													Integer.valueOf(ext.toUpperCase().replace("NB", "").trim()));
 											}
 										}
 									} else {
 										if(data_to_process.toUpperCase().contains("LB")) {
 											this_inn.get(this_inn.size()-1).setTotalLegByes(
 												Integer.valueOf(data_to_process.toUpperCase().replace("LB", "").trim()));
+										}else if(data_to_process.toUpperCase().contains("NB")) {
+											this_inn.get(this_inn.size()-1).setTotalNoBalls(
+												Integer.valueOf(data_to_process.toUpperCase().replace("NB", "").trim()));
 										}else if(data_to_process.toUpperCase().contains("B")) {
 											this_inn.get(this_inn.size()-1).setTotalByes(
 												Integer.valueOf(data_to_process.toUpperCase().replace("B", "").trim()));
 										}else if(data_to_process.toUpperCase().contains("W")) {
 											this_inn.get(this_inn.size()-1).setTotalWides(
 												Integer.valueOf(data_to_process.toUpperCase().replace("W", "").trim()));
-										}else if(data_to_process.toUpperCase().contains("NB")) {
-											this_inn.get(this_inn.size()-1).setTotalNoBalls(
-												Integer.valueOf(data_to_process.toUpperCase().replace("NB", "").trim()));
 										}
 									}
 									
@@ -224,17 +239,23 @@ public class CricketFunctions {
 								
 								if(!column.findElements(By.tagName("span")).isEmpty()) {
 									for (WebElement this_span : column.findElements(By.tagName("span"))) {
+										System.out.println("this_span = " + this_span);
 										System.out.println("TOTAL OVERS = " + this_span.getText());
-										if(this_span.getText().toUpperCase().contains(" OV")) {
+										if(this_span.getText().toUpperCase().contains(" OV") && !this_span.getText().toUpperCase().contains(",")) {
 											data_to_process = this_span.getText().toUpperCase().replace("OV", "").trim();
 											System.out.println("Overs = " + data_to_process);
-											if(data_to_process.contains(".")) {
+											if(data_to_process.contains(".") && !data_to_process.contains(",")) {
 												System.out.println("Over no = " + data_to_process.substring(0,data_to_process.indexOf(".")));
 												System.out.println("Ball no = " + data_to_process.substring(data_to_process.indexOf(".")+1));
 												this_inn.get(this_inn.size()-1).setTotalOvers(
 													Integer.valueOf(data_to_process.substring(0,data_to_process.indexOf("."))));
 												this_inn.get(this_inn.size()-1).setTotalBalls(
 														Integer.valueOf(data_to_process.substring(data_to_process.indexOf(".")+1)));
+											}else if(!data_to_process.contains(",")) {
+												System.out.println("50Over no = " + data_to_process);
+												this_inn.get(this_inn.size()-1).setTotalOvers(
+													Integer.valueOf(data_to_process));
+												this_inn.get(this_inn.size()-1).setTotalBalls(0);
 											}
 										} else {
 											if(this_span.getText().toUpperCase().contains("(RR:")) {
@@ -314,6 +335,23 @@ public class CricketFunctions {
 											    did_not_bat_anchor.getAttribute("href").split("-").length-1]));
 											this_player.setFull_name(did_not_bat_anchor.findElement(
 												By.xpath("./span/span")).getText().replace(",", "").trim());
+											if(did_not_bat_anchor.findElement(
+													By.xpath("./span/span")).getText().replace(",", "").trim().contains(" ")) {
+												this_player.setFirstname(did_not_bat_anchor.findElement(
+														By.xpath("./span/span")).getText().replace(",", "").trim().split(" ")[0]);
+												this_player.setSurname(did_not_bat_anchor.findElement(
+														By.xpath("./span/span")).getText().replace(",", "").trim().split(" ")[1]);
+												this_player.setTicker_name(did_not_bat_anchor.findElement(
+														By.xpath("./span/span")).getText().replace(",", "").trim().split(" ")[1]);
+											}else {
+												this_player.setFirstname(did_not_bat_anchor.findElement(
+														By.xpath("./span/span")).getText().replace(",", "").trim());
+												this_player.setSurname(did_not_bat_anchor.findElement(
+														By.xpath("./span/span")).getText().replace(",", "").trim());
+												this_player.setTicker_name(did_not_bat_anchor.findElement(
+														By.xpath("./span/span")).getText().replace(",", "").trim());
+											}
+											
 											this_battingcard.add(new BattingCard(this_player.getPlayerId(), 
 												this_battingcard.size() + 1,CricketUtil.STILL_TO_BAT));
 											this_battingcard.get(this_battingcard.size()-1).setPlayer(this_player);
@@ -338,6 +376,23 @@ public class CricketFunctions {
 												column.findElement(By.tagName("a")).getAttribute("href").split("-").length-1]));
 											this_player.setFull_name(column.findElement(
 													By.tagName("a")).getAttribute("title"));
+											if(column.findElement(
+													By.tagName("a")).getAttribute("title").contains(" ")) {
+												this_player.setFirstname(column.findElement(
+														By.tagName("a")).getAttribute("title").split(" ")[0]);
+												this_player.setSurname(column.findElement(
+														By.tagName("a")).getAttribute("title").split(" ")[1]);
+												this_player.setTicker_name(column.findElement(
+														By.tagName("a")).getAttribute("title").split(" ")[1]);
+											}else {
+												this_player.setFirstname(column.findElement(
+														By.tagName("a")).getAttribute("title"));
+												this_player.setSurname(column.findElement(
+														By.tagName("a")).getAttribute("title"));
+												this_player.setTicker_name(column.findElement(
+														By.tagName("a")).getAttribute("title"));
+											}
+											
 											this_battingcard.get(this_battingcard.size()-1).setPlayer(this_player);
 
 											column_data_count = 0;
@@ -357,8 +412,122 @@ public class CricketFunctions {
 											By.tagName("span")).getText().isEmpty()) {
 
 											this_battingcard.get(this_battingcard.size()-1).setStatus(CricketUtil.OUT);
-											this_battingcard.get(this_battingcard.size()-1).setHowOut(
-												column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText());
+											
+											this_player = new Player();
+											
+											if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("c ") &&   // caught
+													column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains(" b ") && 
+													!column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("c & b")) {
+												this_battingcard.get(this_battingcard.size()-1).setHowOut("caught");
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[0]);
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartTwo("b " + column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
+												this_battingcard.get(this_battingcard.size()-1).setHowOutText(
+														column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText());
+												this_player.setFull_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
+												if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].contains(" ")) {
+													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].split(" ")[0]);
+													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].split(" ")[1]);
+													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].split(" ")[1]);
+												}else {
+													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
+													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
+													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
+												}
+												this_battingcard.get(this_battingcard.size()-1).setHowOutBowler(this_player);
+												
+											}else if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("c & b")) {
+												this_battingcard.get(this_battingcard.size()-1).setHowOut("caught_and_bowled");
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne("c & b");
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartTwo(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1]);
+												this_battingcard.get(this_battingcard.size()-1).setHowOutText(
+														column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText());
+												this_player.setFull_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1]);
+												if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1].contains(" ")) {
+													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1].split(" ")[0]);
+													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1].split(" ")[1]);
+													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1].split(" ")[1]);
+												}else {
+													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1]);
+													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1]);
+													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1]);
+												}
+												this_battingcard.get(this_battingcard.size()-1).setHowOutBowler(this_player);
+												
+											}else if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("b ") &&   // bowled
+													!column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("c & b") && 
+													!column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("c ")) {
+												//this_battingcard.get(this_battingcard.size()-1).setHowOutBowler(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText());
+												this_player.setFull_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1]);
+												if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1].contains(" ")) {
+													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1].split(" ")[0]);
+													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1].split(" ")[1]);
+													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1].split(" ")[1]);
+												}else {
+													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1]);
+													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1]);
+													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1]);
+												}
+												this_battingcard.get(this_battingcard.size()-1).setHowOutBowler(this_player);
+												this_battingcard.get(this_battingcard.size()-1).setHowOutText("b " + this_battingcard.get(this_battingcard.size()-1).getHowOutBowler().getTicker_name());
+												this_battingcard.get(this_battingcard.size()-1).setHowOut("bowled");
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne("");
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartTwo("b " + this_battingcard.get(this_battingcard.size()-1).getHowOutBowler().getTicker_name());
+												
+											}else if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("lbw")) { // lbw
+												
+												this_player.setFull_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1]);
+												if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1].contains(" ")) {
+													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1].split(" ")[0]);
+													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1].split(" ")[1]);
+													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1].split(" ")[1]);
+												}else {
+													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1]);
+													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1]);
+													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1]);
+												}
+												this_battingcard.get(this_battingcard.size()-1).setHowOutBowler(this_player);
+												this_battingcard.get(this_battingcard.size()-1).setHowOutText(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText());
+												this_battingcard.get(this_battingcard.size()-1).setHowOut("lbw");
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne("lbw");
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartTwo("b " + this_battingcard.get(this_battingcard.size()-1).getHowOutBowler().getTicker_name());
+												
+											}else if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("st ") && 
+													column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains(" b ")) {
+												
+												this_player.setFull_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
+												if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].contains(" ")) {
+													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].split(" ")[0]);
+													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].split(" ")[1]);
+													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].split(" ")[1]);
+												}else {
+													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
+													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
+													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
+												}
+												this_battingcard.get(this_battingcard.size()-1).setHowOutBowler(this_player);
+												this_battingcard.get(this_battingcard.size()-1).setHowOutText(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText());
+												this_battingcard.get(this_battingcard.size()-1).setHowOut("stumped");
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[0]);
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartTwo("b " + this_battingcard.get(this_battingcard.size()-1).getHowOutBowler().getTicker_name());
+												
+											}else if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("run out")) {
+												
+												this_player.setFull_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].replace(")", ""));
+												if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].contains(" ")) {
+													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].split(" ")[0]);
+													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].split(" ")[1].replace(")", ""));
+													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].split(" ")[1].replace(")", ""));
+												}else {
+													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].replace(")", ""));
+													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].replace(")", ""));
+													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].replace(")", ""));
+												}
+												this_battingcard.get(this_battingcard.size()-1).setHowOutBowler(this_player);
+												this_battingcard.get(this_battingcard.size()-1).setHowOutText(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText());
+												this_battingcard.get(this_battingcard.size()-1).setHowOut("run_out");
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne("run out");
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartTwo("b " + this_battingcard.get(this_battingcard.size()-1).getHowOutBowler().getTicker_name());
+											}
 										} 
 										
 									} else if(!column.findElements(By.tagName("strong")).isEmpty()) {
@@ -406,16 +575,16 @@ public class CricketFunctions {
 						if(this_match.getSetup().getHomeTeam() != null) {
 							this_inn.get(this_inn.size() - 1).setBatting_team(this_match.getSetup().getHomeTeam());
 							this_inn.get(this_inn.size() - 1).setBattingTeamId(this_match.getSetup().getHomeTeamId());
-							this_inn.get(this_inn.size() - 1).setBowling_team(this_match.getSetup().getHomeTeam());
-							this_inn.get(this_inn.size() - 1).setBowlingTeamId(this_match.getSetup().getHomeTeamId());
+							this_inn.get(this_inn.size() - 1).setBowling_team(this_match.getSetup().getAwayTeam());
+							this_inn.get(this_inn.size() - 1).setBowlingTeamId(this_match.getSetup().getAwayTeamId());
 						}
 						break;
 					case 2:
 						if(this_match.getSetup().getAwayTeam() != null) {
 							this_inn.get(this_inn.size() - 1).setBatting_team(this_match.getSetup().getAwayTeam());
 							this_inn.get(this_inn.size() - 1).setBattingTeamId(this_match.getSetup().getAwayTeamId());
-							this_inn.get(this_inn.size() - 1).setBowling_team(this_match.getSetup().getAwayTeam());
-							this_inn.get(this_inn.size() - 1).setBowlingTeamId(this_match.getSetup().getAwayTeamId());
+							this_inn.get(this_inn.size() - 1).setBowling_team(this_match.getSetup().getHomeTeam());
+							this_inn.get(this_inn.size() - 1).setBowlingTeamId(this_match.getSetup().getHomeTeamId());
 						}
 						break;
 					}
@@ -496,6 +665,16 @@ public class CricketFunctions {
 													By.tagName("a")).getAttribute("href").split("-")[
 													column.findElement(By.tagName("a")).getAttribute("href").split("-").length-1]));
 											this_player.setFull_name(column.findElement(By.tagName("a")).findElement(By.tagName("span")).getText());
+											if(column.findElement(By.tagName("a")).findElement(By.tagName("span")).getText().contains(" ")) {
+												this_player.setFirstname(column.findElement(By.tagName("a")).findElement(By.tagName("span")).getText().split(" ")[0]);
+												this_player.setSurname(column.findElement(By.tagName("a")).findElement(By.tagName("span")).getText().split(" ")[1]);
+												this_player.setTicker_name(column.findElement(By.tagName("a")).findElement(By.tagName("span")).getText().split(" ")[1]);
+											}else {
+												this_player.setFirstname(column.findElement(By.tagName("a")).findElement(By.tagName("span")).getText());
+												this_player.setSurname(column.findElement(By.tagName("a")).findElement(By.tagName("span")).getText());
+												this_player.setTicker_name(column.findElement(By.tagName("a")).findElement(By.tagName("span")).getText());
+											}
+											
 											this_bowlingcard.get(this_bowlingcard.size()-1).setPlayer(this_player);
 											
 											column_data_count = 0;
@@ -529,11 +708,14 @@ public class CricketFunctions {
 											this_bowlingcard.get(this_bowlingcard.size()-1).setEconomyRate(column.getText());
 											break;
 										case 6:
+											this_bowlingcard.get(this_bowlingcard.size()-1).setDots(Integer.valueOf(column.getText()));
+											break;
+										case 9:
 											this_bowlingcard.get(this_bowlingcard.size()-1).setWides(Integer.valueOf(column.getText()));
 											break;
-										case 7:
+										case 10:
 											this_bowlingcard.get(this_bowlingcard.size()-1).setNoBalls(Integer.valueOf(column.getText()));
-											break;
+											break;	
 										}
 									}
 								}
@@ -541,7 +723,9 @@ public class CricketFunctions {
 						}
 						
 						System.out.println("Bowling card " + this_bowlingcard.toString());
-						this_inn.get(this_inn.size() - 1).setBowlingCard(this_bowlingcard);
+						System.out.println("Inn Size " + this_inn.size());
+						this_inn.get(bowling_card_count - 1).setBowlingCard(this_bowlingcard);
+						bowling_card_count = bowling_card_count + 1;
 						
 					} else if (data_to_process.equalsIgnoreCase("PLAYER NAME") || data_to_process.equalsIgnoreCase("TEAM")) {
 						break;
@@ -554,13 +738,16 @@ public class CricketFunctions {
 			}
 			break;
 		}
+		readOrSaveMatchFile("WRITE", CricketUtil.SETUP, this_match);
+		readOrSaveMatchFile("WRITE", CricketUtil.MATCH, this_match);
+		
 		return this_match;
 	}
 	public static List<ArchiveData> getStatsFromWebsite(WebDriver driver, String whatToProcess, 
 			String broadcaster, String valueToProcess, CricketService cricketService)
 	{
 		List<ArchiveData> all_stats = new ArrayList<ArchiveData>();
-		String this_url = "";
+		String this_url = "",this_team_id ="";
 		List<String> this_teams = new ArrayList<String>();
 		int teams_found_count = 0;
 		
@@ -571,26 +758,44 @@ public class CricketFunctions {
 			case "GET-SERIES-MATCHES-DATA":
 				
 				driver.get(valueToProcess);
+				System.out.println("valueToProcess = " + valueToProcess);
+				System.out.println("this_team_id = " + this_team_id);
+				this_team_id = valueToProcess.split("/")[valueToProcess.split("/").length-2];
+				System.out.println("1st this_team_id = " + this_team_id);
+				this_team_id = this_team_id.split("-")[this_team_id.split("-").length-1];
+				System.out.println("2nd this_team_id = " + this_team_id);
+				
 				for (Team team : cricketService.getTeams()) {
+					System.out.println("team = " + team.getTeamName1());
 					if(valueToProcess.toLowerCase().contains(
 							team.getTeamName1().replace(" ", "-").toLowerCase())) {
 						this_teams.add(team.getTeamName1().replace(" ", "-").toLowerCase());
+						System.out.println("this_teams = " + this_teams.get(this_teams.size()-1));
 					}
 				}
 				for(WebElement anchor : driver.findElements(By.tagName("a")))
 				{
 					teams_found_count = 0;
+					System.out.println("anchor.getAttribute(href) = " + anchor.getAttribute("href"));
 					if(anchor.getAttribute("href").toLowerCase().contains("/full-scorecard")
 						|| anchor.getAttribute("href").toLowerCase().contains("/live-cricket-score")) {
 						
-						for (String team_str : this_teams) {
-							if(anchor.getAttribute("href").toLowerCase().contains(team_str.toLowerCase())) {
-								teams_found_count++;
+						if(this_teams.size() > 0) {
+							for (String team_str : this_teams) {
+								if(anchor.getAttribute("href").toLowerCase().contains(team_str.toLowerCase())) {
+									teams_found_count++;
+								}
 							}
+						} else if(anchor.getAttribute("href").toLowerCase().contains("/series/")
+							&& anchor.getAttribute("href").toLowerCase().contains(this_team_id + "/")) {
+							teams_found_count = 2;
 						}
+						System.out.println("teams_found_count = " + teams_found_count);
 						if(teams_found_count == 2) {
 							this_url = anchor.getAttribute("href").split("/")[anchor.getAttribute("href").split("/").length - 2];
+							System.out.println("this_url = " + this_url);
 							if(this_url.contains("-")) {
+								System.out.println("match id = " + Long.valueOf(this_url.split("-")[this_url.split("-").length-1]));
 								all_stats.add(new ArchiveData(Long.valueOf(this_url.split("-")[this_url.split("-").length-1]), 
 									this_url, anchor.getAttribute("href")));
 							}
@@ -1807,7 +2012,7 @@ public class CricketFunctions {
 						file.getName().toUpperCase()), EventFile.class));
 			}
 			
-			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService,this_matchAllData));
+		//	tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService,this_matchAllData));
 			//tournament_matches.add(this_matchAllData);
 		}
 		
@@ -2369,7 +2574,7 @@ public class CricketFunctions {
 		}
 		return this_plyr;
 	}
-	public static MatchAllData populateMatchVariables(CricketService cricketService, MatchAllData match) 
+	public static MatchAllData populateMatchVariables(CricketService cricketService, MatchAllData match,Archive archive) 
 			throws IllegalAccessException, InvocationTargetException 
 	{
 		List<Player> players = new ArrayList<Player>();
@@ -2379,19 +2584,37 @@ public class CricketFunctions {
 		}
 		match.getSetup().setHomeSquad(players);
 
-		players = new ArrayList<Player>();
-		for(Player plyr:match.getSetup().getHomeSubstitutes()) {
-			players.add(populatePlayer(cricketService, plyr, match));
-		}
-		match.getSetup().setHomeSubstitutes(players);
-		
-		players = new ArrayList<Player>();
-		if(match.getSetup().getHomeOtherSquad() != null) {
-			for(Player plyr:match.getSetup().getHomeOtherSquad()) {
+		if(match.getSetup().getHomeSubstitutes() != null) {
+			players = new ArrayList<Player>();
+			for(Player plyr:match.getSetup().getHomeSubstitutes()) {
 				players.add(populatePlayer(cricketService, plyr, match));
 			}
+			match.getSetup().setHomeSubstitutes(players);
+			
+			players = new ArrayList<Player>();
+			if(match.getSetup().getHomeOtherSquad() != null) {
+				for(Player plyr:match.getSetup().getHomeOtherSquad()) {
+					players.add(populatePlayer(cricketService, plyr, match));
+				}
+			}
+			match.getSetup().setHomeOtherSquad(players);
 		}
-		match.getSetup().setHomeOtherSquad(players);
+		
+		if(match.getSetup().getAwaySubstitutes() != null) {
+			players = new ArrayList<Player>();
+			for(Player plyr:match.getSetup().getAwaySubstitutes()) {
+				players.add(populatePlayer(cricketService, plyr, match));
+			}
+			match.getSetup().setAwaySubstitutes(players);
+			
+			players = new ArrayList<Player>();
+			if(match.getSetup().getAwayOtherSquad() != null) {
+				for(Player plyr:match.getSetup().getAwayOtherSquad()) {
+					players.add(populatePlayer(cricketService, plyr, match));
+				}
+			}
+			match.getSetup().setAwayOtherSquad(players);
+		}
 		
 		players = new ArrayList<Player>();
 		for(Player plyr:match.getSetup().getAwaySquad()) {
@@ -2399,19 +2622,7 @@ public class CricketFunctions {
 		}
 		match.getSetup().setAwaySquad(players);
 
-		players = new ArrayList<Player>();
-		for(Player plyr:match.getSetup().getAwaySubstitutes()) {
-			players.add(populatePlayer(cricketService, plyr, match));
-		}
-		match.getSetup().setAwaySubstitutes(players);
 		
-		players = new ArrayList<Player>();
-		if(match.getSetup().getAwayOtherSquad() != null) {
-			for(Player plyr:match.getSetup().getAwayOtherSquad()) {
-				players.add(populatePlayer(cricketService, plyr, match));
-			}
-		}
-		match.getSetup().setAwayOtherSquad(players);
 		
 		if(match.getSetup().getHomeTeamId() > 0)
 			match.getSetup().setHomeTeam(cricketService.getTeam(CricketUtil.TEAM, String.valueOf(match.getSetup().getHomeTeamId())));
@@ -2432,7 +2643,7 @@ public class CricketFunctions {
 				
 				if(inn.getBattingCard() != null)
 					for(BattingCard batc:inn.getBattingCard()) 
-						batc = processBattingcard(cricketService,batc);
+						batc = processBattingcard(cricketService,batc,archive);
 	
 				if(inn.getPartnerships() != null)
 					for(Partnership part:inn.getPartnerships()) {
@@ -2455,7 +2666,8 @@ public class CricketFunctions {
 		return match;
 	}
 	
-	public static BattingCard processBattingcard(CricketService cricketService,BattingCard bc)
+	
+	public static BattingCard processBattingcard(CricketService cricketService,BattingCard bc,Archive archive)
 	{
 		bc.setPlayer(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bc.getPlayerId())));
 		if (bc.getConcussionPlayerId() > 0) {
@@ -2513,6 +2725,7 @@ public class CricketFunctions {
 				}
 				break;
 			case CricketUtil.BOWLED:
+				System.out.println("BOWLER_NAME BOWLED = " + bc.getHowOutBowler().getTicker_name());
 				bc.setHowOutText("b " + bc.getHowOutBowler().getTicker_name());
 				bc.setHowOutPartOne("");
 				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
@@ -2577,7 +2790,459 @@ public class CricketFunctions {
 		}
 		return bc;
 	}
+	public static BattingCard processWebBattingcard(CricketService cricketService,BattingCard bc,Archive archive)
+	{
+		Player this_player1 = new Player();
+		
+		//bc.setPlayer(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bc.getPlayerId())));
+		for(Player hs : archive.getMatchAllData().getSetup().getHomeSquad()) {
+			if(hs.getFull_name().equalsIgnoreCase(bc.getPlayer().getFull_name())) {
+				this_player1.setFull_name(hs.getFull_name());
+				this_player1.setFirstname(hs.getFirstname());
+				this_player1.setSurname(hs.getSurname());
+				this_player1.setTicker_name(hs.getTicker_name());
+				this_player1.setPlayerId(hs.getPlayerId());
+				bc.setPlayer(this_player1);
+			}
+			
+		}
+		
+		for(Player as : archive.getMatchAllData().getSetup().getAwaySquad()) {
+			if(as.getFull_name().equalsIgnoreCase(bc.getPlayer().getFull_name())) {
+				this_player1.setFull_name(as.getFull_name());
+				this_player1.setFirstname(as.getFirstname());
+				this_player1.setSurname(as.getSurname());
+				this_player1.setTicker_name(as.getTicker_name());
+				this_player1.setPlayerId(as.getPlayerId());
+				bc.setPlayer(this_player1);
+			}
+			
+		}
+		//System.out.println("player = " + bc.getPlayer().getTicker_name());
+		if (bc.getConcussionPlayerId() > 0) {
+			bc.setConcussion_player(cricketService.getPlayer(CricketUtil.PLAYER, 
+				String.valueOf(bc.getConcussionPlayerId())));
+		}
+		Player this_player = new Player();
+		if(bc.getStatus() != null && bc.getStatus().equalsIgnoreCase(CricketUtil.OUT)) {
+
+			switch (bc.getHowOut().toUpperCase()) {
+			case CricketUtil.CAUGHT_AND_BOWLED: case CricketUtil.CAUGHT: case CricketUtil.BOWLED: 
+			case CricketUtil.STUMPED: case CricketUtil.LBW: case CricketUtil.HIT_WICKET: case CricketUtil.MANKAD:
+				for(Player hs : archive.getMatchAllData().getSetup().getHomeSquad()) {
+					if(bc.getHowOutPartTwo().contains("b ")) {
+						if(hs.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo().split("b ")[1])) {
+							this_player.setFull_name(hs.getFull_name());
+							this_player.setFirstname(hs.getFirstname());
+							this_player.setSurname(hs.getSurname());
+							this_player.setTicker_name(hs.getTicker_name());
+							this_player.setPlayerId(hs.getPlayerId());
+							bc.setHowOutBowler(this_player);
+						}
+					}else {
+						if(hs.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo())) {
+							this_player.setFull_name(hs.getFull_name());
+							this_player.setFirstname(hs.getFirstname());
+							this_player.setSurname(hs.getSurname());
+							this_player.setTicker_name(hs.getTicker_name());
+							this_player.setPlayerId(hs.getPlayerId());
+							bc.setHowOutBowler(this_player);
+						}
+					}
+					
+				}
+				
+				for(Player as : archive.getMatchAllData().getSetup().getAwaySquad()) {
+					if(bc.getHowOutPartTwo().contains("b ")) {
+						if(as.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo().split("b ")[1])) {
+							this_player.setFull_name(as.getFull_name());
+							this_player.setFirstname(as.getFirstname());
+							this_player.setSurname(as.getSurname());
+							this_player.setTicker_name(as.getTicker_name());
+							this_player.setPlayerId(as.getPlayerId());
+							bc.setHowOutBowler(this_player);
+						}
+					}else {
+						if(as.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo())) {
+							this_player.setFull_name(as.getFull_name());
+							this_player.setFirstname(as.getFirstname());
+							this_player.setSurname(as.getSurname());
+							this_player.setTicker_name(as.getTicker_name());
+							this_player.setPlayerId(as.getPlayerId());
+							bc.setHowOutBowler(this_player);
+						}
+					}
+					
+				}
+				break;
+			}
+			
+			switch (bc.getHowOut().toUpperCase()) {
+			case CricketUtil.CAUGHT: case CricketUtil.STUMPED: case CricketUtil.RUN_OUT: 
+				for(Player hs : archive.getMatchAllData().getSetup().getHomeSquad()) {
+					if(bc.getHowOutPartTwo().contains("b ")) {
+						if(hs.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo().split("b ")[1])) {
+							this_player.setFull_name(hs.getFull_name());
+							this_player.setFirstname(hs.getFirstname());
+							this_player.setSurname(hs.getSurname());
+							this_player.setTicker_name(hs.getTicker_name());
+							this_player.setPlayerId(hs.getPlayerId());
+							bc.setHowOutFielder(this_player);
+						}
+					}else {
+						if(hs.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo())) {
+							this_player.setFull_name(hs.getFull_name());
+							this_player.setFirstname(hs.getFirstname());
+							this_player.setSurname(hs.getSurname());
+							this_player.setTicker_name(hs.getTicker_name());
+							this_player.setPlayerId(hs.getPlayerId());
+							bc.setHowOutFielder(this_player);
+						}
+					}
+					
+				}
+				
+				for(Player as : archive.getMatchAllData().getSetup().getAwaySquad()) {
+					if(bc.getHowOutPartTwo().contains("b ")) {
+						if(as.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo().split("b ")[1])) {
+							this_player.setFull_name(as.getFull_name());
+							this_player.setFirstname(as.getFirstname());
+							this_player.setSurname(as.getSurname());
+							this_player.setTicker_name(as.getTicker_name());
+							this_player.setPlayerId(as.getPlayerId());
+							bc.setHowOutFielder(this_player);
+						}
+					}else {
+						if(as.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo())) {
+							this_player.setFull_name(as.getFull_name());
+							this_player.setFirstname(as.getFirstname());
+							this_player.setSurname(as.getSurname());
+							this_player.setTicker_name(as.getTicker_name());
+							this_player.setPlayerId(as.getPlayerId());
+							bc.setHowOutFielder(this_player);
+						}
+					}
+					
+				}
+				//bc.setHowOutFielder(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bc.getHowOutFielderId())));
+				break;
+			}
+
+			switch (bc.getHowOut().toUpperCase()) {
+			case CricketUtil.CAUGHT_AND_BOWLED:
+				for(Player hs : archive.getMatchAllData().getSetup().getHomeSquad()) {
+					if(bc.getHowOutPartTwo().contains("b ")) {
+						if(hs.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo().split("b ")[1])) {
+							bc.setHowOutText("c & b " + hs.getTicker_name());
+							bc.setHowOutPartOne("c & b ");
+							bc.setHowOutPartTwo(hs.getTicker_name());
+						}
+					}else {
+						if(hs.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo())) {
+							bc.setHowOutText("c & b " + hs.getTicker_name());
+							bc.setHowOutPartOne("c & b ");
+							bc.setHowOutPartTwo(hs.getTicker_name());
+						}
+					}
+					
+				}
+				
+				for(Player as : archive.getMatchAllData().getSetup().getAwaySquad()) {
+					if(bc.getHowOutPartTwo().contains("b ")) {
+						if(as.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo().split("b ")[1])) {
+							bc.setHowOutText("c & b " + as.getTicker_name());
+							bc.setHowOutPartOne("c & b ");
+							bc.setHowOutPartTwo(as.getTicker_name());
+						}
+					}else {
+						if(as.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo())) {
+							bc.setHowOutText("c & b " + as.getTicker_name());
+							bc.setHowOutPartOne("c & b ");
+							bc.setHowOutPartTwo(as.getTicker_name());
+						}
+					}
+					
+				}
+				break;
+			case CricketUtil.CAUGHT: case CricketUtil.MANKAD: case CricketUtil.RUN_OUT:
+				switch (bc.getHowOut().toUpperCase()) {
+				case CricketUtil.CAUGHT:
+					for(Player hs : archive.getMatchAllData().getSetup().getHomeSquad()) {
+						if(bc.getHowOutPartTwo().contains("b ")) {
+							if(hs.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo().split("b ")[1])) {
+								bc.setHowOutText(bc.getHowOutPartOne()  + " "+ bc.getHowOutPartTwo());
+								bc.setHowOutPartTwo("b " + hs.getTicker_name());
+							}
+							
+							if(hs.getFull_name().equalsIgnoreCase(bc.getHowOutPartOne().split("c ")[1])) {
+								bc.setHowOutPartOne("c " + bc.getHowOutPartOne().split("c ")[1]);
+							}
+						}else {
+							if(hs.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo())) {
+								bc.setHowOutText(bc.getHowOutPartOne()  + " "+ bc.getHowOutPartTwo());
+								bc.setHowOutPartTwo("b " + hs.getTicker_name());
+							}
+							if(hs.getFull_name().equalsIgnoreCase(bc.getHowOutPartOne().split("c ")[1])) {
+								bc.setHowOutPartOne("c " + bc.getHowOutPartOne().split("c ")[1]);
+							}
+						}
+						
+					}
+					
+					for(Player as : archive.getMatchAllData().getSetup().getAwaySquad()) {
+						if(bc.getHowOutPartTwo().contains("b ")) {
+							if(as.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo().split("b ")[1])) {
+								bc.setHowOutText(bc.getHowOutPartOne()  + " "+ bc.getHowOutPartTwo());
+								bc.setHowOutPartTwo("b " + as.getTicker_name());
+							}
+							
+							if(as.getFull_name().equalsIgnoreCase(bc.getHowOutPartOne().split("c ")[1])) {
+								bc.setHowOutPartOne("c " + bc.getHowOutPartOne().split("c ")[1]);
+							}
+						}else {
+							if(as.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo())) {
+								bc.setHowOutText(bc.getHowOutPartOne()  + " "+ bc.getHowOutPartTwo());
+								bc.setHowOutPartTwo("b " + as.getTicker_name());
+							}
+							if(as.getFull_name().equalsIgnoreCase(bc.getHowOutPartOne().split("c ")[1])) {
+								bc.setHowOutPartOne("c " + bc.getHowOutPartOne().split("c ")[1]);
+							}
+						}
+						
+					}
+					
+					break;
+				case CricketUtil.RUN_OUT:
+					bc.setHowOutText("run out (" + bc.getHowOutFielder().getTicker_name() + ")");
+					bc.setHowOutPartOne("run out");
+					bc.setHowOutPartTwo(bc.getHowOutFielder().getTicker_name());
+					if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
+						bc.setHowOutText(bc.getHowOutText() + " (SUB)");
+						bc.setHowOutPartTwo(bc.getHowOutPartTwo() + " (SUB)");
+					}
+					break;
+				case CricketUtil.MANKAD:
+					bc.setHowOutText("run out (" + bc.getHowOutBowler().getTicker_name() + ")");
+					bc.setHowOutPartOne("run out");
+					bc.setHowOutPartTwo(bc.getHowOutBowler().getTicker_name());
+					break;
+				}
+				break;
+			case CricketUtil.BOWLED:
+				for(Player hs : archive.getMatchAllData().getSetup().getHomeSquad()) {
+					if(bc.getHowOutPartTwo().contains("b ")) {
+						if(hs.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo().split("b ")[1])) {
+							bc.setHowOutText("b " + hs.getTicker_name());
+							bc.setHowOutPartOne("");
+							bc.setHowOutPartTwo("b " + hs.getTicker_name());
+						}
+					}else {
+						if(hs.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo())) {
+							bc.setHowOutText("b " + hs.getTicker_name());
+							bc.setHowOutPartOne("");
+							bc.setHowOutPartTwo("b " + hs.getTicker_name());
+						}
+					}
+					
+				}
+				
+				for(Player as : archive.getMatchAllData().getSetup().getAwaySquad()) {
+					if(bc.getHowOutPartTwo().contains("b ")) {
+						if(as.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo().split("b ")[1])) {
+							bc.setHowOutText("b " + as.getTicker_name());
+							bc.setHowOutPartOne("");
+							bc.setHowOutPartTwo("b " + as.getTicker_name());
+						}
+					}else {
+						if(as.getFull_name().equalsIgnoreCase(bc.getHowOutPartTwo())) {
+							bc.setHowOutText("b " + as.getTicker_name());
+							bc.setHowOutPartOne("");
+							bc.setHowOutPartTwo("b " + as.getTicker_name());
+						}
+					}
+					
+				}
+				
+				break;
+			case CricketUtil.STUMPED:
+				bc.setHowOutText("st " + bc.getHowOutFielder().getTicker_name() + " b " + bc.getHowOutBowler().getTicker_name());
+				bc.setHowOutPartOne("st " + bc.getHowOutFielder().getTicker_name());
+				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
+				break;
+			case CricketUtil.LBW:
+				bc.setHowOutText("lbw b " + bc.getHowOutBowler().getTicker_name());
+				bc.setHowOutPartOne("lbw");
+				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
+				break;
+			case CricketUtil.HIT_WICKET:
+				bc.setHowOutText("hit wicket b " + bc.getHowOutBowler().getTicker_name());
+				bc.setHowOutPartOne("hit wicket");
+				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
+				break;
+			case CricketUtil.HANDLED_THE_BALL:
+				bc.setHowOutText("handled the ball");
+				bc.setHowOutPartOne(bc.getHowOutText());
+				bc.setHowOutPartTwo("");
+				break;
+			case CricketUtil.HIT_BALL_TWICE:
+				bc.setHowOutText("hit the ball twice");
+				bc.setHowOutPartOne(bc.getHowOutText());
+				bc.setHowOutPartTwo("");
+				break;
+			case CricketUtil.OBSTRUCTING_FIELDER:
+				bc.setHowOutText("obstructing the field");
+				bc.setHowOutPartOne(bc.getHowOutText());
+				bc.setHowOutPartTwo("");
+				break;
+			case CricketUtil.TIMED_OUT:
+				bc.setHowOutText("timed out");
+				bc.setHowOutPartOne(bc.getHowOutText());
+				bc.setHowOutPartTwo("");
+				break;
+			case CricketUtil.RETIRED_HURT:
+				bc.setHowOutText("retired hurt");
+				bc.setHowOutPartOne(bc.getHowOutText());
+				bc.setHowOutPartTwo("");
+				break;
+			case CricketUtil.RETIRED_OUT:
+				bc.setHowOutText("retired out");
+				bc.setHowOutPartOne(bc.getHowOutText());
+				bc.setHowOutPartTwo("");
+				break;
+			case CricketUtil.ABSENT_HURT:
+				bc.setHowOutText("absent hurt");
+				bc.setHowOutPartOne(bc.getHowOutText());
+				bc.setHowOutPartTwo("");
+				break;
+			case CricketUtil.CONCUSSED:
+				bc.setHowOutText("concussed");
+				bc.setHowOutPartOne(bc.getHowOutText());
+				bc.setHowOutPartTwo("");
+				break;
+			}
+			
+		}
+		return bc;
+	}
+	public static MatchAllData populateApiMatchVariables(CricketService cricketService, MatchAllData match,Archive archive) 
+			throws IllegalAccessException, InvocationTargetException 
+	{
+		List<Player> players = new ArrayList<Player>();
+		
+		for(Player plyr:match.getSetup().getHomeSquad()) {
+			players.add(populatePlayer(cricketService, plyr, match));
+		}
+		match.getSetup().setHomeSquad(players);
+
+		if(match.getSetup().getHomeSubstitutes() != null) {
+			players = new ArrayList<Player>();
+			for(Player plyr:match.getSetup().getHomeSubstitutes()) {
+				players.add(populatePlayer(cricketService, plyr, match));
+			}
+			match.getSetup().setHomeSubstitutes(players);
+			
+			players = new ArrayList<Player>();
+			if(match.getSetup().getHomeOtherSquad() != null) {
+				for(Player plyr:match.getSetup().getHomeOtherSquad()) {
+					players.add(populatePlayer(cricketService, plyr, match));
+				}
+			}
+			match.getSetup().setHomeOtherSquad(players);
+		}
+		
+		if(match.getSetup().getAwaySubstitutes() != null) {
+			players = new ArrayList<Player>();
+			for(Player plyr:match.getSetup().getAwaySubstitutes()) {
+				players.add(populatePlayer(cricketService, plyr, match));
+			}
+			match.getSetup().setAwaySubstitutes(players);
+			
+			players = new ArrayList<Player>();
+			if(match.getSetup().getAwayOtherSquad() != null) {
+				for(Player plyr:match.getSetup().getAwayOtherSquad()) {
+					players.add(populatePlayer(cricketService, plyr, match));
+				}
+			}
+			match.getSetup().setAwayOtherSquad(players);
+		}
+		
+		players = new ArrayList<Player>();
+		for(Player plyr:match.getSetup().getAwaySquad()) {
+			players.add(populatePlayer(cricketService, plyr, match));
+		}
+		match.getSetup().setAwaySquad(players);
+
+		
+		
+		if(match.getSetup().getHomeTeamId() > 0)
+			match.getSetup().setHomeTeam(cricketService.getTeam(CricketUtil.TEAM, String.valueOf(match.getSetup().getHomeTeamId())));
+		if(match.getSetup().getAwayTeamId() > 0)
+			match.getSetup().setAwayTeam(cricketService.getTeam(CricketUtil.TEAM, String.valueOf(match.getSetup().getAwayTeamId())));
+		if(match.getSetup().getGroundId() > 0) {
+			match.getSetup().setGround(cricketService.getGround(match.getSetup().getGroundId()));
+			if(match.getSetup().getGround() != null) {
+				match.getSetup().setVenueName(match.getSetup().getGround().getFullname());
+			}
+		}
+		
+		if(match.getMatch().getInning() != null) {
+			for(Inning inn : match.getMatch().getInning()) {
+				
+				inn.setBatting_team(cricketService.getTeam(CricketUtil.TEAM, String.valueOf(inn.getBattingTeamId())));
+				inn.setBowling_team(cricketService.getTeam(CricketUtil.TEAM, String.valueOf(inn.getBowlingTeamId())));
+				
+				if(inn.getBattingCard() != null)
+					for(BattingCard batc:inn.getBattingCard()) 
+						batc = processWebBattingcard(cricketService,batc,archive);
 	
+				if(inn.getPartnerships() != null)
+					for(Partnership part:inn.getPartnerships()) {
+						part.setFirstPlayer(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(part.getFirstBatterNo())));
+						part.setSecondPlayer(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(part.getSecondBatterNo())));
+					}
+				
+				if(inn.getBowlingCard() != null)
+					for(BowlingCard bowlc:inn.getBowlingCard()) {
+						Player players1 = new Player();
+						
+						//bc.setPlayer(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bc.getPlayerId())));
+						for(Player hs : archive.getMatchAllData().getSetup().getHomeSquad()) {
+							if(hs.getFull_name().equalsIgnoreCase(bowlc.getPlayer().getFull_name())) {
+								players1.setFull_name(hs.getFull_name());
+								players1.setFirstname(hs.getFirstname());
+								players1.setSurname(hs.getSurname());
+								players1.setTicker_name(hs.getTicker_name());
+								players1.setPlayerId(hs.getPlayerId());
+								bowlc.setPlayer(players1);
+							}
+							
+						}
+						
+						for(Player as : archive.getMatchAllData().getSetup().getAwaySquad()) {
+							if(as.getFull_name().equalsIgnoreCase(bowlc.getPlayer().getFull_name())) {
+								players1.setFull_name(as.getFull_name());
+								players1.setFirstname(as.getFirstname());
+								players1.setSurname(as.getSurname());
+								players1.setTicker_name(as.getTicker_name());
+								players1.setPlayerId(as.getPlayerId());
+								bowlc.setPlayer(players1);
+							}
+							
+						}
+							//bowlc.setPlayer(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bowlc.getPlayerId())));
+					}
+						
+	
+				if(inn.getBowlingTeamId() == match.getSetup().getHomeTeamId()) {
+					inn.setFielders(match.getSetup().getHomeSquad());
+				} else if(inn.getBowlingTeamId() == match.getSetup().getAwayTeamId()) {
+					inn.setFielders(match.getSetup().getAwaySquad());
+				}
+	
+			}
+		}
+		return match;
+	}
 	public static String getBalls(int Overs,int Balls) {
 		String Overs_text = "" ;
 		switch(Balls) {

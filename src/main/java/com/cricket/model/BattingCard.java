@@ -47,7 +47,7 @@ public class BattingCard implements Comparable<BattingCard>{
 
   private long seconds;
   
-  @JsonIgnore
+ 
   private Player player;
 
   @JsonIgnore
