@@ -538,32 +538,43 @@ public class CricketFunctions {
 
 									} else {
 										
-										if(!column.getText().isEmpty()) {
+										if(this_inn.get(this_inn.size()-1).getTotalRuns() <= 0 && this_inn.get(this_inn.size()-1).getTotalWickets() <= 0 &&
+											this_inn.get(this_inn.size()-1).getTotalOvers() <= 0 && this_inn.get(this_inn.size()-1).getTotalBalls() <= 0) {
+											
 											if(column.getText().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
 												this_battingcard.get(this_battingcard.size()-1).setStatus(CricketUtil.NOT_OUT);
 											}else {
 												column_data_count++;
-												System.out.println("Bat column_data_count = " + column_data_count + " -> " + column.getText());
+												data_to_process = column.getText().trim();
+												if(data_to_process.isEmpty()) {
+													if(column_data_count == 5) {
+														data_to_process = "0.0";
+													} else {
+														data_to_process = "0";
+													}
+												}
+												System.out.println("Bat column_data_count = " + column_data_count + " -> " + data_to_process);
 												switch (column_data_count) {
 												case 1:
 													this_battingcard.get(this_battingcard.size()-1).setBalls(
-														Integer.valueOf(column.getText()));
+														Integer.valueOf(data_to_process));
 													break;
 												case 2: // Minutes
 													break;
 												case 3:
 													this_battingcard.get(this_battingcard.size()-1).setFours(
-														Integer.valueOf(column.getText()));
+														Integer.valueOf(data_to_process));
 													break;
 												case 4:
 													this_battingcard.get(this_battingcard.size()-1).setSixes(
-														Integer.valueOf(column.getText()));
+														Integer.valueOf(data_to_process));
 													break;
 												case 5:
-													this_battingcard.get(this_battingcard.size()-1).setStrikeRate(column.getText());
+													this_battingcard.get(this_battingcard.size()-1).setStrikeRate(data_to_process);
 													break;
 												}
 											}
+											
 										}
 									}
 								}
