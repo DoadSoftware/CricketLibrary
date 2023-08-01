@@ -29,6 +29,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.xml.bind.JAXBException;
+
+import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.openqa.selenium.By;
@@ -277,6 +279,14 @@ public class CricketFunctions {
 										this_inn.get(this_inn.size()-1).setTotalWickets(
 											Integer.valueOf(data_to_process.substring(data_to_process.indexOf("/")+1)));
 										total_found = false;
+									} else {
+										if(NumberUtils.isCreatable(data_to_process)) {
+											System.out.println("Total Runs without / = " + data_to_process);
+											System.out.println("Total Wickets = " + this_battingcard.size());
+											this_inn.get(this_inn.size()-1).setTotalRuns(Integer.valueOf(data_to_process));
+											this_inn.get(this_inn.size()-1).setTotalWickets(this_battingcard.size()-1);
+											total_found = false;
+										}
 									}
 								}
 								
@@ -288,18 +298,18 @@ public class CricketFunctions {
 									System.out.println("FoW -> data_to_process = " + data_to_process);
 									for(int i=0; i < data_to_process.split(",").length; i++) {
 										
-										System.out.println("data_to_process 1 = " + data_to_process.split(",")[i]);
-										System.out.println("foW wicket = " + data_to_process.split(",")[i].substring(0, 
-											data_to_process.split(",")[i].indexOf("-")));
-										System.out.println("foW runs = " + data_to_process.split(",")[i].substring(data_to_process.split(",")[i].indexOf("-") + 1, 
-											data_to_process.split(",")[i].indexOf("(") - data_to_process.split(",")[i].indexOf("-") + 1));
-										System.out.println("foW player name = " + data_to_process.split(",")[i].substring(
-											data_to_process.split(",")[i].indexOf("(") + 1));
-										System.out.println("data_to_process 2 = " + data_to_process.split(",")[i+1]);
-										System.out.println("foW over = " + data_to_process.split(",")[i+1].toUpperCase()
-											.replace("OV)", "").substring(0,data_to_process.split(",")[i+1].indexOf(".")).trim());
-										System.out.println("foW ball = " + data_to_process.split(",")[i+1].toUpperCase()
-												.replace("OV)", "").substring(data_to_process.split(",")[i+1].indexOf(".")+1).trim());
+//										System.out.println("data_to_process 1 = " + data_to_process.split(",")[i]);
+//										System.out.println("foW wicket = " + data_to_process.split(",")[i].substring(0, 
+//											data_to_process.split(",")[i].indexOf("-")));
+//										System.out.println("foW runs = " + data_to_process.split(",")[i].substring(data_to_process.split(",")[i].indexOf("-") + 1, 
+//											data_to_process.split(",")[i].indexOf("(") - data_to_process.split(",")[i].indexOf("-") + 1));
+//										System.out.println("foW player name = " + data_to_process.split(",")[i].substring(
+//											data_to_process.split(",")[i].indexOf("(") + 1));
+//										System.out.println("data_to_process 2 = " + data_to_process.split(",")[i+1]);
+//										System.out.println("foW over = " + data_to_process.split(",")[i+1].toUpperCase()
+//											.replace("OV)", "").substring(0,data_to_process.split(",")[i+1].indexOf(".")).trim());
+//										System.out.println("foW ball = " + data_to_process.split(",")[i+1].toUpperCase()
+//												.replace("OV)", "").substring(data_to_process.split(",")[i+1].indexOf(".")+1).trim());
 										
 										for (BattingCard bc : this_battingcard) {
 
@@ -694,38 +704,46 @@ public class CricketFunctions {
 									} else {
 										
 										column_data_count++;
-										System.out.println("Bowl column_data_count = " + column_data_count + " -> " + column.getText());
+										data_to_process = column.getText().trim();
+										if(data_to_process.isEmpty()) {
+											if(column_data_count == 5) {
+												data_to_process = "0.0";
+											} else {
+												data_to_process = "0";
+											}
+										}
+										System.out.println("Bowl column_data_count = " + column_data_count + " -> " + data_to_process);
 										switch (column_data_count) {
 										case 1:
 											if(column.getText().contains(".")) {
 												this_bowlingcard.get(this_bowlingcard.size()-1).setOvers(
-													Integer.valueOf(column.getText().substring(0,column.getText().indexOf("."))));
+													Integer.valueOf(data_to_process.substring(0,data_to_process.indexOf("."))));
 												this_bowlingcard.get(this_bowlingcard.size()-1).setBalls((
-													Integer.valueOf(column.getText().substring(column.getText().indexOf(".")+1))));
+													Integer.valueOf(data_to_process.substring(data_to_process.indexOf(".")+1))));
 											} else {
-												this_bowlingcard.get(this_bowlingcard.size()-1).setOvers(Integer.valueOf(column.getText()));
+												this_bowlingcard.get(this_bowlingcard.size()-1).setOvers(Integer.valueOf(data_to_process));
 											}
 											break;
 										case 2: 
-											this_bowlingcard.get(this_bowlingcard.size()-1).setMaidens(Integer.valueOf(column.getText()));
+											this_bowlingcard.get(this_bowlingcard.size()-1).setMaidens(Integer.valueOf(data_to_process));
 											break;
 										case 3:
-											this_bowlingcard.get(this_bowlingcard.size()-1).setRuns(Integer.valueOf(column.getText()));
+											this_bowlingcard.get(this_bowlingcard.size()-1).setRuns(Integer.valueOf(data_to_process));
 											break;
 										case 4:
-											this_bowlingcard.get(this_bowlingcard.size()-1).setWickets(Integer.valueOf(column.getText()));
+											this_bowlingcard.get(this_bowlingcard.size()-1).setWickets(Integer.valueOf(data_to_process));
 											break;
 										case 5:
-											this_bowlingcard.get(this_bowlingcard.size()-1).setEconomyRate(column.getText());
+											this_bowlingcard.get(this_bowlingcard.size()-1).setEconomyRate(data_to_process);
 											break;
 										case 6:
-											this_bowlingcard.get(this_bowlingcard.size()-1).setDots(Integer.valueOf(column.getText()));
+											this_bowlingcard.get(this_bowlingcard.size()-1).setDots(Integer.valueOf(data_to_process));
 											break;
 										case 9:
-											this_bowlingcard.get(this_bowlingcard.size()-1).setWides(Integer.valueOf(column.getText()));
+											this_bowlingcard.get(this_bowlingcard.size()-1).setWides(Integer.valueOf(data_to_process));
 											break;
 										case 10:
-											this_bowlingcard.get(this_bowlingcard.size()-1).setNoBalls(Integer.valueOf(column.getText()));
+											this_bowlingcard.get(this_bowlingcard.size()-1).setNoBalls(Integer.valueOf(data_to_process));
 											break;	
 										}
 									}
