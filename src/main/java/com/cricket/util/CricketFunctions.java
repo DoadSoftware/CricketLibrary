@@ -2603,7 +2603,7 @@ public class CricketFunctions {
 		}
 		return this_plyr;
 	}
-	public static MatchAllData populateMatchVariables(CricketService cricketService, MatchAllData match,Archive archive) 
+	public static MatchAllData populateMatchVariables(CricketService cricketService, MatchAllData match) 
 			throws IllegalAccessException, InvocationTargetException 
 	{
 		List<Player> players = new ArrayList<Player>();
@@ -2672,7 +2672,7 @@ public class CricketFunctions {
 				
 				if(inn.getBattingCard() != null)
 					for(BattingCard batc:inn.getBattingCard()) 
-						batc = processBattingcard(cricketService,batc,archive);
+						batc = processBattingcard(cricketService,batc);
 	
 				if(inn.getPartnerships() != null)
 					for(Partnership part:inn.getPartnerships()) {
@@ -2696,7 +2696,7 @@ public class CricketFunctions {
 	}
 	
 	
-	public static BattingCard processBattingcard(CricketService cricketService,BattingCard bc,Archive archive)
+	public static BattingCard processBattingcard(CricketService cricketService,BattingCard bc)
 	{
 		bc.setPlayer(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bc.getPlayerId())));
 		if (bc.getConcussionPlayerId() > 0) {
@@ -3153,7 +3153,7 @@ public class CricketFunctions {
 		}
 		return bc;
 	}
-	public static MatchAllData populateApiMatchVariables(CricketService cricketService, MatchAllData match,Archive archive) 
+	public static MatchAllData populateApiMatchVariables(CricketService cricketService, MatchAllData match, Archive archive) 
 			throws IllegalAccessException, InvocationTargetException 
 	{
 		List<Player> players = new ArrayList<Player>();
