@@ -28,6 +28,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.lang3.math.NumberUtils;
@@ -36,7 +38,6 @@ import org.jsoup.nodes.Document;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
 import com.cricket.archive.Archive;
 import com.cricket.archive.ArchiveData;
 import com.cricket.model.BattingCard;
@@ -2208,8 +2209,8 @@ public class CricketFunctions {
 		return stat;
 	}
 	
-	public static List<Tournament> extractTournamentStats(String typeOfExtraction, List<MatchAllData> tournament_matches, 
-			CricketService cricketService,MatchAllData currentMatch, List<Tournament> past_tournament_stats) 
+	public static List<Tournament> extractTournamentStats(String typeOfExtraction,boolean ShowStrikeRate, List<MatchAllData> tournament_matches, 
+			CricketService cricketService,MatchAllData currentMatch, List<Tournament> past_tournament_stat) 
 	{		
 		int playerId = -1;
 		List<Tournament> tournament_stats = new ArrayList<Tournament>();
@@ -2218,8 +2219,8 @@ public class CricketFunctions {
 		switch(typeOfExtraction) {
 		case "COMBINED_PAST_CURRENT_MATCH_DATA":
 			
-			 return extractTournamentStats("CURRENT_MATCH_DATA", tournament_matches, cricketService, currentMatch, 
-					extractTournamentStats("PAST_MATCHES_DATA", tournament_matches, cricketService, currentMatch, null));
+			 return extractTournamentStats("CURRENT_MATCH_DATA",ShowStrikeRate, tournament_matches, cricketService, currentMatch, 
+					extractTournamentStats("PAST_MATCHES_DATA",ShowStrikeRate, tournament_matches, cricketService, currentMatch, null));
 			
 		case "PAST_MATCHES_DATA":
 			
@@ -2269,7 +2270,7 @@ public class CricketFunctions {
 										}
 										
 										
-										//getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), playerId, cricketService, tournament_stats, mtch);
+										getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), playerId, cricketService, tournament_stats, mtch);
 										
 									}else {
 										tournament_stats.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), 0, 0, 0, bc.getBalls(), 
@@ -2283,7 +2284,7 @@ public class CricketFunctions {
 													bc.getBalls(),inn.getBowling_team(), bc.getPlayer()));
 										}
 										
-										//getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), (tournament_stats.size() - 1), cricketService, tournament_stats, mtch);
+										getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), (tournament_stats.size() - 1), cricketService, tournament_stats, mtch);
 									}	
 								}
 							}
@@ -2349,6 +2350,16 @@ public class CricketFunctions {
 			
 		case "CURRENT_MATCH_DATA":
 			
+			List<Tournament> past_tournament_statsdata = past_tournament_stat;    
+			List<Tournament> past_tournament_stats = past_tournament_statsdata.stream().map(tourn_stats -> {
+				try {
+					return tourn_stats.clone();
+				} catch (CloneNotSupportedException e) {
+					e.printStackTrace();
+				}
+				return tourn_stats;
+			}).collect(Collectors.toList());
+			
 			has_match_started = false;
 			if(currentMatch.getSetup().getMatchType().equalsIgnoreCase(currentMatch.getSetup().getMatchType())) {
 				if(currentMatch.getMatch().getInning().get(0).getTotalRuns() > 0 || (6 * currentMatch.getMatch().getInning().get(0).getTotalOvers() 
@@ -2388,7 +2399,10 @@ public class CricketFunctions {
 										bc.getBalls(), inn.getBowling_team(), bc.getPlayer()));
 							}
 							
-							//getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), playerId, cricketService, past_tournament_stats, currentMatch);
+							if(ShowStrikeRate == true) {
+								getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), playerId, cricketService, past_tournament_stats, currentMatch);
+							}
+							
 							
 						}else {
 							past_tournament_stats.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), 0, 0, 0, bc.getBalls(), 
@@ -2402,7 +2416,9 @@ public class CricketFunctions {
 										(bc.getRuns() * 2), bc.getBalls(), inn.getBowling_team(), bc.getPlayer()));
 							}
 							
-							//getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), (past_tournament_stats.size()-1), cricketService, past_tournament_stats, currentMatch);
+							if(ShowStrikeRate == true) {
+								getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), playerId, cricketService, past_tournament_stats, currentMatch);
+							}
 						}	
 					}
 

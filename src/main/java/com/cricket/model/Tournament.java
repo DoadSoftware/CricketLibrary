@@ -49,8 +49,6 @@ public Tournament() {
 	super();
 }
 
-
-
 public Tournament(int playerId, int runs, int fours, int sixes, int wickets, int runsConceded,
 		int ballsBowled, int ballsFaced, int dots, String notOut, int runs_against_pace, int balls_against_pace,
 		int runs_against_spin, int balls_against_spin, Player player,List<BestStats> batsman_best_Stats, List<BestStats> bowler_best_Stats) {
@@ -319,7 +317,7 @@ public String toString() {
 }
 
 @Override
-public Object clone() throws CloneNotSupportedException {
+public Tournament clone() throws CloneNotSupportedException {
     Tournament clone = null;
     try
     {
