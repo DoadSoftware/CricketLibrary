@@ -28,6 +28,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBException;
@@ -2042,8 +2043,8 @@ public class CricketFunctions {
 						file.getName().toUpperCase()), EventFile.class));
 			}
 			
-		//	tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService,this_matchAllData));
-			//tournament_matches.add(this_matchAllData);
+			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService,this_matchAllData,null));
+			tournament_matches.add(this_matchAllData);
 		}
 		
 		return tournament_matches;
@@ -2068,7 +2069,7 @@ public class CricketFunctions {
 		return Four + "," + Six;
 	}
 
-	public static Statistics updateTournamentDataWithStats(Statistics stats,List<MatchAllData> tournament_matches,MatchAllData currentMatch) throws JsonMappingException, JsonProcessingException 
+	public static Statistics updateTournamentDataWithStats(Statistics stats,List<MatchAllData> tournament_matches,MatchAllData currentMatch) throws JsonMappingException, JsonProcessingException, InterruptedException 
 	{
 		boolean player_found = false;
 		
@@ -2079,6 +2080,7 @@ public class CricketFunctions {
 		for(MatchAllData match : tournament_matches) {
 			if(!match.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
 				if(stat.getStats_type().getStats_short_name().equalsIgnoreCase(match.getSetup().getMatchType())) {
+					TimeUnit.MILLISECONDS.sleep(500);
 					for(Inning inn : match.getMatch().getInning()) {
 						for(BattingCard bc : inn.getBattingCard()) {
 							if(bc.getPlayerId() == stat.getPlayer_id()) {
@@ -2203,6 +2205,11 @@ public class CricketFunctions {
 				}
 			}
 			if(player_found == true){
+				System.out.println("MATCH - " + stat.getMatches());
+				System.out.println("MATCH - " + stat.getMatches());
+				System.out.println("MATCH - " + stat.getMatches());
+				System.out.println("MATCH - " + stat.getMatches());
+				System.out.println("MATCH - " + stat.getMatches());
 				stat.setMatches(stat.getMatches() + 1);
 			}
 		}
@@ -2270,7 +2277,7 @@ public class CricketFunctions {
 										}
 										
 										
-										getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), playerId, cricketService, tournament_stats, mtch);
+										//getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), playerId, cricketService, tournament_stats, mtch);
 										
 									}else {
 										tournament_stats.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), 0, 0, 0, bc.getBalls(), 
@@ -2284,7 +2291,7 @@ public class CricketFunctions {
 													bc.getBalls(),inn.getBowling_team(), bc.getPlayer()));
 										}
 										
-										getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), (tournament_stats.size() - 1), cricketService, tournament_stats, mtch);
+										//getBatsmanSRAgainstPaceAndSpin(bc.getPlayerId(), (tournament_stats.size() - 1), cricketService, tournament_stats, mtch);
 									}	
 								}
 							}
@@ -2344,6 +2351,10 @@ public class CricketFunctions {
 						}
 					}
 				}
+			}
+			
+			for(int i=0;i<=tournament_stats.size()-1;i++) {
+				System.out.println("CF-ID : " + tournament_stats.get(i).getPlayerId() + " CF-RUNS : " + tournament_stats.get(i).getRuns());
 			}
 			
 			return tournament_stats;
@@ -2770,7 +2781,7 @@ public class CricketFunctions {
 				}
 				break;
 			case CricketUtil.BOWLED:
-				System.out.println("BOWLER_NAME BOWLED = " + bc.getHowOutBowler().getTicker_name());
+				//System.out.println("BOWLER_NAME BOWLED = " + bc.getHowOutBowler().getTicker_name());
 				bc.setHowOutText("b " + bc.getHowOutBowler().getTicker_name());
 				bc.setHowOutPartOne("");
 				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
@@ -3525,7 +3536,7 @@ public class CricketFunctions {
 							total_runs = total_runs + events.get(i).getEventRuns();
 							break;
 						
-						case CricketUtil.LEG_BYE: case CricketUtil.BYE:
+						case CricketUtil.LEG_BYE: case CricketUtil.BYE: case CricketUtil.NO_BALL:
 							total_balls = total_balls + 1 ;
 							count_balls = count_balls + 1 ;
 							break;
@@ -3541,12 +3552,11 @@ public class CricketFunctions {
 				          break;
 						}
 						
-						if((count_balls < plyr_balls_count && total_runs >= splitvalue) || (count_balls == plyr_balls_count)) {
+						if((total_runs >= splitvalue && count_balls < plyr_balls_count) || (count_balls == plyr_balls_count)) {
 							
 							Balls.add(String.valueOf(total_balls));
 							total_runs = total_runs - splitvalue;
 							total_balls = 0;
-							
 							continue;
 						}
 					}
