@@ -46,7 +46,6 @@ public class BattingCard implements Comparable<BattingCard>{
   private int concussionPlayerId;
 
   private long seconds;
-  
  
   private Player player;
 

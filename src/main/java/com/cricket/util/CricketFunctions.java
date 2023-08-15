@@ -2043,7 +2043,7 @@ public class CricketFunctions {
 						file.getName().toUpperCase()), EventFile.class));
 			}
 			
-			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService,this_matchAllData,null));
+			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService,this_matchAllData));
 			tournament_matches.add(this_matchAllData);
 		}
 		
