@@ -39,7 +39,7 @@ public class Player implements Comparable<Player>, Diffable<Player>
   private String instagramHandle;
   
   @Column(name = "Age")
-  private int age;
+  private Integer age;
   
   @Column(name = "HindiFullName")
   private String hindifull_name;
@@ -268,11 +268,11 @@ public void setNationality(String nationality) {
 	Nationality = nationality;
 }
 
-public int getAge() {
+public Integer getAge() {
 	return age;
 }
 
-public void setAge(int age) {
+public void setAge(Integer age) {
 	this.age = age;
 }
 
