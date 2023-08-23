@@ -13,6 +13,7 @@ public class BestStats{
   private int runs;
   private int wickets;
   private int balls;
+  private String status;
   private boolean not_out;
   
   @JsonIgnore
@@ -22,13 +23,14 @@ public BestStats() {
 	super();
 }
 
-public BestStats(int playerId, int bestEquation, int balls, Team opponentTeam, Player player) {
+public BestStats(int playerId, int bestEquation, int balls, Team opponentTeam, Player player,String status) {
 	super();
 	this.playerId = playerId;
 	this.bestEquation = bestEquation;
 	this.balls = balls;
 	this.opponentTeam = opponentTeam;
 	this.player = player;
+	this.status = status;
 }
 
 public boolean isNot_out() {
@@ -95,11 +97,19 @@ public void setPlayer(Player player) {
 	this.player = player;
 }
 
+public String getStatus() {
+	return status;
+}
+
+public void setStatus(String status) {
+	this.status = status;
+}
+
 @Override
 public String toString() {
 	return "BestStats [playerId=" + playerId + ", bestEquation=" + bestEquation + ", opponentTeam=" + opponentTeam
-			+ ", runs=" + runs + ", wickets=" + wickets + ", balls=" + balls + ", not_out=" + not_out + ", player="
-			+ player + "]";
+			+ ", runs=" + runs + ", wickets=" + wickets + ", balls=" + balls + ", status=" + status + ", not_out="
+			+ not_out + ", player=" + player + "]";
 }
 
 }

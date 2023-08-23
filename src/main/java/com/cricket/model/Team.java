@@ -27,6 +27,9 @@ public class Team implements Comparable<Team> {
   
   @Column(name = "TeamLogo")
   private String teamLogo;
+  
+  @Column(name = "Captains")
+  private String captains;
 
   @Column(name = "FullHindiTeamName")
   private String FullHindiTeamName;
@@ -145,6 +148,14 @@ public String getTeamLogo() {
 
 public void setTeamLogo(String teamLogo) {
 	this.teamLogo = teamLogo;
+}
+
+public String getCaptains() {
+	return captains;
+}
+
+public void setCaptains(String captains) {
+	this.captains = captains;
 }
 
 @Override
