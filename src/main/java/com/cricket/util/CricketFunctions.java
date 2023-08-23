@@ -2044,12 +2044,8 @@ public class CricketFunctions {
 				this_matchAllData.setEventFile(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY + 
 						file.getName().toUpperCase()), EventFile.class));
 			}
-			
 
-//			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService,this_matchAllData));
-//			tournament_matches.add(this_matchAllData);
-
-			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService,this_matchAllData,null));
+			tournament_matches.add(CricketFunctions.populateMatchVariables(cricketService,this_matchAllData));
 
 		}
 		
@@ -2770,7 +2766,7 @@ public class CricketFunctions {
 		}
 		return this_plyr;
 	}
-	public static MatchAllData populateMatchVariables(CricketService cricketService, MatchAllData match,Archive archive) 
+	public static MatchAllData populateMatchVariables(CricketService cricketService, MatchAllData match) 
 			throws IllegalAccessException, InvocationTargetException 
 	{
 		List<Player> players = new ArrayList<Player>();
@@ -2839,7 +2835,7 @@ public class CricketFunctions {
 				
 				if(inn.getBattingCard() != null)
 					for(BattingCard batc:inn.getBattingCard()) 
-						batc = processBattingcard(cricketService,batc,archive);
+						batc = processBattingcard(cricketService,batc);
 	
 				if(inn.getPartnerships() != null)
 					for(Partnership part:inn.getPartnerships()) {
@@ -2862,8 +2858,7 @@ public class CricketFunctions {
 		return match;
 	}
 	
-	
-	public static BattingCard processBattingcard(CricketService cricketService,BattingCard bc,Archive archive)
+	public static BattingCard processBattingcard(CricketService cricketService,BattingCard bc)
 	{
 		bc.setPlayer(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bc.getPlayerId())));
 		if (bc.getConcussionPlayerId() > 0) {

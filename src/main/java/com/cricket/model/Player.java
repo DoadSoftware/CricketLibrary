@@ -87,6 +87,9 @@ public class Player implements Comparable<Player>, Diffable<Player>
   private String captainWicketKeeper;
 
   @Transient
+  private String impactPlayer;
+ 
+  @Transient
   private String player_type;
 
   public Player() {
@@ -100,6 +103,14 @@ public class Player implements Comparable<Player>, Diffable<Player>
 	this.player_type = player_type;
   }
   
+public String getImpactPlayer() {
+	return impactPlayer;
+}
+
+public void setImpactPlayer(String impactPlayer) {
+	this.impactPlayer = impactPlayer;
+}
+
 public String getFirstname() {
 	return firstname;
 }
@@ -312,13 +323,14 @@ public int compareTo(Player pm) {
 @Override
 public String toString() {
 	return "Player [playerId=" + playerId + ", full_name=" + full_name + ", firstname=" + firstname + ", surname="
-			+ surname + ", ticker_name=" + ticker_name + ", age=" + age + ", hindifull_name=" + hindifull_name
-			+ ", tamilfull_name=" + tamilfull_name + ", telugufull_name=" + telugufull_name + ", hindi_surname="
-			+ hindi_surname + ", tamil_surname=" + tamil_surname + ", telugu_surname=" + telugu_surname + ", role="
-			+ role + ", bowlingStyle=" + bowlingStyle + ", battingStyle=" + battingStyle + ", teamId=" + teamId
+			+ surname + ", ticker_name=" + ticker_name + ", twitterHandle=" + twitterHandle + ", instagramHandle="
+			+ instagramHandle + ", age=" + age + ", hindifull_name=" + hindifull_name + ", tamilfull_name="
+			+ tamilfull_name + ", telugufull_name=" + telugufull_name + ", hindi_surname=" + hindi_surname
+			+ ", tamil_surname=" + tamil_surname + ", telugu_surname=" + telugu_surname + ", role=" + role
+			+ ", bowlingStyle=" + bowlingStyle + ", battingStyle=" + battingStyle + ", teamId=" + teamId
 			+ ", overseasPlayer=" + overseasPlayer + ", Photo=" + Photo + ", Nationality=" + Nationality
-			+ ", playerPosition=" + playerPosition + ", captainWicketKeeper=" + captainWicketKeeper + ", player_type="
-			+ player_type + "]";
+			+ ", playerPosition=" + playerPosition + ", captainWicketKeeper=" + captainWicketKeeper + ", impactPlayer="
+			+ impactPlayer + ", player_type=" + player_type + "]";
 }
 
 }
