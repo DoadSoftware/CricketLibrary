@@ -4,17 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.apache.commons.lang3.builder.DiffBuilder;
-import org.apache.commons.lang3.builder.DiffResult;
-import org.apache.commons.lang3.builder.Diffable;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import javax.persistence.Column;
 
 @Entity
 @Table(name = "Players")
-public class Player implements Comparable<Player>, Diffable<Player>
+public class Player implements Comparable<Player>
 {
   @Id
   @Column(name = "PLAYERID")
@@ -89,18 +83,14 @@ public class Player implements Comparable<Player>, Diffable<Player>
   @Transient
   private String impactPlayer;
  
-  @Transient
-  private String player_type;
-
   public Player() {
 		super();
   }
 
-  public Player(int playerId, Integer playerPosition, String player_type) {
+  public Player(int playerId, Integer playerPosition) {
 	super();
 	this.playerId = playerId;
 	this.playerPosition = playerPosition;
-	this.player_type = player_type;
   }
   
 public String getImpactPlayer() {
@@ -207,14 +197,6 @@ public void setCaptainWicketKeeper(String captainWicketKeeper) {
 	this.captainWicketKeeper = captainWicketKeeper;
 }
 
-public String getPlayer_type() {
-	return player_type;
-}
-
-public void setPlayer_type(String player_type) {
-	this.player_type = player_type;
-}
-
 public String getHindifull_name() {
 	return hindifull_name;
 }
@@ -305,17 +287,6 @@ public void setInstagramHandle(String instagramHandle) {
 }
 
 @Override
-public DiffResult diff(Player plyr) {
-	DiffBuilder db = new DiffBuilder(this, plyr, ToStringStyle.SHORT_PREFIX_STYLE);
-    if ((this.captainWicketKeeper != null && !this.captainWicketKeeper.isEmpty()) || (plyr.captainWicketKeeper != null && !plyr.captainWicketKeeper.isEmpty()))
-    	db.append("captainWicketKeeper", this.captainWicketKeeper, plyr.captainWicketKeeper);
-    if ((this.player_type != null && !this.player_type.isEmpty()) || (plyr.player_type != null && !plyr.player_type.isEmpty()))
-    	db.append("player_type", this.player_type, plyr.player_type);
-    db.append("playerPosition", this.playerPosition, plyr.playerPosition);
-	return db.build();
-}
-
-@Override
 public int compareTo(Player pm) {
 	return (int) (this.getPlayerPosition()-pm.getPlayerPosition());
 }
@@ -330,7 +301,7 @@ public String toString() {
 			+ ", bowlingStyle=" + bowlingStyle + ", battingStyle=" + battingStyle + ", teamId=" + teamId
 			+ ", overseasPlayer=" + overseasPlayer + ", Photo=" + Photo + ", Nationality=" + Nationality
 			+ ", playerPosition=" + playerPosition + ", captainWicketKeeper=" + captainWicketKeeper + ", impactPlayer="
-			+ impactPlayer + ", player_type=" + player_type + "]";
+			+ impactPlayer + "]";
 }
 
 }
