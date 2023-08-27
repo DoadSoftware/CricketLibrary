@@ -300,19 +300,6 @@ public class CricketFunctions {
 									System.out.println("FoW -> data_to_process = " + data_to_process);
 									for(int i=0; i < data_to_process.split(",").length; i++) {
 										
-//										System.out.println("data_to_process 1 = " + data_to_process.split(",")[i]);
-//										System.out.println("foW wicket = " + data_to_process.split(",")[i].substring(0, 
-//											data_to_process.split(",")[i].indexOf("-")));
-//										System.out.println("foW runs = " + data_to_process.split(",")[i].substring(data_to_process.split(",")[i].indexOf("-") + 1, 
-//											data_to_process.split(",")[i].indexOf("(") - data_to_process.split(",")[i].indexOf("-") + 1));
-//										System.out.println("foW player name = " + data_to_process.split(",")[i].substring(
-//											data_to_process.split(",")[i].indexOf("(") + 1));
-//										System.out.println("data_to_process 2 = " + data_to_process.split(",")[i+1]);
-//										System.out.println("foW over = " + data_to_process.split(",")[i+1].toUpperCase()
-//											.replace("OV)", "").substring(0,data_to_process.split(",")[i+1].indexOf(".")).trim());
-//										System.out.println("foW ball = " + data_to_process.split(",")[i+1].toUpperCase()
-//												.replace("OV)", "").substring(data_to_process.split(",")[i+1].indexOf(".")+1).trim());
-										
 										for (BattingCard bc : this_battingcard) {
 
 											if(bc.getPlayer() != null && bc.getPlayer().getFull_name() != null
@@ -413,132 +400,128 @@ public class CricketFunctions {
 										
 									} else if(!column.findElements(By.xpath("./span/span")).isEmpty()) {
 
-										System.out.println("Bat status = " + column.findElement(By.tagName("span")).findElement(
-												By.tagName("span")).getText());
-										if(column.findElement(By.tagName("span")).findElement(
-											By.tagName("span")).getText().equalsIgnoreCase("not out")) {
-											
+										data_to_process = column.findElement(By.tagName("span")).findElement(
+												By.tagName("span")).getText().replaceAll("[^a-zA-Z0-9\\s\\/]", "");
+										
+										System.out.println("Bat status (data_to_process) = " + data_to_process);
+										
+										if(data_to_process.equalsIgnoreCase("not out")) {
 											this_battingcard.get(this_battingcard.size()-1).setStatus(CricketUtil.NOT_OUT);
-											
-										} else if(!column.findElement(By.tagName("span")).findElement(
-											By.tagName("span")).getText().isEmpty()) {
+										} else if(!data_to_process.isEmpty()) {
 
 											this_battingcard.get(this_battingcard.size()-1).setStatus(CricketUtil.OUT);
 											
 											this_player = new Player();
 											
-											if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("c ") &&   // caught
-													column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains(" b ") && 
-													!column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("c & b")) {
-												this_battingcard.get(this_battingcard.size()-1).setHowOut("caught");
-												this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[0]);
-												this_battingcard.get(this_battingcard.size()-1).setHowOutPartTwo("b " + column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
-												this_battingcard.get(this_battingcard.size()-1).setHowOutText(
-														column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText());
-												this_player.setFull_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
-												if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].contains(" ")) {
-													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].split(" ")[0]);
-													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].split(" ")[1]);
-													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].split(" ")[1]);
-												}else {
-													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
-													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
-													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
+											if(data_to_process.toLowerCase().contains("c ") && data_to_process.toLowerCase().contains(" b ") && 
+												!data_to_process.toLowerCase().contains("c & b")) {
+												this_battingcard.get(this_battingcard.size()-1).setHowOut(CricketUtil.CAUGHT);
+												if(data_to_process.toLowerCase().contains(" b ")) {
+													this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne(data_to_process.toLowerCase().split(" b ")[0]);
+													this_battingcard.get(this_battingcard.size()-1).setHowOutPartTwo("b " + data_to_process.toLowerCase().split(" b ")[1]);
+													this_player.setFull_name(data_to_process.toLowerCase().split(" b ")[1]);
+													if(data_to_process.toLowerCase().split(" b ")[1].contains(" ")) {
+														this_player.setFirstname(data_to_process.toLowerCase().split(" b ")[1].split(" ")[0]);
+														this_player.setSurname(data_to_process.toLowerCase().split(" b ")[1].split(" ")[1]);
+														this_player.setTicker_name(data_to_process.toLowerCase().split(" b ")[1].split(" ")[1]);
+													}else {
+														this_player.setFirstname(data_to_process.toLowerCase().split(" b ")[1]);
+														this_player.setSurname(data_to_process.toLowerCase().split(" b ")[1]);
+														this_player.setTicker_name(data_to_process.toLowerCase().split(" b ")[1]);
+													}
 												}
+												this_battingcard.get(this_battingcard.size()-1).setHowOutText(data_to_process);
 												this_battingcard.get(this_battingcard.size()-1).setHowOutBowler(this_player);
 												
-											}else if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("c & b")) {
-												this_battingcard.get(this_battingcard.size()-1).setHowOut("caught_and_bowled");
+											}else if(data_to_process.toLowerCase().contains("c & b")) {
+												this_battingcard.get(this_battingcard.size()-1).setHowOut(CricketUtil.CAUGHT_AND_BOWLED);
 												this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne("c & b");
-												this_battingcard.get(this_battingcard.size()-1).setHowOutPartTwo(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1]);
-												this_battingcard.get(this_battingcard.size()-1).setHowOutText(
-														column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText());
-												this_player.setFull_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1]);
-												if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1].contains(" ")) {
-													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1].split(" ")[0]);
-													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1].split(" ")[1]);
-													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1].split(" ")[1]);
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartTwo(data_to_process.split("c & b ")[1]);
+												this_battingcard.get(this_battingcard.size()-1).setHowOutText(data_to_process);
+												this_player.setFull_name(data_to_process.split("c & b ")[1]);
+												if(data_to_process.toLowerCase().split("c & b ")[1].contains(" ")) {
+													this_player.setFirstname(data_to_process.toLowerCase().split("c & b ")[1].split(" ")[0]);
+													this_player.setSurname(data_to_process.toLowerCase().split("c & b ")[1].split(" ")[1]);
+													this_player.setTicker_name(data_to_process.toLowerCase().split("c & b ")[1].split(" ")[1]);
 												}else {
-													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1]);
-													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1]);
-													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("c & b ")[1]);
+													this_player.setFirstname(data_to_process.toLowerCase().split("c & b ")[1]);
+													this_player.setSurname(data_to_process.toLowerCase().split("c & b ")[1]);
+													this_player.setTicker_name(data_to_process.toLowerCase().split("c & b ")[1]);
 												}
 												this_battingcard.get(this_battingcard.size()-1).setHowOutBowler(this_player);
 												
-											}else if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("b ") &&   // bowled
-													!column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("c & b") && 
-													!column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("c ")) {
-												//this_battingcard.get(this_battingcard.size()-1).setHowOutBowler(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText());
-												this_player.setFull_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1]);
-												if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1].contains(" ")) {
-													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1].split(" ")[0]);
-													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1].split(" ")[1]);
-													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1].split(" ")[1]);
+											}else if(data_to_process.toLowerCase().contains("b ")) {
+												this_player.setFull_name(data_to_process.split("b ")[1]);
+												if(data_to_process.toLowerCase().split("b ")[1].contains(" ")) {
+													this_player.setFirstname(data_to_process.toLowerCase().split("b ")[1].split(" ")[0]);
+													this_player.setSurname(data_to_process.toLowerCase().split("b ")[1].split(" ")[1]);
+													this_player.setTicker_name(data_to_process.toLowerCase().split("b ")[1].split(" ")[1]);
 												}else {
-													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1]);
-													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1]);
-													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("b ")[1]);
+													this_player.setFirstname(data_to_process.toLowerCase().split("b ")[1]);
+													this_player.setSurname(data_to_process.toLowerCase().split("b ")[1]);
+													this_player.setTicker_name(data_to_process.toLowerCase().split("b ")[1]);
 												}
 												this_battingcard.get(this_battingcard.size()-1).setHowOutBowler(this_player);
 												this_battingcard.get(this_battingcard.size()-1).setHowOutText("b " + this_battingcard.get(this_battingcard.size()-1).getHowOutBowler().getTicker_name());
-												this_battingcard.get(this_battingcard.size()-1).setHowOut("bowled");
+												this_battingcard.get(this_battingcard.size()-1).setHowOut(CricketUtil.BOWLED);
 												this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne("");
 												this_battingcard.get(this_battingcard.size()-1).setHowOutPartTwo("b " + this_battingcard.get(this_battingcard.size()-1).getHowOutBowler().getTicker_name());
 												
-											}else if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("lbw")) { // lbw
+											}else if(data_to_process.toLowerCase().contains("lbw b ")) { // lbw
 												
-												this_player.setFull_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1]);
-												if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1].contains(" ")) {
-													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1].split(" ")[0]);
-													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1].split(" ")[1]);
-													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1].split(" ")[1]);
+												this_player.setFull_name(data_to_process.split("lbw b ")[1]);
+												if(data_to_process.toLowerCase().split("lbw b ")[1].contains(" ")) {
+													this_player.setFirstname(data_to_process.toLowerCase().split("lbw b ")[1].split(" ")[0]);
+													this_player.setSurname(data_to_process.toLowerCase().split("lbw b ")[1].split(" ")[1]);
+													this_player.setTicker_name(data_to_process.toLowerCase().split("lbw b ")[1].split(" ")[1]);
 												}else {
-													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1]);
-													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1]);
-													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("lbw b ")[1]);
+													this_player.setFirstname(data_to_process.toLowerCase().split("lbw b ")[1]);
+													this_player.setSurname(data_to_process.toLowerCase().split("lbw b ")[1]);
+													this_player.setTicker_name(data_to_process.toLowerCase().split("lbw b ")[1]);
 												}
 												this_battingcard.get(this_battingcard.size()-1).setHowOutBowler(this_player);
-												this_battingcard.get(this_battingcard.size()-1).setHowOutText(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText());
-												this_battingcard.get(this_battingcard.size()-1).setHowOut("lbw");
-												this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne("lbw");
+												this_battingcard.get(this_battingcard.size()-1).setHowOutText(data_to_process);
+												this_battingcard.get(this_battingcard.size()-1).setHowOut(CricketUtil.LBW);
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne(CricketUtil.LBW);
 												this_battingcard.get(this_battingcard.size()-1).setHowOutPartTwo("b " + this_battingcard.get(this_battingcard.size()-1).getHowOutBowler().getTicker_name());
 												
-											}else if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("st ") && 
-													column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains(" b ")) {
+											}else if(data_to_process.toLowerCase().contains("st ") && data_to_process.toLowerCase().contains(" b ")) {
 												
-												this_player.setFull_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
-												if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].contains(" ")) {
-													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].split(" ")[0]);
-													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].split(" ")[1]);
-													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1].split(" ")[1]);
+												this_player.setFull_name(data_to_process.split(" b ")[1]);
+												if(data_to_process.toLowerCase().split(" b ")[1].contains(" ")) {
+													this_player.setFirstname(data_to_process.toLowerCase().split(" b ")[1].split(" ")[0]);
+													this_player.setSurname(data_to_process.toLowerCase().split(" b ")[1].split(" ")[1]);
+													this_player.setTicker_name(data_to_process.toLowerCase().split(" b ")[1].split(" ")[1]);
 												}else {
-													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
-													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
-													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[1]);
+													this_player.setFirstname(data_to_process.toLowerCase().split(" b ")[1]);
+													this_player.setSurname(data_to_process.toLowerCase().split(" b ")[1]);
+													this_player.setTicker_name(data_to_process.toLowerCase().split(" b ")[1]);
 												}
 												this_battingcard.get(this_battingcard.size()-1).setHowOutBowler(this_player);
-												this_battingcard.get(this_battingcard.size()-1).setHowOutText(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText());
-												this_battingcard.get(this_battingcard.size()-1).setHowOut("stumped");
-												this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split(" b ")[0]);
+												this_battingcard.get(this_battingcard.size()-1).setHowOutText(data_to_process);
+												this_battingcard.get(this_battingcard.size()-1).setHowOut(CricketUtil.STUMPED);
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne(data_to_process.split(" b ")[0]);
 												this_battingcard.get(this_battingcard.size()-1).setHowOutPartTwo("b " + this_battingcard.get(this_battingcard.size()-1).getHowOutBowler().getTicker_name());
 												
-											}else if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().contains("run out")) {
+											}else if(data_to_process.toLowerCase().contains("run out")) {
 												
-												this_player.setFull_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].replace(")", ""));
-												if(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].contains(" ")) {
-													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].split(" ")[0]);
-													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].split(" ")[1].replace(")", ""));
-													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].split(" ")[1].replace(")", ""));
-												}else {
-													this_player.setFirstname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].replace(")", ""));
-													this_player.setSurname(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].replace(")", ""));
-													this_player.setTicker_name(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText().split("run out (")[1].replace(")", ""));
+												data_to_process = data_to_process.toLowerCase().split("run out ")[1]
+													.replace("(", "").replace(")", ""); 
+												this_player.setFirstname("");
+												if(data_to_process.toLowerCase().contains("/")) {
+													this_player.setFull_name(data_to_process.split("/")[1]);
+													this_player.setSurname(data_to_process.split("/")[1]);
+													this_player.setTicker_name(data_to_process.split("/")[1]);
+												} else {
+													this_player.setFull_name(data_to_process);
+													this_player.setSurname(data_to_process);
+													this_player.setTicker_name(data_to_process);
 												}
 												this_battingcard.get(this_battingcard.size()-1).setHowOutBowler(this_player);
-												this_battingcard.get(this_battingcard.size()-1).setHowOutText(column.findElement(By.tagName("span")).findElement(By.tagName("span")).getText());
-												this_battingcard.get(this_battingcard.size()-1).setHowOut("run_out");
-												this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne("run out");
-												this_battingcard.get(this_battingcard.size()-1).setHowOutPartTwo("b " + this_battingcard.get(this_battingcard.size()-1).getHowOutBowler().getTicker_name());
+												this_battingcard.get(this_battingcard.size()-1).setHowOutText(data_to_process);
+												this_battingcard.get(this_battingcard.size()-1).setHowOut(CricketUtil.RUN_OUT);
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartOne(CricketUtil.RUN_OUT.replace("_", " "));
+												this_battingcard.get(this_battingcard.size()-1).setHowOutPartTwo(data_to_process);
 											}
 										} 
 										
