@@ -2058,7 +2058,7 @@ public class CricketFunctions {
 
 	public static Statistics updateTournamentDataWithStats(Statistics stats,List<MatchAllData> tournament_matches,MatchAllData currentMatch) throws JsonMappingException, JsonProcessingException, InterruptedException 
 	{
-		boolean player_found = false;
+		boolean player_found = false,impact_player_found=false;
 		
 		Statistics statsdata = stats;
 		ObjectMapper objectMapper = new ObjectMapper();    
@@ -2107,22 +2107,24 @@ public class CricketFunctions {
 							}							
 						}
 					}
-					player_found = false;
 					for(Player hs : match.getSetup().getHomeSubstitutes()) {
 						if(hs.getImpactPlayer().equalsIgnoreCase(CricketUtil.YES)) {
 							if(hs.getPlayerId() == stat.getPlayer_id()) {
-								player_found = true;
+								impact_player_found = true;
 							}
 						}
 					}
 					for(Player as : match.getSetup().getAwaySubstitutes()) {
 						if(as.getImpactPlayer().equalsIgnoreCase(CricketUtil.YES)) {
 							if(as.getPlayerId() == stat.getPlayer_id()) {
-								player_found = true;
+								impact_player_found = true;
 							}
 						}
 					}
 					if(player_found == true){
+						stat.setMatches(stat.getMatches() + 1);
+					}
+					if(impact_player_found == true){
 						stat.setMatches(stat.getMatches() + 1);
 					}
 				}
@@ -2133,7 +2135,7 @@ public class CricketFunctions {
 	
 	public static Statistics updateStatisticsWithMatchData(Statistics stats, MatchAllData match) throws JsonMappingException, JsonProcessingException
 	{
-		boolean player_found = false;
+		boolean player_found = false,impact_player_found=false;
 		
 		Statistics statsdata = stats;
 		ObjectMapper objectMapper = new ObjectMapper();    
@@ -2184,22 +2186,24 @@ public class CricketFunctions {
 					}							
 				}
 			}
-			player_found = false;
 			for(Player hs : match.getSetup().getHomeSubstitutes()) {
 				if(hs.getImpactPlayer().equalsIgnoreCase(CricketUtil.YES)) {
 					if(hs.getPlayerId() == stat.getPlayer_id()) {
-						player_found = true;
+						impact_player_found = true;
 					}
 				}
 			}
 			for(Player as : match.getSetup().getAwaySubstitutes()) {
 				if(as.getImpactPlayer().equalsIgnoreCase(CricketUtil.YES)) {
 					if(as.getPlayerId() == stat.getPlayer_id()) {
-						player_found = true;
+						impact_player_found = true;
 					}
 				}
 			}
 			if(player_found == true){
+				stat.setMatches(stat.getMatches() + 1);
+			}
+			if(impact_player_found == true){
 				stat.setMatches(stat.getMatches() + 1);
 			}
 		}
