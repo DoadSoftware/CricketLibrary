@@ -2416,9 +2416,6 @@ public class CricketFunctions {
 												if(boc.getPlayerId() == trmnt.getPlayerId()) {
 													is_player_found = true;
 													trmnt.setMatches(trmnt.getMatches() + 1);
-													if(trmnt.getPlayerId() == 143) {
-														System.out.println("NameBowlingCard = " + trmnt.getPlayer().getFull_name() + "  matches = " + trmnt.getMatches() + " FileName = " + mtch.getMatch().getMatchFileName());
-													}
 												}
 											}
 										}
@@ -2430,9 +2427,6 @@ public class CricketFunctions {
 											if(bc.getPlayerId() == trmnt.getPlayerId()) {
 												is_player_found = true;
 												trmnt.setMatches(trmnt.getMatches() + 1);
-												if(trmnt.getPlayerId() == 143) {
-													System.out.println("NameBattingCard = " + trmnt.getPlayer().getFull_name() + "  matches = " + trmnt.getMatches() + " FileName = " + mtch.getMatch().getMatchFileName());
-												}
 											}
 										}
 									}
@@ -2463,12 +2457,6 @@ public class CricketFunctions {
 						}
 					}
 				}
-			}
-			for(int i =0; i <= tournament_stats.size() -1; i++) {
-				if(tournament_stats.get(i).getPlayerId() == 143) {
-					System.out.println("Name = " + tournament_stats.get(i).getPlayer().getFull_name() + "  matches = " + tournament_stats.get(i).getMatches());
-				}
-				
 			}
 			return tournament_stats;
 			
@@ -2807,14 +2795,22 @@ public class CricketFunctions {
 	public static class BatsmanFoursComparator implements Comparator<Tournament> {
 	    @Override
 	    public int compare(Tournament bc1, Tournament bc2) {
-	       return Integer.compare(bc2.getBatsmanFoursSortData(), bc1.getBatsmanFoursSortData());
+	    	if(bc2.getFours() == bc1.getFours()) {
+	    		return Integer.compare(bc2.getBatsmanStrikeRateSortData(), bc1.getBatsmanStrikeRateSortData());
+	    	}else {
+	    		return Integer.compare(bc2.getBatsmanFoursSortData(), bc1.getBatsmanFoursSortData());
+	    	}
 	    }
 	}
 	
 	public static class BatsmanSixesComparator implements Comparator<Tournament> {
 	    @Override
 	    public int compare(Tournament bc1, Tournament bc2) {
-	       return Integer.compare(bc2.getBatsmanSixesSortData(), bc1.getBatsmanSixesSortData());
+	    	if(bc2.getSixes() == bc1.getSixes()) {
+	    		return Integer.compare(bc2.getBatsmanStrikeRateSortData(), bc1.getBatsmanStrikeRateSortData());
+	    	}else {
+	    		return Integer.compare(bc2.getBatsmanSixesSortData(), bc1.getBatsmanSixesSortData());
+	    	}
 	    }
 	}
 	
