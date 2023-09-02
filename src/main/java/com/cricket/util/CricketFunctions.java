@@ -2052,7 +2052,7 @@ public class CricketFunctions {
 				}
 			}
 		}
-		
+		System.out.println(Four + "," + Six);
 		return Four + "," + Six;
 	}
 
@@ -2065,6 +2065,7 @@ public class CricketFunctions {
 		Statistics stat = objectMapper.readValue(objectMapper.writeValueAsString(statsdata), Statistics.class);
 		
 		for(MatchAllData match : tournament_matches) {
+			System.out.println(match.getMatch().getMatchFileName());
 			if(!match.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
 				if(stat.getStats_type().getStats_short_name().equalsIgnoreCase(match.getSetup().getMatchType())) {
 					TimeUnit.MILLISECONDS.sleep(500);
@@ -2074,6 +2075,9 @@ public class CricketFunctions {
 								player_found = true;
 								if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES)) {
 									stat.setInnings(stat.getInnings() + 1);
+								}
+								if(stat.getPlayer_id() == 76) {
+									System.out.println("matches = " + stat.getMatches());
 								}
 								stat.setRuns(stat.getRuns() + bc.getRuns());
 								stat.setFours(stat.getFours() + bc.getFours());
@@ -2121,14 +2125,22 @@ public class CricketFunctions {
 							}
 						}
 					}
+					if(stat.getPlayer_id() == 76) {
+						System.out.println("namestat = " + stat.getPlayer_id() + " matches = " + stat.getMatches());
+					}
 					if(player_found == true){
+						player_found = false;
 						stat.setMatches(stat.getMatches() + 1);
 					}
 					if(impact_player_found == true){
+						impact_player_found = false;
 						stat.setMatches(stat.getMatches() + 1);
 					}
 				}
 			}
+		}
+		if(stat.getPlayer_id() == 76) {
+			System.out.println("name = " + stat.getPlayer_id() + " matches = " + stat.getMatches());
 		}
 		return stat;
 	}
@@ -2200,12 +2212,20 @@ public class CricketFunctions {
 					}
 				}
 			}
+			if(stat.getPlayer_id() == 76) {
+				System.out.println("namebefore = " + stat.getPlayer_id() + " matches = " + stat.getMatches());
+			}
 			if(player_found == true){
+				player_found = false;
 				stat.setMatches(stat.getMatches() + 1);
 			}
 			if(impact_player_found == true){
+				impact_player_found = false;
 				stat.setMatches(stat.getMatches() + 1);
 			}
+		}
+		if(stat.getPlayer_id() == 76) {
+			System.out.println("namecurrent = " + stat.getPlayer_id() + " matches = " + stat.getMatches());
 		}
 		return stat;
 	}
@@ -2239,7 +2259,7 @@ public class CricketFunctions {
 			
 			for(MatchAllData mtch : tournament_matches) {
 				if(!mtch.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
-					
+					System.out.println(mtch.getMatch().getMatchFileName());
 					has_match_started = false;
 					
 					if(mtch.getSetup().getMatchType().equalsIgnoreCase(currentMatch.getSetup().getMatchType())) {
@@ -2361,6 +2381,9 @@ public class CricketFunctions {
 										}
 									}
 								}
+								if(trmnt.getPlayerId() == 143) {
+									System.out.println("NameTournament = " + trmnt.getPlayer().getFull_name() + "  matches = " + trmnt.getMatches() + " FileName = " + mtch.getMatch().getMatchFileName());
+								}
 							}
 							
 							if(fielder_found == false) {
@@ -2379,7 +2402,6 @@ public class CricketFunctions {
 									}
 								}
 							}
-							
 						}
 						
 						if(has_match_started == true) {
@@ -2394,7 +2416,7 @@ public class CricketFunctions {
 												if(boc.getPlayerId() == trmnt.getPlayerId()) {
 													is_player_found = true;
 													trmnt.setMatches(trmnt.getMatches() + 1);
-													if(trmnt.getPlayerId() == 30) {
+													if(trmnt.getPlayerId() == 143) {
 														System.out.println("NameBowlingCard = " + trmnt.getPlayer().getFull_name() + "  matches = " + trmnt.getMatches() + " FileName = " + mtch.getMatch().getMatchFileName());
 													}
 												}
@@ -2408,7 +2430,7 @@ public class CricketFunctions {
 											if(bc.getPlayerId() == trmnt.getPlayerId()) {
 												is_player_found = true;
 												trmnt.setMatches(trmnt.getMatches() + 1);
-												if(trmnt.getPlayerId() == 30) {
+												if(trmnt.getPlayerId() == 143) {
 													System.out.println("NameBattingCard = " + trmnt.getPlayer().getFull_name() + "  matches = " + trmnt.getMatches() + " FileName = " + mtch.getMatch().getMatchFileName());
 												}
 											}
@@ -2443,7 +2465,7 @@ public class CricketFunctions {
 				}
 			}
 			for(int i =0; i <= tournament_stats.size() -1; i++) {
-				if(tournament_stats.get(i).getPlayerId() == 30) {
+				if(tournament_stats.get(i).getPlayerId() == 143) {
 					System.out.println("Name = " + tournament_stats.get(i).getPlayer().getFull_name() + "  matches = " + tournament_stats.get(i).getMatches());
 				}
 				
@@ -2626,7 +2648,7 @@ public class CricketFunctions {
 									{
 										if(boc.getPlayerId() == trment.getPlayerId()) {
 											trment.setMatches(trment.getMatches() + 1);
-											if(trment.getPlayerId() == 12) {
+											if(trment.getPlayerId() == 143) {
 												System.out.println("NameBowlingCard = " + trment.getPlayer().getFull_name() + "  matches = " + trment.getMatches());
 											}
 											is_player_found = true;
@@ -2661,7 +2683,7 @@ public class CricketFunctions {
 				}
 			}
 			for(int i =0; i <= past_tournament_stat_clone.size() -1; i++) {
-				if(past_tournament_stat_clone.get(i).getPlayerId() == 12) {
+				if(past_tournament_stat_clone.get(i).getPlayerId() == 143) {
 					System.out.println("Name = " + past_tournament_stat_clone.get(i).getPlayer().getFull_name() + "  matches = " + past_tournament_stat_clone.get(i).getMatches());
 				}
 				
