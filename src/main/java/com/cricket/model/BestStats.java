@@ -5,11 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class BestStats{
 
   private int playerId;
-  
   private int bestEquation;
-  
   private Team opponentTeam;
-
+  private String matchNumber;
   private int runs;
   private int wickets;
   private int balls;
@@ -23,14 +21,15 @@ public BestStats() {
 	super();
 }
 
-public BestStats(int playerId, int bestEquation, int balls, Team opponentTeam, Player player,String status) {
+public BestStats(int playerId, int bestEquation, int balls, Team opponentTeam, String matchNumber, Player player ,String status) {
 	super();
 	this.playerId = playerId;
 	this.bestEquation = bestEquation;
-	this.balls = balls;
 	this.opponentTeam = opponentTeam;
-	this.player = player;
+	this.matchNumber = matchNumber;
+	this.balls = balls;
 	this.status = status;
+	this.player = player;
 }
 
 public boolean isNot_out() {
@@ -105,11 +104,19 @@ public void setStatus(String status) {
 	this.status = status;
 }
 
+public String getMatchNumber() {
+	return matchNumber;
+}
+
+public void setMatchNumber(String matchNumber) {
+	this.matchNumber = matchNumber;
+}
+
 @Override
 public String toString() {
 	return "BestStats [playerId=" + playerId + ", bestEquation=" + bestEquation + ", opponentTeam=" + opponentTeam
-			+ ", runs=" + runs + ", wickets=" + wickets + ", balls=" + balls + ", status=" + status + ", not_out="
-			+ not_out + ", player=" + player + "]";
+			+ ", matchNumber=" + matchNumber + ", runs=" + runs + ", wickets=" + wickets + ", balls=" + balls
+			+ ", status=" + status + ", not_out=" + not_out + ", player=" + player + "]";
 }
 
 }
