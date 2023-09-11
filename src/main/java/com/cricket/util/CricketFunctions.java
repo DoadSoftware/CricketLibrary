@@ -4274,7 +4274,7 @@ public class CricketFunctions {
 	
 	public static String getlastthirtyballsdata(MatchAllData match,String separator,List<Event> events,int number_of_events) {
 		
-		int total_runs = 0, total_wickets = 0,ball_count = 0;
+		int total_runs = 0, total_wickets = 0,total_fours=0,total_sixes=0,ball_count = 0;
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
 				switch(events.get(i).getEventType()) {
@@ -4282,6 +4282,11 @@ public class CricketFunctions {
 		        case CricketUtil.FOUR: case CricketUtil.SIX:
 		        	ball_count = ball_count + 1;
 		        	total_runs += events.get(i).getEventRuns();
+		        	if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR)) {
+		        		total_fours = total_fours + 1;
+		        	}else if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX)) {
+		        		total_sixes = total_sixes + 1;
+		        	}
 		          break;
 		          
 		        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
@@ -4311,6 +4316,14 @@ public class CricketFunctions {
 			          if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
 			        	  total_wickets += 1;
 			          }
+			          if (((events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
+		  	        		  && (events.get(i).getEventWasABoundary() != null) &&  (events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+			        	  if(events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) {
+				        		total_fours = total_fours + 1;
+			        	  }else if(events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX)) {
+				        		total_sixes = total_sixes + 1;
+			        	  }
+		  	          }
 			          break;
 				}
 				if(ball_count >= number_of_events) {
@@ -4319,7 +4332,7 @@ public class CricketFunctions {
 			}
 		}
 			  
-		return total_runs + separator + total_wickets;	
+		return total_runs + separator + total_wickets + separator + total_fours + separator + total_sixes;	
 	}
 	
 	public static String compareInningData(MatchAllData match, String separator, int inning_number, List<Event> events) {
