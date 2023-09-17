@@ -33,6 +33,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.lang3.math.NumberUtils;
@@ -41,6 +42,8 @@ import org.jsoup.nodes.Document;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import com.Ae_Third_Party_Xml.AE_Cricket;
 import com.cricket.archive.Archive;
 import com.cricket.archive.ArchiveData;
 import com.cricket.model.BattingCard;
@@ -80,6 +83,11 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 public class CricketFunctions {
 	
 	public static ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+	public static AE_Cricket getDataFromThirdParty(String FilePathName) throws
+	JAXBException { AE_Cricket cricket_data =(AE_Cricket)JAXBContext.newInstance(AE_Cricket.class)
+		.createUnmarshaller().unmarshal(new File(FilePathName));
+	return cricket_data;
+}
 	
 	public static MatchAllData getMatchDataFromWebsite(WebDriver driver, String whatToProcess, 
 		String broadcaster, String valueToProcess, List<Team> all_teams) throws StreamWriteException, DatabindException, JAXBException, IOException, URISyntaxException
