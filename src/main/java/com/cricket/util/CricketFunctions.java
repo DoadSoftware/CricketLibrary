@@ -5400,10 +5400,10 @@ public class CricketFunctions {
 					int totalball = 0;
 					totalball =((inn.getTotalOvers()*6) + inn.getTotalBalls());
 					if(totalball < 42) {
-						htmlFile = Jsoup.parse(new File("C:\\Sports\\ParScores BB.html"), "ISO-8859-1");
+						htmlFile = Jsoup.parse(new File("C:\\Sports\\Cricket\\ParScores BB.html"), "ISO-8859-1");
 
 					}else if(totalball >= 42) {
-						htmlFile = Jsoup.parse(new File("C:\\Sports\\ParScores OO.html"), "ISO-8859-1");
+						htmlFile = Jsoup.parse(new File("C:\\Sports\\Cricket\\ParScores OO.html"), "ISO-8859-1");
 
 					}
 				}
