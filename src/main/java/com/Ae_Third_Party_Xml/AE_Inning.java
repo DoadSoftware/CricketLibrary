@@ -246,5 +246,7 @@ public class AE_Inning {
 	public void setRunRate(String runRate) {
 		RunRate = runRate;
 	}
+
+	 
 	
 }

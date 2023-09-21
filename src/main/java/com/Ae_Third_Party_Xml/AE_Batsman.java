@@ -1,7 +1,7 @@
 package com.Ae_Third_Party_Xml;
 
 import javax.xml.bind.annotation.*;
-@XmlRootElement(name="Batsman")
+@XmlRootElement(name="Batsman ")
 public class AE_Batsman {
 	private Integer Position,FielderID,BowlerID,Runs,Balls,DotBalls,Minutes,Fours,Sixes;
 	private String StrikeRate;

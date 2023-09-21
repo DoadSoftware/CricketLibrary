@@ -83,12 +83,12 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 public class CricketFunctions {
 	
 	public static ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
-	public static AE_Cricket getDataFromThirdParty(String FilePathName) throws
-
-	JAXBException { AE_Cricket cricket_data =(AE_Cricket)JAXBContext.newInstance(AE_Cricket.class)
+	public static AE_Cricket getDataFromThirdParty(String FilePathName) throws JAXBException {
+		AE_Cricket cricket_data =(AE_Cricket)JAXBContext.newInstance(AE_Cricket.class)
 		.createUnmarshaller().unmarshal(new File(FilePathName));
 	return cricket_data;
 }
+	
 	public static MatchAllData getMatchDataFromWebsite(WebDriver driver, String whatToProcess, 
 		String broadcaster, String valueToProcess, List<Team> all_teams) throws StreamWriteException, DatabindException, JAXBException, IOException, URISyntaxException
 	{
