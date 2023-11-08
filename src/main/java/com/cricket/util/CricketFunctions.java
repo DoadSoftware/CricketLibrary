@@ -86,8 +86,8 @@ public class CricketFunctions {
 	public static AE_Cricket getDataFromThirdParty(String FilePathName) throws JAXBException {
 		AE_Cricket cricket_data =(AE_Cricket)JAXBContext.newInstance(AE_Cricket.class)
 		.createUnmarshaller().unmarshal(new File(FilePathName));
-	return cricket_data;
-}
+		return cricket_data;
+	}
 	
 	public static MatchAllData getMatchDataFromWebsite(WebDriver driver, String whatToProcess, 
 		String broadcaster, String valueToProcess, List<Team> all_teams) throws StreamWriteException, DatabindException, JAXBException, IOException, URISyntaxException
@@ -869,15 +869,17 @@ public class CricketFunctions {
 					+ match.getMatch().getMatchFileName()), 
 					objectWriter.writeValueAsString(match.getSetup()).getBytes());			
 			}
-			if(whichFileToProcess.toUpperCase().contains(CricketUtil.EVENT)) {
-				Files.write(Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY 
-					+ match.getMatch().getMatchFileName()), 
-					objectWriter.writeValueAsString(match.getEventFile()).getBytes());
-			}
-			if(whichFileToProcess.toUpperCase().contains(CricketUtil.MATCH)) {
-				Files.write(Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
-					+ match.getMatch().getMatchFileName()), 
-					objectWriter.writeValueAsString(match.getMatch()).getBytes());
+			if(match.getSetup().getMatch_data_update().equalsIgnoreCase(CricketUtil.START)) {
+				if(whichFileToProcess.toUpperCase().contains(CricketUtil.EVENT)) {
+					Files.write(Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY 
+						+ match.getMatch().getMatchFileName()), 
+						objectWriter.writeValueAsString(match.getEventFile()).getBytes());
+				}
+				if(whichFileToProcess.toUpperCase().contains(CricketUtil.MATCH)) {
+					Files.write(Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
+						+ match.getMatch().getMatchFileName()), 
+						objectWriter.writeValueAsString(match.getMatch()).getBytes());
+				}
 			}
 			break;
 		case CricketUtil.READ:

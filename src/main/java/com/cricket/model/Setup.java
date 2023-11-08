@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Setup {
 
+  private String match_data_update;
+  
   private String saveMatchFileAs;
 	
   private String generateInteractiveFile;
@@ -100,6 +102,14 @@ public class Setup {
   @JsonIgnore
   private int which_key_press;
   
+public String getMatch_data_update() {
+	return match_data_update;
+}
+
+public void setMatch_data_update(String match_data_update) {
+	this.match_data_update = match_data_update;
+}
+
 public String getSaveMatchFileAs() {
 	return saveMatchFileAs;
 }
@@ -454,22 +464,23 @@ public void setLastXball(String lastXball) {
 
 @Override
 public String toString() {
-	return "Setup [saveMatchFileAs=" + saveMatchFileAs + ", generateInteractiveFile=" + generateInteractiveFile
-			+ ", wagonXOffSet=" + wagonXOffSet + ", wagonYOffSet=" + wagonYOffSet + ", followOn=" + followOn
-			+ ", followOnThreshold=" + followOnThreshold + ", homeSubstitutesNumber=" + homeSubstitutesNumber
-			+ ", awaySubstitutesNumber=" + awaySubstitutesNumber + ", reviewsPerTeam=" + reviewsPerTeam
-			+ ", matchFileTimeStamp=" + matchFileTimeStamp + ", speedFilePath=" + speedFilePath + ", matchType="
-			+ matchType + ", readPhotoColumn=" + readPhotoColumn + ", tossResult=" + tossResult
-			+ ", tossWinningDecision=" + tossWinningDecision + ", tournament=" + tournament + ", matchIdent="
-			+ matchIdent + ", tossWinningTeam=" + tossWinningTeam + ", numberOfPowerplays=" + numberOfPowerplays
-			+ ", maxOvers=" + maxOvers + ", reducedOvers=" + reducedOvers + ", homeTeamId=" + homeTeamId
-			+ ", awayTeamId=" + awayTeamId + ", groundId=" + groundId + ", seasonId=" + seasonId + ", targetRuns="
-			+ targetRuns + ", targetType=" + targetType + ", targetOvers=" + targetOvers + ", venueName=" + venueName
-			+ ", homeTeam=" + homeTeam + ", awayTeam=" + awayTeam + ", setupHomeTeam=" + setupHomeTeam
-			+ ", setupAwayTeam=" + setupAwayTeam + ", homeSquad=" + homeSquad + ", homeSubstitutes=" + homeSubstitutes
-			+ ", awaySquad=" + awaySquad + ", awaySubstitutes=" + awaySubstitutes + ", homeOtherSquad=" + homeOtherSquad
-			+ ", awayOtherSquad=" + awayOtherSquad + ", ground=" + ground + ", nameSuper=" + nameSuper + ", LastXball="
-			+ LastXball + ", selected_inning=" + selected_inning + ", which_key_press=" + which_key_press + "]";
+	return "Setup [match_data_update=" + match_data_update + ", saveMatchFileAs=" + saveMatchFileAs
+			+ ", generateInteractiveFile=" + generateInteractiveFile + ", wagonXOffSet=" + wagonXOffSet
+			+ ", wagonYOffSet=" + wagonYOffSet + ", followOn=" + followOn + ", followOnThreshold=" + followOnThreshold
+			+ ", homeSubstitutesNumber=" + homeSubstitutesNumber + ", awaySubstitutesNumber=" + awaySubstitutesNumber
+			+ ", reviewsPerTeam=" + reviewsPerTeam + ", matchFileTimeStamp=" + matchFileTimeStamp + ", speedFilePath="
+			+ speedFilePath + ", matchType=" + matchType + ", readPhotoColumn=" + readPhotoColumn + ", tossResult="
+			+ tossResult + ", tossWinningDecision=" + tossWinningDecision + ", tournament=" + tournament
+			+ ", matchIdent=" + matchIdent + ", tossWinningTeam=" + tossWinningTeam + ", numberOfPowerplays="
+			+ numberOfPowerplays + ", maxOvers=" + maxOvers + ", reducedOvers=" + reducedOvers + ", homeTeamId="
+			+ homeTeamId + ", awayTeamId=" + awayTeamId + ", groundId=" + groundId + ", seasonId=" + seasonId
+			+ ", targetRuns=" + targetRuns + ", targetType=" + targetType + ", targetOvers=" + targetOvers
+			+ ", venueName=" + venueName + ", homeTeam=" + homeTeam + ", awayTeam=" + awayTeam + ", setupHomeTeam="
+			+ setupHomeTeam + ", setupAwayTeam=" + setupAwayTeam + ", homeSquad=" + homeSquad + ", homeSubstitutes="
+			+ homeSubstitutes + ", awaySquad=" + awaySquad + ", awaySubstitutes=" + awaySubstitutes
+			+ ", homeOtherSquad=" + homeOtherSquad + ", awayOtherSquad=" + awayOtherSquad + ", ground=" + ground
+			+ ", nameSuper=" + nameSuper + ", LastXball=" + LastXball + ", selected_inning=" + selected_inning
+			+ ", which_key_press=" + which_key_press + "]";
 }
 
 }
