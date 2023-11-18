@@ -1850,7 +1850,8 @@ public class CricketFunctions {
     			BatSpeed bat_speed = new ObjectMapper().readValue(
    					new File(batSpeedSourceFilePath), new BatSpeed().getClass());
     			bat_speed.setBatSpeedFileModifiedTime(new File(batSpeedSourceFilePath).lastModified());
-   				Files.write(Paths.get(batSpeedDestinationFilePath),objectWriter.writeValueAsString(bat_speed).getBytes());			
+    			objectWriter.writeValue(new File(batSpeedDestinationFilePath), bat_speed);
+   				//Files.write(Paths.get(batSpeedDestinationFilePath),objectWriter.writeValueAsString(bat_speed).getBytes());			
    				return bat_speed;
         	}
 		}
