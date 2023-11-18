@@ -7,7 +7,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Setup {
 
-  private String match_data_update;
+  private String noBallsRuns;
+	
+  private String ballsPerOver;
+	
+  private String matchDataUpdate;
   
   private String saveMatchFileAs;
 	
@@ -102,14 +106,6 @@ public class Setup {
   @JsonIgnore
   private int which_key_press;
   
-public String getMatch_data_update() {
-	return match_data_update;
-}
-
-public void setMatch_data_update(String match_data_update) {
-	this.match_data_update = match_data_update;
-}
-
 public String getSaveMatchFileAs() {
 	return saveMatchFileAs;
 }
@@ -462,25 +458,28 @@ public void setLastXball(String lastXball) {
 	LastXball = lastXball;
 }
 
-@Override
-public String toString() {
-	return "Setup [match_data_update=" + match_data_update + ", saveMatchFileAs=" + saveMatchFileAs
-			+ ", generateInteractiveFile=" + generateInteractiveFile + ", wagonXOffSet=" + wagonXOffSet
-			+ ", wagonYOffSet=" + wagonYOffSet + ", followOn=" + followOn + ", followOnThreshold=" + followOnThreshold
-			+ ", homeSubstitutesNumber=" + homeSubstitutesNumber + ", awaySubstitutesNumber=" + awaySubstitutesNumber
-			+ ", reviewsPerTeam=" + reviewsPerTeam + ", matchFileTimeStamp=" + matchFileTimeStamp + ", speedFilePath="
-			+ speedFilePath + ", matchType=" + matchType + ", readPhotoColumn=" + readPhotoColumn + ", tossResult="
-			+ tossResult + ", tossWinningDecision=" + tossWinningDecision + ", tournament=" + tournament
-			+ ", matchIdent=" + matchIdent + ", tossWinningTeam=" + tossWinningTeam + ", numberOfPowerplays="
-			+ numberOfPowerplays + ", maxOvers=" + maxOvers + ", reducedOvers=" + reducedOvers + ", homeTeamId="
-			+ homeTeamId + ", awayTeamId=" + awayTeamId + ", groundId=" + groundId + ", seasonId=" + seasonId
-			+ ", targetRuns=" + targetRuns + ", targetType=" + targetType + ", targetOvers=" + targetOvers
-			+ ", venueName=" + venueName + ", homeTeam=" + homeTeam + ", awayTeam=" + awayTeam + ", setupHomeTeam="
-			+ setupHomeTeam + ", setupAwayTeam=" + setupAwayTeam + ", homeSquad=" + homeSquad + ", homeSubstitutes="
-			+ homeSubstitutes + ", awaySquad=" + awaySquad + ", awaySubstitutes=" + awaySubstitutes
-			+ ", homeOtherSquad=" + homeOtherSquad + ", awayOtherSquad=" + awayOtherSquad + ", ground=" + ground
-			+ ", nameSuper=" + nameSuper + ", LastXball=" + LastXball + ", selected_inning=" + selected_inning
-			+ ", which_key_press=" + which_key_press + "]";
+public String getNoBallsRuns() {
+	return noBallsRuns;
+}
+
+public void setNoBallsRuns(String noBallsRuns) {
+	this.noBallsRuns = noBallsRuns;
+}
+
+public String getBallsPerOver() {
+	return ballsPerOver;
+}
+
+public void setBallsPerOver(String ballsPerOver) {
+	this.ballsPerOver = ballsPerOver;
+}
+
+public String getMatchDataUpdate() {
+	return matchDataUpdate;
+}
+
+public void setMatchDataUpdate(String matchDataUpdate) {
+	this.matchDataUpdate = matchDataUpdate;
 }
 
 }

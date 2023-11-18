@@ -869,7 +869,7 @@ public class CricketFunctions {
 					+ match.getMatch().getMatchFileName()), 
 					objectWriter.writeValueAsString(match.getSetup()).getBytes());			
 			}
-			if(match.getSetup().getMatch_data_update().equalsIgnoreCase(CricketUtil.START)) {
+			if(match.getSetup().getMatchDataUpdate().equalsIgnoreCase(CricketUtil.START)) {
 				if(whichFileToProcess.toUpperCase().contains(CricketUtil.EVENT)) {
 					Files.write(Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY 
 						+ match.getMatch().getMatchFileName()), 
