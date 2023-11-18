@@ -4751,7 +4751,7 @@ public class CricketFunctions {
 	}
 	
 	public static String Plural(int count){
-		if (count == 1){
+		if (count <= 1){
 			return "";
 		} else{
 			return "s";
@@ -5096,7 +5096,7 @@ public class CricketFunctions {
 							for(BowlingCard boc : inn.getBowlingCard()) {
 								if(boc.getPlayerId() == events.get(i).getEventBowlerNo()) {
 									bowler = boc.getPlayer().getTicker_name() + ',' + boc.getWickets() + '-' + boc.getRuns() + ',' + boc.getDots() + ',' +
-											boc.getEconomyRate() + ',' + OverBalls(boc.getOvers(), boc.getBalls());
+											boc.getEconomyRate() + ',' + OverBalls(boc.getOvers(), boc.getBalls()) + ',' + boc.getPlayerId();
 								}
 							}
 						}
@@ -5128,6 +5128,72 @@ public class CricketFunctions {
 			}
 		}
 		return bowler;
+	}
+	
+	public static String PreOtherRunWicket(int playerId , int inningNumber, String Seperator,MatchAllData match ,List<Event> events) {
+		int run_count = 0,wicket_count = 0;
+		if((events != null) && (events.size() > 0)) {
+			for(int i = events.size() - 1; i >= 0; i--) {
+				if (events.get(i).getEventInningNumber() == inningNumber) {
+					if(match.getMatch().getInning().get(inningNumber - 1).getTotalOvers() > 0 || match.getMatch().getInning().get(inningNumber - 1).getTotalBalls() > 0) {
+						if(playerId == events.get(i).getEventBowlerNo()) {
+							if(match.getMatch().getInning().get(inningNumber - 1).getTotalOvers() == events.get(i).getEventOverNo() && events.get(i).getEventBallNo() == 0) {
+								switch(events.get(i).getEventType()) {
+								case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
+						        case CricketUtil.FOUR: case CricketUtil.SIX: 
+						        	run_count += events.get(i).getEventRuns();
+						          break;
+						          
+						        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+						        	run_count += events.get(i).getEventRuns();
+						        	break;
+						        
+						        case CricketUtil.LOG_ANY_BALL:
+						        	run_count += events.get(i).getEventRuns();
+							          if (events.get(i).getEventExtra() != null) {
+							        	  run_count += events.get(i).getEventExtraRuns();
+							          }
+							          if (events.get(i).getEventSubExtra() != null) {
+							        	  run_count += events.get(i).getEventSubExtraRuns();
+							          }
+							          break;
+						        case CricketUtil.WICKET:
+						        	wicket_count += 1;
+						        	break;
+								}
+								//run_count = run_count + events.get(i).getEventRuns();
+							}
+							if((match.getMatch().getInning().get(inningNumber - 1).getTotalOvers() - 1) == events.get(i).getEventOverNo()) {
+								switch(events.get(i).getEventType()) {
+								case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
+						        case CricketUtil.FOUR: case CricketUtil.SIX: 
+						        	run_count += events.get(i).getEventRuns();
+						          break;
+						          
+						        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+						        	run_count += events.get(i).getEventRuns();
+						        	break;
+						        
+						        case CricketUtil.LOG_ANY_BALL:
+						        	run_count += events.get(i).getEventRuns();
+							          if (events.get(i).getEventExtra() != null) {
+							        	  run_count += events.get(i).getEventExtraRuns();
+							          }
+							          if (events.get(i).getEventSubExtra() != null) {
+							        	  run_count += events.get(i).getEventSubExtraRuns();
+							          }
+							          break;
+						        case CricketUtil.WICKET:
+						        	wicket_count += 1;
+						        	break;      
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return String.valueOf(run_count) + Seperator + String.valueOf(wicket_count);
 	}
 	public static String processThisOverRunsCount(int player_id, List<Event> events) {
 		int total_runs=0;
