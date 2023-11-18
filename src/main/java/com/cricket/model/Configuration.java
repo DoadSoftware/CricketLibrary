@@ -17,6 +17,9 @@ public class Configuration {
 	
 	@XmlElement(name="broadcaster")
 	private String broadcaster;
+
+	@XmlElement(name="secondaryBroadcaster")
+	private String secondaryBroadcaster;
 	
 	@XmlElement(name="primaryIpAddress")
 	private String primaryIpAddress;
@@ -82,6 +85,14 @@ public class Configuration {
 		this.tertiaryPortNumber = tertiaryPortNumber;
 		this.tertiaryScene = tertiaryScene;
 		this.tertiaryLanguage = tertiaryLanguage;
+	}
+
+	public String getSecondaryBroadcaster() {
+		return secondaryBroadcaster;
+	}
+
+	public void setSecondaryBroadcaster(String secondaryBroadcaster) {
+		this.secondaryBroadcaster = secondaryBroadcaster;
 	}
 
 	public String getSecondaryFilename() {
