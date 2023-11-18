@@ -11,6 +11,9 @@ public class Configuration {
 	
 	@XmlElement(name="filename")
 	private String filename;
+
+	@XmlElement(name="secondaryFilename")
+	private String secondaryFilename;
 	
 	@XmlElement(name="broadcaster")
 	private String broadcaster;
@@ -79,6 +82,14 @@ public class Configuration {
 		this.tertiaryPortNumber = tertiaryPortNumber;
 		this.tertiaryScene = tertiaryScene;
 		this.tertiaryLanguage = tertiaryLanguage;
+	}
+
+	public String getSecondaryFilename() {
+		return secondaryFilename;
+	}
+
+	public void setSecondaryFilename(String secondaryFilename) {
+		this.secondaryFilename = secondaryFilename;
 	}
 
 	public String getPrimaryLanguage() {

@@ -46,6 +46,7 @@ import org.openqa.selenium.WebElement;
 import com.Ae_Third_Party_Xml.AE_Cricket;
 import com.cricket.archive.Archive;
 import com.cricket.archive.ArchiveData;
+import com.cricket.model.BatSpeed;
 import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
 import com.cricket.model.BowlingCard;
@@ -1837,6 +1838,26 @@ public class CricketFunctions {
 		        	}
 				}
 			}
+		}
+		return null;
+	}
+
+	public static BatSpeed processCurrentBatSpeed(String batSpeedSourceFilePath, 
+		String batSpeedDestinationFilePath, BatSpeed lastBatSpeed) throws IOException {
+		
+		System.out.println("batSpeedSourceFilePath = " + batSpeedSourceFilePath);
+		System.out.println("lastBatSpeed = " + lastBatSpeed);
+		if(!batSpeedSourceFilePath.trim().isEmpty()) {
+			System.out.println("lastBatSpeed.getBatSpeedFileModifiedTime() = " + lastBatSpeed.getBatSpeedFileModifiedTime());
+			System.out.println("new File(batSpeedSourceFilePath).lastModified() = " + new File(batSpeedSourceFilePath).lastModified());
+        	if(lastBatSpeed.getBatSpeedFileModifiedTime() != new File(batSpeedSourceFilePath).lastModified()) {
+    			BatSpeed bat_speed = new ObjectMapper().readValue(
+   					new File(batSpeedSourceFilePath), new BatSpeed().getClass());
+    			bat_speed.setBatSpeedFileModifiedTime(new File(batSpeedSourceFilePath).lastModified());
+    			System.out.println("bat_speed = " + bat_speed);
+   				Files.write(Paths.get(batSpeedDestinationFilePath),objectWriter.writeValueAsString(bat_speed).getBytes());			
+   				return bat_speed;
+        	}
 		}
 		return null;
 	}
