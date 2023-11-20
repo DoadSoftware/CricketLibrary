@@ -56,6 +56,7 @@ import com.cricket.model.DuckWorthLewis;
 import com.cricket.model.Event;
 import com.cricket.model.EventFile;
 import com.cricket.model.FallOfWicket;
+import com.cricket.model.FieldersData;
 import com.cricket.model.Fixture;
 import com.cricket.model.ForeignLanguageData;
 import com.cricket.model.Inning;
@@ -916,7 +917,15 @@ public class CricketFunctions {
         return "";
     }
 	
-
+	public static FieldersData getFielderFormation(String filePathName) throws IOException {
+		FieldersData fielderFormationData = new ObjectMapper().
+				readValue(new File(filePathName), FieldersData.class);
+          return fielderFormationData;
+    }
+	 public static String readFileAsString(String fileName) throws Exception {
+        String data = new String(Files.readAllBytes(Paths.get(fileName)));
+        return data;
+    }
 	public static String checkImpactPlayer(List<Event> events,int inning_number,int player_id) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
