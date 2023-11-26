@@ -4953,7 +4953,7 @@ public class CricketFunctions {
 		  		      return "Current Run Rate " + (match.getMatch().getInning().get(0)).getRunRate();
 		  		    }
 		    	else {
-		    		return CricketFunctions.generateTossResult(match, CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL,CricketUtil.CHOSE);
+		    		return CricketFunctions.generateTossResult(match, CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL, CricketUtil.CHOSE);
 		    	}
 		    case 2: case 3:
 		    	if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
@@ -4970,7 +4970,7 @@ public class CricketFunctions {
 
 				    	matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
 					        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
-				    	if (CricketFunctions.getRequiredBalls(match) >= 100) {
+				    	if (CricketFunctions.getRequiredBalls(match) > 120) {
 				    		matchSummaryStatus = matchSummaryStatus + CricketFunctions.OverBalls(0,CricketFunctions.getRequiredBalls(match)) + " overs";
 						} else {
 							matchSummaryStatus = matchSummaryStatus + CricketFunctions.getRequiredBalls(match) + 
