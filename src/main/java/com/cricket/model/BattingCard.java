@@ -67,7 +67,10 @@ public BattingCard(int playerId, int batterPosition, String status) {
 public BattingCard() {
 	super();
 }
-
+public BattingCard(Player player) {
+	super();
+	this.player = player;
+}
 public BattingCard(int playerId, int batterPosition, String battingStyle, int runs, int fours, int sixes, int balls,
 		int howOutFielderId, int howOutBowlerId, String batsmanInningStarted, String status, String onStrike,
 		String howOutText, String howOut, String howOutPartOne, String howOutPartTwo, String strikeRate,
