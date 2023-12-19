@@ -1768,6 +1768,19 @@ public class CricketFunctions {
 	{
 		List<PrintWriter> print_writer = new ArrayList<PrintWriter>();
 		
+		System.out.println("QTIp = " + config.getQtIpAddress() + "  QTporrt = " + config.getQtPortNumber());
+		System.out.println("VizIp = " + config.getPrimaryIpAddress() + "  Vizporrt = " + config.getPrimaryPortNumber());
+		
+		if(config.getQtIpAddress() != null && !config.getQtIpAddress().isEmpty()) {
+			if(!config.getQtLanguage().equalsIgnoreCase("ENGLISH")) {
+				print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getQtIpAddress(), 
+						config.getQtPortNumber()).getOutputStream(), StandardCharsets.UTF_8),true));
+			}else {
+				print_writer.add(new PrintWriter(new Socket(config.getQtIpAddress(), 
+						config.getQtPortNumber()).getOutputStream(), true));
+			}
+		}
+		
 		if(config.getPrimaryIpAddress() != null && !config.getPrimaryIpAddress().isEmpty()) {
 			if(!config.getPrimaryLanguage().equalsIgnoreCase("ENGLISH")) {
 				print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getPrimaryIpAddress(), 
@@ -1797,6 +1810,8 @@ public class CricketFunctions {
 						config.getTertiaryPortNumber()).getOutputStream(), true));
 			}
 		}
+		
+		
 		return print_writer;
 	}
 
@@ -4316,6 +4331,34 @@ public class CricketFunctions {
 		}
 	    
 	    return return_pp_txt;
+	}
+	
+	public static String totalnoballs(List<Event> events,int inn_number)
+	{
+	    int count_lb = 0;
+	    if ((events != null) && (events.size() > 0)) {
+	      for (Event evnt : events)
+	      {
+	    	  if(evnt.getEventInningNumber() == inn_number) {
+	    		 
+	  	        switch (evnt.getEventType()) {
+	  	      case CricketUtil.NO_BALL:
+	  	          count_lb += 2;
+	  	          break;
+	  	        case CricketUtil.LOG_ANY_BALL: 
+	  	          if ((evnt.getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) && (evnt.getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL))) {
+		  	        	count_lb = count_lb + 2 + evnt.getEventSubExtraRuns();
+		  	            //exitLoop = true;
+		  	      }else if ((evnt.getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL))) {
+		  	        	count_lb = count_lb + 2;
+		  	            //exitLoop = true;
+		  	      }
+	  	          break;
+	  	        }
+	    	  }
+	      }
+	    }
+	    return String.valueOf(count_lb);
 	}
 	
 	public static String lastFewOversData(String whatToProcess, List<Event> events,int inn_number)

@@ -21,6 +21,18 @@ public class Configuration {
 	@XmlElement(name="secondaryBroadcaster")
 	private String secondaryBroadcaster;
 	
+	@XmlElement(name="qtIpAddress")
+	private String qtIpAddress;
+	
+	@XmlElement(name="qtPortNumber")
+	private int qtPortNumber;
+	
+	@XmlElement(name="qtScene")
+	private String qtScene;
+
+	@XmlElement(name="qtLanguage")
+	private String qtLanguage;
+	
 	@XmlElement(name="primaryIpAddress")
 	private String primaryIpAddress;
 	
@@ -66,13 +78,18 @@ public class Configuration {
 		this.broadcaster = broadcaster;
 	}
 
-	public Configuration(String filename, String broadcaster, String primaryIpAddress, int primaryPortNumber,
+	public Configuration(String filename, String broadcaster,String qtIpAddress, int qtPortNumber,String qtScene, String qtLanguage, 
+			String primaryIpAddress, int primaryPortNumber,
 			String primaryScene, String primaryLanguage, String secondaryIpAddress, int secondaryPortNumber,
 			String secondaryScene, String secondaryLanguage, String tertiaryIpAddress, int tertiaryPortNumber,
 			String tertiaryScene, String tertiaryLanguage) {
 		super();
 		this.filename = filename;
 		this.broadcaster = broadcaster;
+		this.qtIpAddress = qtIpAddress;
+		this.qtPortNumber = qtPortNumber;
+		this.qtScene = qtScene;
+		this.qtLanguage = qtLanguage;
 		this.primaryIpAddress = primaryIpAddress;
 		this.primaryPortNumber = primaryPortNumber;
 		this.primaryScene = primaryScene;
@@ -85,6 +102,39 @@ public class Configuration {
 		this.tertiaryPortNumber = tertiaryPortNumber;
 		this.tertiaryScene = tertiaryScene;
 		this.tertiaryLanguage = tertiaryLanguage;
+	}
+
+	
+	public String getQtIpAddress() {
+		return qtIpAddress;
+	}
+
+	public void setQtIpAddress(String qtIpAddress) {
+		this.qtIpAddress = qtIpAddress;
+	}
+
+	public int getQtPortNumber() {
+		return qtPortNumber;
+	}
+
+	public void setQtPortNumber(int qtPortNumber) {
+		this.qtPortNumber = qtPortNumber;
+	}
+
+	public String getQtScene() {
+		return qtScene;
+	}
+
+	public void setQtScene(String qtScene) {
+		this.qtScene = qtScene;
+	}
+
+	public String getQtLanguage() {
+		return qtLanguage;
+	}
+
+	public void setQtLanguage(String qtLanguage) {
+		this.qtLanguage = qtLanguage;
 	}
 
 	public String getSecondaryBroadcaster() {
