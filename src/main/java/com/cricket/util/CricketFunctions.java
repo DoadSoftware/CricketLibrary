@@ -49,6 +49,7 @@ import com.cricket.archive.ArchiveData;
 import com.cricket.model.BatSpeed;
 import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
+import com.cricket.model.BowlerData;
 import com.cricket.model.BowlingCard;
 import com.cricket.model.Configuration;
 import com.cricket.model.Dictionary;
@@ -5673,5 +5674,49 @@ public class CricketFunctions {
 			}
 		}
 		return ahead_behind;
+	}
+	
+	
+	public static void getBatsmanRunsVsAllBowlers(int PlayerId,MatchAllData match) {
+		
+		ArrayList<BowlerData> bowler_data = new ArrayList<BowlerData>();
+		int playerId = -1;
+		
+		for (int i = 0; i <= match.getEventFile().getEvents().size() - 1; i++) {
+			if(PlayerId == match.getEventFile().getEvents().get(i).getEventBatterNo()) {
+				switch (match.getEventFile().getEvents().get(i).getEventType()) {
+				case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR: 
+				case CricketUtil.FIVE: case CricketUtil.SIX:
+					
+					if(bowler_data.size() > 0 && match.getEventFile().getEvents().get(i).getEventBowlerNo() > 0) {
+						
+						playerId = -1;
+						for(int j=0; j<=bowler_data.size()-1; j++) {
+							if(bowler_data.get(j).getPlayerId() == match.getEventFile().getEvents().get(i).getEventBowlerNo()) {
+								playerId = j;
+								break;
+							}
+						}
+						
+						if(playerId >=0) {
+							bowler_data.get(playerId).setRuns(bowler_data.get(playerId).getRuns() + match.getEventFile().getEvents().get(i).getEventRuns());
+						}else {
+							bowler_data.add(new BowlerData(match.getEventFile().getEvents().get(i).getEventBowlerNo(), 
+									match.getEventFile().getEvents().get(i).getEventRuns(), null));
+						}
+						
+					}else {
+						bowler_data.add(new BowlerData(match.getEventFile().getEvents().get(i).getEventBowlerNo(), 
+								match.getEventFile().getEvents().get(i).getEventRuns(), null));
+					}
+					
+					break;
+				
+				}
+			}
+		}
+		for(int k=0;k<=bowler_data.size()-1;k++) {
+			System.out.println("Player id : " + bowler_data.get(k).getPlayerId()+" - Runs : "+bowler_data.get(k).getRuns());
+		}
 	}
 }
