@@ -108,16 +108,13 @@ public class Configuration {
 	}
 
 	
-	public Configuration(String filename, String broadcaster, String speedUnit, String primaryIpAddress, int primaryPortNumber,
-			String primaryLanguage) {
+	public Configuration(String filename, String broadcaster, String speedUnit, String primaryIpAddress, int primaryPortNumber) {
 		super();
 		this.filename = filename;
 		this.broadcaster = broadcaster;
 		this.speedUnit = speedUnit;
 		this.primaryIpAddress = primaryIpAddress;
 		this.primaryPortNumber = primaryPortNumber;
-		this.primaryLanguage = primaryLanguage;
-		
 	}
 
 	public String getQtIpAddress() {
