@@ -107,6 +107,7 @@ public class Configuration {
 		this.tertiaryLanguage = tertiaryLanguage;
 	}
 
+<<<<<<< Updated upstream
 	
 	public Configuration(String filename, String broadcaster, String speedUnit, String primaryIpAddress, int primaryPortNumber) {
 		super();
@@ -163,6 +164,13 @@ public class Configuration {
 
 	public void setSecondaryFilename(String secondaryFilename) {
 		this.secondaryFilename = secondaryFilename;
+=======
+	public Configuration(String selectedMatch, String select_broadcaster, String vizIPAddress, int vizPortNumber,
+			String vizScene, String vizLanguage, String vizSecondaryIPAddress, int vizSecondaryPortNumber,
+			String vizSecondaryScene, String vizSecondaryLanguage, String vizTertiaryIPAddress, String preview,
+			int vizTertiaryPortNumber, String vizTertiaryScene, String vizTertiaryLanguage) {
+		// TODO Auto-generated constructor stub
+>>>>>>> Stashed changes
 	}
 
 	public String getPrimaryLanguage() {
