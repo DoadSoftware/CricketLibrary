@@ -69,6 +69,9 @@ public class Configuration {
 	@XmlElement(name="tertiaryLanguage")
 	private String tertiaryLanguage;
 	
+	@XmlElement(name="speedUnit")
+	private String speedUnit;
+	
 	public Configuration() {
 		super();
 	}
@@ -105,6 +108,18 @@ public class Configuration {
 	}
 
 	
+	public Configuration(String filename, String broadcaster, String speedUnit, String primaryIpAddress, int primaryPortNumber,
+			String primaryLanguage) {
+		super();
+		this.filename = filename;
+		this.broadcaster = broadcaster;
+		this.speedUnit = speedUnit;
+		this.primaryIpAddress = primaryIpAddress;
+		this.primaryPortNumber = primaryPortNumber;
+		this.primaryLanguage = primaryLanguage;
+		
+	}
+
 	public String getQtIpAddress() {
 		return qtIpAddress;
 	}
@@ -264,16 +279,27 @@ public class Configuration {
 	public void setTertiaryScene(String tertiaryScene) {
 		this.tertiaryScene = tertiaryScene;
 	}
+	
+
+	public String getSpeedUnit() {
+		return speedUnit;
+	}
+
+	public void setSpeedUnit(String speedUnit) {
+		this.speedUnit = speedUnit;
+	}
 
 	@Override
 	public String toString() {
-		return "Configuration [filename=" + filename + ", broadcaster=" + broadcaster + ", primaryIpAddress="
-				+ primaryIpAddress + ", primaryPortNumber=" + primaryPortNumber + ", primaryScene=" + primaryScene
-				+ ", primaryLanguage=" + primaryLanguage + ", secondaryIpAddress=" + secondaryIpAddress
-				+ ", secondaryPortNumber=" + secondaryPortNumber + ", secondaryScene=" + secondaryScene
-				+ ", secondaryLanguage=" + secondaryLanguage + ", tertiaryIpAddress=" + tertiaryIpAddress
-				+ ", tertiaryPortNumber=" + tertiaryPortNumber + ", tertiaryScene=" + tertiaryScene
-				+ ", tertiaryLanguage=" + tertiaryLanguage + "]";
+		return "Configuration [filename=" + filename + ", secondaryFilename=" + secondaryFilename + ", broadcaster="
+				+ broadcaster + ", secondaryBroadcaster=" + secondaryBroadcaster + ", qtIpAddress=" + qtIpAddress
+				+ ", qtPortNumber=" + qtPortNumber + ", qtScene=" + qtScene + ", qtLanguage=" + qtLanguage
+				+ ", primaryIpAddress=" + primaryIpAddress + ", primaryPortNumber=" + primaryPortNumber
+				+ ", primaryScene=" + primaryScene + ", primaryLanguage=" + primaryLanguage + ", secondaryIpAddress="
+				+ secondaryIpAddress + ", secondaryPortNumber=" + secondaryPortNumber + ", secondaryScene="
+				+ secondaryScene + ", secondaryLanguage=" + secondaryLanguage + ", tertiaryIpAddress="
+				+ tertiaryIpAddress + ", tertiaryPortNumber=" + tertiaryPortNumber + ", tertiaryScene=" + tertiaryScene
+				+ ", tertiaryLanguage=" + tertiaryLanguage + ", speedUnit=" + speedUnit + "]";
 	}
 	
 }
