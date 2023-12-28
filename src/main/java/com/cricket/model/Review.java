@@ -6,15 +6,19 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Review {
 
   private int reviewNumber;
-
   private int reviewTeamId;
-
   private String reviewStatus;
-
   private String reviewRetained;
+  private long lastTimeStamp;
 
 public Review() {
 	super();
+}
+
+public Review(String reviewStatus, long lastTimeStamp) {
+	super();
+	this.reviewStatus = reviewStatus;
+	this.lastTimeStamp = lastTimeStamp;
 }
 
 public Review(int reviewNumber, int reviewTeamId, String reviewStatus, String reviewRetained) {
@@ -55,6 +59,14 @@ public String getReviewStatus() {
 
 public void setReviewStatus(String reviewStatus) {
 	this.reviewStatus = reviewStatus;
+}
+
+public long getLastTimeStamp() {
+	return lastTimeStamp;
+}
+
+public void setLastTimeStamp(long lastTimeStamp) {
+	this.lastTimeStamp = lastTimeStamp;
 }
 
 }

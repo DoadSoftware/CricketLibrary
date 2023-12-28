@@ -8,15 +8,19 @@ public class BowlerData {
   private int playerId;
   
   private int runs;
+  
+  private int fours;
+  
+  private int sixes;
    
   private Player player;
 
-  
-  
-public BowlerData(int playerId, int runs, Player player) {
+public BowlerData(int playerId, int runs, int fours, int sixes, Player player) {
 	super();
 	this.playerId = playerId;
 	this.runs = runs;
+	this.fours = fours;
+	this.sixes = sixes;
 	this.player = player;
 }
 
@@ -42,6 +46,22 @@ public Player getPlayer() {
 
 public void setPlayer(Player player) {
 	this.player = player;
+}
+
+public int getFours() {
+	return fours;
+}
+
+public void setFours(int fours) {
+	this.fours = fours;
+}
+
+public int getSixes() {
+	return sixes;
+}
+
+public void setSixes(int sixes) {
+	this.sixes = sixes;
 }
 
 @Override

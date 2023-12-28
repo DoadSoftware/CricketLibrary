@@ -30,6 +30,9 @@ public class CricketUtil {
 	public final static String AR_FREE_TXT = "ARFreeText.txt";
 	public final static String INFOBAR_FREE_TXT = "InfobarFreeText.txt";
 	public final static String PREVIEW = "C:/Temp/Preview.jpg";
+	
+	public final static String Doad_Fruit_scene = "D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT/Scenes/Fruit.sum";
+	public final static String REVIEWS="C:/Sports/Cricket/Reviews.txt";
 
 	public final static String READ = "READ";
 	public final static String WRITE = "WRITE";
