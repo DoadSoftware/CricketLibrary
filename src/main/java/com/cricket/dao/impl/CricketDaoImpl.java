@@ -142,4 +142,9 @@ public List<Pointers> getPointers() {
 	return sessionFactory.getCurrentSession().createQuery("from Pointers").list();
 }
 
+@Override
+public List<StatsType> getAllStatsType() {
+	return sessionFactory.getCurrentSession().createQuery("from StatsType").list();
+}
+
 }

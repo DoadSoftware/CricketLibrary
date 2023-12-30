@@ -23,6 +23,7 @@ public interface CricketDao {
   Team getTeam(String whatToProcess, String valueToProcess);
   Ground getGround(int ground_id);
   StatsType getStatsType(int stats_type_id);
+  List<StatsType> getAllStatsType();
   List<Player> getPlayers(String whatToProcess, String valueToProcess);
   List<Team> getTeams();
   List<NameSuper> getNameSupers();

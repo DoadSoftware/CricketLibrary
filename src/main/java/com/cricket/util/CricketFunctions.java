@@ -1769,9 +1769,6 @@ public class CricketFunctions {
 	{
 		List<PrintWriter> print_writer = new ArrayList<PrintWriter>();
 		
-		System.out.println("QTIp = " + config.getQtIpAddress() + "  QTporrt = " + config.getQtPortNumber());
-		System.out.println("VizIp = " + config.getPrimaryIpAddress() + "  Vizporrt = " + config.getPrimaryPortNumber());
-		
 		if(config.getQtIpAddress() != null && !config.getQtIpAddress().isEmpty()) {
 			if(!config.getQtLanguage().equalsIgnoreCase("ENGLISH")) {
 				print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getQtIpAddress(), 
@@ -4921,10 +4918,9 @@ public class CricketFunctions {
 	    		  if (((whatToProcess.equalsIgnoreCase(CricketUtil.BOUNDARY)) 
 	  	        		&& (evnt.getEventType().equalsIgnoreCase(CricketUtil.SIX))) 
 	  	        		|| (evnt.getEventType().equalsIgnoreCase(CricketUtil.FOUR))) {
-	    			  
 	    			  count_lb = 0;
-	  	          //break;
-	  	        }
+	    			  //break;
+	  	        	}
 	  	        switch (evnt.getEventType()) {
 	  	        case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.DOT: case CricketUtil.FIVE: case CricketUtil.BYE: 
 	  	        case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET:
@@ -6402,4 +6398,28 @@ public class CricketFunctions {
 		}
 		return dot_count;
 	}
+	public static Player getPlayerFromMatchData(int plyr_id, MatchAllData match)
+	{
+		for(Player plyr : match.getSetup().getHomeSquad()) {
+			if(plyr_id == plyr.getPlayerId()) { 
+				return plyr;
+			}
+		}
+		for(Player plyr : match.getSetup().getAwaySquad()) {
+			if(plyr_id == plyr.getPlayerId()) { 
+				return plyr;
+			}
+		}
+		for(Player plyr : match.getSetup().getHomeOtherSquad()) {
+			if(plyr_id == plyr.getPlayerId()) { 
+				return plyr;
+			}
+		}
+		for(Player plyr : match.getSetup().getAwayOtherSquad()) {
+			if(plyr_id == plyr.getPlayerId()) { 
+				return plyr;
+			}
+		}
+		return null;
+	}	
 }

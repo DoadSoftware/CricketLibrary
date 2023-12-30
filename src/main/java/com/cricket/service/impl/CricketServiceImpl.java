@@ -125,4 +125,9 @@ public List<Season> getSeasons() {
 public List<Pointers> getPointers() {
 	return cricketDao.getPointers();
 }
+
+@Override
+public List<StatsType> getAllStatsType() {
+	return cricketDao.getAllStatsType();
+}
 }
