@@ -863,7 +863,6 @@ public class CricketFunctions {
 	public static MatchAllData readOrSaveMatchFile(String whatToProcess, String whichFileToProcess, MatchAllData match) 
 		throws JAXBException, StreamWriteException, DatabindException, IOException, URISyntaxException
 	{
-		MatchAllData this_match = new MatchAllData();
 		switch (whatToProcess) {
 		case CricketUtil.WRITE:
 			if(whichFileToProcess.toUpperCase().contains(CricketUtil.SETUP)) {
@@ -889,7 +888,7 @@ public class CricketFunctions {
 				if(new File(CricketUtil.CRICKET_DIRECTORY 
 					+ CricketUtil.SETUP_DIRECTORY + match.getMatch().getMatchFileName().toUpperCase().replace(
 					".XML", ".JSON")).exists() == true) {
-					this_match.setSetup(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY 
+					match.setSetup(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY 
 							+ CricketUtil.SETUP_DIRECTORY + match.getMatch().getMatchFileName()), Setup.class));
 				}
 			}
@@ -897,17 +896,17 @@ public class CricketFunctions {
 				if(new File(CricketUtil.CRICKET_DIRECTORY 
 						+ CricketUtil.EVENT_DIRECTORY + match.getMatch().getMatchFileName().toUpperCase().replace(
 						".XML", ".JSON")).exists() == true) {
-					this_match.setEventFile(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY 
+					match.setEventFile(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY 
 							+ CricketUtil.EVENT_DIRECTORY + match.getMatch().getMatchFileName()), EventFile.class));
 					}
 			}
 			if(whichFileToProcess.toUpperCase().contains(CricketUtil.MATCH)) {
-				this_match.setMatch(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY 
+				match.setMatch(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY 
 					+ CricketUtil.MATCHES_DIRECTORY + match.getMatch().getMatchFileName()), Match.class));
 			}
 			break;
 		}
-		return this_match;
+		return match;
 	}
 	public static String deletePreview() throws IOException
     {
