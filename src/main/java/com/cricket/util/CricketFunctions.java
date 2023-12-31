@@ -87,6 +87,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 public class CricketFunctions {
 	
 	public static ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+	
 	public static AE_Cricket getDataFromThirdParty(String FilePathName) throws JAXBException {
 		AE_Cricket cricket_data =(AE_Cricket)JAXBContext.newInstance(AE_Cricket.class)
 		.createUnmarshaller().unmarshal(new File(FilePathName));
@@ -3116,6 +3117,62 @@ public class CricketFunctions {
 		}
 		return bc;
 	}
+	public static String processHowOutText(String whatToProcess, BattingCard bc)
+	{
+		if(bc.getStatus() != null && bc.getStatus().equalsIgnoreCase(CricketUtil.OUT)) {
+			switch (whatToProcess) {
+			case "FOUR-PART-HOW-OUT":
+				switch (bc.getHowOut().toUpperCase()) {
+				case CricketUtil.CAUGHT_AND_BOWLED:
+					return "||c & b|" + bc.getHowOutBowler().getTicker_name();
+				case CricketUtil.CAUGHT: case CricketUtil.MANKAD: case CricketUtil.RUN_OUT:
+					switch (bc.getHowOut().toUpperCase()) {
+					case CricketUtil.CAUGHT: 
+						if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
+							return "c|" + bc.getHowOutFielder().getTicker_name() + " (SUB)|b|" + bc.getHowOutBowler().getTicker_name();
+						} else {
+							return "c|" + bc.getHowOutFielder().getTicker_name() + "|b|" + bc.getHowOutBowler().getTicker_name();
+						}
+					case CricketUtil.RUN_OUT:
+						if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
+							return "||run out|" + bc.getHowOutFielder().getTicker_name() + " (SUB)";
+						} else {
+							return "||run out|(" + bc.getHowOutFielder().getTicker_name() + ")";
+						}
+					case CricketUtil.MANKAD:
+						return "||run out|(" + bc.getHowOutBowler().getTicker_name() + ")";
+					}
+					break;
+				case CricketUtil.BOWLED:
+					return "||b|" + bc.getHowOutBowler().getTicker_name();
+				case CricketUtil.STUMPED:
+					return "st|" + bc.getHowOutFielder().getTicker_name() + "|b|" + bc.getHowOutBowler().getTicker_name();
+				case CricketUtil.LBW:
+					return "||lbw|b|" + bc.getHowOutBowler().getTicker_name();
+				case CricketUtil.HIT_WICKET:
+					return "||hit wicket|b|" + bc.getHowOutBowler().getTicker_name();
+				case CricketUtil.HANDLED_THE_BALL:
+					return "handled the ball|||";
+				case CricketUtil.HIT_BALL_TWICE:
+					return "hit the ball twice|||";
+				case CricketUtil.OBSTRUCTING_FIELDER:
+					return "obstructing the field|||";
+				case CricketUtil.TIMED_OUT:
+					return "timed out|||";
+				case CricketUtil.RETIRED_HURT:
+					return "retired hurt|||";
+				case CricketUtil.RETIRED_OUT:
+					return "retired out|||";
+				case CricketUtil.ABSENT_HURT:
+					return "absent hurt|||";
+				case CricketUtil.CONCUSSED:
+					return "concussed|||";
+				}
+				break;
+			}
+		}
+		return null;
+	}	
 	public static BattingCard processWebBattingcard(CricketService cricketService,BattingCard bc,Archive archive)
 	{
 		Player this_player1 = new Player();
@@ -5409,6 +5466,18 @@ public class CricketFunctions {
 				return TeamNameToUse + " won toss & elected to " + decisionText;
 			default:
 				return TeamNameToUse + " won toss & chose to " + decisionText;
+			}
+		}
+	}
+
+	public static String getTeamScore(Inning inning, String slashOrDash, boolean wicketsFirst){
+		if(inning.getTotalWickets() >= 10) {
+			return String.valueOf(inning.getTotalRuns());
+		} else{
+			if(wicketsFirst == true) {
+				return String.valueOf(inning.getTotalWickets()) + slashOrDash + String.valueOf(inning.getTotalRuns());
+			} else {
+				return String.valueOf(inning.getTotalRuns()) + slashOrDash + String.valueOf(inning.getTotalWickets());
 			}
 		}
 	}
