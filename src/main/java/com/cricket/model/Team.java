@@ -25,6 +25,9 @@ public class Team implements Comparable<Team> {
   @Column(name = "TeamName4")
   private String teamName4;
   
+  @Column(name = "TeamGroup")
+  private String teamGroup;
+  
   @Column(name = "TeamLogo")
   private String teamLogo;
   
@@ -167,6 +170,14 @@ public String getTeamColor() {
 
 public void setTeamColor(String teamColor) {
 	this.teamColor = teamColor;
+}
+
+public String getTeamGroup() {
+	return teamGroup;
+}
+
+public void setTeamGroup(String teamGroup) {
+	this.teamGroup = teamGroup;
 }
 
 @Override
