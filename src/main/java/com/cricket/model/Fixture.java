@@ -20,8 +20,11 @@ public class Fixture {
   @Column(name = "Date")
   private String date;
   
-  @Column(name = "Time")
-  private String time;
+  @Column(name = "LOCALTime")
+  private String localTime;
+  
+  @Column(name = "GMTTime")
+  private String gmtTime;
 
   @Column(name = "HOMETEAM")
   private int hometeamid;
@@ -117,12 +120,20 @@ public void setWinnerteam(String winnerteam) {
 	this.winnerteam = winnerteam;
 }
 
-public String getTime() {
-	return time;
+public String getLocalTime() {
+	return localTime;
 }
 
-public void setTime(String time) {
-	this.time = time;
+public void setLocalTime(String localTime) {
+	this.localTime = localTime;
+}
+
+public String getGmtTime() {
+	return gmtTime;
+}
+
+public void setGmtTime(String gmtTime) {
+	this.gmtTime = gmtTime;
 }
 
 public String getTeamgroup() {
