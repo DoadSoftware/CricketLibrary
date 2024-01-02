@@ -3148,9 +3148,9 @@ public class CricketFunctions {
 				case CricketUtil.STUMPED:
 					return "st|" + bc.getHowOutFielder().getTicker_name() + "|b|" + bc.getHowOutBowler().getTicker_name();
 				case CricketUtil.LBW:
-					return "||lbw|b|" + bc.getHowOutBowler().getTicker_name();
+					return "lbw||b|" + bc.getHowOutBowler().getTicker_name();
 				case CricketUtil.HIT_WICKET:
-					return "||hit wicket|b|" + bc.getHowOutBowler().getTicker_name();
+					return "hit wicket||b|" + bc.getHowOutBowler().getTicker_name();
 				case CricketUtil.HANDLED_THE_BALL:
 					return "handled the ball|||";
 				case CricketUtil.HIT_BALL_TWICE:
