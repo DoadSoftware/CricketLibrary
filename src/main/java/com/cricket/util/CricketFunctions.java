@@ -3135,12 +3135,13 @@ public class CricketFunctions {
 						}
 					case CricketUtil.RUN_OUT:
 						if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
-							return "||run out|" + bc.getHowOutFielder().getTicker_name() + " (SUB)";
+							return "run out|" + bc.getHowOutFielder().getTicker_name() + " (SUB)"+"| | ";
 						} else {
-							return "||run out|(" + bc.getHowOutFielder().getTicker_name() + ")";
+							System.out.println("Hello");
+							return "run out|(" + bc.getHowOutFielder().getTicker_name() + ")| | ";
 						}
 					case CricketUtil.MANKAD:
-						return "||run out|(" + bc.getHowOutBowler().getTicker_name() + ")";
+						return "run out|(" + bc.getHowOutBowler().getTicker_name() + ")| | ";
 					}
 					break;
 				case CricketUtil.BOWLED:
