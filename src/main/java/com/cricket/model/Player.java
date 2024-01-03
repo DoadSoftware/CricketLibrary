@@ -92,7 +92,7 @@ public class Player implements Comparable<Player>
   @Column(name = "Question3")
   private String question3;
   
-@Transient
+  @Transient
   private Integer playerPosition;
 
   @Transient
@@ -100,7 +100,7 @@ public class Player implements Comparable<Player>
 
   @Transient
   private String impactPlayer;
- 
+
   public Player() {
 		super();
   }

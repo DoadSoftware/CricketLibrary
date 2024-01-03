@@ -1556,7 +1556,21 @@ public class CricketFunctions {
 				print_writers.get(i).println("-1 " + SendTextIn.replace("$English$", "$Telugu$") + foreignLanguageData.get(foreignLanguageData.size() - 1).getTeluguText() + "\0");
 			}
 		}
-	}			
+	}
+	public static void DoadWriteCommandToSelectedViz(int SelectedViz, String SendTextIn, List<PrintWriter> print_writers) 
+	{
+		for(int i = 0; i < print_writers.size(); i++) {
+			if(SelectedViz == (i+1)) {
+				print_writers.get(i).println(SendTextIn);
+			}
+		}
+	}	
+	public static void DoadWriteCommandToAllViz(String SendTextIn, List<PrintWriter> print_writers) 
+	{
+		for(int i = 0; i < print_writers.size(); i++) {
+			print_writers.get(i).println(SendTextIn);
+		}
+	}	
 	public static ForeignLanguageData MergeForeignLanguageDataListToSingleObject(List<ForeignLanguageData> foreignLanguageDataList) {
 		
 		ForeignLanguageData this_fd = new ForeignLanguageData();
