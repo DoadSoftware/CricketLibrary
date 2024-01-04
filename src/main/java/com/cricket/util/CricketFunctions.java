@@ -3138,7 +3138,7 @@ public class CricketFunctions {
 			case "FOUR-PART-HOW-OUT":
 				switch (bc.getHowOut().toUpperCase()) {
 				case CricketUtil.CAUGHT_AND_BOWLED:
-					return "||c & b|" + bc.getHowOutBowler().getTicker_name();
+					return " | |c & b|" + bc.getHowOutBowler().getTicker_name();
 				case CricketUtil.CAUGHT: case CricketUtil.MANKAD: case CricketUtil.RUN_OUT:
 					switch (bc.getHowOut().toUpperCase()) {
 					case CricketUtil.CAUGHT: 
@@ -3159,29 +3159,29 @@ public class CricketFunctions {
 					}
 					break;
 				case CricketUtil.BOWLED:
-					return "||b|" + bc.getHowOutBowler().getTicker_name();
+					return " | |b|" + bc.getHowOutBowler().getTicker_name();
 				case CricketUtil.STUMPED:
 					return "st|" + bc.getHowOutFielder().getTicker_name() + "|b|" + bc.getHowOutBowler().getTicker_name();
 				case CricketUtil.LBW:
-					return "lbw||b|" + bc.getHowOutBowler().getTicker_name();
+					return "lbw| |b|" + bc.getHowOutBowler().getTicker_name();
 				case CricketUtil.HIT_WICKET:
-					return "hit wicket||b|" + bc.getHowOutBowler().getTicker_name();
+					return "hit wicket| |b|" + bc.getHowOutBowler().getTicker_name();
 				case CricketUtil.HANDLED_THE_BALL:
-					return "handled the ball|||";
+					return "handled the ball| | | ";
 				case CricketUtil.HIT_BALL_TWICE:
-					return "hit the ball twice|||";
+					return "hit the ball twice| | | ";
 				case CricketUtil.OBSTRUCTING_FIELDER:
-					return "obstructing the field|||";
+					return "obstructing the field| | | ";
 				case CricketUtil.TIMED_OUT:
-					return "timed out|||";
+					return "timed out| | | ";
 				case CricketUtil.RETIRED_HURT:
-					return "retired hurt|||";
+					return "retired hurt| | | ";
 				case CricketUtil.RETIRED_OUT:
-					return "retired out|||";
+					return "retired out| | | ";
 				case CricketUtil.ABSENT_HURT:
-					return "absent hurt|||";
+					return "absent hurt| | | ";
 				case CricketUtil.CONCUSSED:
-					return "concussed|||";
+					return "concussed| | | ";
 				}
 				break;
 			}
