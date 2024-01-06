@@ -1559,10 +1559,8 @@ public class CricketFunctions {
 	}
 	public static void DoadWriteCommandToSelectedViz(int SelectedViz, String SendTextIn, List<PrintWriter> print_writers) 
 	{
-		for(int i = 0; i < print_writers.size(); i++) {
-			if(SelectedViz == (i+1)) {
-				print_writers.get(i).println(SendTextIn);
-			}
+		if(SelectedViz >= 0 && SelectedViz < print_writers.size()) {
+			print_writers.get(SelectedViz).println(SendTextIn);
 		}
 	}	
 	public static void DoadWriteCommandToAllViz(String SendTextIn, List<PrintWriter> print_writers) 
@@ -5490,11 +5488,15 @@ public class CricketFunctions {
 		case CricketUtil.SHORT:
 			return TeamNameToUse + " won the toss and " + decisionText;
 		default:
-			switch (electedOrChoose) {
-			case CricketUtil.ELECTED:
-				return TeamNameToUse + " won toss & elected to " + decisionText;
-			default:
-				return TeamNameToUse + " won toss & chose to " + decisionText;
+			if(electedOrChoose == null) {
+				return TeamNameToUse + " won the toss";
+			} else {
+				switch (electedOrChoose) {
+				case CricketUtil.ELECTED:
+					return TeamNameToUse + " won the toss and elected to " + decisionText;
+				default:
+					return TeamNameToUse + " won the toss and chose to " + decisionText;
+				}
 			}
 		}
 	}
@@ -5512,7 +5514,7 @@ public class CricketFunctions {
 	}
 	
 	public static String Plural(int count){
-		if (count <= 1){
+		if (count == 1){
 			return "";
 		} else{
 			return "s";
