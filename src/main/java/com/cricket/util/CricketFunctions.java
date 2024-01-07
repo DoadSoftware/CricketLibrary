@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.Socket;
@@ -1782,14 +1783,13 @@ public class CricketFunctions {
 	{
 		List<PrintWriter> print_writer = new ArrayList<PrintWriter>();
 		
-		if(config.getQtIpAddress() != null && !config.getQtIpAddress().isEmpty()) {
-			if(!config.getQtLanguage().equalsIgnoreCase("ENGLISH")) {
-				print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getQtIpAddress(), 
-						config.getQtPortNumber()).getOutputStream(), StandardCharsets.UTF_8),true));
-			}else {
+		try {
+			if(config.getQtIpAddress() != null && !config.getQtIpAddress().isEmpty()) {
 				print_writer.add(new PrintWriter(new Socket(config.getQtIpAddress(), 
-						config.getQtPortNumber()).getOutputStream(), true));
+					config.getQtPortNumber()).getOutputStream(), true));
 			}
+		} catch (ConnectException e) {
+			System.out.println("Unable to create print writer for QT");
 		}
 		
 		if(config.getPrimaryIpAddress() != null && !config.getPrimaryIpAddress().isEmpty()) {
