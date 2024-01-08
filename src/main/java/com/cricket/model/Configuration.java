@@ -81,7 +81,7 @@ public class Configuration {
 		this.broadcaster = broadcaster;
 	}
 
-	public Configuration(String filename, String broadcaster,String qtIpAddress, int qtPortNumber,String qtScene, String qtLanguage, 
+	public Configuration(String filename, String broadcaster,String secondaryBroadcaster,String qtIpAddress, int qtPortNumber,String qtScene, String qtLanguage, 
 			String primaryIpAddress, int primaryPortNumber,
 			String primaryScene, String primaryLanguage, String secondaryIpAddress, int secondaryPortNumber,
 			String secondaryScene, String secondaryLanguage, String tertiaryIpAddress, int tertiaryPortNumber,
@@ -89,6 +89,7 @@ public class Configuration {
 		super();
 		this.filename = filename;
 		this.broadcaster = broadcaster;
+		this.secondaryBroadcaster = secondaryBroadcaster;
 		this.qtIpAddress = qtIpAddress;
 		this.qtPortNumber = qtPortNumber;
 		this.qtScene = qtScene;

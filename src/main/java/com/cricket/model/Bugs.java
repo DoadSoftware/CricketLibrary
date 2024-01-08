@@ -28,6 +28,12 @@ public class Bugs
   @Column(name = "TEXT4")
   private String text4;
   
+  @Column(name = "Flag")
+  private String flag;
+  
+  @Column(name = "Sponsor")
+  private String sponsor;
+  
   @Column(name = "HindiText1")
   private String hindiText1;
   
@@ -149,6 +155,22 @@ public String getText4() {
 
 public void setText4(String text4) {
 	this.text4 = text4;
+}
+
+public String getFlag() {
+	return flag;
+}
+
+public void setFlag(String flag) {
+	this.flag = flag;
+}
+
+public String getSponsor() {
+	return sponsor;
+}
+
+public void setSponsor(String sponsor) {
+	this.sponsor = sponsor;
 }
 
 }
