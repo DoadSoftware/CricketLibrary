@@ -3656,7 +3656,7 @@ public class CricketFunctions {
 			return defaultValue;
 		} else {
 			if (numberOfDecimals > 0) {
-				return String.format("%.0" + numberOfDecimals + "f", totalRuns / (inningsCount - notOuts));
+				return String.format("%.0" + numberOfDecimals + "f", (float)totalRuns / (float)(inningsCount - notOuts));
 			} else {
 				return defaultValue;
 			}
@@ -3669,7 +3669,7 @@ public class CricketFunctions {
 			return defaultValue;
 		} else {
 			if (numberOfDecimals > 0) {
-				return String.format("%.0" + numberOfDecimals + "f", (totalRunsConceded / totalBallsBowled) * 6);
+				return String.format("%.0" + numberOfDecimals + "f", ((float)totalRunsConceded / (float)totalBallsBowled) * 6);
 			} else {
 				return defaultValue;
 			}
@@ -3855,7 +3855,7 @@ public class CricketFunctions {
 	public static String OverBalls(int Overs,int Balls) {
 		
 		int TotalBalls=0, WholeOv, OddBalls;
-		String Overs_text = "0.0" ;
+		String Overs_text = "0" ;
 		
 		TotalBalls = 6 * Overs + Balls ;
 
@@ -5513,16 +5513,16 @@ public class CricketFunctions {
 		case CricketUtil.MINI:
 			return CricketUtil.TOSS + ": " + TeamNameToUse;
 		case CricketUtil.SHORT:
-			return TeamNameToUse + " won the toss and " + decisionText;
+			return TeamNameToUse + " won the toss & " + decisionText;
 		default:
 			if(electedOrChoose == null) {
 				return TeamNameToUse + " won the toss";
 			} else {
 				switch (electedOrChoose) {
 				case CricketUtil.ELECTED:
-					return TeamNameToUse + " won the toss and elected to " + decisionText;
+					return TeamNameToUse + " won the toss & elected to " + decisionText;
 				default:
-					return TeamNameToUse + " won the toss and chose to " + decisionText;
+					return TeamNameToUse + " won the toss & chose to " + decisionText;
 				}
 			}
 		}

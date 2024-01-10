@@ -60,10 +60,10 @@ public class Statistics
   private Integer sixes;
   
   @Column(name="BALLSBOWLED")
-  private double balls_bowled;
+  private Integer balls_bowled;
   
   @Column(name="RUNSCONCEDED")
-  private double runs_conceded;
+  private Integer runs_conceded;
   
   @Column(name="3Plus")
   private Integer plus_3;
@@ -241,20 +241,16 @@ public void setSixes(Integer sixes) {
 	this.sixes = sixes;
 }
 
-public double getBalls_bowled() {
+public Integer getBalls_bowled() {
 	return balls_bowled;
 }
 
-public void setBalls_bowled(double balls_bowled) {
+public void setBalls_bowled(Integer balls_bowled) {
 	this.balls_bowled = balls_bowled;
 }
 
-public double getRuns_conceded() {
+public Integer getRuns_conceded() {
 	return runs_conceded;
-}
-
-public void setRuns_conceded(double runs_conceded) {
-	this.runs_conceded = runs_conceded;
 }
 
 public void setRuns_conceded(Integer runs_conceded) {
