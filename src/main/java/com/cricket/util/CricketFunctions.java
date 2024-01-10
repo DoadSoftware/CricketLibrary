@@ -3649,6 +3649,33 @@ public class CricketFunctions {
 		}
 	}
 	
+	public static String getAverage(int inningsCount, int notOuts, int totalRuns, 
+		int numberOfDecimals, String defaultValue) 
+	{
+		if(inningsCount - notOuts <= 0) {
+			return defaultValue;
+		} else {
+			if (numberOfDecimals > 0) {
+				return String.format("%.0" + numberOfDecimals + "f", totalRuns / (inningsCount - notOuts));
+			} else {
+				return defaultValue;
+			}
+		}
+	}
+
+	public static String getEconomy(int totalRunsConceded, int totalBallsBowled, int numberOfDecimals, String defaultValue) 
+	{
+		if(totalBallsBowled <= 0) {
+			return defaultValue;
+		} else {
+			if (numberOfDecimals > 0) {
+				return String.format("%.0" + numberOfDecimals + "f", (totalRunsConceded / totalBallsBowled) * 6);
+			} else {
+				return defaultValue;
+			}
+		}
+	}
+	
 	public static String getOvers(int Overs,int Balls) {
 		String Overs_text = "" ;
 		switch(Balls) {
