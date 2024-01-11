@@ -9,6 +9,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Configuration {
 	
+	@XmlElement(name="primaryVariousOptions")
+	private String primaryVariousOptions;
+	
 	@XmlElement(name="filename")
 	private String filename;
 
@@ -81,8 +84,8 @@ public class Configuration {
 		this.broadcaster = broadcaster;
 	}
 
-	public Configuration(String filename, String broadcaster,String secondaryBroadcaster,String qtIpAddress, int qtPortNumber,String qtScene, String qtLanguage, 
-			String primaryIpAddress, int primaryPortNumber,
+	public Configuration(String filename, String broadcaster,String secondaryBroadcaster,String qtIpAddress, 
+			int qtPortNumber,String qtScene, String qtLanguage, String primaryIpAddress, int primaryPortNumber,
 			String primaryScene, String primaryLanguage, String secondaryIpAddress, int secondaryPortNumber,
 			String secondaryScene, String secondaryLanguage, String tertiaryIpAddress, int tertiaryPortNumber,
 			String tertiaryScene, String tertiaryLanguage) {
@@ -109,15 +112,27 @@ public class Configuration {
 	}
 
 	
-	public Configuration(String filename, String broadcaster, String speedUnit, String primaryIpAddress, int primaryPortNumber, String primaryLanguage) {
+	public Configuration(String filename, String broadcaster, String secondaryBroadcaster, 
+			String primaryIpAddress, int primaryPortNumber, String primaryLanguage, String qtIpAddress, 
+			int qtPortNumber, String primaryVariousOptions) {
 		super();
 		this.filename = filename;
 		this.broadcaster = broadcaster;
-		this.speedUnit = speedUnit;
+		this.secondaryBroadcaster = secondaryBroadcaster;
 		this.primaryIpAddress = primaryIpAddress;
 		this.primaryPortNumber = primaryPortNumber;
 		this.primaryLanguage = primaryLanguage;
+		this.qtIpAddress = qtIpAddress;
+		this.qtPortNumber = qtPortNumber;
+		this.primaryVariousOptions = primaryVariousOptions;
+	}
 
+	public String getPrimaryVariousOptions() {
+		return primaryVariousOptions;
+	}
+
+	public void setPrimaryVariousOptions(String primaryVariousOptions) {
+		this.primaryVariousOptions = primaryVariousOptions;
 	}
 
 	public String getQtIpAddress() {
@@ -168,13 +183,6 @@ public class Configuration {
 		this.secondaryFilename = secondaryFilename;
 	}
 		
-	public Configuration(String selectedMatch, String select_broadcaster, String vizIPAddress, int vizPortNumber,
-			String vizScene, String vizLanguage, String vizSecondaryIPAddress, int vizSecondaryPortNumber,
-			String vizSecondaryScene, String vizSecondaryLanguage, String vizTertiaryIPAddress, String preview,
-			int vizTertiaryPortNumber, String vizTertiaryScene, String vizTertiaryLanguage) {
-		
-	}
-
 	public String getPrimaryLanguage() {
 		return primaryLanguage;
 	}
