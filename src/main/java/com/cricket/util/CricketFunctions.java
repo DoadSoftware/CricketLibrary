@@ -4895,9 +4895,9 @@ public class CricketFunctions {
 		String text="";
 		
 		if(bowlingType.charAt(0) == 'L') {
-			text = "Left Arm" ;
+			text = "Left-Arm" ;
 		}else {
-			text = "Right Arm" ;
+			text = "Right-Arm" ;
 		}
 		
 		if(bowlingType == "WSL") {
@@ -4914,16 +4914,16 @@ public class CricketFunctions {
 			text = text + " Fast";
 			break;
 		case "FM":
-			text = text + " Fast Medium";
+			text = text + " Fast-Medium";
 			break;
 		case "MF":
-			text = text + " Medium Fast";
+			text = text + " Medium-Fast";
 			break;
 		case "M":
 			text = text + " Medium";
 			break;
 		case "SM":
-			text = text + " Slow Medium";
+			text = text + " Slow-Medium";
 			break;
 		case "OB":
 			text = text + " Off-Break";

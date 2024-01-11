@@ -33,6 +33,9 @@ public class NameSuper
   @Column(name = "SUBLINE")
   private String subLine;
   
+  @Column(name = "FLAG")
+  private String flag;
+  
   @Column(name = "SPONSOR")
   private String sponsor;
 
@@ -101,6 +104,14 @@ public String getSubLine() {
 
 public void setSubLine(String subLine) {
 	this.subLine = subLine;
+}
+
+public String getFlag() {
+	return flag;
+}
+
+public void setFlag(String flag) {
+	this.flag = flag;
 }
 
 public String getSponsor() {
