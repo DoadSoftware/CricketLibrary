@@ -1560,8 +1560,8 @@ public class CricketFunctions {
 	}
 	public static void DoadWriteCommandToSelectedViz(int SelectedViz, String SendTextIn, List<PrintWriter> print_writers) 
 	{
-		if(SelectedViz >= 0 && SelectedViz < print_writers.size()) {
-			print_writers.get(SelectedViz).println(SendTextIn);
+		if(SelectedViz > 0 && SelectedViz <= print_writers.size()) {
+			print_writers.get(SelectedViz-1).println(SendTextIn);
 		}
 	}	
 	public static void DoadWriteCommandToAllViz(String SendTextIn, List<PrintWriter> print_writers) 
@@ -1783,15 +1783,6 @@ public class CricketFunctions {
 	{
 		List<PrintWriter> print_writer = new ArrayList<PrintWriter>();
 		
-		try {
-			if(config.getQtIpAddress() != null && !config.getQtIpAddress().isEmpty()) {
-				print_writer.add(new PrintWriter(new Socket(config.getQtIpAddress(), 
-					config.getQtPortNumber()).getOutputStream(), true));
-			}
-		} catch (ConnectException e) {
-			System.out.println("Unable to create print writer for QT");
-		}
-		
 		if(config.getPrimaryIpAddress() != null && !config.getPrimaryIpAddress().isEmpty()) {
 			if(!config.getPrimaryLanguage().equalsIgnoreCase("ENGLISH")) {
 				print_writer.add(new PrintWriter(new OutputStreamWriter(new Socket(config.getPrimaryIpAddress(), 
@@ -1822,7 +1813,15 @@ public class CricketFunctions {
 			}
 		}
 		
-		
+		try {
+			if(config.getQtIpAddress() != null && !config.getQtIpAddress().isEmpty()) {
+				print_writer.add(new PrintWriter(new Socket(config.getQtIpAddress(), 
+					config.getQtPortNumber()).getOutputStream(), true));
+			}
+		} catch (ConnectException e) {
+			System.out.println("Unable to create print writer for QT");
+		}
+
 		return print_writer;
 	}
 
