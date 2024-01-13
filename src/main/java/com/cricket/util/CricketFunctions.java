@@ -2107,24 +2107,34 @@ public class CricketFunctions {
 		
 		return tournament_matches;
 	}
-	public static String gettournamentFoursAndSixes(List<MatchAllData> tournament_matches,MatchAllData currentMatch) 
+	public static Tournament extracttournamentFoursAndSixes(String typeOfExtraction, List<MatchAllData> tournament_matches, MatchAllData currentMatch, 
+			Tournament past_tournament_stat) throws CloneNotSupportedException 
 	{
-		int Four = 0, Six = 0;
-		for(MatchAllData match : tournament_matches) {
-			if(!match.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
-				for(Inning inn : match.getMatch().getInning()) {
-					Four = Four + inn.getTotalFours();
-					Six = Six + inn.getTotalSixes();
-				}
-			}else {
-				for(Inning inn : currentMatch.getMatch().getInning()) {
-					Four = Four + inn.getTotalFours();
-					Six = Six + inn.getTotalSixes();
+		Tournament tournament_stats = new Tournament();	
+		switch(typeOfExtraction) {
+		case "COMBINED_PAST_CURRENT_MATCH_DATA":
+			 return extracttournamentFoursAndSixes("CURRENT_MATCH_DATA", tournament_matches, currentMatch, 
+					 extracttournamentFoursAndSixes("PAST_MATCHES_DATA", tournament_matches, currentMatch, null));
+		case "PAST_MATCHES_DATA":
+			for(MatchAllData match : tournament_matches) {
+				if(!match.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
+					for(Inning inn : match.getMatch().getInning()) {
+						tournament_stats.setTournament_fours(tournament_stats.getTournament_fours() + inn.getTotalFours());
+						tournament_stats.setTournament_sixes(tournament_stats.getTournament_sixes() + inn.getTotalSixes());
+					}
 				}
 			}
+			return tournament_stats;
+		case "CURRENT_MATCH_DATA":
+			Tournament past_tournament_stat_clone = past_tournament_stat.clone(); // create clone of past_tournament_stat
+			for(Inning inn : currentMatch.getMatch().getInning()) {
+				past_tournament_stat_clone.setTournament_fours(past_tournament_stat_clone.getTournament_fours() + inn.getTotalFours());
+				past_tournament_stat_clone.setTournament_sixes(past_tournament_stat_clone.getTournament_sixes() + inn.getTotalSixes());
+			}
+			return past_tournament_stat_clone;
 		}
-		System.out.println(Four + "," + Six);
-		return Four + "," + Six;
+		
+		return null;
 	}
 
 	public static Statistics updateTournamentDataWithStats(Statistics stats,List<MatchAllData> tournament_matches,MatchAllData currentMatch) throws JsonMappingException, JsonProcessingException, InterruptedException 
@@ -2331,6 +2341,7 @@ public class CricketFunctions {
 						is_player_found = false;
 						for(Inning inn : mtch.getMatch().getInning())
 						{
+							
 							if(inn.getTotalRuns() > 0 || (6 * inn.getTotalOvers() + inn.getTotalBalls()) > 0) {
 								has_match_started = true;
 							}
@@ -5987,7 +5998,7 @@ public class CricketFunctions {
 		return String.valueOf(run_count) + Seperator + String.valueOf(wicket_count);
 	}
 	public static String processThisOverRunsCount(int player_id, List<Event> events) {
-		int total_runs=0;
+		int total_runs=0,ball_count=0;
 		if((events != null) && (events.size() > 0)) {
 			
 			for(int i = events.size() - 1; i >= 0; i--) {
@@ -6002,25 +6013,29 @@ public class CricketFunctions {
 				case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 		        case CricketUtil.FOUR: case CricketUtil.SIX: 
 		        	total_runs += events.get(i).getEventRuns();
+		        	ball_count = ball_count + 1;
 		          break;
 		          
 		        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
 		        	total_runs += events.get(i).getEventRuns();
+		        	ball_count = ball_count + 1;
 		        	break;
 		        
 		        case CricketUtil.LOG_ANY_BALL:
 		        	total_runs += events.get(i).getEventRuns();
 			          if (events.get(i).getEventExtra() != null) {
 			        	 total_runs += events.get(i).getEventExtraRuns();
+			        	 ball_count = ball_count + 1;
 			          }
 			          if (events.get(i).getEventSubExtra() != null) {
 			        	 total_runs += events.get(i).getEventSubExtraRuns();
+			        	 ball_count = ball_count + 1;
 			          }
 			          break;
 				}
 			}
 		}
-		return String.valueOf(total_runs);
+		return total_runs + "-" + ball_count;
 	}
 
 	public static String getLastWicket(MatchAllData match) {
