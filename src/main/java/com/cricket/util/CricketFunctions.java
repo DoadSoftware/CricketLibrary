@@ -2148,7 +2148,7 @@ public class CricketFunctions {
 		for(MatchAllData match : tournament_matches) {
 			//System.out.println(match.getMatch().getMatchFileName());
 			if(!match.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
-				if(stat.getStats_type().getStats_short_name().equalsIgnoreCase(match.getSetup().getMatchType())) {
+				if(stat.getStats_type().getStats_full_name().contains(match.getSetup().getMatchType())) {
 					TimeUnit.MILLISECONDS.sleep(500);
 					for(Inning inn : match.getMatch().getInning()) {
 						for(BattingCard bc : inn.getBattingCard()) {
@@ -2225,7 +2225,7 @@ public class CricketFunctions {
 		ObjectMapper objectMapper = new ObjectMapper();    
 		Statistics stat = objectMapper.readValue(objectMapper.writeValueAsString(statsdata), Statistics.class);
 		
-		if(stat.getStats_type().getStats_short_name().equalsIgnoreCase(match.getSetup().getMatchType())) {
+		if(stat.getStats_type().getStats_full_name().contains(match.getSetup().getMatchType())) {
 			stat.setTournament_fours(stat.getTournament_fours() + match.getMatch().getInning().get(0).getTotalFours());
 			stat.setTournament_fours(stat.getTournament_fours() + match.getMatch().getInning().get(1).getTotalFours());
 			for(Inning inn : match.getMatch().getInning()) {
@@ -4955,6 +4955,29 @@ public class CricketFunctions {
 		}
 		return text;
 	}
+	
+	public static String processPowerPlayAnimation(MatchAllData match, int InningNumber)
+	{
+		if ((match.getEventFile().getEvents() != null) && (match.getEventFile().getEvents().size() > 0)) {
+			for (int i = match.getEventFile().getEvents().size() - 1; i >= 0; i--) {
+				if((match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER) && 
+						(match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getInning().get(InningNumber-1).getFirstPowerplayEndOver()||
+						match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getInning().get(InningNumber-1).getSecondPowerplayEndOver()))) {
+					
+					return CricketUtil.YES;
+					
+				}else if((!match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER) && 
+						(match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getInning().get(InningNumber-1).getFirstPowerplayEndOver()||
+						match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getInning().get(InningNumber-1).getSecondPowerplayEndOver()||
+						match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getInning().get(InningNumber-1).getThirdPowerplayEndOver()))
+						&& match.getEventFile().getEvents().get(i).getEventBallNo() == 0) {
+					
+					return CricketUtil.NO;
+				}
+			}
+		}
+	    return null;
+	}
 
 	public static String processPowerPlay(String powerplay_return_type,MatchAllData match)
 	{
@@ -5248,7 +5271,11 @@ public class CricketFunctions {
 		      total_runs += events.get(i).getEventRuns();
 		      break;
 		    case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
-		      this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()) + events.get(i).getEventType();
+		    	if((events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()) > 1) {
+		    		this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()) + events.get(i).getEventType();
+		    	}else {
+		    		this_ball_data = events.get(i).getEventType();
+		    	}
 		      break;
 		    case CricketUtil.LOG_WICKET: 
 		      if(events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)) {
@@ -5266,9 +5293,9 @@ public class CricketFunctions {
 		    	if (events.get(i).getEventExtra() != null) {
 		    		if(events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0) {
 		    			if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
-		    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + 
-		    						events.get(i).getEventSubExtraRuns());
-		    			}else if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL) && events.get(i).getEventRuns() <= 0) {
+		    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns());
+		    			}
+		    			else if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL) && events.get(i).getEventRuns() <= 0) {
 		    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + 
 		    						events.get(i).getEventSubExtraRuns());
 		    			}
@@ -5349,6 +5376,7 @@ public class CricketFunctions {
 		//System.out.println(this_over);
 		return this_over;
 	}
+	
 	
 	public static Event getLastBallData(List<Event> events) 
 	{
