@@ -2125,7 +2125,11 @@ public class CricketFunctions {
 			}
 			return tournament_stats;
 		case "CURRENT_MATCH_DATA":
-			Tournament past_tournament_stat_clone = past_tournament_stat.clone(); // create clone of past_tournament_stat
+			Tournament past_tournament_stat_clone = new Tournament();
+			if(past_tournament_stat  != null) {
+				past_tournament_stat_clone = past_tournament_stat.clone(); // create clone of past_tournament_stat
+			}
+			
 			for(Inning inn : currentMatch.getMatch().getInning()) {
 				past_tournament_stat_clone.setTournament_fours(past_tournament_stat_clone.getTournament_fours() + inn.getTotalFours());
 				past_tournament_stat_clone.setTournament_sixes(past_tournament_stat_clone.getTournament_sixes() + inn.getTotalSixes());
@@ -2134,6 +2138,27 @@ public class CricketFunctions {
 		}
 		
 		return null;
+	}
+	
+	public static String hundredsTensUnits(String number) {
+		String hundReds ="0",tens="0",units="0";
+		
+		switch (number.length()) {
+		case 1:
+			units = String.valueOf(number.charAt(0));
+			break;
+		case 2:
+			tens = String.valueOf(number.charAt(0));
+			units = String.valueOf(number.charAt(1));
+			break;
+		case 3:
+			hundReds = String.valueOf(number.charAt(0));
+			tens = String.valueOf(number.charAt(1));
+			units = String.valueOf(number.charAt(2));
+			break;
+		}
+		
+		return hundReds + "," + tens + "," + units;
 	}
 
 	public static Statistics updateTournamentDataWithStats(Statistics stats,List<MatchAllData> tournament_matches,MatchAllData currentMatch) throws JsonMappingException, JsonProcessingException, InterruptedException 
