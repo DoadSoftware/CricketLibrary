@@ -3159,7 +3159,6 @@ public class CricketFunctions {
 						if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
 							return "run out|" + bc.getHowOutFielder().getTicker_name() + " (SUB)"+"| | ";
 						} else {
-							System.out.println("Hello");
 							return "run out|(" + bc.getHowOutFielder().getTicker_name() + ")| | ";
 						}
 					case CricketUtil.MANKAD:
@@ -5281,7 +5280,7 @@ public class CricketFunctions {
 		    	  break;
 		      }else {
 		    	  if (events.get(i).getEventRuns() > 0) {
-			        this_ball_data = String.valueOf(events.get(i).getEventRuns()) + "+" + events.get(i).getEventType();
+			        this_ball_data = String.valueOf(events.get(i).getEventRuns()) + events.get(i).getEventType();
 			      } else {
 			        this_ball_data = events.get(i).getEventType();
 			      }
@@ -5305,7 +5304,7 @@ public class CricketFunctions {
 		    			}
 		    			else if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 		    				if(events.get(i).getEventRuns()>0) {
-			    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns();
+			    				this_ball_data = events.get(i).getEventExtra() + " " + events.get(i).getEventRuns();
 			    			}else {
 			    				this_ball_data = events.get(i).getEventExtra();
 			    			}
@@ -5316,7 +5315,7 @@ public class CricketFunctions {
 		    			}
 		    			
 		    		}else {
-		    			this_ball_data = this_ball_data + events.get(i).getEventExtra();
+		    			this_ball_data = this_ball_data + " " + events.get(i).getEventExtra();
 		    		}
 		    	}
 		    	
@@ -5325,7 +5324,7 @@ public class CricketFunctions {
 			    		if (this_ball_data.isEmpty()) {
 				          this_ball_data = String.valueOf(events.get(i).getEventSubExtraRuns()) + events.get(i).getEventSubExtra();
 				        } else {
-				          this_ball_data = this_ball_data + "+" + String.valueOf(events.get(i).getEventSubExtraRuns()) + events.get(i).getEventSubExtra();
+				          this_ball_data = this_ball_data + " " + String.valueOf(events.get(i).getEventSubExtraRuns()) + events.get(i).getEventSubExtra();
 				        }
 			    	}
 			        
@@ -5334,7 +5333,7 @@ public class CricketFunctions {
 		        if (this_ball_data.isEmpty()) {
 		          this_ball_data = CricketUtil.WICKET;
 		        } else {
-		          this_ball_data = this_ball_data + "+" + CricketUtil.WICKET;
+		          this_ball_data = this_ball_data + " " + CricketUtil.WICKET;
 		        }
 		      }
 		    }
