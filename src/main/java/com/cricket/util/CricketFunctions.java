@@ -6497,7 +6497,7 @@ public class CricketFunctions {
 		
 		return this_dls;
 	}
-	public static String populateDls(MatchAllData match) throws InterruptedException 
+	public static String populateDls(MatchAllData match,List<DuckWorthLewis> dls) throws InterruptedException 
 	{
 		String team="",ahead_behind="";
 		int runs = 0;
@@ -6510,9 +6510,9 @@ public class CricketFunctions {
 					team = match.getSetup().getAwayTeam().getTeamName4();
 				}
 				
-				for(int i = 0; i<= CricketFunctions.populateDuckWorthLewis(match).size() -1;i++) {
-					if(CricketFunctions.populateDuckWorthLewis(match).get(i).getOver_left().equalsIgnoreCase(CricketFunctions.OverBalls(inn.getTotalOvers(),inn.getTotalBalls()))) {
-						runs = (inn.getTotalRuns() - Integer.valueOf(CricketFunctions.populateDuckWorthLewis(match).get(i).getWkts_down()));
+				for(int i = 0; i<= dls.size() -1;i++) {
+					if(dls.get(i).getOver_left().equalsIgnoreCase(CricketFunctions.OverBalls(inn.getTotalOvers(),inn.getTotalBalls()))) {
+						runs = (inn.getTotalRuns() - Integer.valueOf(dls.get(i).getWkts_down()));
 					}
 				}
 				if(runs < 0)
