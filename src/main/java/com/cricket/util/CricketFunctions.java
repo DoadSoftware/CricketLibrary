@@ -4582,7 +4582,7 @@ public class CricketFunctions {
 	public static String getFirstPowerPlayScore(MatchAllData match, int inn_num, List<Event> events)
     {
 
-        int total_run_PP = 0, total_wickets_PP = 0,ball_count = 0,Fours=0,Sixes=0;
+        int total_run_PP = 0, total_wickets_PP = 0,ball_count = 0,Fours=0,Sixes=0,Dots = 0;
         if((events != null) && (events.size() > 0)) 
         {
         	for (int i = 0; i <= events.size() - 1; i++)
@@ -4611,6 +4611,9 @@ public class CricketFunctions {
 	                        	case CricketUtil.SIX:
 	                        		Sixes ++;
 	                        		break;
+	                        	case CricketUtil.DOT:
+	                        		Dots ++;
+	                        		break;	
 	                            }
                                 break;
 
@@ -4622,6 +4625,8 @@ public class CricketFunctions {
                                 if (events.get(i).getEventRuns() > 0)
                                 {
                                     total_run_PP += events.get(i).getEventRuns();
+                                }else {
+                                	Dots ++;
                                 }
                                 total_wickets_PP += 1;
                                 break;
@@ -4666,6 +4671,9 @@ public class CricketFunctions {
     	                        	case CricketUtil.SIX:
     	                        		Sixes ++;
     	                        		break;
+    	                        	case CricketUtil.DOT:
+    	                        		Dots ++;
+    	                        		break;	
     	                            }
                                     break;
 
@@ -4677,6 +4685,8 @@ public class CricketFunctions {
                                     if (events.get(i).getEventRuns() > 0)
                                     {
                                         total_run_PP += events.get(i).getEventRuns();
+                                    }else {
+                                    	Dots ++;
                                     }
                                     total_wickets_PP += 1;
                                     break;
@@ -4711,12 +4721,12 @@ public class CricketFunctions {
                 }
             }
         }
-        return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP)+","+Fours+","+Sixes;
+        return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP)+","+Fours+","+Sixes+","+Dots;
     }
     public static String getSecPowerPlayScore(MatchAllData match, int inn_num, List<Event> events)
     {
 
-        int total_run_PP = 0, total_wickets_PP = 0,ball_count = 0,Fours=0,Sixes=0;
+        int total_run_PP = 0, total_wickets_PP = 0,ball_count = 0,Fours=0,Sixes=0,Dots = 0;
         int StartOver=0,EndOver=0;
         if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.OD) || match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
         	StartOver = match.getMatch().getInning().get(inn_num-1).getSecondPowerplayStartOver();
@@ -4765,6 +4775,9 @@ public class CricketFunctions {
 	                        	case CricketUtil.SIX:
 	                        		Sixes ++;
 	                        		break;
+	                        	case CricketUtil.DOT:
+	                        		Dots ++;
+	                        		break;	
 	                            }
                                 break;
 
@@ -4782,6 +4795,8 @@ public class CricketFunctions {
                                 if (events.get(i).getEventRuns() > 0)
                                 {
                                     total_run_PP += events.get(i).getEventRuns();
+                                }else {
+                                	Dots ++;
                                 }
                                 total_wickets_PP += 1;
                                 break;
@@ -4825,6 +4840,9 @@ public class CricketFunctions {
     	                        	case CricketUtil.SIX:
     	                        		Sixes ++;
     	                        		break;
+    	                        	case CricketUtil.DOT:
+    	                        		Dots ++;
+    	                        		break;	
     	                            }
                                     break;
 
@@ -4842,6 +4860,8 @@ public class CricketFunctions {
                                     if (events.get(i).getEventRuns() > 0)
                                     {
                                         total_run_PP += events.get(i).getEventRuns();
+                                    }else {
+                                    	Dots ++;
                                     }
                                     total_wickets_PP += 1;
                                     break;
@@ -4876,12 +4896,12 @@ public class CricketFunctions {
                 }
             }
         }
-        return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP)+","+Fours+","+Sixes;
+        return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP)+","+Fours+","+Sixes+","+Dots;
     }
     public static String getThirdPowerPlayScore(MatchAllData match, int inn_num, List<Event> events)
     {
 
-        int total_run_PP = 0, total_wickets_PP = 0,ball_count = 0,Fours=0,Sixes=0;
+        int total_run_PP = 0, total_wickets_PP = 0,ball_count = 0,Fours=0,Sixes=0,Dots=0;
         int StartOver=0,EndOver=0;
         if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.OD) || match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
         	StartOver = match.getMatch().getInning().get(inn_num-1).getThirdPowerplayStartOver();
@@ -4923,6 +4943,9 @@ public class CricketFunctions {
     	                        	case CricketUtil.SIX:
     	                        		Sixes ++;
     	                        		break;
+    	                        	case CricketUtil.DOT:
+    	                        		Dots ++;
+    	                        		break;	
     	                            }
                                     break;
 
@@ -4934,6 +4957,8 @@ public class CricketFunctions {
                                     if (events.get(i).getEventRuns() > 0)
                                     {
                                         total_run_PP += events.get(i).getEventRuns();
+                                    }else {
+                                    	Dots ++;
                                     }
                                     total_wickets_PP += 1;
                                     break;
@@ -4968,7 +4993,7 @@ public class CricketFunctions {
                 }
             }
         //System.out.println(String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP));
-        return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP)+","+Fours+","+Sixes;
+        return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP)+","+Fours+","+Sixes+","+Dots;
     }
 
 	
