@@ -33,6 +33,7 @@ public class CricketUtil {
 	public final static String INFOBAR_FREE_TXT = "InfobarFreeText.txt";
 	public final static String PREVIEW = "C:/Temp/Preview.jpg";
 
+	public final static String BEAT = "BEAT";
 	public final static String READ = "READ";
 	public final static String WRITE = "WRITE";
 	public final static String XML = "XML";
