@@ -4320,18 +4320,17 @@ public class CricketFunctions {
 			                                {
 			                                    totalWickets[inn_num-1] += 1;
 			                                }
-			                                break;
-			                                
+			                                break; 
 			                        }
 			        			}
 			        		}	                	
-	                }
-	            }
-	        }
-	    } 
-	    powerPlayScores.add(String.valueOf(totalRuns[0]) + "-" + String.valueOf(totalWickets[0]));
-	    powerPlayScores.add(String.valueOf(totalRuns[1]) + "-" + String.valueOf(totalWickets[1]));
-		return powerPlayScores;
+	                	}
+	            	}
+	        	}
+	    	} 
+		    powerPlayScores.add(String.valueOf(totalRuns[0]) + "-" + String.valueOf(totalWickets[0]));
+		    powerPlayScores.add(String.valueOf(totalRuns[1]) + "-" + String.valueOf(totalWickets[1]));
+			return powerPlayScores;
     }
     public static List<String> getSecPowerPlayScores(MatchAllData match, List<Integer> inning_numbers, List<Event> events)
     {
@@ -4365,12 +4364,19 @@ public class CricketFunctions {
 	            				if (ballCount[inn_num-1] == 36 && events.get(i - 1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
 	                                int j = i;
 	                                while (j < events.size() && ballCount[inn_num-1] == 36) {
-	                                    if (events.get(j).getEventType().equalsIgnoreCase(CricketUtil.WIDE) ||events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) ||events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)||events.get(j).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
-	                                        if(events.get(j).getEventBallNo()==0 && events.get(j).getEventOverNo()==15)
-	                                    	totalRuns[inn_num-1] += events.get(j).getEventRuns()+ events.get(j).getEventSubExtraRuns()+events.get(j).getEventExtraRuns();
-	                                    } else {
-	                                        break; 
-	                                    }
+	                                	if (events.get(j).getEventType().equalsIgnoreCase(CricketUtil.WIDE) || events.get(j).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+                                            if(events.get(j).getEventBallNo()==0 && events.get(j).getEventOverNo()==EndOver)
+                                        	totalRuns[inn_num-1] += events.get(j).getEventRuns()+ events.get(j).getEventSubExtraRuns()+events.get(j).getEventExtraRuns();
+                                        } else {
+                                        	if(events.get(j).getEventExtra() != null) {
+                                        		if(events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) || events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+	                                        		if(events.get(j).getEventBallNo()==0 && events.get(j).getEventOverNo()==EndOver)
+	    	                                        	totalRuns[inn_num-1] += events.get(j).getEventRuns()+ events.get(j).getEventSubExtraRuns()+events.get(j).getEventExtraRuns();
+	                                        	}
+                                        	}else {
+                                        		break;
+                                        	}
+                                        }
 	                                    j++;
 	                                }  
 	            				}
@@ -4381,11 +4387,19 @@ public class CricketFunctions {
 	                				if (ballCount[inn_num-1] == 12 && events.get(i - 1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
 	                                    int j = i;
 	                                    while (j < events.size() && ballCount[inn_num-1] == 12) {
-	                                        if (events.get(j).getEventType().equalsIgnoreCase(CricketUtil.WIDE) ||events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) ||events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)||events.get(j).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
-	                                            if(events.get(j).getEventBallNo()==0 && events.get(j).getEventOverNo()==6)
+	                                        
+	                                        if (events.get(j).getEventType().equalsIgnoreCase(CricketUtil.WIDE) || events.get(j).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+	                                            if(events.get(j).getEventBallNo()==0 && events.get(j).getEventOverNo()==EndOver)
 	                                        	totalRuns[inn_num-1] += events.get(j).getEventRuns()+ events.get(j).getEventSubExtraRuns()+events.get(j).getEventExtraRuns();
 	                                        } else {
-	                                            break; // Stop the loop if the event is not a wide or no-ball
+	                                        	if(events.get(j).getEventExtra() != null) {
+	                                        		if(events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) || events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+		                                        		if(events.get(j).getEventBallNo()==0 && events.get(j).getEventOverNo()==EndOver)
+		    	                                        	totalRuns[inn_num-1] += events.get(j).getEventRuns()+ events.get(j).getEventSubExtraRuns()+events.get(j).getEventExtraRuns();
+		                                        	}
+	                                        	}else {
+	                                        		break;
+	                                        	}
 	                                        }
 	                                        j++;
 	                                    }  
@@ -4398,11 +4412,19 @@ public class CricketFunctions {
 	                				if (ballCount[inn_num-1] == ((StartOver-1)*6) && events.get(i - 1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
 	                                    int j = i;
 	                                    while (j < events.size() && ballCount[inn_num-1] == ((StartOver-1)*6)) {
-	                                        if (events.get(j).getEventType().equalsIgnoreCase(CricketUtil.WIDE) ||events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) ||events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)||events.get(j).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+	                                    	
+	                                        if (events.get(j).getEventType().equalsIgnoreCase(CricketUtil.WIDE) || events.get(j).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 	                                            if(events.get(j).getEventBallNo()==0 && events.get(j).getEventOverNo()==EndOver)
 	                                        	totalRuns[inn_num-1] += events.get(j).getEventRuns()+ events.get(j).getEventSubExtraRuns()+events.get(j).getEventExtraRuns();
 	                                        } else {
-	                                            break; 
+	                                        	if(events.get(j).getEventExtra() != null) {
+	                                        		if(events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) || events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+		                                        		if(events.get(j).getEventBallNo()==0 && events.get(j).getEventOverNo()==EndOver)
+		    	                                        	totalRuns[inn_num-1] += events.get(j).getEventRuns()+ events.get(j).getEventSubExtraRuns()+events.get(j).getEventExtraRuns();
+		                                        	}
+	                                        	}else {
+	                                        		break;
+	                                        	}
 	                                        }
 	                                        j++;
 	                                    }  
@@ -4563,12 +4585,19 @@ public class CricketFunctions {
 	            				if (ballCount[inn_num-1] == 90 && events.get(i - 1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
 	                                int j = i;
 	                                while (j < events.size() && ballCount[inn_num-1] == 90) {
-	                                    if (events.get(j).getEventType().equalsIgnoreCase(CricketUtil.WIDE) ||events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) ||events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)||events.get(j).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
-	                                        if(events.get(j).getEventBallNo()==0 && events.get(j).getEventOverNo()==15)
-	                                    	totalRuns[inn_num-1] += events.get(j).getEventRuns()+ events.get(j).getEventSubExtraRuns()+events.get(j).getEventExtraRuns();
-	                                    } else {
-	                                        break; 
-	                                    }
+	                                	if (events.get(j).getEventType().equalsIgnoreCase(CricketUtil.WIDE) || events.get(j).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+                                            if(events.get(j).getEventBallNo()==0 && events.get(j).getEventOverNo()==EndOver)
+                                        	totalRuns[inn_num-1] += events.get(j).getEventRuns()+ events.get(j).getEventSubExtraRuns()+events.get(j).getEventExtraRuns();
+                                        } else {
+                                        	if(events.get(j).getEventExtra() != null) {
+                                        		if(events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) || events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+	                                        		if(events.get(j).getEventBallNo()==0 && events.get(j).getEventOverNo()==EndOver)
+	    	                                        	totalRuns[inn_num-1] += events.get(j).getEventRuns()+ events.get(j).getEventSubExtraRuns()+events.get(j).getEventExtraRuns();
+	                                        	}
+                                        	}else {
+                                        		break;
+                                        	}
+                                        }
 	                                    j++;
 	                                }  
 	            				}
@@ -4580,11 +4609,18 @@ public class CricketFunctions {
 	                				if (ballCount[inn_num-1] == ((StartOver-1)*6) && events.get(i - 1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
 	                                    int j = i;
 	                                    while (j < events.size() && ballCount[inn_num-1] == ((StartOver-1)*6)) {
-	                                        if (events.get(j).getEventType().equalsIgnoreCase(CricketUtil.WIDE) ||events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) ||events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)||events.get(j).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+	                                    	if (events.get(j).getEventType().equalsIgnoreCase(CricketUtil.WIDE) || events.get(j).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 	                                            if(events.get(j).getEventBallNo()==0 && events.get(j).getEventOverNo()==EndOver)
 	                                        	totalRuns[inn_num-1] += events.get(j).getEventRuns()+ events.get(j).getEventSubExtraRuns()+events.get(j).getEventExtraRuns();
 	                                        } else {
-	                                            break; 
+	                                        	if(events.get(j).getEventExtra() != null) {
+	                                        		if(events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) || events.get(j).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+		                                        		if(events.get(j).getEventBallNo()==0 && events.get(j).getEventOverNo()==EndOver)
+		    	                                        	totalRuns[inn_num-1] += events.get(j).getEventRuns()+ events.get(j).getEventSubExtraRuns()+events.get(j).getEventExtraRuns();
+		                                        	}
+	                                        	}else {
+	                                        		break;
+	                                        	}
 	                                        }
 	                                        j++;
 	                                    }  
@@ -4677,21 +4713,42 @@ public class CricketFunctions {
 	    return run_rate;
 	}
 	
-	public static String PowerPlayMatchOvers(MatchAllData match, String separator) {
+    public static String PowerPlayMatchOvers(int inn_num, MatchAllData match, String separator) {
 		String pp_overs="";
-		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.OD)) {
-			pp_overs="1-10"+separator+"11-40"+separator+"41-50";
-			
-		}else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20)||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)) {
-			
-			pp_overs="1-6"+separator+"7-16"+separator+"17-20";
-			
-		}else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10)) {
-			pp_overs="1-2"+separator+"3-6"+separator+"7-10";
-			
-		}
+			if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.OD)) {
+				pp_overs=match.getMatch().getInning().get(inn_num).getFirstPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getFirstPowerplayEndOver()+separator+
+						match.getMatch().getInning().get(inn_num).getSecondPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getSecondPowerplayEndOver()+separator+
+						match.getMatch().getInning().get(inn_num).getThirdPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getThirdPowerplayEndOver();
+				
+			}else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20)||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)) {
+				pp_overs=match.getMatch().getInning().get(inn_num).getFirstPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getFirstPowerplayEndOver()+separator+
+						 match.getMatch().getInning().get(inn_num).getSecondPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getSecondPowerplayEndOver()+separator+
+						 match.getMatch().getInning().get(inn_num).getThirdPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getThirdPowerplayEndOver();
+				
+			}else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10)) {
+				pp_overs= match.getMatch().getInning().get(inn_num).getFirstPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getFirstPowerplayEndOver()+separator+
+						  match.getMatch().getInning().get(inn_num).getSecondPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getSecondPowerplayEndOver()+separator+
+						  match.getMatch().getInning().get(inn_num).getThirdPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getThirdPowerplayEndOver();				
+			}	
+		
 		return pp_overs;
 	}
+	
+	public static int getAllRounderCatches(int allRoubderId,MatchAllData match,List<Event> event)
+    {
+		int catches=0;
+		if(event.size()>0) {
+		for(Event ev:event) {
+			if((allRoubderId==ev.getEventBowlerNo()||allRoubderId==ev.getEventHowOutFielderId())&&ev.getEventType().equalsIgnoreCase(CricketUtil.LOG_WICKET)){
+				if(!ev.getEventHowOut().isEmpty()&& ev.getEventHowOut()!=null&&(ev.getEventHowOut().equalsIgnoreCase(CricketUtil.CAUGHT))|| (ev.getEventHowOut().equalsIgnoreCase(CricketUtil.CAUGHT_AND_BOWLED))){
+					catches ++;	
+				}			
+			}
+		}
+	}
+		return catches;
+		
+    }
 	public static String getFirstPowerPlayScore(MatchAllData match, int inn_num, List<Event> events)
     {
 
