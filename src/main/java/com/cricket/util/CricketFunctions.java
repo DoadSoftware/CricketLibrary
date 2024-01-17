@@ -4803,19 +4803,19 @@ public class CricketFunctions {
     public static String PowerPlayMatchOvers(int inn_num, MatchAllData match, String separator) {
 		String pp_overs="";
 			if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.OD)) {
-				pp_overs=match.getMatch().getInning().get(inn_num).getFirstPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getFirstPowerplayEndOver()+separator+
-						match.getMatch().getInning().get(inn_num).getSecondPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getSecondPowerplayEndOver()+separator+
-						match.getMatch().getInning().get(inn_num).getThirdPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getThirdPowerplayEndOver();
+				pp_overs=match.getMatch().getInning().get(inn_num-1).getFirstPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num-1).getFirstPowerplayEndOver()+separator+
+						match.getMatch().getInning().get(inn_num-1).getSecondPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num-1).getSecondPowerplayEndOver()+separator+
+						match.getMatch().getInning().get(inn_num-1).getThirdPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num-1).getThirdPowerplayEndOver();
 				
 			}else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20)||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)) {
-				pp_overs=match.getMatch().getInning().get(inn_num).getFirstPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getFirstPowerplayEndOver()+separator+
-						 match.getMatch().getInning().get(inn_num).getSecondPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getSecondPowerplayEndOver()+separator+
-						 match.getMatch().getInning().get(inn_num).getThirdPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getThirdPowerplayEndOver();
+				pp_overs=match.getMatch().getInning().get(inn_num-1).getFirstPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num-1).getFirstPowerplayEndOver()+separator+
+						 match.getMatch().getInning().get(inn_num-1).getSecondPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num-1).getSecondPowerplayEndOver()+separator+
+						 match.getMatch().getInning().get(inn_num-1).getThirdPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num-1).getThirdPowerplayEndOver();
 				
 			}else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10)) {
-				pp_overs= match.getMatch().getInning().get(inn_num).getFirstPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getFirstPowerplayEndOver()+separator+
-						  match.getMatch().getInning().get(inn_num).getSecondPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getSecondPowerplayEndOver()+separator+
-						  match.getMatch().getInning().get(inn_num).getThirdPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num).getThirdPowerplayEndOver();				
+				pp_overs= match.getMatch().getInning().get(inn_num-1).getFirstPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num-1).getFirstPowerplayEndOver()+separator+
+						  match.getMatch().getInning().get(inn_num-1).getSecondPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num-1).getSecondPowerplayEndOver()+separator+
+						  match.getMatch().getInning().get(inn_num-1).getThirdPowerplayStartOver()+"-"+match.getMatch().getInning().get(inn_num-1).getThirdPowerplayEndOver();				
 			}	
 		
 		return pp_overs;
