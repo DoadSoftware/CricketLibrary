@@ -39,6 +39,7 @@ public class CricketUtil {
 	public final static String XML = "XML";
 	public final static String JSON = "JSON";
 	public final static String PNG_EXTENSION = ".png";
+	public final static String XML_EXTENSION = ".XML";
 	public final static String BOWL = "bowl";
 	public final static String DOUBLE_BACKSLASH = "\\";
 	public final static String MATCH = "MATCH";

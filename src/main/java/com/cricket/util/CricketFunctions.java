@@ -3376,13 +3376,13 @@ public class CricketFunctions {
 					switch (bc.getHowOut().toUpperCase()) {
 					case CricketUtil.CAUGHT: 
 						if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
-							return "c|" + bc.getHowOutFielder().getTicker_name() + " (SUB)|b|" + bc.getHowOutBowler().getTicker_name();
+							return "c|" +  "sub ("+bc.getHowOutFielder().getTicker_name()+")|b|" + bc.getHowOutBowler().getTicker_name();
 						} else {
 							return "c|" + bc.getHowOutFielder().getTicker_name() + "|b|" + bc.getHowOutBowler().getTicker_name();
 						}
 					case CricketUtil.RUN_OUT:
 						if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
-							return "run out|" + bc.getHowOutFielder().getTicker_name() + " (SUB)"+"| | ";
+							return "run out|" + "sub (" + bc.getHowOutFielder().getTicker_name() + ")| | ";
 						} else {
 							return "run out|(" + bc.getHowOutFielder().getTicker_name() + ")| | ";
 						}
