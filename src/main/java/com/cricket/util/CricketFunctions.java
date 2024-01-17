@@ -2174,7 +2174,7 @@ public class CricketFunctions {
 			//System.out.println(match.getMatch().getMatchFileName());
 			if(!match.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
 				if(stat.getStats_type().getStats_full_name().contains(match.getSetup().getMatchType())) {
-					TimeUnit.MILLISECONDS.sleep(500);
+//					TimeUnit.MILLISECONDS.sleep(500);
 					for(Inning inn : match.getMatch().getInning()) {
 						for(BattingCard bc : inn.getBattingCard()) {
 							if(bc.getPlayerId() == stat.getPlayer_id()) {
@@ -2915,7 +2915,7 @@ public class CricketFunctions {
 		return null;
 	}
 	
-	public static String generateMatchResult(MatchAllData match, String teamNameType, String winType)
+	public static String generateMatchResult(MatchAllData match, String teamNameType, String broadcaster, String splitResultTxt)
 	{
 		String resultToShow = "", opponentTeamName = "";
 		if(match.getMatch().getMatchResult() != null) {
@@ -2970,9 +2970,9 @@ public class CricketFunctions {
 						resultToShow = resultToShow + " win by an inning and " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
 							+ " run" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
 					} else if (match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.RUN)) {
-						switch (winType) {
-						case CricketUtil.BEAT:
-							resultToShow = resultToShow + " beat " + opponentTeamName + " by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
+						switch (broadcaster) {
+						case "ICC_U19_2024":
+							resultToShow = resultToShow + " beat " + opponentTeamName + " " + splitResultTxt + "by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
 								+ " run" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
 							break;
 						default:
@@ -2981,9 +2981,9 @@ public class CricketFunctions {
 							break;
 						}
 					} else if (match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.WICKET)) {
-						switch (winType) {
-						case CricketUtil.BEAT:
-							resultToShow = resultToShow + " beat " + opponentTeamName + " by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
+						switch (broadcaster) {
+						case "ICC_U19_2024":
+							resultToShow = resultToShow + " beat " + opponentTeamName + " " + splitResultTxt + " by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
 								+ " wicket" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
 							break;
 						default:
@@ -6116,7 +6116,6 @@ public class CricketFunctions {
 	
 	public static String generateMatchSummaryStatus(int whichInning, MatchAllData match, String teamNameType) 
 	{
-
 		String matchSummaryStatus = generateMatchResult(match, teamNameType);
 
 	    if(matchSummaryStatus.trim().isEmpty()) {
@@ -6204,9 +6203,10 @@ public class CricketFunctions {
 	    }
 	    return matchSummaryStatus;
 	}
-	public static String generateMatchSummaryStatus(int whichInning, MatchAllData match, String teamNameType, String winType) 
+	public static String generateMatchSummaryStatus(int whichInning, MatchAllData match, String teamNameType, 
+		String SplitSummaryText, String broadcaster) 
 	{
-		String matchSummaryStatus = generateMatchResult(match, teamNameType, winType);
+		String matchSummaryStatus = generateMatchResult(match, teamNameType, broadcaster);
 
 	    if(matchSummaryStatus.trim().isEmpty()) {
 	    	
@@ -6257,10 +6257,15 @@ public class CricketFunctions {
 						}
 				    } else if (CricketFunctions.getRequiredRuns(match) <= 0)
 				    {
-				    	switch (winType) {
-						case CricketUtil.BEAT:
-					    	matchSummaryStatus = batTeamNm + " beat " + bowlTeamNm + " by " + CricketFunctions.getWicketsLeft(match) + 
-					    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
+				    	switch (broadcaster) {
+						case "ICC_U19_2024":
+							if(SplitSummaryText.isEmpty()) {
+						    	matchSummaryStatus = batTeamNm + " beat " + bowlTeamNm + " by " + CricketFunctions.getWicketsLeft(match) + 
+						    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
+							} else {
+						    	matchSummaryStatus = batTeamNm + " beat " + bowlTeamNm + SplitSummaryText + "by " + CricketFunctions.getWicketsLeft(match) + 
+						    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
+							}
 							break;
 						default:
 					    	matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match) + 
