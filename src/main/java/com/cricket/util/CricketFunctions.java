@@ -32,19 +32,15 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
 import com.Ae_Third_Party_Xml.AE_Cricket;
 import com.cricket.archive.Archive;
 import com.cricket.archive.ArchiveData;
@@ -2923,13 +2919,46 @@ public class CricketFunctions {
 					|| match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.ABANDONED)) {
 				if(match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.DRAWN) 
 						&& !match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) { // For limited over match use match tied
-					resultToShow = CricketUtil.MATCH.toLowerCase() + " " + CricketUtil.TIED.toLowerCase();
+					switch (broadcaster) {
+					case "ICC_U19_2024":
+						if(splitResultTxt.isEmpty()) {
+							resultToShow = CricketUtil.MATCH.toLowerCase() + " " + CricketUtil.TIED.toLowerCase();
+						} else {
+							resultToShow = CricketUtil.MATCH.toLowerCase() + splitResultTxt + CricketUtil.TIED.toLowerCase();
+						}
+						break;
+					default:
+						resultToShow = CricketUtil.MATCH.toLowerCase() + " " + CricketUtil.TIED.toLowerCase();
+						break;
+					}
 				} else {
 					resultToShow = CricketUtil.MATCH.toLowerCase();
 					if(match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.DRAWN)) {
-						resultToShow = resultToShow + " " + CricketUtil.DRAWN.toLowerCase();
+						switch (broadcaster) {
+						case "ICC_U19_2024":
+							if(splitResultTxt.isEmpty()) {
+								resultToShow = resultToShow + " " + CricketUtil.DRAWN.toLowerCase();
+							} else {
+								resultToShow = resultToShow + splitResultTxt + CricketUtil.DRAWN.toLowerCase();
+							}
+							break;
+						default:
+							resultToShow = resultToShow + " " + CricketUtil.DRAWN.toLowerCase();
+							break;
+						}
 					} else if(match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.ABANDONED)) {
-						resultToShow = resultToShow + " " + CricketUtil.ABANDONED.toLowerCase();
+						switch (broadcaster) {
+						case "ICC_U19_2024":
+							if(splitResultTxt.isEmpty()) {
+								resultToShow = resultToShow + " " + CricketUtil.ABANDONED.toLowerCase();
+							} else {
+								resultToShow = resultToShow + splitResultTxt + CricketUtil.ABANDONED.toLowerCase();
+							}
+							break;
+						default:
+							resultToShow = resultToShow + " " + CricketUtil.ABANDONED.toLowerCase();
+							break;
+						}
 					}
 				}
 			} else if(match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.NO_RESULT)) {
@@ -2957,9 +2986,13 @@ public class CricketFunctions {
 					    break;
 					}
 					if(match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.SUPER_OVER)) {
-						switch (winType) {
-						case CricketUtil.BEAT:
-							resultToShow = resultToShow + " beat " + opponentTeamName + " in super over";
+						switch (broadcaster) {
+						case "ICC_U19_2024":
+							if(splitResultTxt.isEmpty()) {
+								resultToShow = resultToShow + " beat " + opponentTeamName + " in super over";
+							} else {
+								resultToShow = resultToShow + " beat " + opponentTeamName + splitResultTxt + " in super over";
+							}
 							break;
 						default:
 							resultToShow = resultToShow + " win by super over";
@@ -2972,8 +3005,13 @@ public class CricketFunctions {
 					} else if (match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.RUN)) {
 						switch (broadcaster) {
 						case "ICC_U19_2024":
-							resultToShow = resultToShow + " beat " + opponentTeamName + " " + splitResultTxt + "by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
-								+ " run" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
+							if(splitResultTxt.isEmpty()) {
+								resultToShow = resultToShow + " beat " + opponentTeamName + " by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
+									+ " run" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
+							} else {
+								resultToShow = resultToShow + " beat " + opponentTeamName + splitResultTxt + "by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
+									+ " run" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
+							}
 							break;
 						default:
 							resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
@@ -2983,8 +3021,13 @@ public class CricketFunctions {
 					} else if (match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.WICKET)) {
 						switch (broadcaster) {
 						case "ICC_U19_2024":
-							resultToShow = resultToShow + " beat " + opponentTeamName + " " + splitResultTxt + " by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
-								+ " wicket" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
+							if(splitResultTxt.isEmpty()) {
+								resultToShow = resultToShow + " beat " + opponentTeamName + " by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
+									+ " wicket" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
+							} else {
+								resultToShow = resultToShow + " beat " + opponentTeamName + splitResultTxt + "by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
+									+ " wicket" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
+							}
 							break;
 						default:
 							resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
@@ -6206,7 +6249,7 @@ public class CricketFunctions {
 	public static String generateMatchSummaryStatus(int whichInning, MatchAllData match, String teamNameType, 
 		String SplitSummaryText, String broadcaster) 
 	{
-		String matchSummaryStatus = generateMatchResult(match, teamNameType, broadcaster);
+		String matchSummaryStatus = generateMatchResult(match, teamNameType, broadcaster, SplitSummaryText);
 
 	    if(matchSummaryStatus.trim().isEmpty()) {
 	    	
@@ -6276,14 +6319,30 @@ public class CricketFunctions {
 				    else if (CricketFunctions.getRequiredRuns(match) == 1 && (CricketFunctions.getRequiredBalls(match) <= 0 
 				    		|| CricketFunctions.getWicketsLeft(match) <= 0)) 
 				    {
-				    	matchSummaryStatus = "Match tied";
+				    	switch (broadcaster) {
+						case "ICC_U19_2024":
+							if(SplitSummaryText.isEmpty()) {
+						    	matchSummaryStatus = "Match tied";
+							} else {
+						    	matchSummaryStatus = "Match" + SplitSummaryText + "tied";
+							}
+							break;
+						default:
+					    	matchSummaryStatus = "Match tied";
+							break;
+						}
 				    } 
 				    else 
 				    {
-				    	switch (winType) {
-						case CricketUtil.BEAT:
-					    	matchSummaryStatus =  bowlTeamNm + " beat " + batTeamNm + " by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
-					    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
+				    	switch (broadcaster) {
+						case "ICC_U19_2024":
+							if(SplitSummaryText.isEmpty()) {
+						    	matchSummaryStatus =  bowlTeamNm + " beat " + batTeamNm + " by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
+						    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
+							} else {
+						    	matchSummaryStatus =  bowlTeamNm + " beat " + batTeamNm + SplitSummaryText + "by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
+						    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
+							}
 							break;
 						default:
 					    	matchSummaryStatus = bowlTeamNm + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
