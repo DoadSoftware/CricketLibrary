@@ -5390,9 +5390,9 @@ public class CricketFunctions {
 		}
 		
 		if(bowlingType == "WSL") {
-			text = "Left Arm Wrist Spin";
+			text = "Left-Arm Wrist Spin";
 		}else if(bowlingType == "WSR"){
-			text = "Right Arm Wrist Spin";
+			text = "Right-Arm Wrist Spin";
 		}
 		
 		switch (bowlingType.substring(1).trim()) {
@@ -5427,7 +5427,7 @@ public class CricketFunctions {
 			text = text + " Orthodox";
 			break;
 		case "SL":
-			text = "Slow Left Arm";
+			text = "Slow Left-Arm";
 			break;
 		
 		}
