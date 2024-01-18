@@ -2503,7 +2503,7 @@ public class CricketFunctions {
 												inn.getBatting_team(),mtch.getMatch().getMatchFileName().replace(".json", "") ,boc.getPlayer(),""));
 										
 									}else {
-										tournament_stats.add(new Tournament(boc.getPlayerId(), 0, 0, 0, 0, 0, boc.getWickets(), boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 0, 
+										tournament_stats.add(new Tournament(boc.getPlayerId(), 0, 0, 0, 0, 0, 0, 0, boc.getWickets(), boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 0, 
 												boc.getDots(),null,0,0,0,0, boc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
 										
 										tournament_stats.get(tournament_stats.size() - 1).getBowler_best_Stats().add(new BestStats(
@@ -2542,7 +2542,13 @@ public class CricketFunctions {
 										tournament_stats.get(playerId).setFifty(tournament_stats.get(playerId).getFifty() + fifty);
 										tournament_stats.get(playerId).setHundreds(tournament_stats.get(playerId).getHundreds() + hundreds);
 										
+										if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES)) {
+											tournament_stats.get(playerId).setInnings(tournament_stats.get(playerId).getInnings()+1);
+										}
+										
 										if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+											tournament_stats.get(playerId).setNot_out(tournament_stats.get(playerId).getNot_out() + 1);
+											
 											tournament_stats.get(playerId).getBatsman_best_Stats().add(new BestStats(
 													bc.getPlayerId(), (bc.getRuns() * 2) + 1, bc.getBalls(), inn.getBowling_team(), 
 													mtch.getMatch().getMatchFileName().replace(".json", "") ,bc.getPlayer(),CricketUtil.NOT_OUT));
@@ -2570,10 +2576,15 @@ public class CricketFunctions {
 											hundreds = hundreds + 1;
 										}
 										
-										tournament_stats.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes() , fifty, hundreds, 0, 0, 0, bc.getBalls(), 
+										tournament_stats.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), 0, 0, fifty, hundreds, 0, 0, 0, bc.getBalls(), 
 												0,bc.getStatus(),0,0,0,0, bc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
-										//tournament_stats.get(tournament_stats.size() - 1).setMatches((tournament_stats.get(tournament_stats.size() - 1).getMatches() + 1));
+										
+										if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES)) {
+											tournament_stats.get(tournament_stats.size() - 1).setInnings(tournament_stats.get(tournament_stats.size() - 1).getInnings()+1);
+										}
+										
 										if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+											tournament_stats.get(tournament_stats.size() - 1).setNot_out(tournament_stats.get(tournament_stats.size() - 1).getNot_out() + 1);
 											tournament_stats.get(tournament_stats.size() - 1).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), (bc.getRuns() * 2) + 1, 
 													bc.getBalls(),inn.getBowling_team(),mtch.getMatch().getMatchFileName().replace(".json", "") ,bc.getPlayer(),CricketUtil.NOT_OUT));
 										}else if(bc.getStatus().equalsIgnoreCase(CricketUtil.OUT)) {
@@ -2610,7 +2621,7 @@ public class CricketFunctions {
 							if(fielder_found == false) {
 								for(Player plyr : mtch.getSetup().getHomeSubstitutes()) {
 									if(plyr.getImpactPlayer().equalsIgnoreCase(CricketUtil.YES)) {
-										tournament_stats.add(new Tournament(plyr.getPlayerId(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+										tournament_stats.add(new Tournament(plyr.getPlayerId(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 												0,CricketUtil.STILL_TO_BAT,0,0,0,0, plyr, new ArrayList<BestStats>(), new ArrayList<BestStats>()));
 //										fielder_found = true;
 									}
@@ -2618,7 +2629,7 @@ public class CricketFunctions {
 								
 								for(Player plyr : mtch.getSetup().getAwaySubstitutes()) {
 									if(plyr.getImpactPlayer().equalsIgnoreCase(CricketUtil.YES)) {
-										tournament_stats.add(new Tournament(plyr.getPlayerId(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+										tournament_stats.add(new Tournament(plyr.getPlayerId(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 												0,CricketUtil.STILL_TO_BAT,0,0,0,0, plyr, new ArrayList<BestStats>(), new ArrayList<BestStats>()));
 									}
 								}
@@ -2730,7 +2741,7 @@ public class CricketFunctions {
 										inn.getBatting_team(),currentMatch.getMatch().getMatchFileName().replace(".json", ""),boc.getPlayer(),""));
 	
 							}else {
-								past_tournament_stat_clone.add(new Tournament(boc.getPlayerId(), 0, 0, 0, 0, 0, boc.getWickets(), boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 0, 
+								past_tournament_stat_clone.add(new Tournament(boc.getPlayerId(), 0, 0, 0, 0, 0, 0, 0, boc.getWickets(), boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 0, 
 										boc.getDots(),null,0,0,0,0, boc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
 								
 								past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getBowler_best_Stats().add(new BestStats(boc.getPlayerId(), 
@@ -2768,7 +2779,13 @@ public class CricketFunctions {
 							past_tournament_stat_clone.get(playerId).setFifty(past_tournament_stat_clone.get(playerId).getFifty() + fifty);
 							past_tournament_stat_clone.get(playerId).setHundreds(past_tournament_stat_clone.get(playerId).getHundreds() + hundreds);
 							
+							if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES)) {
+								past_tournament_stat_clone.get(playerId).setInnings(past_tournament_stat_clone.get(playerId).getInnings()+1);
+							}
+							
 							if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+								past_tournament_stat_clone.get(playerId).setNot_out(past_tournament_stat_clone.get(playerId).getNot_out() + 1);
+								
 								past_tournament_stat_clone.get(playerId).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), (bc.getRuns() * 2) + 1, 
 										bc.getBalls(), inn.getBowling_team(),currentMatch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),CricketUtil.NOT_OUT));
 								
@@ -2795,10 +2812,16 @@ public class CricketFunctions {
 								hundreds = hundreds + 1;
 							}
 							
-							past_tournament_stat_clone.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), fifty, hundreds, 0, 0, 0, bc.getBalls(), 
+							past_tournament_stat_clone.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), 0, 0, fifty, hundreds, 0, 0, 0, bc.getBalls(), 
 									0,bc.getStatus(),0,0,0,0, bc.getPlayer(), new ArrayList<BestStats>(),new ArrayList<BestStats>()));
 							
+							if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES)) {
+								past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).setInnings(past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getInnings()+1);
+							}
+							
 							if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+								past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).setNot_out(past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getNot_out() + 1);
+								
 								past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), 
 										(bc.getRuns() * 2) + 1, bc.getBalls(), inn.getBowling_team(),currentMatch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),CricketUtil.NOT_OUT));
 							}else if(bc.getStatus().equalsIgnoreCase(CricketUtil.OUT)) {
@@ -2837,7 +2860,7 @@ public class CricketFunctions {
 					if(fielder_found == false) {
 						for(Player plyr : currentMatch.getSetup().getHomeSubstitutes()) {
 							if(plyr.getImpactPlayer().equalsIgnoreCase(CricketUtil.YES)) {
-								past_tournament_stat_clone.add(new Tournament(plyr.getPlayerId(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+								past_tournament_stat_clone.add(new Tournament(plyr.getPlayerId(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 										0,CricketUtil.STILL_TO_BAT,0,0,0,0, plyr, new ArrayList<BestStats>(), new ArrayList<BestStats>()));
 								//fielder_found = true;
 							}
@@ -2845,7 +2868,7 @@ public class CricketFunctions {
 						
 						for(Player plyr : currentMatch.getSetup().getAwaySubstitutes()) {
 							if(plyr.getImpactPlayer().equalsIgnoreCase(CricketUtil.YES)) {
-								past_tournament_stat_clone.add(new Tournament(plyr.getPlayerId(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+								past_tournament_stat_clone.add(new Tournament(plyr.getPlayerId(), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 										0,CricketUtil.STILL_TO_BAT,0,0,0,0, plyr, new ArrayList<BestStats>(), new ArrayList<BestStats>()));
 							}
 						}
@@ -4033,7 +4056,13 @@ public class CricketFunctions {
 									tournament_stats.get(playerId).setFifty(tournament_stats.get(playerId).getFifty() + fifty);
 									tournament_stats.get(playerId).setHundreds(tournament_stats.get(playerId).getHundreds() + hundreds);
 									
+									if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES)) {
+										tournament_stats.get(playerId).setInnings(tournament_stats.get(playerId).getInnings()+1);
+									}
+									
 									if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+										tournament_stats.get(playerId).setNot_out(tournament_stats.get(playerId).getNot_out() + 1);
+										
 										tournament_stats.get(playerId).getBatsman_best_Stats().add(new BestStats(
 												bc.getPlayerId(), (bc.getRuns() * 2) + 1, bc.getBalls(), inn.getBowling_team(),
 												mtch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),""));
@@ -4052,10 +4081,16 @@ public class CricketFunctions {
 										hundreds = hundreds + 1;
 									}
 									
-									tournament_stats.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), fifty, hundreds, 0, 0, 0, bc.getBalls(), 
-											0,bc.getStatus(),0,0,0,0, bc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
+									tournament_stats.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), 0, 0, fifty, hundreds, 
+											0, 0, 0, bc.getBalls(), 0,bc.getStatus(),0,0,0,0, bc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
+									
+									if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES)) {
+										tournament_stats.get(tournament_stats.size() - 1).setInnings(tournament_stats.get(tournament_stats.size() - 1).getInnings()+1);
+									}
 									
 									if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+										tournament_stats.get(tournament_stats.size() - 1).setNot_out(tournament_stats.get(tournament_stats.size() - 1).getNot_out() + 1);
+										
 										tournament_stats.get(tournament_stats.size() - 1).getBatsman_best_Stats().add(
 												new BestStats(bc.getPlayerId(), (bc.getRuns() * 2) + 1, bc.getBalls(),
 												inn.getBowling_team(),mtch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),""));
@@ -4096,7 +4131,7 @@ public class CricketFunctions {
 									
 								}else {
 									
-									tournament_stats.add(new Tournament(boc.getPlayerId(), 0, 0, 0, 0, 0, boc.getWickets(), boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 0, 
+									tournament_stats.add(new Tournament(boc.getPlayerId(), 0, 0, 0, 0, 0, 0, 0, boc.getWickets(), boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), 0, 
 											boc.getDots(),null,0,0,0,0, boc.getPlayer(), new ArrayList<BestStats>(), new ArrayList<BestStats>()));
 									
 									tournament_stats.get(tournament_stats.size() - 1).getBowler_best_Stats().add(new BestStats(
