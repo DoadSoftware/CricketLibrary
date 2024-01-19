@@ -6983,7 +6983,7 @@ public class CricketFunctions {
 		
 		return this_dls;
 	}
-	public static String populateDls(MatchAllData match,String teamNameType,List<DuckWorthLewis> dls) throws InterruptedException 
+	public static String populateDls(MatchAllData match,String teamNameType,int dlsRuns) throws InterruptedException 
 	{
 		String team="",ahead_behind="";
 		int runs = 0;
@@ -7008,11 +7008,8 @@ public class CricketFunctions {
 					break;
 				}
 				
-				for(int i = 0; i<= dls.size() -1;i++) {
-					if(dls.get(i).getOver_left().equalsIgnoreCase(CricketFunctions.OverBalls(inn.getTotalOvers(),inn.getTotalBalls()))) {
-						runs = (inn.getTotalRuns() - Integer.valueOf(dls.get(i).getWkts_down()));
-					}
-				}
+				runs = (inn.getTotalRuns() - dlsRuns);
+				
 				if(runs < 0)
                 {
                     ahead_behind = team + " is " + (Math.abs(runs)) + " runs behind";
