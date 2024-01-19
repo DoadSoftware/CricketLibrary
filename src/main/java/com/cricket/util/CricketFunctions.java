@@ -6983,17 +6983,29 @@ public class CricketFunctions {
 		
 		return this_dls;
 	}
-	public static String populateDls(MatchAllData match,List<DuckWorthLewis> dls) throws InterruptedException 
+	public static String populateDls(MatchAllData match,String teamNameType,List<DuckWorthLewis> dls) throws InterruptedException 
 	{
 		String team="",ahead_behind="";
 		int runs = 0;
 		for(Inning inn : match.getMatch().getInning()) {
 			if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
-				if(inn.getBattingTeamId() == match.getSetup().getHomeTeamId()) {
-					team = match.getSetup().getHomeTeam().getTeamName4();
-				}
-				if(inn.getBattingTeamId() == match.getSetup().getAwayTeamId()) {
-					team = match.getSetup().getAwayTeam().getTeamName4();
+				switch (teamNameType.toUpperCase()) {
+				case CricketUtil.SHORT:
+					if(inn.getBattingTeamId() == match.getSetup().getHomeTeamId()) {
+						team = match.getSetup().getHomeTeam().getTeamName4();
+					}
+					if(inn.getBattingTeamId() == match.getSetup().getAwayTeamId()) {
+						team = match.getSetup().getAwayTeam().getTeamName4();
+					}
+					break;
+				default:
+					if(inn.getBattingTeamId() == match.getSetup().getHomeTeamId()) {
+						team = match.getSetup().getHomeTeam().getTeamName1();
+					}
+					if(inn.getBattingTeamId() == match.getSetup().getAwayTeamId()) {
+						team = match.getSetup().getAwayTeam().getTeamName1();
+					}
+					break;
 				}
 				
 				for(int i = 0; i<= dls.size() -1;i++) {
