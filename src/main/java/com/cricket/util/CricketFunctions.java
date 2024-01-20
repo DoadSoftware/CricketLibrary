@@ -5482,9 +5482,14 @@ public class CricketFunctions {
 						(match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getInning().get(InningNumber-1).getFirstPowerplayEndOver()||
 						match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getInning().get(InningNumber-1).getSecondPowerplayEndOver()||
 						match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getInning().get(InningNumber-1).getThirdPowerplayEndOver()))
-						&& match.getEventFile().getEvents().get(i).getEventBallNo() == 0) {
+						&& match.getEventFile().getEvents().get(i).getEventBallNo() == 0 ) {
 					
-					return CricketUtil.NO;
+					if(!match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE) &&
+							!match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL) &&
+							!match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL)) {
+						
+						return CricketUtil.NO;
+					}
 				}
 			}
 		}
