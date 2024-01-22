@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cricket.dao.CricketDao;
 import com.cricket.model.Bugs;
+import com.cricket.model.Commentator;
 import com.cricket.model.Dictionary;
 import com.cricket.model.Fixture;
 import com.cricket.model.Ground;
@@ -18,6 +19,7 @@ import com.cricket.model.Player;
 import com.cricket.model.Playoff;
 import com.cricket.model.Pointers;
 import com.cricket.model.Season;
+import com.cricket.model.Staff;
 import com.cricket.model.Statistics;
 import com.cricket.model.StatsType;
 import com.cricket.model.Team;
@@ -145,6 +147,15 @@ public List<Pointers> getPointers() {
 @Override
 public List<StatsType> getAllStatsType() {
 	return sessionFactory.getCurrentSession().createQuery("from StatsType").list();
+}
+
+@Override
+public List<Commentator> getCommentator() {
+	return sessionFactory.getCurrentSession().createQuery("from Commentator").list();
+}
+
+public List<Staff> getStaff() {
+	return sessionFactory.getCurrentSession().createQuery("from Staff").list();
 }
 
 }

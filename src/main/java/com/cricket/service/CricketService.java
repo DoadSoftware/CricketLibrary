@@ -3,6 +3,7 @@ package com.cricket.service;
 import java.util.List;
 
 import com.cricket.model.Bugs;
+import com.cricket.model.Commentator;
 import com.cricket.model.Dictionary;
 import com.cricket.model.Fixture;
 import com.cricket.model.Ground;
@@ -12,6 +13,7 @@ import com.cricket.model.Player;
 import com.cricket.model.Playoff;
 import com.cricket.model.Pointers;
 import com.cricket.model.Season;
+import com.cricket.model.Staff;
 import com.cricket.model.Statistics;
 import com.cricket.model.StatsType;
 import com.cricket.model.Team;
@@ -39,4 +41,6 @@ public interface CricketService {
   List<VariousText> getVariousTexts();
   List<Playoff> getPlayOff();
   List<Season> getSeasons();
+  List<Commentator> getCommentator();
+  List<Staff> getStaff();
 }

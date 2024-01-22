@@ -70,6 +70,7 @@ import com.cricket.model.Review;
 import com.cricket.model.Season;
 import com.cricket.model.Setup;
 import com.cricket.model.Speed;
+import com.cricket.model.Staff;
 import com.cricket.model.Statistics;
 import com.cricket.model.Team;
 import com.cricket.model.Tournament;
@@ -1964,6 +1965,18 @@ public class CricketFunctions {
 			}
 		}
 		return fixtures;
+	}
+	
+	public static List<Staff> processAllStaff(CricketService cricketService, int teamId) {
+		
+		List<Staff> staff = new ArrayList<Staff>();
+		for(Staff st : cricketService.getStaff()) {
+			if(st.getClubId() == teamId) {
+				st.setTeam(cricketService.getTeams().get(teamId-1));
+				staff.add(st);
+			}
+		}
+		return staff;
 	}
 	
 	public static String whenWriteStringUsingBufferedWritter_thenCorrect(String str) 
