@@ -44,6 +44,7 @@ import org.openqa.selenium.WebElement;
 import com.Ae_Third_Party_Xml.AE_Cricket;
 import com.cricket.archive.Archive;
 import com.cricket.archive.ArchiveData;
+import com.cricket.model.BatBallGriff;
 import com.cricket.model.BatSpeed;
 import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
@@ -7309,6 +7310,189 @@ public class CricketFunctions {
 	    }
 
 	    return "";
+	}
+	
+	public static Player getHomeAwayPlayer(int plyr_id, MatchAllData match)
+	{
+		for(Player plyr : match.getSetup().getHomeSquad()) {
+			if(plyr_id == plyr.getPlayerId()) { 
+				return plyr;
+			}
+		}
+		for(Player plyr : match.getSetup().getAwaySquad()) {
+			if(plyr_id == plyr.getPlayerId()) { 
+				return plyr;
+			}
+		}
+		return null;
+	}
+	
+	public static List<BatBallGriff> getBatBallGriffData(String dataType,int PlayerId,List<Team> team,List<MatchAllData> all_matches, MatchAllData match)
+	{
+		boolean player_check = false;
+		
+		List<BatBallGriff> griffBatBall = new ArrayList<BatBallGriff>();
+		
+		switch (dataType.toUpperCase()) {
+		case CricketUtil.BATSMAN:
+			for(MatchAllData mtch : all_matches) {
+				player_check = false;
+				if(!mtch.getMatch().getMatchFileName().equalsIgnoreCase(match.getMatch().getMatchFileName())) {
+					if(CricketFunctions.getHomeAwayPlayer(PlayerId, mtch) != null) {
+						for(Inning inn : mtch.getMatch().getInning())
+						{
+							if(inn.getBattingCard() != null && inn.getBattingCard().size() > 0) {
+								for(BattingCard bc : inn.getBattingCard())
+								{
+									if(bc.getPlayerId() == PlayerId) {
+										player_check = true;
+										
+										griffBatBall.add(new BatBallGriff(bc.getPlayerId(), bc.getRuns(), bc.getBalls(), bc.getStatus(), 0, 0, "0",
+												team.get(inn.getBowlingTeamId() - 1).getTeamName1(), bc.getPlayer()));
+										break;
+									}
+								}
+							}
+						}	
+						if(player_check != true) {
+							
+							griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", 0, 0, "0",
+									"", CricketFunctions.getHomeAwayPlayer(PlayerId, mtch)));
+							
+							if(CricketFunctions.getHomeAwayPlayer(PlayerId, mtch).getTeamId() == mtch.getSetup().getHomeTeamId()) {
+								griffBatBall.get(griffBatBall.size() - 1).setOpponentTeam(mtch.getSetup().getAwayTeam().getTeamName1());
+							}else {
+								griffBatBall.get(griffBatBall.size() - 1).setOpponentTeam(mtch.getSetup().getHomeTeam().getTeamName1());
+							}
+						}
+					}
+				}
+			}
+			
+			if(CricketFunctions.getHomeAwayPlayer(PlayerId, match) != null) {
+				for(Inning inn : match.getMatch().getInning())
+				{
+					if(inn.getBattingCard() != null && inn.getBattingCard().size() > 0) {
+						for(BattingCard bc : inn.getBattingCard())
+						{
+							if(bc.getPlayerId() == PlayerId) {
+								player_check = true;
+								
+								griffBatBall.add(new BatBallGriff(bc.getPlayerId(), bc.getRuns(), bc.getBalls(), bc.getStatus(), 0, 0, "0",
+										team.get(inn.getBowlingTeamId() - 1).getTeamName1(), bc.getPlayer()));
+								break;
+							}
+						}
+					}
+				}	
+				if(player_check != true) {
+					griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", 0, 0, "0", "", CricketFunctions.getHomeAwayPlayer(PlayerId, match)));
+					
+					if(CricketFunctions.getHomeAwayPlayer(PlayerId, match).getTeamId() == match.getSetup().getHomeTeamId()) {
+						griffBatBall.get(griffBatBall.size() - 1).setOpponentTeam(match.getSetup().getAwayTeam().getTeamName1());
+					}else {
+						griffBatBall.get(griffBatBall.size() - 1).setOpponentTeam(match.getSetup().getHomeTeam().getTeamName1());
+					}
+				}
+			}
+			break;
+		case CricketUtil.BOWLER:
+			for(MatchAllData mtch : all_matches) {
+				player_check = false;
+				if(!mtch.getMatch().getMatchFileName().equalsIgnoreCase(match.getMatch().getMatchFileName())) {
+					if(CricketFunctions.getHomeAwayPlayer(PlayerId, mtch) != null) {
+						for(Inning inn : mtch.getMatch().getInning())
+						{
+							if(inn.getBowlingCard() != null && inn.getBowlingCard().size() > 0) {
+								
+								for(BowlingCard boc : inn.getBowlingCard())
+								{
+									if(boc.getPlayerId() == PlayerId) {
+										player_check = true;
+										
+										griffBatBall.add(new BatBallGriff(boc.getPlayerId(), 0, 0, "BALL", boc.getRuns(), boc.getWickets(), 
+												CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()),team.get(inn.getBattingTeamId() - 1).getTeamName1(), boc.getPlayer()));
+										break;
+									}
+								}
+							}
+						}
+						for(Inning inn : mtch.getMatch().getInning())
+						{
+							if(player_check != true) {
+								for(BattingCard bc : inn.getBattingCard())
+								{
+									if(bc.getPlayerId() == PlayerId) {
+										player_check = true;
+										griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNB", 0, 0, 
+												"0",team.get(inn.getBowlingTeamId() - 1).getTeamName1(), bc.getPlayer()));
+									}
+								}
+							}
+						}
+						
+						
+						if(player_check != true) {
+							
+							griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", 0, 0, "0",
+									"", CricketFunctions.getHomeAwayPlayer(PlayerId, mtch)));
+							
+							if(CricketFunctions.getHomeAwayPlayer(PlayerId, mtch).getTeamId() == mtch.getSetup().getHomeTeamId()) {
+								griffBatBall.get(griffBatBall.size() - 1).setOpponentTeam(mtch.getSetup().getAwayTeam().getTeamName1());
+							}else {
+								griffBatBall.get(griffBatBall.size() - 1).setOpponentTeam(mtch.getSetup().getHomeTeam().getTeamName1());
+							}
+						}
+					}
+				}
+			}
+			
+			if(CricketFunctions.getHomeAwayPlayer(PlayerId, match) != null) {
+				for(Inning inn : match.getMatch().getInning())
+				{
+					if(inn.getBowlingCard() != null && inn.getBowlingCard().size() > 0) {
+						for(BowlingCard boc : inn.getBowlingCard())
+						{
+							if(boc.getPlayerId() == PlayerId) {
+								player_check = true;
+								
+								griffBatBall.add(new BatBallGriff(boc.getPlayerId(), 0, 0, "BALL", boc.getRuns(), boc.getWickets(), 
+										CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()),team.get(inn.getBattingTeamId() - 1).getTeamName1(), boc.getPlayer()));
+								break;
+							}
+						}
+					}
+				}
+				for(Inning inn : match.getMatch().getInning())
+				{
+					if(player_check != true) {
+						for(BattingCard bc : inn.getBattingCard())
+						{
+							if(bc.getPlayerId() == PlayerId) {
+								player_check = true;
+								
+								griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNB", 0, 0, 
+										"0",team.get(inn.getBowlingTeamId() - 1).getTeamName1(), bc.getPlayer()));
+							}
+						}
+					}
+				}
+				
+				if(player_check != true) {
+					griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", 0, 0, "0",
+							"", CricketFunctions.getHomeAwayPlayer(PlayerId, match)));
+					
+					if(CricketFunctions.getHomeAwayPlayer(PlayerId, match).getTeamId() == match.getSetup().getHomeTeamId()) {
+						griffBatBall.get(griffBatBall.size() - 1).setOpponentTeam(match.getSetup().getAwayTeam().getTeamName1());
+					}else {
+						griffBatBall.get(griffBatBall.size() - 1).setOpponentTeam(match.getSetup().getHomeTeam().getTeamName1());
+					}
+				}
+			}
+			break;	
+		}
+		
+		return griffBatBall;
 	}
 	public static Player getPlayerFromMatchData(int plyr_id, MatchAllData match)
 	{
