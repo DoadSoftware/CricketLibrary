@@ -5628,15 +5628,23 @@ public class CricketFunctions {
 			for (int i = events.size() - 1; i >= 0; i--) {
 				switch(events.get(i).getEventType()) {
 				case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
+		        	ball_count = ball_count + 1;
+		        	total_runs += events.get(i).getEventRuns();
+		        	
+		          break;
+		          
 		        case CricketUtil.FOUR: case CricketUtil.SIX:
 		        	ball_count = ball_count + 1;
 		        	total_runs += events.get(i).getEventRuns();
-		        	if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR)) {
+		        	
+		        	if(events.get(i).getEventWasABoundary() != null && events.get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR) && 
+		        			events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
 		        		total_fours = total_fours + 1;
-		        	}else if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX)) {
+		        	}else if(events.get(i).getEventWasABoundary() != null && events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX) && 
+		        			events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
 		        		total_sixes = total_sixes + 1;
 		        	}
-		          break;
+		          break;  
 		          
 		        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
 		        	ball_count = ball_count + 1;
