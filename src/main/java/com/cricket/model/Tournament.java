@@ -30,6 +30,10 @@ public class Tournament implements Cloneable {
   
   private int ballsBowled;
   
+  private int threeWicketHaul;
+  
+  private int fiveWicketHaul;
+  
   private int ballsFaced;
   
   private int dots;
@@ -60,7 +64,7 @@ public Tournament() {
 
 
 public Tournament(int playerId, int runs, int fours, int sixes, int innings, int not_out, int fifty, int hundreds, int wickets, int runsConceded,
-		int ballsBowled, int ballsFaced, int dots, String notOut, int runs_against_pace, int balls_against_pace,
+		int ballsBowled, int ballsFaced, int dots, int threeWicketHaul, int fiveWicketHaul, String notOut, int runs_against_pace, int balls_against_pace,
 		int runs_against_spin, int balls_against_spin, Player player, List<BestStats> batsman_best_Stats,
 		List<BestStats> bowler_best_Stats) {
 	super();
@@ -77,6 +81,8 @@ public Tournament(int playerId, int runs, int fours, int sixes, int innings, int
 	this.ballsBowled = ballsBowled;
 	this.ballsFaced = ballsFaced;
 	this.dots = dots;
+	this.threeWicketHaul = threeWicketHaul;
+	this.fiveWicketHaul = fiveWicketHaul;
 	this.notOut = notOut;
 	this.runs_against_pace = runs_against_pace;
 	this.balls_against_pace = balls_against_pace;
@@ -332,6 +338,22 @@ public int getNot_out() {
 
 public void setNot_out(int not_out) {
 	this.not_out = not_out;
+}
+
+public int getThreeWicketHaul() {
+	return threeWicketHaul;
+}
+
+public void setThreeWicketHaul(int threeWicketHaul) {
+	this.threeWicketHaul = threeWicketHaul;
+}
+
+public int getFiveWicketHaul() {
+	return fiveWicketHaul;
+}
+
+public void setFiveWicketHaul(int fiveWicketHaul) {
+	this.fiveWicketHaul = fiveWicketHaul;
 }
 
 @Override

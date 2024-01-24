@@ -31,7 +31,7 @@ public class CricketUtil {
 	public final static String BATSPEED_JSON = "Batspeed.json";
 	public final static String AR_FREE_TXT = "ARFreeText.txt";
 	public final static String INFOBAR_FREE_TXT = "InfobarFreeText.txt";
-	public final static String PREVIEW = "C:/Temp/Preview.jpg";
+	public final static String PREVIEW = "C:/Temp/Preview.png";
 
 	public final static String BEAT = "BEAT";
 	public final static String READ = "READ";

@@ -7,6 +7,7 @@ public class BestStats{
   private int playerId;
   private int bestEquation;
   private Team opponentTeam;
+  private Ground whichVenue;
   private String matchNumber;
   private int runs;
   private int wickets;
@@ -21,11 +22,12 @@ public BestStats() {
 	super();
 }
 
-public BestStats(int playerId, int bestEquation, int balls, Team opponentTeam, String matchNumber, Player player ,String status) {
+public BestStats(int playerId, int bestEquation, int balls, Team opponentTeam, Ground whichVenue, String matchNumber, Player player ,String status) {
 	super();
 	this.playerId = playerId;
 	this.bestEquation = bestEquation;
 	this.opponentTeam = opponentTeam;
+	this.whichVenue = whichVenue;
 	this.matchNumber = matchNumber;
 	this.balls = balls;
 	this.status = status;
@@ -110,6 +112,14 @@ public String getMatchNumber() {
 
 public void setMatchNumber(String matchNumber) {
 	this.matchNumber = matchNumber;
+}
+
+public Ground getWhichVenue() {
+	return whichVenue;
+}
+
+public void setWhichVenue(Ground whichVenue) {
+	this.whichVenue = whichVenue;
 }
 
 @Override
