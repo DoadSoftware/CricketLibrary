@@ -6398,12 +6398,20 @@ public class CricketFunctions {
 				    {
 				    	switch (broadcaster) {
 						case "ICC-U19-2023":
-							if(SplitSummaryText.isEmpty()) {
-						    	matchSummaryStatus = batTeamNm + " beat " + bowlTeamNm + " by " + CricketFunctions.getWicketsLeft(match) + 
-						    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
-							} else {
-						    	matchSummaryStatus = batTeamNm + " beat " + bowlTeamNm + SplitSummaryText + "by " + CricketFunctions.getWicketsLeft(match) + 
-						    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
+							if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
+								if(SplitSummaryText.isEmpty()) {
+							    	matchSummaryStatus =  batTeamNm + " beat " + bowlTeamNm + " by super over";
+								} else {
+							    	matchSummaryStatus =  batTeamNm + " beat " + bowlTeamNm + SplitSummaryText + "by super over";
+								}
+							}else {
+								if(SplitSummaryText.isEmpty()) {
+									matchSummaryStatus = batTeamNm + " beat " + bowlTeamNm + " by " + CricketFunctions.getWicketsLeft(match) + 
+								    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
+								} else {
+									matchSummaryStatus = batTeamNm + " beat " + bowlTeamNm + SplitSummaryText + "by " + CricketFunctions.getWicketsLeft(match) + 
+								    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
+								}
 							}
 							break;
 						default:
@@ -6418,9 +6426,9 @@ public class CricketFunctions {
 				    	switch (broadcaster) {
 						case "ICC-U19-2023":
 							if(SplitSummaryText.isEmpty()) {
-						    	matchSummaryStatus = "Match tied";
+						    	matchSummaryStatus = "Match tied - winner will be decided by super over";
 							} else {
-						    	matchSummaryStatus = "Match" + SplitSummaryText + "tied";
+						    	matchSummaryStatus = "Match tied" + SplitSummaryText + "winner will be decided by super over";
 							}
 							break;
 						default:
@@ -6432,12 +6440,20 @@ public class CricketFunctions {
 				    {
 				    	switch (broadcaster) {
 						case "ICC-U19-2023":
-							if(SplitSummaryText.isEmpty()) {
-						    	matchSummaryStatus =  bowlTeamNm + " beat " + batTeamNm + " by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
-						    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
-							} else {
-						    	matchSummaryStatus =  bowlTeamNm + " beat " + batTeamNm + SplitSummaryText + "by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
-						    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
+							if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
+								if(SplitSummaryText.isEmpty()) {
+							    	matchSummaryStatus =  bowlTeamNm + " beat " + batTeamNm + " by super over";
+								} else {
+							    	matchSummaryStatus =  bowlTeamNm + " beat " + batTeamNm + SplitSummaryText + "by super over";
+								}
+							}else {
+								if(SplitSummaryText.isEmpty()) {
+							    	matchSummaryStatus =  bowlTeamNm + " beat " + batTeamNm + " by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
+							    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
+								} else {
+							    	matchSummaryStatus =  bowlTeamNm + " beat " + batTeamNm + SplitSummaryText + "by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
+							    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
+								}
 							}
 							break;
 						default:
