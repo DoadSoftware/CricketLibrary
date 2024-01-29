@@ -56,6 +56,9 @@ public class Player implements Comparable<Player>
   @Column(name = "ROLE")
   private String role;
   
+  @Column(name = "Squad")
+  private String squad;
+  
   @Column(name = "BOWLINGSTYLE")
   private String bowlingStyle;
   
@@ -349,6 +352,14 @@ public String getQuestion3() {
 
 public void setQuestion3(String question3) {
 	this.question3 = question3;
+}
+
+public String getSquad() {
+	return squad;
+}
+
+public void setSquad(String squad) {
+	this.squad = squad;
 }
 
 @Override

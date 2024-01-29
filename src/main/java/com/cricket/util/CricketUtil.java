@@ -3,7 +3,11 @@ package com.cricket.util;
 public class CricketUtil {
 
 	public final static String DOAD = "DOAD";
+	public final static String DOAD_FRUIT = "DOAD_FRUIT";
+	public final static String ICC_U19_WorldCup_2024 = "ICC_U19_WORLDCUP_2024";
 	public final static String Doad_Fruit_scene = "D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT/Scenes/Fruit.sum";
+	public final static String ICC_U19_WorldCup_2024_scene = "D:/DOAD_In_House_Everest/Everest_Cricket/ICC_U19_WprldCup_2024/Scenes/Fruit.sum";
+	public final static String LastBallAudio = "LastBallAudio";
 	
 	public final static String INFOBAR_SCENE_DIRECTORY = "D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_APL2022/Scenes/Scorebug.sum";
 	public final static String CRICKET_SERVER_DIRECTORY = "C:/Sports/Cricket/";
@@ -32,7 +36,7 @@ public class CricketUtil {
 	public final static String AR_FREE_TXT = "ARFreeText.txt";
 	public final static String INFOBAR_FREE_TXT = "InfobarFreeText.txt";
 	public final static String PREVIEW = "C:/Temp/Preview.png";
-
+	
 	public final static String BEAT = "BEAT";
 	public final static String READ = "READ";
 	public final static String WRITE = "WRITE";

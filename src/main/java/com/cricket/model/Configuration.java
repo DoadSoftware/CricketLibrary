@@ -75,6 +75,15 @@ public class Configuration {
 	@XmlElement(name="speedUnit")
 	private String speedUnit;
 	
+	@XmlElement(name="audio")
+	private String audio;
+
+	@XmlElement(name="qudich")
+	private String qudich;
+
+	@XmlElement(name="wagon")
+	private String wagon;
+	
 	public Configuration() {
 		super();
 	}
@@ -82,6 +91,21 @@ public class Configuration {
 	public Configuration(String broadcaster) {
 		super();
 		this.broadcaster = broadcaster;
+	}
+	
+	public Configuration(String filename, String broadcaster, String speedUnit,String qudich,String wagon,String audio, String primaryIpAddress, 
+			int primaryPortNumber, String primaryLanguage) {
+		super();
+		this.filename = filename;
+		this.broadcaster = broadcaster;
+		this.speedUnit = speedUnit;
+		this.audio = audio;
+		this.qudich = qudich;
+		this.wagon = wagon;
+		this.primaryIpAddress = primaryIpAddress;
+		this.primaryPortNumber = primaryPortNumber;
+		this.primaryLanguage = primaryLanguage;
+		
 	}
 
 	public Configuration(String filename, String broadcaster,String secondaryBroadcaster,String qtIpAddress, 
@@ -299,13 +323,36 @@ public class Configuration {
 		this.tertiaryScene = tertiaryScene;
 	}
 	
-
 	public String getSpeedUnit() {
 		return speedUnit;
 	}
 
 	public void setSpeedUnit(String speedUnit) {
 		this.speedUnit = speedUnit;
+	}
+
+	public String getAudio() {
+		return audio;
+	}
+
+	public void setAudio(String audio) {
+		this.audio = audio;
+	}
+
+	public String getQudich() {
+		return qudich;
+	}
+
+	public void setQudich(String qudich) {
+		this.qudich = qudich;
+	}
+
+	public String getWagon() {
+		return wagon;
+	}
+
+	public void setWagon(String wagon) {
+		this.wagon = wagon;
 	}
 
 	@Override
