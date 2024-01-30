@@ -3053,18 +3053,8 @@ public class CricketFunctions {
 					    break;
 					}
 					if(match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.SUPER_OVER)) {
-						switch (broadcaster) {
-						case "ICC-U19-2023":
-							if(splitResultTxt.isEmpty()) {
-								resultToShow = resultToShow + " beat " + opponentTeamName + " by super over";
-							} else {
-								resultToShow = resultToShow + " beat " + opponentTeamName + splitResultTxt + " by super over";
-							}
-							break;
-						default:
-							resultToShow = resultToShow + " win by super over";
-							break;
-						}
+						resultToShow = "Match Tied - " + resultToShow + " win the super over";
+						
 					} else if(match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.INNING) 
 							&& match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.RUN)) {
 						resultToShow = resultToShow + " win by an inning and " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
