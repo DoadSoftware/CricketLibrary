@@ -7117,12 +7117,12 @@ public class CricketFunctions {
 				
 				if(runs < 0)
                 {
-                    ahead_behind = team + " is " + (Math.abs(runs)) + " runs behind";
+                    ahead_behind = team + " are " + (Math.abs(runs)) + " runs behind";
                 }
 
                 if (runs > 0)
                 {
-                    ahead_behind = team + " is " + runs + " runs ahead";
+                    ahead_behind = team + " are " + runs + " runs ahead";
                 }
                 
                 if (runs == 0)
