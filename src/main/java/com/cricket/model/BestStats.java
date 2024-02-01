@@ -34,6 +34,29 @@ public BestStats(int playerId, int bestEquation, int balls, Team opponentTeam, G
 	this.player = player;
 }
 
+public int getBatsmanStrikeRateSortData() {
+	int temp = 0;
+	if(this.getBalls() >= 1) {
+		temp = (100*this.getRuns())/this.getBalls();
+	}
+	if(temp > 32000) {
+		return 0 ;
+	}else {
+		return temp;
+	}
+}
+public int getBowlerEconomySortData() {
+	int temp = 0;
+	if(this.getBalls()>0) {
+		temp = (1000*this.getRuns())/this.getBalls();
+	}
+	if(temp > 32000) {
+		return 32000;
+	}else {
+		return 20000-temp;
+	}
+}
+
 public boolean isNot_out() {
 	return not_out;
 }

@@ -141,11 +141,11 @@ public int getBowlerStrikeRateSortData() {
 }
 
 public int getBatsmanFoursSortData() {
-	return 1000 * this.getFours() - this.getMatches();
+	return 1000 * this.getFours() - this.getInnings();
 }
 
 public int getBatsmanSixesSortData() {
-	return 1000 * this.getSixes() - this.getMatches();
+	return 1000 * this.getSixes() - this.getInnings();
 }
 
 public List<BestStats> getBatsman_best_Stats() {

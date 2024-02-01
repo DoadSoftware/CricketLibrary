@@ -3216,8 +3216,9 @@ public class CricketFunctions {
 	public static class BatsmanFoursComparator implements Comparator<Tournament> {
 	    @Override
 	    public int compare(Tournament bc1, Tournament bc2) {
-	    	if(bc2.getFours() == bc1.getFours()) {
-	    		return Integer.compare(bc2.getBatsmanStrikeRateSortData(), bc1.getBatsmanStrikeRateSortData());
+	    	if(bc2.getBatsmanFoursSortData() == bc1.getBatsmanFoursSortData()) {
+	    		//return Integer.compare(bc2.getBatsmanStrikeRateSortData(), bc1.getBatsmanStrikeRateSortData());
+	    		return Integer.compare(bc2.getRuns(), bc1.getRuns());
 	    	}else {
 	    		return Integer.compare(bc2.getBatsmanFoursSortData(), bc1.getBatsmanFoursSortData());
 	    	}
@@ -3227,10 +3228,32 @@ public class CricketFunctions {
 	public static class BatsmanSixesComparator implements Comparator<Tournament> {
 	    @Override
 	    public int compare(Tournament bc1, Tournament bc2) {
-	    	if(bc2.getSixes() == bc1.getSixes()) {
-	    		return Integer.compare(bc2.getBatsmanStrikeRateSortData(), bc1.getBatsmanStrikeRateSortData());
+	    	if(bc2.getBatsmanSixesSortData() == bc1.getBatsmanSixesSortData()) {
+	    		//return Integer.compare(bc2.getBatsmanStrikeRateSortData(), bc1.getBatsmanStrikeRateSortData());
+	    		return Integer.compare(bc2.getRuns(), bc1.getRuns());
 	    	}else {
 	    		return Integer.compare(bc2.getBatsmanSixesSortData(), bc1.getBatsmanSixesSortData());
+	    	}
+	    }
+	}
+	
+	public static class BatsmanBestStatsComparator implements Comparator<BestStats> {
+	    @Override
+	    public int compare(BestStats bs1, BestStats bs2) {
+	    	if(bs2.getBestEquation() == bs1.getBestEquation()) {
+	    		return Integer.compare(bs2.getBatsmanStrikeRateSortData(), bs1.getBatsmanStrikeRateSortData());
+	    	}else {
+	    		return Integer.compare(bs2.getBestEquation(), bs1.getBestEquation());
+	    	}
+	    }
+	}
+	public static class BowlerBestStatsComparator implements Comparator<BestStats> {
+	    @Override
+	    public int compare(BestStats bs1, BestStats bs2) {
+	    	if(bs2.getBestEquation() == bs1.getBestEquation()) {
+	    		return Integer.compare(bs1.getBalls(), bs2.getBalls());
+	    	}else {
+	    		return Integer.compare(bs2.getBestEquation(), bs1.getBestEquation());
 	    	}
 	    }
 	}
@@ -6058,7 +6081,6 @@ public class CricketFunctions {
 	    		break;
 	    	}
 		}
-		//System.out.println("over = " + over_by_over_data);
 		return over_by_over_data;
 	}
 	
