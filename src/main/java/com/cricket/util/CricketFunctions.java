@@ -6038,27 +6038,27 @@ public class CricketFunctions {
 										total_wickets = total_wickets + 1;
 								}
 						    }
-					    	if(events.get(i).getEventOverNo() == 50 && events.get(i).getEventBallNo() <= 0) {
-						    	switch (processPowerPlay(CricketUtil.FULL, match).replace(CricketUtil.POWERPLAY, "").trim()) {
-						    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
-						    		over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
-							    			total_runs, total_wickets, true));
-						    		break;
-						    	default:
-							    	over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
-							    			total_runs, total_wickets, false));
-						    		break;
-						    	}
-						    	switch (type.toUpperCase()) {
-								case "MANHATTAN":
-									total_runs = 0;
-									total_wickets = 0;
-									break;
-								case "WORM":
-									total_wickets = 0;
-									break;
-								}
-					    	}
+//					    	if(events.get(i).getEventOverNo() == 50 && events.get(i).getEventBallNo() <= 0) {
+//						    	switch (processPowerPlay(CricketUtil.FULL, match).replace(CricketUtil.POWERPLAY, "").trim()) {
+//						    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
+//						    		over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
+//							    			total_runs, total_wickets, true));
+//						    		break;
+//						    	default:
+//							    	over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
+//							    			total_runs, total_wickets, false));
+//						    		break;
+//						    	}
+//						    	switch (type.toUpperCase()) {
+//								case "MANHATTAN":
+//									total_runs = 0;
+//									total_wickets = 0;
+//									break;
+//								case "WORM":
+//									total_wickets = 0;
+//									break;
+//								}
+//					    	}
 			  		        break;
 			  		       
 			  		        
@@ -6098,11 +6098,11 @@ public class CricketFunctions {
 	    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
 	    		System.out.println("INN : " + events.get(events.size()-1).getEventInningNumber() + " - OVER : " + events.get(events.size()-1).getEventOverNo() +
 	    				" - RUNS/WICKETS : " + total_runs + "/" + total_wickets);
-	    		over_by_over_data.add(new OverByOverData(events.get(events.size()-1).getEventInningNumber(), 
+	    		over_by_over_data.add(new OverByOverData(inn_num, 
 		    			events.get(events.size()-1).getEventOverNo(), total_runs, total_wickets, true));
 	    		break;
 	    	default:
-		    	over_by_over_data.add(new OverByOverData(events.get(events.size()-1).getEventInningNumber(), 
+		    	over_by_over_data.add(new OverByOverData(inn_num, 
 		    			events.get(events.size()-1).getEventOverNo(), total_runs, total_wickets, false));
 	    		break;
 	    	}
