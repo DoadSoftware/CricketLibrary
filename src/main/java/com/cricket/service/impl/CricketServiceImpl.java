@@ -14,6 +14,7 @@ import com.cricket.model.Fixture;
 import com.cricket.model.Ground;
 import com.cricket.model.InfobarStats;
 import com.cricket.model.NameSuper;
+import com.cricket.model.POTT;
 import com.cricket.model.Player;
 import com.cricket.model.Playoff;
 import com.cricket.model.Pointers;
@@ -141,5 +142,10 @@ public List<Commentator> getCommentator() {
 @Override
 public List<Staff> getStaff() {
 	return cricketDao.getStaff();
+}
+
+@Override
+public List<POTT> getPott() {
+	return cricketDao.getPott();
 }
 }
