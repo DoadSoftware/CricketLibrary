@@ -66,6 +66,7 @@ import com.cricket.model.MatchAllData;
 import com.cricket.model.MatchClock;
 import com.cricket.model.MultiLanguageDatabase;
 import com.cricket.model.OverByOverData;
+import com.cricket.model.POTT;
 import com.cricket.model.Partnership;
 import com.cricket.model.Player;
 import com.cricket.model.Review;
@@ -7646,6 +7647,30 @@ public class CricketFunctions {
 		
 		return griffBatBall;
 	}
+	public static List<POTT> processAllPott(CricketService cricketService) {
+		List<POTT> pott = cricketService.getPott();
+		for(Player player : cricketService.getAllPlayer()) {
+			for(POTT pt : pott) {
+				if(pt.getPlayerId1() == player.getPlayerId()) {
+					pt.setPlayer1(player);
+					//pott.add(pt);
+				}
+				if(pt.getPlayerId2() == player.getPlayerId()) {
+					pt.setPlayer2(player);
+					//pott.add(pt);
+				}
+				if(pt.getPlayerId3() == player.getPlayerId()) {
+					pt.setPlayer3(player);
+					//pott.add(pt);
+				}
+				if(pt.getPlayerId4() == player.getPlayerId()) {
+					pt.setPlayer4(player);
+					//pott.add(pt);
+				}
+			}
+		}
+		return pott;
+	}
 	public static Player getPlayerFromMatchData(int plyr_id, MatchAllData match)
 	{
 		for(Player plyr : match.getSetup().getHomeSquad()) {
@@ -7670,4 +7695,5 @@ public class CricketFunctions {
 		}
 		return null;
 	}	
+	
 }

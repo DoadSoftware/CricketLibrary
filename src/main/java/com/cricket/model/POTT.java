@@ -35,7 +35,16 @@ public class POTT
   private int playerId4;
   
   @Transient
-  private Team team;
+  private Player Player1;
+  
+  @Transient
+  private Player Player2;
+  
+  @Transient
+  private Player Player3;
+  
+  @Transient
+  private Player Player4;
 
   public POTT() {
 		super();
@@ -86,12 +95,37 @@ public void setPlayerId4(int playerId4) {
 	this.playerId4 = playerId4;
 }
 
-public Team getTeam() {
-	return team;
+public Player getPlayer1() {
+	return Player1;
 }
 
-public void setTeam(Team team) {
-	this.team = team;
+public void setPlayer1(Player player1) {
+	Player1 = player1;
 }
+
+public Player getPlayer2() {
+	return Player2;
+}
+
+public void setPlayer2(Player player2) {
+	Player2 = player2;
+}
+
+public Player getPlayer3() {
+	return Player3;
+}
+
+public void setPlayer3(Player player3) {
+	Player3 = player3;
+}
+
+public Player getPlayer4() {
+	return Player4;
+}
+
+public void setPlayer4(Player player4) {
+	Player4 = player4;
+}
+
 
 }
