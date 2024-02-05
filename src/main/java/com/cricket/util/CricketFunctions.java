@@ -6039,27 +6039,6 @@ public class CricketFunctions {
 										total_wickets = total_wickets + 1;
 								}
 						    }
-//					    	if(events.get(i).getEventOverNo() == 50 && events.get(i).getEventBallNo() <= 0) {
-//						    	switch (processPowerPlay(CricketUtil.FULL, match).replace(CricketUtil.POWERPLAY, "").trim()) {
-//						    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
-//						    		over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
-//							    			total_runs, total_wickets, true));
-//						    		break;
-//						    	default:
-//							    	over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
-//							    			total_runs, total_wickets, false));
-//						    		break;
-//						    	}
-//						    	switch (type.toUpperCase()) {
-//								case "MANHATTAN":
-//									total_runs = 0;
-//									total_wickets = 0;
-//									break;
-//								case "WORM":
-//									total_wickets = 0;
-//									break;
-//								}
-//					    	}
 			  		        break;
 			  		       
 			  		        
@@ -6455,9 +6434,15 @@ public class CricketFunctions {
 		    	} else {
 				    if ((CricketFunctions.getRequiredRuns(match) > 0) && (CricketFunctions.getRequiredBalls(match) > 0) 
 				    		&& (CricketFunctions.getWicketsLeft(match) > 0)) {
+				    	
+				    	if(CricketFunctions.getRequiredRuns(match) == 1) {
+				    		matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
+						        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
+				    	}else {
+				    		matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
+						        	" more run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
+				    	}
 
-				    	matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
-					        	" more run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
 				    	if (CricketFunctions.getRequiredBalls(match) > 120) {
 				    		matchSummaryStatus = matchSummaryStatus + CricketFunctions.OverBalls(0,CricketFunctions.getRequiredBalls(match)) + " overs";
 						} else {
