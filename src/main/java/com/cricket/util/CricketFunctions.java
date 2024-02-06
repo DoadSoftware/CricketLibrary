@@ -7490,7 +7490,7 @@ public class CricketFunctions {
 									if(bc.getPlayerId() == PlayerId) {
 										player_check = true;
 										
-										griffBatBall.add(new BatBallGriff(bc.getPlayerId(), bc.getRuns(), bc.getBalls(), bc.getStatus(), 0, 0, "0",
+										griffBatBall.add(new BatBallGriff(bc.getPlayerId(), bc.getRuns(), bc.getBalls(), bc.getStatus(), bc.getHowOut(), 0, 0, "0",
 												team.get(inn.getBowlingTeamId() - 1).getTeamName1(), bc.getPlayer()));
 										break;
 									}
@@ -7499,7 +7499,7 @@ public class CricketFunctions {
 						}	
 						if(player_check != true) {
 							
-							griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", 0, 0, "0",
+							griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0",
 									"", CricketFunctions.getHomeAwayPlayer(PlayerId, mtch)));
 							
 							if(CricketFunctions.getHomeAwayPlayer(PlayerId, mtch).getTeamId() == mtch.getSetup().getHomeTeamId()) {
@@ -7521,7 +7521,7 @@ public class CricketFunctions {
 							if(bc.getPlayerId() == PlayerId) {
 								player_check = true;
 								
-								griffBatBall.add(new BatBallGriff(bc.getPlayerId(), bc.getRuns(), bc.getBalls(), bc.getStatus(), 0, 0, "0",
+								griffBatBall.add(new BatBallGriff(bc.getPlayerId(), bc.getRuns(), bc.getBalls(), bc.getStatus(), bc.getHowOut(), 0, 0, "0",
 										team.get(inn.getBowlingTeamId() - 1).getTeamName1(), bc.getPlayer()));
 								break;
 							}
@@ -7529,7 +7529,7 @@ public class CricketFunctions {
 					}
 				}	
 				if(player_check != true) {
-					griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", 0, 0, "0", "", CricketFunctions.getHomeAwayPlayer(PlayerId, match)));
+					griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0", "", CricketFunctions.getHomeAwayPlayer(PlayerId, match)));
 					
 					if(CricketFunctions.getHomeAwayPlayer(PlayerId, match).getTeamId() == match.getSetup().getHomeTeamId()) {
 						griffBatBall.get(griffBatBall.size() - 1).setOpponentTeam(match.getSetup().getAwayTeam().getTeamName1());
@@ -7554,7 +7554,7 @@ public class CricketFunctions {
 										//System.out.println("Player1 = " + PlayerId);
 										player_check = true;
 										
-										griffBatBall.add(new BatBallGriff(boc.getPlayerId(), 0, 0, "BALL", boc.getRuns(), boc.getWickets(), 
+										griffBatBall.add(new BatBallGriff(boc.getPlayerId(), 0, 0, "BALL", "", boc.getRuns(), boc.getWickets(), 
 												CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()),team.get(inn.getBattingTeamId() - 1).getTeamName1(), boc.getPlayer()));
 										break;
 									}
@@ -7568,7 +7568,7 @@ public class CricketFunctions {
 								{
 									if(bc.getPlayerId() == PlayerId) {
 										player_check = true;
-										griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNB", 0, 0, 
+										griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNB", "", 0, 0, 
 												"0",team.get(inn.getBowlingTeamId() - 1).getTeamName1(), bc.getPlayer()));
 									}
 								}
@@ -7578,7 +7578,7 @@ public class CricketFunctions {
 						
 						if(player_check != true) {
 							
-							griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", 0, 0, "0",
+							griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0",
 									"", CricketFunctions.getHomeAwayPlayer(PlayerId, mtch)));
 							
 							if(CricketFunctions.getHomeAwayPlayer(PlayerId, mtch).getTeamId() == mtch.getSetup().getHomeTeamId()) {
@@ -7601,7 +7601,7 @@ public class CricketFunctions {
 							if(boc.getPlayerId() == PlayerId) {
 								player_check = true;
 								//System.out.println("PlayerId1 = " + PlayerId);
-								griffBatBall.add(new BatBallGriff(boc.getPlayerId(), 0, 0, "BALL", boc.getRuns(), boc.getWickets(), 
+								griffBatBall.add(new BatBallGriff(boc.getPlayerId(), 0, 0, "BALL", "", boc.getRuns(), boc.getWickets(), 
 										CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()),team.get(inn.getBattingTeamId() - 1).getTeamName1(), boc.getPlayer()));
 								break;
 							}
@@ -7616,7 +7616,7 @@ public class CricketFunctions {
 							if(bc.getPlayerId() == PlayerId) {
 								player_check = true;
 								
-								griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNB", 0, 0, 
+								griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNB", "", 0, 0, 
 										"0",team.get(inn.getBowlingTeamId() - 1).getTeamName1(), bc.getPlayer()));
 							}
 						}
@@ -7624,7 +7624,7 @@ public class CricketFunctions {
 				}
 				
 				if(player_check != true) {
-					griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", 0, 0, "0",
+					griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0",
 							"", CricketFunctions.getHomeAwayPlayer(PlayerId, match)));
 					
 					if(CricketFunctions.getHomeAwayPlayer(PlayerId, match).getTeamId() == match.getSetup().getHomeTeamId()) {
