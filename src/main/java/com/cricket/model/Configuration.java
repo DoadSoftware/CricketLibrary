@@ -84,6 +84,9 @@ public class Configuration {
 	@XmlElement(name="wagon")
 	private String wagon;
 	
+	@XmlElement(name="preview")
+	private String preview;
+	
 	public Configuration() {
 		super();
 	}
@@ -139,7 +142,7 @@ public class Configuration {
 	public Configuration(String filename, String broadcaster, String secondaryBroadcaster, 
 			String primaryIpAddress, int primaryPortNumber, String primaryLanguage,
 			String qtIpAddress,int qtPortNumber, String primaryVariousOptions, String secondaryIpAddress, 
-			int secondaryPortNumber,String secondaryLanguage) {
+			int secondaryPortNumber,String secondaryLanguage, String preview) {
 		super();
 		this.filename = filename;
 		this.broadcaster = broadcaster;
@@ -153,6 +156,17 @@ public class Configuration {
 		this.secondaryIpAddress = secondaryIpAddress;
 		this.secondaryPortNumber = secondaryPortNumber;
 		this.secondaryLanguage = secondaryLanguage;
+		this.preview = preview;
+	}
+
+	
+	
+	public String getPreview() {
+		return preview;
+	}
+
+	public void setPreview(String preview) {
+		this.preview = preview;
 	}
 
 	public String getPrimaryVariousOptions() {
@@ -357,15 +371,16 @@ public class Configuration {
 
 	@Override
 	public String toString() {
-		return "Configuration [filename=" + filename + ", secondaryFilename=" + secondaryFilename + ", broadcaster="
-				+ broadcaster + ", secondaryBroadcaster=" + secondaryBroadcaster + ", qtIpAddress=" + qtIpAddress
-				+ ", qtPortNumber=" + qtPortNumber + ", qtScene=" + qtScene + ", qtLanguage=" + qtLanguage
-				+ ", primaryIpAddress=" + primaryIpAddress + ", primaryPortNumber=" + primaryPortNumber
-				+ ", primaryScene=" + primaryScene + ", primaryLanguage=" + primaryLanguage + ", secondaryIpAddress="
-				+ secondaryIpAddress + ", secondaryPortNumber=" + secondaryPortNumber + ", secondaryScene="
-				+ secondaryScene + ", secondaryLanguage=" + secondaryLanguage + ", tertiaryIpAddress="
-				+ tertiaryIpAddress + ", tertiaryPortNumber=" + tertiaryPortNumber + ", tertiaryScene=" + tertiaryScene
-				+ ", tertiaryLanguage=" + tertiaryLanguage + ", speedUnit=" + speedUnit + "]";
+		return "Configuration [primaryVariousOptions=" + primaryVariousOptions + ", filename=" + filename
+				+ ", secondaryFilename=" + secondaryFilename + ", broadcaster=" + broadcaster
+				+ ", secondaryBroadcaster=" + secondaryBroadcaster + ", qtIpAddress=" + qtIpAddress + ", qtPortNumber="
+				+ qtPortNumber + ", qtScene=" + qtScene + ", qtLanguage=" + qtLanguage + ", primaryIpAddress="
+				+ primaryIpAddress + ", primaryPortNumber=" + primaryPortNumber + ", primaryScene=" + primaryScene
+				+ ", primaryLanguage=" + primaryLanguage + ", secondaryIpAddress=" + secondaryIpAddress
+				+ ", secondaryPortNumber=" + secondaryPortNumber + ", secondaryScene=" + secondaryScene
+				+ ", secondaryLanguage=" + secondaryLanguage + ", tertiaryIpAddress=" + tertiaryIpAddress
+				+ ", tertiaryPortNumber=" + tertiaryPortNumber + ", tertiaryScene=" + tertiaryScene
+				+ ", tertiaryLanguage=" + tertiaryLanguage + ", speedUnit=" + speedUnit + ", audio=" + audio
+				+ ", qudich=" + qudich + ", wagon=" + wagon + ", preview=" + preview + "]";
 	}
-	
 }
