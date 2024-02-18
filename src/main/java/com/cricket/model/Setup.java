@@ -69,6 +69,10 @@ public class Setup {
   
   private String targetOvers;
 
+  private int secondaryTargetRuns;
+
+  private String secondaryTargetOvers;
+  
   private String venueName;
 
   private Team homeTeam;
@@ -106,6 +110,22 @@ public class Setup {
   @JsonIgnore
   private int which_key_press;
   
+public int getSecondaryTargetRuns() {
+	return secondaryTargetRuns;
+}
+
+public void setSecondaryTargetRuns(int secondaryTargetRuns) {
+	this.secondaryTargetRuns = secondaryTargetRuns;
+}
+
+public String getSecondaryTargetOvers() {
+	return secondaryTargetOvers;
+}
+
+public void setSecondaryTargetOvers(String secondaryTargetOvers) {
+	this.secondaryTargetOvers = secondaryTargetOvers;
+}
+
 public String getSaveMatchFileAs() {
 	return saveMatchFileAs;
 }

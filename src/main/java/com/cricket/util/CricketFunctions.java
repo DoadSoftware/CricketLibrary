@@ -3405,23 +3405,33 @@ public class CricketFunctions {
 				break;
 			case CricketUtil.CAUGHT: case CricketUtil.MANKAD: case CricketUtil.RUN_OUT:
 				switch (bc.getHowOut().toUpperCase()) {
-				case CricketUtil.CAUGHT: 
-					bc.setHowOutText("c " + bc.getHowOutFielder().getTicker_name());
-					bc.setHowOutPartOne("c " + bc.getHowOutFielder().getTicker_name());
-					if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
-						bc.setHowOutText(bc.getHowOutText() + " (SUB)");
-						bc.setHowOutPartOne(bc.getHowOutPartOne() + " (SUB)");
+				case CricketUtil.CAUGHT:
+					if(bc.getHowOutFielderId() < 0) {
+						bc.setHowOutText("c substitute");
+						bc.setHowOutPartOne("c substitute");
+					} else {
+						bc.setHowOutText("c " + bc.getHowOutFielder().getTicker_name());
+						bc.setHowOutPartOne("c " + bc.getHowOutFielder().getTicker_name());
+						if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
+							bc.setHowOutText(bc.getHowOutText() + " (SUB)");
+							bc.setHowOutPartOne(bc.getHowOutPartOne() + " (SUB)");
+						}
 					}
 					bc.setHowOutText(bc.getHowOutText() + " b " + bc.getHowOutBowler().getTicker_name());
 					bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
 					break;
 				case CricketUtil.RUN_OUT:
-					bc.setHowOutText("run out (" + bc.getHowOutFielder().getTicker_name() + ")");
 					bc.setHowOutPartOne("run out");
-					bc.setHowOutPartTwo(bc.getHowOutFielder().getTicker_name());
-					if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
-						bc.setHowOutText(bc.getHowOutText() + " (SUB)");
-						bc.setHowOutPartTwo(bc.getHowOutPartTwo() + " (SUB)");
+					if(bc.getHowOutFielderId() < 0) {
+						bc.setHowOutText("run out substitute");
+						bc.setHowOutPartTwo("substitute");
+					} else {
+						bc.setHowOutText("run out (" + bc.getHowOutFielder().getTicker_name() + ")");
+						bc.setHowOutPartTwo(bc.getHowOutFielder().getTicker_name());
+						if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
+							bc.setHowOutText(bc.getHowOutText() + " (SUB)");
+							bc.setHowOutPartTwo(bc.getHowOutPartTwo() + " (SUB)");
+						}
 					}
 					break;
 				case CricketUtil.MANKAD:
@@ -3438,8 +3448,13 @@ public class CricketFunctions {
 				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
 				break;
 			case CricketUtil.STUMPED:
-				bc.setHowOutText("st " + bc.getHowOutFielder().getTicker_name() + " b " + bc.getHowOutBowler().getTicker_name());
-				bc.setHowOutPartOne("st " + bc.getHowOutFielder().getTicker_name());
+				if(bc.getHowOutFielderId() < 0) {
+					bc.setHowOutText("st substitute b " + bc.getHowOutBowler().getTicker_name());
+					bc.setHowOutPartOne("st substitute");
+				} else {
+					bc.setHowOutText("st " + bc.getHowOutFielder().getTicker_name() + " b " + bc.getHowOutBowler().getTicker_name());
+					bc.setHowOutPartOne("st " + bc.getHowOutFielder().getTicker_name());
+				}
 				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
 				break;
 			case CricketUtil.LBW:
@@ -3509,26 +3524,46 @@ public class CricketFunctions {
 					switch (bc.getHowOut().toUpperCase()) {
 					case CricketUtil.CAUGHT: 
 						if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
-							return "c|" +  "sub ("+bc.getHowOutFielder().getTicker_name()+")|b|" + bc.getHowOutBowler().getTicker_name();
+							if(bc.getHowOutFielderId() <= 0) {
+								return "c|" +  "substitute|b|" + bc.getHowOutBowler().getTicker_name();
+							} else {
+								return "c|" +  "sub (" + bc.getHowOutFielder().getTicker_name()+")|b|" + bc.getHowOutBowler().getTicker_name();
+							}
 						} else {
-							return "c|" + bc.getHowOutFielder().getTicker_name() + "|b|" + bc.getHowOutBowler().getTicker_name();
+							if(bc.getHowOutFielderId() <= 0) {
+								return "c|substitute|b|" + bc.getHowOutBowler().getTicker_name();
+							} else {
+								return "c|" + bc.getHowOutFielder().getTicker_name() + "|b|" + bc.getHowOutBowler().getTicker_name();
+							}
 						}
 					case CricketUtil.RUN_OUT:
 						if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
-							return "run out|" + "sub (" + bc.getHowOutFielder().getTicker_name() + ")| | ";
+							if(bc.getHowOutFielderId() <= 0) {
+								return "run out|(substitute)| | ";
+							} else {
+								return "run out|" + "sub (" + bc.getHowOutFielder().getTicker_name() + ")| | ";
+							}
 						} else {
-							return "run out|(" + bc.getHowOutFielder().getTicker_name() + ")| | ";
+							if(bc.getHowOutFielderId() <= 0) {
+								return "run out|(substitute)| | ";
+							} else {
+								return "run out|(" + bc.getHowOutFielder().getTicker_name() + ")| | ";
+							}
 						}
 					case CricketUtil.MANKAD:
 						return "run out|(" + bc.getHowOutBowler().getTicker_name() + ")| | ";
 					}
 					break;
 				case CricketUtil.BOWLED:
-					return " | |b|" + bc.getHowOutBowler().getTicker_name();
+					return "||b|" + bc.getHowOutBowler().getTicker_name();
 				case CricketUtil.STUMPED:
-					return "st|" + bc.getHowOutFielder().getTicker_name() + "|b|" + bc.getHowOutBowler().getTicker_name();
+					if(bc.getHowOutFielderId() <= 0) {
+						return "st|substitute|b|" + bc.getHowOutBowler().getTicker_name();
+					} else {
+						return "st|" + bc.getHowOutFielder().getTicker_name() + "|b|" + bc.getHowOutBowler().getTicker_name();
+					}
 				case CricketUtil.LBW:
-					return "lbw| |b|" + bc.getHowOutBowler().getTicker_name();
+					return "lbw||b|" + bc.getHowOutBowler().getTicker_name();
 				case CricketUtil.HIT_WICKET:
 					return "hit wicket| |b|" + bc.getHowOutBowler().getTicker_name();
 				case CricketUtil.HANDLED_THE_BALL:
