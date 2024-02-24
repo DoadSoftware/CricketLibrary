@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Setup {
 
+  private String specialMatchRules;
+	
   private String noBallsRuns;
 	
   private String ballsPerOver;
@@ -110,6 +112,14 @@ public class Setup {
   @JsonIgnore
   private int which_key_press;
   
+public String getSpecialMatchRules() {
+	return specialMatchRules;
+}
+
+public void setSpecialMatchRules(String specialMatchRules) {
+	this.specialMatchRules = specialMatchRules;
+}
+
 public int getSecondaryTargetRuns() {
 	return secondaryTargetRuns;
 }

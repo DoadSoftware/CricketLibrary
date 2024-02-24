@@ -73,6 +73,7 @@ public class CricketUtil {
 	public final static String FOUR = "4";
 	public final static String FIVE = "5";
 	public final static String SIX = "6";
+	public final static String NINE = "9";
 
 	public final static String UNDO = "UNDO";
 	public final static String WIDE = "WIDE";

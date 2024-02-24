@@ -18,7 +18,7 @@ public class BattingCard implements Comparable<BattingCard>{
   private int fours;
   
   private int sixes;
-  
+
   private int balls;
   
   private int howOutFielderId;
