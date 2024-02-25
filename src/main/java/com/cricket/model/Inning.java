@@ -41,6 +41,8 @@ public class Inning {
 
   private int totalSixes;
 
+  private int totalNines;
+  
   private String runRate;
   
   private String isCurrentInning;
@@ -91,6 +93,14 @@ public Inning() {
 public Inning(int oversRemaining) {
 	super();
 	this.oversRemaining = oversRemaining;
+}
+
+public int getTotalNines() {
+	return totalNines;
+}
+
+public void setTotalNines(int totalNines) {
+	this.totalNines = totalNines;
 }
 
 public String getIsDeclared() {

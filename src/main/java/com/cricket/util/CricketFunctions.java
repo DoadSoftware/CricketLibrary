@@ -6070,7 +6070,7 @@ public class CricketFunctions {
 					    case CricketUtil.SIX: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
 					    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
 					    	
-					    	total_runs = total_runs + events.get(i).getEventRuns() ;
+					    	total_runs = total_runs + events.get(i).getEventRuns();
 					    	
 					    	switch (events.get(i).getEventType().toUpperCase()) {
 						    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
@@ -6120,20 +6120,20 @@ public class CricketFunctions {
 		if(total_runs > 0 || total_wickets > 0) {
 	    	switch (processPowerPlay(CricketUtil.FULL, match).replace(CricketUtil.POWERPLAY, "").trim()) {
 	    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
-	    		System.out.println("INN : " + events.get(events.size()-1).getEventInningNumber() + " - OVER : " + events.get(events.size()-1).getEventOverNo() +
-	    				" - RUNS/WICKETS : " + total_runs + "/" + total_wickets);
+	    		System.out.println("INN : " + events.get(events.size()-1).getEventInningNumber() 
+	    			+ " - OVER : " + events.get(events.size()-1).getEventOverNo() +
+	    			" - RUNS/WICKETS : " + total_runs + "/" + total_wickets);
 	    		over_by_over_data.add(new OverByOverData(inn_num, 
 		    			events.get(events.size()-1).getEventOverNo(), total_runs, total_wickets, true));
 	    		break;
 	    	default:
 		    	over_by_over_data.add(new OverByOverData(inn_num, 
-		    			events.get(events.size()-1).getEventOverNo(), total_runs, total_wickets, false));
+		    		events.get(events.size()-1).getEventOverNo(), total_runs, total_wickets, false));
 	    		break;
 	    	}
 		}
 		return over_by_over_data;
 	}
-	
 	public static String generateStrikeRate(int runs, int balls, int numberOfDecimals) {
 		
 		String strike_rate = "";

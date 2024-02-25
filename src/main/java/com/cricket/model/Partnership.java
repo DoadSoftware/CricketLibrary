@@ -27,6 +27,8 @@ public class Partnership implements Comparable<Partnership>
   private int totalFours;
 
   private int totalSixes;
+
+  private int totalNines;
   
   @JsonIgnore
   private Player firstPlayer;
@@ -60,6 +62,14 @@ public Partnership(int partnershipNumber, int firstBatterNo, int secondBatterNo,
 
 public Partnership() {
 	super();
+}
+
+public int getTotalNines() {
+	return totalNines;
+}
+
+public void setTotalNines(int totalNines) {
+	this.totalNines = totalNines;
 }
 
 public Player getFirstPlayer() {
