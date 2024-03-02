@@ -20,8 +20,6 @@ public class BattingCard implements Comparable<BattingCard>{
   private int sixes;
   
   private int nines;
-
-  private int nines;
   
   private int balls;
   
@@ -133,13 +131,6 @@ public int getBatsmanScoreSortData() {
 		sortData = sortData + 1;
 	}
 	return 1000 * sortData + 1000 - this.getBalls();
-}
-
-public int getNines() {
-	return nines;
-}
-public void setNines(int nines) {
-	this.nines = nines;
 }
 public long getSeconds() {
 	return seconds;
