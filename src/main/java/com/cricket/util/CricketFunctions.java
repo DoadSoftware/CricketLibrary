@@ -1208,7 +1208,6 @@ public class CricketFunctions {
 		    }
 			
 			line_txt = addSubString(line_txt,batsman_style,102);
-			
 			line_txt = addSubString(line_txt,shot,109);
 			line_txt = addSubString(line_txt,"0",115);
 			line_txt = addSubString(line_txt,"0",121);
@@ -1217,7 +1216,6 @@ public class CricketFunctions {
 			line_txt = addSubString(line_txt,OtherBatsman,131);
 			line_txt = addSubString(line_txt,this_over_run,157);
 			  
-			
 			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT), 
 					Arrays.asList(line_txt), StandardOpenOption.APPEND);
 			break;
@@ -1243,7 +1241,8 @@ public class CricketFunctions {
 			max_inn = 4;
 		}
 		switch(type.toUpperCase()){
-		case"FULL_WRITE":
+		case "FULL_WRITE":
+			
 			txt = addSubString(txt,"============================================================================================================================================================" + "\n\n",0);
 			txt = addSubString(txt,"# 174-178               Spin text" + "\n",0);
 			txt = addSubString(txt,"# 167-172               Shot type code" + "\n",0);
@@ -1275,13 +1274,13 @@ public class CricketFunctions {
 			txt = addSubString(txt,"============================================================================================================================================================" + "\n\n",0);
 
 			if(Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT))) {
-				//Files.delete(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT));
-				FileOutputStream fs=new FileOutputStream(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT);
+				FileOutputStream fs=new FileOutputStream(CricketUtil.CRICKET_SERVER_DIRECTORY 
+					+ CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT);
 				fs.write(new byte[0]);
 				fs.close();
 			}
 			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT), 
-					Arrays.asList(txt), StandardOpenOption.CREATE);
+				Arrays.asList(txt), StandardOpenOption.CREATE);
 		
 			line_txt = addSubString(line_txt,"Inns",2);
 			line_txt = addSubString(line_txt,"Batsman",8);
@@ -1308,19 +1307,16 @@ public class CricketFunctions {
 		    for (int i = 0; i <= match.getEventFile().getEvents().size() - 1; i++)
 		    {
 			  if(match.getEventFile().getEvents().get(i).getEventInningNumber() >= 1 && match.getEventFile().getEvents().get(i).getEventInningNumber() <= max_inn) {
-				
 				  setInteractiveData(match,line_txt,i);
 		    }
-	    }
-		    
+		    }
 		    break;
 		case"OVERWRITE":
 			  if(match.getEventFile().getEvents().get(match.getEventFile().getEvents().size() - 1).getEventInningNumber() == inning.getInningNumber() &&
-					  inning.getTotalOvers() == match.getEventFile().getEvents().get(match.getEventFile().getEvents().size() - 1).getEventOverNo() &&
-					  inning.getTotalBalls() == match.getEventFile().getEvents().get(match.getEventFile().getEvents().size() - 1).getEventBallNo() &&
-					  match.getEventFile().getEvents().get(match.getEventFile().getEvents().size() - 1).getEventInningNumber() <= max_inn) 
+				  inning.getTotalOvers() == match.getEventFile().getEvents().get(match.getEventFile().getEvents().size() - 1).getEventOverNo() &&
+				  inning.getTotalBalls() == match.getEventFile().getEvents().get(match.getEventFile().getEvents().size() - 1).getEventBallNo() &&
+				  match.getEventFile().getEvents().get(match.getEventFile().getEvents().size() - 1).getEventInningNumber() <= max_inn) 
 			  {
-				  
 				  setInteractiveData(match,line_txt,match.getEventFile().getEvents().size() - 1);
 			  }
 			break;

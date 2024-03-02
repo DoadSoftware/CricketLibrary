@@ -9,7 +9,7 @@ public class BowlingCard implements Comparable<BowlingCard> {
   private Player player;
 
   private int bowlingPosition;
-  
+
   private String status;
 
   private String economyRate;
@@ -45,6 +45,8 @@ public class BowlingCard implements Comparable<BowlingCard> {
   private int totalRunsThisOver;
 
   private List<Speed> speeds;
+
+  private String ballTypeOverNo;
   
 public BowlingCard() {
 	super();
@@ -88,6 +90,13 @@ public int getBowlerFigureSortData() {
 public List<Speed> getSpeeds() {
 	return speeds;
 }
+public String getBallTypeOverNo() {
+	return ballTypeOverNo;
+}
+public void setBallTypeOverNo(String ballTypeOverNo) {
+	this.ballTypeOverNo = ballTypeOverNo;
+}
+
 public void setSpeeds(List<Speed> speeds) {
 	this.speeds = speeds;
 }

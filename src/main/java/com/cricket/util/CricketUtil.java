@@ -2,6 +2,7 @@ package com.cricket.util;
 
 public class CricketUtil {
 
+	public final static String ISPL = "ISPL";
 	public final static String DOAD = "DOAD";
 	public final static String DOAD_FRUIT = "DOAD_FRUIT";
 	public final static String ISPL_FRUIT = "ISPL_FRUIT";
