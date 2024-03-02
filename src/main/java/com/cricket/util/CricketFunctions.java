@@ -96,26 +96,6 @@ public class CricketFunctions {
 		return cricket_data;
 	}
 	
-	public static String gettournamentFoursAndSixes(List<MatchAllData> tournament_matches,MatchAllData currentMatch) 
-	{
-		int Four = 0, Six = 0;
-		for(MatchAllData match : tournament_matches) {
-			if(!match.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
-				for(Inning inn : match.getMatch().getInning()) {
-					Four = Four + inn.getTotalFours();
-					Six = Six + inn.getTotalSixes();
-				}
-			}else {
-				for(Inning inn : currentMatch.getMatch().getInning()) {
-					Four = Four + inn.getTotalFours();
-					Six = Six + inn.getTotalSixes();
-				}
-			}
-		}
-		System.out.println(Four + "," + Six);
-		return Four + "," + Six;
-	}
-	
 	public static MatchAllData getMatchDataFromWebsite(WebDriver driver, String whatToProcess, 
 		String broadcaster, String valueToProcess, List<Team> all_teams) throws StreamWriteException, DatabindException, JAXBException, IOException, URISyntaxException
 	{
@@ -981,18 +961,18 @@ public class CricketFunctions {
 	
 	public static String getInteractive(MatchAllData match) throws IOException {
 
-//		if(match.getSetup() == null || (match.getSetup().getGenerateInteractiveFile() == null 
-//			|| match.getSetup().getGenerateInteractiveFile().equalsIgnoreCase(CricketUtil.NO))) {
-//			return "";
-//		}
+		if(match.getSetup() == null || (match.getSetup().getGenerateInteractiveFile() == null 
+			|| match.getSetup().getGenerateInteractiveFile().equalsIgnoreCase(CricketUtil.NO))) {
+			return "";
+		}
 		if(match.getEventFile() == null || (match.getEventFile().getEvents() == null 
 			|| match.getEventFile().getEvents().size() <= 0)) {
 			return "";
 		}
 		
 		String this_ball_data = "", Bowler = "", Batsman = "", OtherBatsman = "", 
-				over_number = "", over_ball = "", inning_number = "",batsman_style = "",
-				bowler_handed = "",this_over = "",this_over_run = "",shot = "-",wagonX = "0", wagonY = "0";
+			over_number = "", over_ball = "", inning_number = "",batsman_style = "",
+			bowler_handed = "",this_over = "",this_over_run = "",shot = "-",wagonX = "0", wagonY = "0";
 		int j = 0;
 	      
 		String line_txt = String.format("%-140s", "");
@@ -1068,7 +1048,7 @@ public class CricketFunctions {
 			
 			  switch (match.getEventFile().getEvents().get(i).getEventType().toUpperCase()) {
 			  case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-			  case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: 
+			  case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: 
 			  case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
 				  
 				  line_txt = String.format("%-140s", "");
@@ -1162,7 +1142,7 @@ public class CricketFunctions {
 		    		
 				  switch (match.getEventFile().getEvents().get(i).getEventType().toUpperCase()){
 				    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-				    case CricketUtil.FOUR: case CricketUtil.SIX:
+				    case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
 				    	this_ball_data = String.valueOf(match.getEventFile().getEvents().get(i).getEventRuns());
 				    	this_over_run = this_ball_data;
 				    	line_txt = addSubString(line_txt,this_ball_data,74);
@@ -2064,7 +2044,7 @@ public class CricketFunctions {
 			if(PlayerId == match.getEventFile().getEvents().get(i).getEventBatterNo()) {
 				switch (match.getEventFile().getEvents().get(i).getEventType()) {
 				case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR: 
-				case CricketUtil.FIVE: case CricketUtil.SIX: case CricketUtil.LOG_WICKET:
+				case CricketUtil.FIVE: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.LOG_WICKET:
 					
 					if(getBowlerType(cricketService.getAllPlayer().get(match.getEventFile().getEvents().get(i).getEventBowlerNo()-1)
 							.getBowlingStyle()).equalsIgnoreCase("PACE")) {
@@ -4318,8 +4298,9 @@ public class CricketFunctions {
 							+ match.getMatch().getInning().get(inning_number-1).getTotalBalls());
 					
 					switch (events.get(i).getEventType()) {
-					case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR:  case CricketUtil.FIVE: case CricketUtil.SIX: 
-					case CricketUtil.LEG_BYE: case CricketUtil.BYE: case CricketUtil.LOG_WICKET:
+					case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR:  
+					case CricketUtil.FIVE: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.LEG_BYE: case CricketUtil.BYE: 
+					case CricketUtil.LOG_WICKET:
 						total_balls = total_balls + 1 ;
 						total_runs = total_runs + events.get(i).getEventRuns();
 						break;
@@ -4362,7 +4343,7 @@ public class CricketFunctions {
 					if(playerId == events.get(i).getEventBatterNo()) {
 						switch (events.get(i).getEventType()) {
 						case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR:  case CricketUtil.FIVE:
-						case CricketUtil.SIX: case CricketUtil.LOG_WICKET:
+						case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.LOG_WICKET:
 							total_balls = total_balls + 1 ;
 							count_balls = count_balls + 1 ;
 							total_runs = total_runs + events.get(i).getEventRuns();
@@ -4400,7 +4381,7 @@ public class CricketFunctions {
 	
 	public static List<String> getScoreTypeData(String whatToProcess, MatchAllData match, List<Integer> inning_numbers, int player_id, String separator) {
 	    List<String> return_score_data = new ArrayList<>();
-	    int[] dots = {0, 0}, ones = {0, 0}, twos = {0, 0}, threes = {0, 0}, fours = {0, 0}, fives = {0, 0}, sixes = {0, 0};
+	    int[] dots = {0, 0}, ones = {0, 0}, twos = {0, 0}, threes = {0, 0}, fours = {0, 0}, fives = {0, 0}, sixes = {0, 0}, nines = {0, 0};
 
 	    boolean go_ahead = false;
 
@@ -4448,6 +4429,12 @@ public class CricketFunctions {
 	                            	if(evnt.getEventWasABoundary() != null && 
 	                            		evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
 	                            		sixes[inn_num - 1]++;
+	                            	}
+	                                break;
+	                            case CricketUtil.NINE:
+	                            	if(evnt.getEventWasABoundary() != null && 
+	                            		evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+	                            		nines[inn_num - 1]++;
 	                            	}
 	                                break;
 	                            case CricketUtil.DOT:
@@ -4504,11 +4491,11 @@ public class CricketFunctions {
 
 	    return_score_data.add(String.valueOf(dots[0]) + separator + String.valueOf(ones[0]) + separator + String.valueOf(twos[0]) +
 	            separator + String.valueOf(threes[0]) + separator + String.valueOf(fours[0]) + separator + String.valueOf(fives[0]) +
-	            separator + String.valueOf(sixes[0]));
+	            separator + String.valueOf(sixes[0]) + separator + String.valueOf(nines[0]));
 
 	    return_score_data.add(String.valueOf(dots[1]) + separator + String.valueOf(ones[1]) + separator + String.valueOf(twos[1]) +
 	            separator + String.valueOf(threes[1]) + separator + String.valueOf(fours[1]) + separator + String.valueOf(fives[1]) +
-	            separator + String.valueOf(sixes[1]));
+	            separator + String.valueOf(sixes[1]) + separator + String.valueOf(nines[1]));
 
 	    return return_score_data;
 	}
@@ -4524,7 +4511,7 @@ public class CricketFunctions {
 	                if (event.get(i).getEventInningNumber() == inn_num) {
 	                	switch(event.get(i).getEventType()) {
 							case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-							case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.LOG_WICKET: //case CricketUtil.LOG_ANY_BALL:
+							case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.LOG_WICKET: //case CricketUtil.LOG_ANY_BALL:
 							case CricketUtil.BYE: case CricketUtil.LEG_BYE:
 								ballCount[inn_num-1] ++;
 								break;										
@@ -4534,7 +4521,7 @@ public class CricketFunctions {
 			        			switch (event.get(i).getEventType())
 			                    {
 			                    	case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-			                    	case CricketUtil.FOUR: case CricketUtil.SIX:
+			                    	case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
 			                            totalRuns[inn_num-1] += event.get(i).getEventRuns();
 			                            break;
 			                    	case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
@@ -4582,7 +4569,7 @@ public class CricketFunctions {
 			                        {
 			        				
 			                        	case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-			                        	case CricketUtil.FOUR: case CricketUtil.SIX:
+			                        	case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
 			                                totalRuns[inn_num-1] += event.get(i).getEventRuns();
 			                                break;
 			
@@ -4645,7 +4632,7 @@ public class CricketFunctions {
 	                if (events.get(i).getEventInningNumber() == inn_num) {
 	                	switch(events.get(i).getEventType()) {
 							case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-							case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.LOG_WICKET: //case CricketUtil.LOG_ANY_BALL:
+							case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.LOG_WICKET: //case CricketUtil.LOG_ANY_BALL:
 							case CricketUtil.BYE: case CricketUtil.LEG_BYE:
 								ballCount[inn_num-1]++;
 								break;
@@ -4747,52 +4734,52 @@ public class CricketFunctions {
 	            			switch (events.get(i).getEventType())
 	                        {
 	                        case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-	    					case CricketUtil.FOUR: case CricketUtil.SIX:
+	    					case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
 	                                totalRuns[inn_num-1] += events.get(i).getEventRuns();
 	                                break;
 
-	                            case CricketUtil.WIDE:
-	                            	if(ballCount[inn_num-1] == 90 && events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)&& (match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20)||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20))||
-	                            			ballCount[inn_num-1] == 36 && events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)&&match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10)||
-	                            			ballCount[inn_num-1] == EndOver && events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)&& (match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.OD)||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI))) {
-	                                    break;
-	                            	}else {
-	                            		totalRuns[inn_num-1] += events.get(i).getEventRuns();
-	                                    break;
-	                            	}
-	                            case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
-	                                totalRuns[inn_num-1] += events.get(i).getEventRuns();
-	                                break;
-	                            case CricketUtil.LOG_WICKET:
-	                                if (events.get(i).getEventRuns() > 0)
-	                                {
-	                                    totalRuns[inn_num-1] += events.get(i).getEventRuns();
-	                                }
-	                                totalWickets[inn_num-1] += 1;
-	                                break;
+                            case CricketUtil.WIDE:
+                            	if(ballCount[inn_num-1] == 90 && events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)&& (match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20)||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20))||
+                            			ballCount[inn_num-1] == 36 && events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)&&match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10)||
+                            			ballCount[inn_num-1] == EndOver && events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)&& (match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.OD)||match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI))) {
+                                    break;
+                            	}else {
+                            		totalRuns[inn_num-1] += events.get(i).getEventRuns();
+                                    break;
+                            	}
+                            case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+                                totalRuns[inn_num-1] += events.get(i).getEventRuns();
+                                break;
+                            case CricketUtil.LOG_WICKET:
+                                if (events.get(i).getEventRuns() > 0)
+                                {
+                                    totalRuns[inn_num-1] += events.get(i).getEventRuns();
+                                }
+                                totalWickets[inn_num-1] += 1;
+                                break;
 
-	                            case CricketUtil.LOG_ANY_BALL:
-	                                totalRuns[inn_num-1] += events.get(i).getEventRuns();
-	                                if (events.get(i).getEventExtra() != null)
-	                                {
-	                                    totalRuns[inn_num-1] += events.get(i).getEventExtraRuns();
-	                                }
-	                                if (events.get(i).getEventSubExtra() != null)
-	                                {
-	                                    totalRuns[inn_num-1] += events.get(i).getEventSubExtraRuns();
-	                                }
-	                                if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty())
-	                                {
-	                                    totalWickets[inn_num-1] += 1;
-	                                }
-	                                break;
+                            case CricketUtil.LOG_ANY_BALL:
+                                totalRuns[inn_num-1] += events.get(i).getEventRuns();
+                                if (events.get(i).getEventExtra() != null)
+                                {
+                                    totalRuns[inn_num-1] += events.get(i).getEventExtraRuns();
+                                }
+                                if (events.get(i).getEventSubExtra() != null)
+                                {
+                                    totalRuns[inn_num-1] += events.get(i).getEventSubExtraRuns();
+                                }
+                                if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty())
+                                {
+                                    totalWickets[inn_num-1] += 1;
+                                }
+                                break;
 	                        }
 	            		} else if(ballCount[inn_num-1] > ((StartOver - 1) * 6) && ballCount[inn_num-1] == (EndOver * 6)) {
 	            			if(!events.get(i-2).getEventType().equalsIgnoreCase(CricketUtil.END_OVER) || !events.get(i-2).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
 	            				switch (events.get(i).getEventType())
 	                            {
 	                            	case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-	                            	case CricketUtil.FOUR: case CricketUtil.SIX:
+	                            	case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
 	                                    totalRuns[inn_num-1] += events.get(i).getEventRuns();
 	                                    break;
 
@@ -4866,7 +4853,7 @@ public class CricketFunctions {
 	                if (events.get(i).getEventInningNumber() == inn_num) {
 	                	switch(events.get(i).getEventType()) {
 							case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-							case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.LOG_WICKET: //case CricketUtil.LOG_ANY_BALL:
+							case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.LOG_WICKET: //case CricketUtil.LOG_ANY_BALL:
 							case CricketUtil.BYE: case CricketUtil.LEG_BYE:
 								ballCount[inn_num-1]++;
 								break;
@@ -4933,7 +4920,7 @@ public class CricketFunctions {
                 			switch (events.get(i).getEventType())
                             {
                             	case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-                            	case CricketUtil.FOUR: case CricketUtil.SIX:
+                            	case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
                                     totalRuns[inn_num-1] += events.get(i).getEventRuns();
                                     break;
 
@@ -5044,7 +5031,7 @@ public class CricketFunctions {
 	public static String getFirstPowerPlayScore(MatchAllData match, int inn_num, List<Event> events)
     {
 
-        int total_run_PP = 0, total_wickets_PP = 0,ball_count = 0,Fours=0,Sixes=0,Dots = 0;
+        int total_run_PP = 0, total_wickets_PP = 0,ball_count = 0,Fours=0,Sixes=0,Dots = 0,Nines=0;
         if((events != null) && (events.size() > 0)) 
         {
         	for (int i = 0; i <= events.size() - 1; i++)
@@ -5053,7 +5040,7 @@ public class CricketFunctions {
                 {
             		switch(events.get(i).getEventType()) {
 					case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-					case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.LOG_WICKET: //case CricketUtil.LOG_ANY_BALL:
+					case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.LOG_WICKET: //case CricketUtil.LOG_ANY_BALL:
 					case CricketUtil.BYE: case CricketUtil.LEG_BYE:
 						ball_count = ball_count + 1;
 						break;
@@ -5064,7 +5051,7 @@ public class CricketFunctions {
             			switch (events.get(i).getEventType())
                         {
                         	case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-                        	case CricketUtil.FOUR: case CricketUtil.SIX:
+                        	case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
                                 total_run_PP += events.get(i).getEventRuns();
                                 switch(events.get(i).getEventType()) {
 	                        	case CricketUtil.FOUR:
@@ -5077,6 +5064,12 @@ public class CricketFunctions {
 	                        		if(events.get(i).getEventWasABoundary() != null && 
 	                        			events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
 	                        			Sixes ++;
+	                        		}
+	                        		break;
+	                        	case CricketUtil.NINE:
+	                        		if(events.get(i).getEventWasABoundary() != null && 
+	                        			events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+	                        			Nines ++;
 	                        		}
 	                        		break;
 	                        	case CricketUtil.DOT:
@@ -5130,7 +5123,7 @@ public class CricketFunctions {
             				switch (events.get(i).getEventType())
                             {
                             	case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-                            	case CricketUtil.FOUR: case CricketUtil.SIX:
+                            	case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
                                     total_run_PP += events.get(i).getEventRuns();
                                     switch(events.get(i).getEventType()) {
                                     case CricketUtil.FOUR:
@@ -5143,6 +5136,12 @@ public class CricketFunctions {
     	                        		if(events.get(i).getEventWasABoundary() != null && 
     	                        			events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
     	                        			Sixes ++;
+    	                        		}
+    	                        		break;
+    	                        	case CricketUtil.NINE:
+    	                        		if(events.get(i).getEventWasABoundary() != null && 
+    	                        			events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+    	                        			Nines ++;
     	                        		}
     	                        		break;
     	                        	case CricketUtil.DOT:
@@ -5195,12 +5194,12 @@ public class CricketFunctions {
                 }
             }
         }
-        return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP)+","+Fours+","+Sixes+","+Dots;
+        return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP)+","+Fours+","+Sixes+","+Dots+","+Nines;
     }
     public static String getSecPowerPlayScore(MatchAllData match, int inn_num, List<Event> events)
     {
 
-        int total_run_PP = 0, total_wickets_PP = 0,ball_count = 0,Fours=0,Sixes=0,Dots = 0;
+        int total_run_PP = 0, total_wickets_PP = 0,ball_count = 0,Fours=0,Sixes=0,Dots = 0,Nines=0;
         int StartOver=0,EndOver=0;
         if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.OD) || match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
         	StartOver = match.getMatch().getInning().get(inn_num-1).getSecondPowerplayStartOver();
@@ -5217,7 +5216,7 @@ public class CricketFunctions {
                 {
         			switch(events.get(i).getEventType()) {
 					case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-					case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.LOG_WICKET: //case CricketUtil.LOG_ANY_BALL:
+					case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.LOG_WICKET: //case CricketUtil.LOG_ANY_BALL:
 					case CricketUtil.BYE: case CricketUtil.LEG_BYE:
 						ball_count = ball_count + 1;
 						break;
@@ -5240,7 +5239,7 @@ public class CricketFunctions {
             			switch (events.get(i).getEventType())
                         {
                         case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-    					case CricketUtil.FOUR: case CricketUtil.SIX:
+    					case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
                                 total_run_PP += events.get(i).getEventRuns();
                                 switch(events.get(i).getEventType()) {
                                 case CricketUtil.FOUR:
@@ -5253,6 +5252,12 @@ public class CricketFunctions {
 	                        		if(events.get(i).getEventWasABoundary() != null && 
 	                        			events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
 	                        			Sixes ++;
+	                        		}
+	                        		break;
+	                        	case CricketUtil.NINE:
+	                        		if(events.get(i).getEventWasABoundary() != null && 
+	                        			events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+	                        			Nines ++;
 	                        		}
 	                        		break;
 	                        	case CricketUtil.DOT:
@@ -5311,7 +5316,7 @@ public class CricketFunctions {
             				switch (events.get(i).getEventType())
                             {
                             	case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-                            	case CricketUtil.FOUR: case CricketUtil.SIX:
+                            	case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
                                     total_run_PP += events.get(i).getEventRuns();
                                     switch(events.get(i).getEventType()) {
                                     case CricketUtil.FOUR:
@@ -5324,6 +5329,12 @@ public class CricketFunctions {
     	                        		if(events.get(i).getEventWasABoundary() != null && 
     	                        			events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
     	                        			Sixes ++;
+    	                        		}
+    	                        		break;
+    	                        	case CricketUtil.NINE:
+    	                        		if(events.get(i).getEventWasABoundary() != null && 
+    	                        			events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+    	                        			Nines ++;
     	                        		}
     	                        		break;
     	                        	case CricketUtil.DOT:
@@ -5382,12 +5393,11 @@ public class CricketFunctions {
                 }
             }
         }
-        return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP)+","+Fours+","+Sixes+","+Dots;
+        return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP)+","+Fours+","+Sixes+","+Dots+","+Nines;
     }
     public static String getThirdPowerPlayScore(MatchAllData match, int inn_num, List<Event> events)
     {
-
-        int total_run_PP = 0, total_wickets_PP = 0,ball_count = 0,Fours=0,Sixes=0,Dots=0;
+        int total_run_PP = 0, total_wickets_PP = 0,ball_count = 0,Fours=0,Sixes=0,Dots=0,Nines=0;
         int StartOver=0,EndOver=0;
         if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.OD) || match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
         	StartOver = match.getMatch().getInning().get(inn_num-1).getThirdPowerplayStartOver();
@@ -5404,7 +5414,7 @@ public class CricketFunctions {
                     {
                 		switch(events.get(i).getEventType()) {
     					case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-    					case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.LOG_WICKET: //case CricketUtil.LOG_ANY_BALL:
+    					case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.LOG_WICKET: //case CricketUtil.LOG_ANY_BALL:
     					case CricketUtil.BYE: case CricketUtil.LEG_BYE:
     						ball_count = ball_count + 1;
     						break;
@@ -5420,7 +5430,7 @@ public class CricketFunctions {
                 			switch (events.get(i).getEventType())
                             {
                             	case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-                            	case CricketUtil.FOUR: case CricketUtil.SIX:
+                            	case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
                                     total_run_PP += events.get(i).getEventRuns();
                                     switch(events.get(i).getEventType()) {
                                     case CricketUtil.FOUR:
@@ -5433,6 +5443,12 @@ public class CricketFunctions {
     	                        		if(events.get(i).getEventWasABoundary() != null && 
     	                        			events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
     	                        			Sixes ++;
+    	                        		}
+    	                        		break;
+    	                        	case CricketUtil.NINE:
+    	                        		if(events.get(i).getEventWasABoundary() != null && 
+    	                        			events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+    	                        			Nines ++;
     	                        		}
     	                        		break;
     	                        	case CricketUtil.DOT:
@@ -5485,7 +5501,7 @@ public class CricketFunctions {
                 }
             }
         //System.out.println(String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP));
-        return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP)+","+Fours+","+Sixes+","+Dots;
+        return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP)+","+Fours+","+Sixes+","+Dots+","+Nines;
     }
 
 	
@@ -6090,7 +6106,7 @@ public class CricketFunctions {
 					    case CricketUtil.SIX: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
 					    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
 					    	
-					    	total_runs = total_runs + events.get(i).getEventRuns() ;
+					    	total_runs = total_runs + events.get(i).getEventRuns();
 					    	
 					    	switch (events.get(i).getEventType().toUpperCase()) {
 						    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
@@ -6140,20 +6156,20 @@ public class CricketFunctions {
 		if(total_runs > 0 || total_wickets > 0) {
 	    	switch (processPowerPlay(CricketUtil.FULL, match).replace(CricketUtil.POWERPLAY, "").trim()) {
 	    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
-	    		System.out.println("INN : " + events.get(events.size()-1).getEventInningNumber() + " - OVER : " + events.get(events.size()-1).getEventOverNo() +
-	    				" - RUNS/WICKETS : " + total_runs + "/" + total_wickets);
+	    		System.out.println("INN : " + events.get(events.size()-1).getEventInningNumber() 
+	    			+ " - OVER : " + events.get(events.size()-1).getEventOverNo() +
+	    			" - RUNS/WICKETS : " + total_runs + "/" + total_wickets);
 	    		over_by_over_data.add(new OverByOverData(inn_num, 
 		    			events.get(events.size()-1).getEventOverNo(), total_runs, total_wickets, true));
 	    		break;
 	    	default:
 		    	over_by_over_data.add(new OverByOverData(inn_num, 
-		    			events.get(events.size()-1).getEventOverNo(), total_runs, total_wickets, false));
+		    		events.get(events.size()-1).getEventOverNo(), total_runs, total_wickets, false));
 	    		break;
 	    	}
 		}
 		return over_by_over_data;
 	}
-	
 	public static String generateStrikeRate(int runs, int balls, int numberOfDecimals) {
 		
 		String strike_rate = "";

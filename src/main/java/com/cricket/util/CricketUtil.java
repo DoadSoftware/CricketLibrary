@@ -129,6 +129,7 @@ public class CricketUtil {
 	
 	public final static String INNING_STATUS = "INNING_STATUS";
 	public final static String SELECT_INNING = "SELECT_INNING";
+	public final static String LOG_50_50 = "LOG_50_50";
 	public final static String LOG_EVENT = "LOG_EVENT";
 	public final static String LOG_WICKET = "LOG_WICKET";
 	public final static String LOAD_MATCH = "LOAD_MATCH";
