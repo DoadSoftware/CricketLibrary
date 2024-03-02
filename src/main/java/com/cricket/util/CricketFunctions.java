@@ -5307,7 +5307,7 @@ public class CricketFunctions {
                                 break;
                         }
             		} else if(ball_count > ((StartOver - 1) * Integer.valueOf(match.getSetup().getBallsPerOver())) && ball_count == (EndOver * Integer.valueOf(match.getSetup().getBallsPerOver()))) {
-            			if(!events.get(i-2).getEventType().equalsIgnoreCase(CricketUtil.END_OVER) || !events.get(i-2).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
+            			if(!events.get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER) || !events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
             				switch (events.get(i).getEventType())
                             {
                             	case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:

@@ -40,6 +40,8 @@ public class Inning {
   private int totalFours;
 
   private int totalSixes;
+  
+  private int totalNines;
 
   private String runRate;
   
@@ -225,6 +227,14 @@ public void setTotalSixes(int totalSixes) {
 	this.totalSixes = totalSixes;
 }
 
+public int getTotalNines() {
+	return totalNines;
+}
+
+public void setTotalNines(int totalNines) {
+	this.totalNines = totalNines;
+}
+
 public List<Player> getFielders() {
 	return fielders;
 }
@@ -348,14 +358,21 @@ public void setBowlingCard(List<BowlingCard> bowlingCard) {
 
 @Override
 public String toString() {
-	return "Inning [inningNumber=" + inningNumber + ", battingTeamId=" + battingTeamId + ", bowlingTeamId="
-			+ bowlingTeamId + ", totalRuns=" + totalRuns + ", totalWickets=" + totalWickets + ", totalOvers="
-			+ totalOvers + ", totalBalls=" + totalBalls + ", totalExtras=" + totalExtras + ", totalWides=" + totalWides
-			+ ", totalNoBalls=" + totalNoBalls + ", totalByes=" + totalByes + ", totalLegByes=" + totalLegByes
-			+ ", totalPenalties=" + totalPenalties + ", totalFours=" + totalFours + ", totalSixes=" + totalSixes
-			+ ", isCurrentInning=" + isCurrentInning + ", inningStatus=" + inningStatus + ", batting_team="
-			+ batting_team + ", bowling_team=" + bowling_team + ", battingCard=" + battingCard + ", bowlingCard="
-			+ bowlingCard + ", fielders=" + fielders + "]";
+	return "Inning [isDeclared=" + isDeclared + ", inningNumber=" + inningNumber + ", battingTeamId=" + battingTeamId
+			+ ", bowlingTeamId=" + bowlingTeamId + ", totalRuns=" + totalRuns + ", totalWickets=" + totalWickets
+			+ ", totalOvers=" + totalOvers + ", totalBalls=" + totalBalls + ", totalExtras=" + totalExtras
+			+ ", totalWides=" + totalWides + ", totalNoBalls=" + totalNoBalls + ", totalByes=" + totalByes
+			+ ", totalLegByes=" + totalLegByes + ", totalPenalties=" + totalPenalties + ", totalFours=" + totalFours
+			+ ", totalSixes=" + totalSixes + ", totalNines=" + totalNines + ", runRate=" + runRate
+			+ ", isCurrentInning=" + isCurrentInning + ", inningStatus=" + inningStatus + ", firstPowerplayStartOver="
+			+ firstPowerplayStartOver + ", firstPowerplayEndOver=" + firstPowerplayEndOver
+			+ ", secondPowerplayStartOver=" + secondPowerplayStartOver + ", secondPowerplayEndOver="
+			+ secondPowerplayEndOver + ", thirdPowerplayStartOver=" + thirdPowerplayStartOver
+			+ ", thirdPowerplayEndOver=" + thirdPowerplayEndOver + ", oversRemaining=" + oversRemaining
+			+ ", batting_team=" + batting_team + ", bowling_team=" + bowling_team + ", battingCard=" + battingCard
+			+ ", partnerships=" + partnerships + ", bowlingCard=" + bowlingCard + ", fielders=" + fielders
+			+ ", reviews=" + reviews + ", fallsOfWickets=" + fallsOfWickets + ", spells=" + spells + ", stats=" + stats
+			+ "]";
 }
 
 }

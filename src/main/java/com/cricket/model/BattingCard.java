@@ -18,6 +18,8 @@ public class BattingCard implements Comparable<BattingCard>{
   private int fours;
   
   private int sixes;
+  
+  private int nines;
 
   private int balls;
   
@@ -71,7 +73,7 @@ public BattingCard(Player player) {
 	super();
 	this.player = player;
 }
-public BattingCard(int playerId, int batterPosition, String battingStyle, int runs, int fours, int sixes, int balls,
+public BattingCard(int playerId, int batterPosition, String battingStyle, int runs, int fours, int sixes, int nines, int balls,
 		int howOutFielderId, int howOutBowlerId, String batsmanInningStarted, String status, String onStrike,
 		String howOutText, String howOut, String howOutPartOne, String howOutPartTwo, String strikeRate,
 		String wasHowOutFielderSubstitute, int concussionPlayerId, long seconds, Player player,
@@ -83,6 +85,7 @@ public BattingCard(int playerId, int batterPosition, String battingStyle, int ru
 	this.runs = runs;
 	this.fours = fours;
 	this.sixes = sixes;
+	this.nines = nines;
 	this.balls = balls;
 	this.howOutFielderId = howOutFielderId;
 	this.howOutBowlerId = howOutBowlerId;
@@ -118,6 +121,7 @@ public BattingCard(int playerId, int runs, int fours, int sixes, int balls) {
 	this.runs = runs;
 	this.fours = fours;
 	this.sixes = sixes;
+	this.nines = nines;
 	this.balls = balls;
 }
 
@@ -188,6 +192,12 @@ public int getSixes() {
 }
 public void setSixes(int sixes) {
 	this.sixes = sixes;
+}
+public int getNines() {
+	return nines;
+}
+public void setNines(int nines) {
+	this.nines = nines;
 }
 public String getHowOutText() {
 	return howOutText;
@@ -274,15 +284,18 @@ public Player getPlayer() {
 public void setPlayer(Player player) {
 	this.player = player;
 }
+
 @Override
 public String toString() {
-	return "BattingCard [playerId=" + playerId + ", batterPosition=" + batterPosition + ", runs=" + runs + ", fours="
-			+ fours + ", sixes=" + sixes + ", balls=" + balls + ", howOutFielderId=" + howOutFielderId
-			+ ", howOutBowlerId=" + howOutBowlerId + ", batsmanInningStarted=" + batsmanInningStarted + ", status="
-			+ status + ", onStrike=" + onStrike + ", howOutText=" + howOutText + ", howOut=" + howOut
-			+ ", howOutFielder=" + howOutFielder + ", howOutBowler=" + howOutBowler + ", WasHowOutFielderSubstitute="
-			+ WasHowOutFielderSubstitute + ", concussionPlayerId=" + concussionPlayerId + ", player=" + player
-			+ ", concussion_player=" + concussion_player + "]";
+	return "BattingCard [playerId=" + playerId + ", batterPosition=" + batterPosition + ", battingStyle=" + battingStyle
+			+ ", runs=" + runs + ", fours=" + fours + ", sixes=" + sixes + ", nines=" + nines + ", balls=" + balls
+			+ ", howOutFielderId=" + howOutFielderId + ", howOutBowlerId=" + howOutBowlerId + ", batsmanInningStarted="
+			+ batsmanInningStarted + ", status=" + status + ", onStrike=" + onStrike + ", howOutText=" + howOutText
+			+ ", howOut=" + howOut + ", howOutPartOne=" + howOutPartOne + ", howOutPartTwo=" + howOutPartTwo
+			+ ", strikeRate=" + strikeRate + ", WasHowOutFielderSubstitute=" + WasHowOutFielderSubstitute
+			+ ", concussionPlayerId=" + concussionPlayerId + ", seconds=" + seconds + ", player=" + player
+			+ ", concussion_player=" + concussion_player + ", howOutFielder=" + howOutFielder + ", howOutBowler="
+			+ howOutBowler + "]";
 }
 @Override
 public int compareTo(BattingCard bc) {
