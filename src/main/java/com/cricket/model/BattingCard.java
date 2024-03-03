@@ -120,7 +120,6 @@ public BattingCard(int playerId, int runs, int fours, int sixes, int balls) {
 	this.runs = runs;
 	this.fours = fours;
 	this.sixes = sixes;
-	this.nines = nines;
 	this.balls = balls;
 }
 
@@ -298,6 +297,23 @@ public String toString() {
 @Override
 public int compareTo(BattingCard bc) {
 	return (int) (this.getBatterPosition()-bc.getBatterPosition());
+}
+@Override
+public int hashCode() {
+	return playerId;
+}
+@Override
+public boolean equals(Object obj) {
+	if (this == obj)
+		return true;
+	if (obj == null)
+		return false;
+	if (getClass() != obj.getClass())
+		return false;
+	BattingCard other = (BattingCard) obj;
+	if (playerId != other.playerId)
+		return false;
+	return true;
 }
 
 }
