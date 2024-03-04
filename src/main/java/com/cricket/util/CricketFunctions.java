@@ -1117,11 +1117,13 @@ public class CricketFunctions {
 				    				this_ball_data = match.getEventFile().getEvents().get(i).getEventExtra();
 				    			}
 			    			}else {
-			    				this_over_run = match.getEventFile().getEvents().get(i).getEventSubExtra().charAt(0) + String.valueOf(match.getEventFile().getEvents().get(i).getEventSubExtraRuns());
+			    				if(match.getEventFile().getEvents().get(i).getEventSubExtra() != null && match.getEventFile().getEvents().get(i).getEventSubExtra().length() > 0) {
+				    				this_over_run = match.getEventFile().getEvents().get(i).getEventSubExtra().charAt(0) + String.valueOf(match.getEventFile().getEvents().get(i).getEventSubExtraRuns());
+			    				}
 				    			int runs = (match.getEventFile().getEvents().get(i).getEventRuns() + match.getEventFile().getEvents().get(i).getEventExtraRuns() + 
 			    						match.getEventFile().getEvents().get(i).getEventSubExtraRuns());
 			    				line_txt = addSubString(line_txt,String.valueOf(runs),74);
-					          this_ball_data = String.valueOf(match.getEventFile().getEvents().get(i).getEventSubExtraRuns()) + match.getEventFile().getEvents().get(i).getEventSubExtra();
+					            this_ball_data = String.valueOf(match.getEventFile().getEvents().get(i).getEventSubExtraRuns()) + match.getEventFile().getEvents().get(i).getEventSubExtra();
 			    			}
 			    		}else {
 			    			if(!match.getEventFile().getEvents().get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)&&
