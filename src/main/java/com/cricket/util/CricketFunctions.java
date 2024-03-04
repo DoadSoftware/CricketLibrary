@@ -6771,7 +6771,7 @@ public class CricketFunctions {
 		    	if (((match.getMatch().getInning().get(whichInning - 1)).getTotalRuns() > 0) || 
 		  		      ((match.getMatch().getInning().get(whichInning - 1)).getTotalOvers() > 0) || 
 		  		      ((match.getMatch().getInning().get(whichInning - 1)).getTotalBalls() > 0)) {
-		  		      return "Current Run Rate " + (match.getMatch().getInning().get(0)).getRunRate();
+		  		      return "Current Run Rate " + match.getMatch().getInning().get(whichInning - 1).getRunRate();
 		  		    }
 		    	else {
 		    		return CricketFunctions.generateTossResult(match, CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL, CricketUtil.CHOSE);
