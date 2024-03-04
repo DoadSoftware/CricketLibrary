@@ -7314,7 +7314,7 @@ public class CricketFunctions {
 
 	public static String getScoreTypeData(String whatToProcess, MatchAllData match, int inning_number, int player_id, String seperator, List<Event> events) 
 	{
-		int dots = 0, ones = 0, twos = 0, threes = 0, fours = 0, fives = 0, sixes = 0;
+		int dots = 0, ones = 0, twos = 0, threes = 0, fours = 0, fives = 0, sixes = 0,nines = 0;
 		boolean go_ahead = false;
 		if((events != null) && (events.size() > 0)) {
 			for (Event evnt : events) {
@@ -7361,6 +7361,12 @@ public class CricketFunctions {
 				        		sixes++;
 	                    	}
 				        	break;
+				        case CricketUtil.NINE:
+				        	if(evnt.getEventWasABoundary() != null && 
+	                    		evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+				        		nines++;
+	                    	}
+				        	break;	
 				        case CricketUtil.DOT:  case CricketUtil.LOG_WICKET: 
 				        	dots++;
 				          break;
@@ -7397,6 +7403,14 @@ public class CricketFunctions {
 										break;
 									}
 						        }
+								if ((evnt.getEventRuns() == Integer.valueOf(CricketUtil.NINE)) && (evnt.getEventWasABoundary() != null) && 
+										(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+									switch (whatToProcess) {
+									case CricketUtil.BATSMAN: case CricketUtil.BOWLER: case "TEAM":
+										nines++;
+										break;
+									}
+						        }
 							}
 				        	break;
 						}
@@ -7405,7 +7419,7 @@ public class CricketFunctions {
 			}
 		}
 		return String.valueOf(dots) + seperator + String.valueOf(ones) + seperator + String.valueOf(twos) + seperator + String.valueOf(threes)
-			+ seperator + String.valueOf(fours) + seperator + String.valueOf(fives) + seperator + String.valueOf(sixes);
+			+ seperator + String.valueOf(fours) + seperator + String.valueOf(fives) + seperator + String.valueOf(sixes) + seperator + String.valueOf(nines);
 	}
 	
 	public static List<Double> speedData(MatchAllData match,int whichInning,int PlayerId) {

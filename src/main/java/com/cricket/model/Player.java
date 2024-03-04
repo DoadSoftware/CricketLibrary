@@ -56,6 +56,9 @@ public class Player implements Comparable<Player>
   @Column(name = "ROLE")
   private String role;
   
+  @Column(name = "ZONE")
+  private String zone;
+  
   @Column(name = "Squad")
   private String squad;
   
@@ -362,6 +365,14 @@ public void setSquad(String squad) {
 	this.squad = squad;
 }
 
+public String getZone() {
+	return zone;
+}
+
+public void setZone(String zone) {
+	this.zone = zone;
+}
+
 @Override
 public int compareTo(Player pm) {
 	return (int) (this.getPlayerPosition()-pm.getPlayerPosition());
@@ -373,11 +384,12 @@ public String toString() {
 			+ surname + ", ticker_name=" + ticker_name + ", twitterHandle=" + twitterHandle + ", instagramHandle="
 			+ instagramHandle + ", age=" + age + ", hindifull_name=" + hindifull_name + ", tamilfull_name="
 			+ tamilfull_name + ", telugufull_name=" + telugufull_name + ", hindi_surname=" + hindi_surname
-			+ ", tamil_surname=" + tamil_surname + ", telugu_surname=" + telugu_surname + ", role=" + role
-			+ ", bowlingStyle=" + bowlingStyle + ", battingStyle=" + battingStyle + ", teamId=" + teamId
-			+ ", overseasPlayer=" + overseasPlayer + ", Photo=" + Photo + ", Nationality=" + Nationality
-			+ ", playerPosition=" + playerPosition + ", captainWicketKeeper=" + captainWicketKeeper + ", impactPlayer="
-			+ impactPlayer + "]";
+			+ ", tamil_surname=" + tamil_surname + ", telugu_surname=" + telugu_surname + ", role=" + role + ", zone="
+			+ zone + ", squad=" + squad + ", bowlingStyle=" + bowlingStyle + ", battingStyle=" + battingStyle
+			+ ", teamId=" + teamId + ", overseasPlayer=" + overseasPlayer + ", Photo=" + Photo + ", Nationality="
+			+ Nationality + ", text1=" + text1 + ", text2=" + text2 + ", text3=" + text3 + ", question1=" + question1
+			+ ", question2=" + question2 + ", question3=" + question3 + ", playerPosition=" + playerPosition
+			+ ", captainWicketKeeper=" + captainWicketKeeper + ", impactPlayer=" + impactPlayer + "]";
 }
 
 }
