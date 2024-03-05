@@ -4686,6 +4686,7 @@ public class CricketFunctions {
 			          break;
 					}
 					
+					
 					if(count_balls <= max_balls && total_runs >= splitvalue) {
 						
 						Balls.add(String.valueOf(total_balls));
@@ -6370,11 +6371,28 @@ public class CricketFunctions {
 		    				this_ball_data = events.get(i).getEventExtra();
 		    			}
 		    			else if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
-		    				if(events.get(i).getEventRuns()>0) {
-			    				this_ball_data = events.get(i).getEventExtra() + " " + events.get(i).getEventRuns();
-			    			}else {
-			    				this_ball_data = events.get(i).getEventExtra();
-			    			}
+		    				if(events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0) {
+		    					if(events.get(i).getEventRuns()>0) {
+				    				this_ball_data = events.get(i).getEventExtra() + " " + events.get(i).getEventRuns() + " " + 
+				    						events.get(i).getEventSubExtraRuns() + " " + events.get(i).getEventSubExtra();
+				    			}else {
+				    				this_ball_data = events.get(i).getEventExtra() + " " + 
+				    						events.get(i).getEventSubExtraRuns() + " " + events.get(i).getEventSubExtra();
+				    			}
+		    				}else if(events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() <= 0) {
+		    					if(events.get(i).getEventRuns()>0) {
+				    				this_ball_data = events.get(i).getEventExtra() + " " + events.get(i).getEventRuns() + " " + 
+				    						events.get(i).getEventSubExtra();
+				    			}else {
+				    				this_ball_data = events.get(i).getEventExtra() + " " + events.get(i).getEventSubExtra();
+				    			}
+		    				}else {
+		    					if(events.get(i).getEventRuns()>0) {
+				    				this_ball_data = events.get(i).getEventExtra() + " " + events.get(i).getEventRuns();
+				    			}else {
+				    				this_ball_data = events.get(i).getEventExtra();
+				    			}
+		    				}
 		    			}else {
 		    				if(events.get(i).getEventRuns()>0) {
 			    				this_ball_data = String.valueOf(events.get(i).getEventRuns());
