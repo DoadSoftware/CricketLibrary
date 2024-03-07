@@ -20,6 +20,8 @@ public class Tournament implements Cloneable {
   
   private int sixes;
   
+  private int thirty;
+  
   private int fifty;
   
   private int hundreds;
@@ -61,9 +63,42 @@ public Tournament() {
 	super();
 }
 
+public Tournament(int playerId, int matches, int innings, int not_out, int runs, int fours, int sixes, int thirty,
+		int fifty, int hundreds, int wickets, int runsConceded, int ballsBowled, int threeWicketHaul,
+		int fiveWicketHaul, int ballsFaced, int dots, String notOut, int runs_against_pace, int balls_against_pace,
+		int runs_against_spin, int balls_against_spin, Player player, int tournament_fours, int tournament_sixes,
+		List<BestStats> batsman_best_Stats, List<BestStats> bowler_best_Stats) {
+	super();
+	this.playerId = playerId;
+	this.matches = matches;
+	this.innings = innings;
+	this.not_out = not_out;
+	this.runs = runs;
+	this.fours = fours;
+	this.sixes = sixes;
+	this.thirty = thirty;
+	this.fifty = fifty;
+	this.hundreds = hundreds;
+	this.wickets = wickets;
+	this.runsConceded = runsConceded;
+	this.ballsBowled = ballsBowled;
+	this.threeWicketHaul = threeWicketHaul;
+	this.fiveWicketHaul = fiveWicketHaul;
+	this.ballsFaced = ballsFaced;
+	this.dots = dots;
+	this.notOut = notOut;
+	this.runs_against_pace = runs_against_pace;
+	this.balls_against_pace = balls_against_pace;
+	this.runs_against_spin = runs_against_spin;
+	this.balls_against_spin = balls_against_spin;
+	this.player = player;
+	this.tournament_fours = tournament_fours;
+	this.tournament_sixes = tournament_sixes;
+	this.batsman_best_Stats = batsman_best_Stats;
+	this.bowler_best_Stats = bowler_best_Stats;
+}
 
-
-public Tournament(int playerId, int runs, int fours, int sixes, int innings, int not_out, int fifty, int hundreds, int wickets, int runsConceded,
+public Tournament(int playerId, int runs, int fours, int sixes, int innings, int not_out, int thirty, int fifty, int hundreds, int wickets, int runsConceded,
 		int ballsBowled, int ballsFaced, int dots, int threeWicketHaul, int fiveWicketHaul, String notOut, int runs_against_pace, int balls_against_pace,
 		int runs_against_spin, int balls_against_spin, Player player, List<BestStats> batsman_best_Stats,
 		List<BestStats> bowler_best_Stats) {
@@ -74,6 +109,7 @@ public Tournament(int playerId, int runs, int fours, int sixes, int innings, int
 	this.sixes = sixes;
 	this.innings = innings;
 	this.not_out = not_out;
+	this.thirty = thirty;
 	this.fifty = fifty;
 	this.hundreds = hundreds;
 	this.wickets = wickets;
@@ -354,6 +390,14 @@ public int getFiveWicketHaul() {
 
 public void setFiveWicketHaul(int fiveWicketHaul) {
 	this.fiveWicketHaul = fiveWicketHaul;
+}
+
+public int getThirty() {
+	return thirty;
+}
+
+public void setThirty(int thirty) {
+	this.thirty = thirty;
 }
 
 @Override
