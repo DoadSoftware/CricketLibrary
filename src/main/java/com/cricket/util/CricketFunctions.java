@@ -7841,7 +7841,7 @@ public class CricketFunctions {
 		return dot_count;
 	}
 	public static String compareInning_Data(MatchAllData match, String separator, int inning_number, List<Event> events) {
-	    int total_runs = 0, total_wickets = 0, total_Four = 0, total_SIX = 0;
+	    int total_runs = 0, total_wickets = 0, total_Four = 0, total_SIX = 0, total_nine = 0;
 
 	    if (events != null && !events.isEmpty()) {
 	        for (int i = 0; i < events.size(); i++) {
@@ -7865,6 +7865,12 @@ public class CricketFunctions {
 	                            		total_SIX++;
 			                    	}
 	                                break;
+	                            case CricketUtil.NINE:
+	                            	if(events.get(i).getEventWasABoundary() != null && 
+	                            			events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+	                            		total_nine++;
+			                    	}
+	                                break;    
 	                        }
 	                        break;
 
@@ -7902,12 +7908,17 @@ public class CricketFunctions {
 	                                &&  events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
 	                            total_SIX++;
 	                        }
+	                        
+	                        if ( events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NINE) &&  events.get(i).getEventWasABoundary() != null
+	                                &&  events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+	                            total_nine++;
+	                        }
 	                        break;
 	                }
 
 	                if ( events.get(i).getEventOverNo() == match.getMatch().getInning().get(1).getTotalOvers()
 	                        &&  events.get(i).getEventBallNo() == match.getMatch().getInning().get(1).getTotalBalls()) {
-	                    return total_runs + separator + total_wickets + separator + total_SIX + separator + total_Four;
+	                    return total_runs + separator + total_wickets + separator + total_SIX + separator + total_Four + separator + total_nine;
 	                }
 	            }
 	        }
