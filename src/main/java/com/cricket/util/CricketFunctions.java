@@ -4817,8 +4817,17 @@ public class CricketFunctions {
 	                            	}
 	                                break;
 	                            case CricketUtil.DOT:
+	                            	dots[inn_num - 1]++;
+	                                break;
 	                            case CricketUtil.LOG_WICKET:
-	                                dots[inn_num - 1]++;
+	                            	if(evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.CAUGHT) || evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.CAUGHT_AND_BOWLED)
+	                            		|| evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.BOWLED) || evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.STUMPED)
+	                            		|| evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.LBW) || evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.HIT_WICKET)
+	                            		|| evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.HIT_BALL_TWICE)) 
+	                            	{
+	                            		
+	                            		dots[inn_num - 1]++;
+	                            	}
 	                                break;
 	                            case CricketUtil.BYE:
 	                            case CricketUtil.LEG_BYE:
@@ -7397,9 +7406,25 @@ public class CricketFunctions {
 				        		nines++;
 	                    	}
 				        	break;	
-				        case CricketUtil.DOT:  case CricketUtil.LOG_WICKET: 
+				        case CricketUtil.DOT:
 				        	dots++;
-				          break;
+				        	break;
+				        case CricketUtil.LOG_WICKET:
+				        	if(evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.CAUGHT) || evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.CAUGHT_AND_BOWLED)
+                        		|| evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.BOWLED) || evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.STUMPED)
+                        		|| evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.LBW) || evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.HIT_WICKET)
+                        		|| evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.HIT_BALL_TWICE)) 
+                        	{
+                        		
+				        		dots++;
+                        	}else if(evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
+                        		if(evnt.getEventRuns() > 0) {
+                        			ones++;
+                        		}else {
+                        			dots++;
+                        		}
+                        	}
+					        break;
 				        case CricketUtil.BYE: case CricketUtil.LEG_BYE:
 				        	switch (whatToProcess) {
 				        	case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
