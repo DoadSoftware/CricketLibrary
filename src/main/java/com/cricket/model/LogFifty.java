@@ -1,6 +1,6 @@
 package com.cricket.model;
 
-public class TapeBall implements Cloneable{
+public class LogFifty implements Cloneable{
 
   private int playerId;
   private Player player;
@@ -9,11 +9,15 @@ public class TapeBall implements Cloneable{
   private int runs;
   private int wickets;
   
-public TapeBall() {
+  private int teamId;
+  private int matches;
+  private int challengeRuns;
+  
+public LogFifty() {
 	super();
 }
 
-public TapeBall(int playerId, Player player, String opponentTeam, String matchNumber, int runs, int wickets) {
+public LogFifty(int playerId, Player player, String opponentTeam, String matchNumber, int runs, int wickets) {
 	super();
 	this.playerId = playerId;
 	this.player = player;
@@ -21,6 +25,13 @@ public TapeBall(int playerId, Player player, String opponentTeam, String matchNu
 	this.matchNumber = matchNumber;
 	this.runs = runs;
 	this.wickets = wickets;
+}
+
+public LogFifty(int teamId, int matches, int challengeRuns) {
+	super();
+	this.teamId = teamId;
+	this.matches = matches;
+	this.challengeRuns = challengeRuns;
 }
 
 public int getPlayerId() {
@@ -71,18 +82,36 @@ public void setWickets(int wickets) {
 	this.wickets = wickets;
 }
 
-@Override
-public String toString() {
-	return "TapeBall [player=" + player + ", opponentTeam=" + opponentTeam + ", matchNumber=" + matchNumber + ", runs="
-			+ runs + ", wickets=" + wickets + "]";
+public int getTeamId() {
+	return teamId;
+}
+
+public void setTeamId(int teamId) {
+	this.teamId = teamId;
+}
+
+public int getChallengeRuns() {
+	return challengeRuns;
+}
+
+public void setChallengeRuns(int challengeRuns) {
+	this.challengeRuns = challengeRuns;
+}
+
+public int getMatches() {
+	return matches;
+}
+
+public void setMatches(int matches) {
+	this.matches = matches;
 }
 
 @Override
-public TapeBall clone() throws CloneNotSupportedException {
-	TapeBall clone = null;
+public LogFifty clone() throws CloneNotSupportedException {
+	LogFifty clone = null;
     try
     {
-        clone = (TapeBall) super.clone();
+        clone = (LogFifty) super.clone();
     } 
     catch (CloneNotSupportedException e) 
     {

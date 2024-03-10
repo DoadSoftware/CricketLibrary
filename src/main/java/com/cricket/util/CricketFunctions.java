@@ -62,6 +62,7 @@ import com.cricket.model.FieldersData;
 import com.cricket.model.Fixture;
 import com.cricket.model.ForeignLanguageData;
 import com.cricket.model.Inning;
+import com.cricket.model.LogFifty;
 import com.cricket.model.Match;
 import com.cricket.model.MatchAllData;
 import com.cricket.model.MatchClock;
@@ -2825,7 +2826,177 @@ public class CricketFunctions {
 		}
 		return stat;
 	}
-	public static List<TapeBall> extractTapeData(String typeOfData,CricketService cricketService,List<MatchAllData> tournament_matches,MatchAllData currentMatch, List<TapeBall> past_tapeBall) throws IOException 
+	public static List<LogFifty> extractLogFifty(String typeOfExtraction,String typeOfData ,CricketService cricketService,List<MatchAllData> tournament_matches,
+			MatchAllData currentMatch, List<LogFifty> past_logFifty) throws IOException 
+	{
+		List<LogFifty> log_50_50 = new ArrayList<LogFifty>();
+		
+		switch(typeOfExtraction) {
+		case "COMBINED_PAST_CURRENT_MATCH_DATA":
+			return extractLogFifty("CURRENT_MATCH_DATA",typeOfData, cricketService,tournament_matches, currentMatch, 
+					extractLogFifty("PAST_MATCHES_DATA",typeOfData, cricketService,tournament_matches, currentMatch, null));
+		case "PAST_MATCHES_DATA":
+			for(MatchAllData mtch : tournament_matches) {
+				if(!mtch.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
+					int over_number=0,bowlerId = 0,batterId=0,runs = 0,wicket = 0,inning_num = 0,teamid = -1;
+					if ((mtch.getEventFile().getEvents() != null) && (mtch.getEventFile().getEvents().size() > 0)) {
+						for(int i=mtch.getEventFile().getEvents().size()-1;i>=0;i--) {
+							if(mtch.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_50_50)) {
+								bowlerId = mtch.getEventFile().getEvents().get(i).getEventBowlerNo();
+								batterId = mtch.getEventFile().getEvents().get(i).getEventBatterNo();
+								over_number = mtch.getEventFile().getEvents().get(i).getEventOverNo();
+								runs = mtch.getEventFile().getEvents().get(i).getEventTotalRunsInAnOver();
+								inning_num = mtch.getEventFile().getEvents().get(i).getEventInningNumber();
+								
+								if(typeOfData.equalsIgnoreCase(CricketUtil.BOWLER)) {
+									for(int j=0;j<= mtch.getEventFile().getEvents().size()-1;j++) {
+										if(mtch.getEventFile().getEvents().get(j).getEventBowlerNo() == bowlerId && ((mtch.getEventFile().getEvents().get(j).getEventOverNo()*6)+
+											mtch.getEventFile().getEvents().get(j).getEventBallNo()) > ((over_number-1)*6) && ((mtch.getEventFile().getEvents().get(j).getEventOverNo()*6)+
+													mtch.getEventFile().getEvents().get(j).getEventBallNo()) <= (over_number*6)) {
+											
+											switch(mtch.getEventFile().getEvents().get(j).getEventType()) {
+											case CricketUtil.LOG_WICKET:
+							                    wicket += 1;
+							                    break;
+											case CricketUtil.LOG_ANY_BALL:
+												if (mtch.getEventFile().getEvents().get(j).getEventHowOut() != null && 
+													!mtch.getEventFile().getEvents().get(j).getEventHowOut().isEmpty())
+					                            {
+													wicket += 1;
+					                            }
+							                    break;
+											}
+										}
+									}
+									log_50_50.add(new LogFifty(bowlerId, null, null, null, runs, wicket));
+									
+									runs = 0;
+									wicket = 0;
+									
+									for (BowlingCard boc : mtch.getMatch().getInning().get(inning_num - 1).getBowlingCard()) {
+										if(boc.getPlayerId() == bowlerId) {
+											log_50_50.get(log_50_50.size() - 1).setPlayer(boc.getPlayer());
+										}
+									}
+									
+									if(CricketFunctions.getHomeAwayPlayer(bowlerId, mtch).getTeamId() == mtch.getSetup().getHomeTeamId()) {
+										log_50_50.get(log_50_50.size() - 1).setOpponentTeam(mtch.getSetup().getAwayTeam().getTeamName4());
+									}else {
+										log_50_50.get(log_50_50.size() - 1).setOpponentTeam(mtch.getSetup().getHomeTeam().getTeamName4());
+									}
+								}else {
+									for(BattingCard bc : mtch.getMatch().getInning().get(inning_num - 1).getBattingCard()) {
+										if(bc.getPlayerId() == batterId) {
+											teamid = -1;
+											for(int k=0;k<=log_50_50.size()-1;k++) {
+												if(log_50_50.get(k).getTeamId() == bc.getPlayer().getTeamId()) {
+													teamid = k;
+													break;
+												}
+											}
+											if(teamid > 0) {
+												log_50_50.get(teamid).setMatches(log_50_50.get(teamid).getMatches()+1);
+												log_50_50.get(teamid).setChallengeRuns(log_50_50.get(teamid).getChallengeRuns()+runs);
+												break;
+											}else {
+												log_50_50.add(new LogFifty(bc.getPlayer().getTeamId(), 1, runs));
+											}
+										}
+									}
+									runs = 0;
+								}
+							}
+						}
+					}
+				}
+			}
+			return log_50_50;
+		case "CURRENT_MATCH_DATA":
+			List<LogFifty> past_log_fifty_clone = past_logFifty.stream().map(logfifty ->{
+				try {
+					return logfifty.clone();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return logfifty;
+			}).collect(Collectors.toList());
+			if ((currentMatch.getEventFile().getEvents() != null) && (currentMatch.getEventFile().getEvents().size() > 0)) {
+				int over_number=0,bowlerId = 0, batterId=0,runs = 0,wicket = 0,inning_num = 0, teamid = -1;
+				for(int i=currentMatch.getEventFile().getEvents().size()-1;i>=0;i--) {
+					if(currentMatch.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_50_50)) {
+						bowlerId = currentMatch.getEventFile().getEvents().get(i).getEventBowlerNo();
+						over_number = currentMatch.getEventFile().getEvents().get(i).getEventOverNo();
+						runs = currentMatch.getEventFile().getEvents().get(i).getEventTotalRunsInAnOver();
+						inning_num = currentMatch.getEventFile().getEvents().get(i).getEventInningNumber();
+						
+						if(typeOfData.equalsIgnoreCase(CricketUtil.BOWLER)) {
+							for(int j=0;j<= currentMatch.getEventFile().getEvents().size()-1;j++) {
+								if(currentMatch.getEventFile().getEvents().get(j).getEventBowlerNo() == bowlerId && ((currentMatch.getEventFile().getEvents().get(j).getEventOverNo()*6)+
+									currentMatch.getEventFile().getEvents().get(j).getEventBallNo()) > ((over_number-1)*6) && ((currentMatch.getEventFile().getEvents().get(j).getEventOverNo()*6)+
+									 currentMatch.getEventFile().getEvents().get(j).getEventBallNo()) <= (over_number*6)) {
+									
+									switch(currentMatch.getEventFile().getEvents().get(j).getEventType()) {
+									case CricketUtil.LOG_WICKET:
+					                    wicket += 1;
+					                    break;
+									case CricketUtil.LOG_ANY_BALL:
+										if (currentMatch.getEventFile().getEvents().get(j).getEventHowOut() != null && 
+											!currentMatch.getEventFile().getEvents().get(j).getEventHowOut().isEmpty())
+			                            {
+											wicket += 1;
+			                            }
+					                    break;
+									}
+								}
+							}
+							
+							past_log_fifty_clone.add(new LogFifty(bowlerId, null, null, null, runs, wicket));
+							
+							runs = 0;
+							wicket = 0;
+							
+							for (BowlingCard boc : currentMatch.getMatch().getInning().get(inning_num - 1).getBowlingCard()) {
+								if(boc.getPlayerId() == bowlerId) {
+									past_log_fifty_clone.get(past_log_fifty_clone.size() - 1).setPlayer(boc.getPlayer());
+								}
+							}
+							
+							if(CricketFunctions.getHomeAwayPlayer(bowlerId, currentMatch).getTeamId() == currentMatch.getSetup().getHomeTeamId()) {
+								past_log_fifty_clone.get(past_log_fifty_clone.size() - 1).setOpponentTeam(currentMatch.getSetup().getAwayTeam().getTeamName4());
+							}else {
+								past_log_fifty_clone.get(past_log_fifty_clone.size() - 1).setOpponentTeam(currentMatch.getSetup().getHomeTeam().getTeamName4());
+							}
+						}else {
+							for(BattingCard bc : currentMatch.getMatch().getInning().get(inning_num - 1).getBattingCard()) {
+								if(bc.getPlayerId() == batterId) {
+									teamid = -1;
+									for(int k=0;k<=log_50_50.size()-1;k++) {
+										if(log_50_50.get(k).getTeamId() == bc.getPlayer().getTeamId()) {
+											teamid = k;
+											break;
+										}
+									}
+									if(teamid > 0) {
+										past_log_fifty_clone.get(teamid).setMatches(past_log_fifty_clone.get(teamid).getMatches()+1);
+										past_log_fifty_clone.get(teamid).setChallengeRuns(past_log_fifty_clone.get(teamid).getChallengeRuns()+runs);
+										break;
+									}else {
+										past_log_fifty_clone.add(new LogFifty(bc.getPlayer().getTeamId(), 1, runs));
+									}
+								}
+							}
+							runs = 0;
+						}
+					}
+				}
+			}
+			
+			return past_log_fifty_clone;	
+		}
+		return null;
+	}
+	public static List<TapeBall> extractTapeData(String typeOfData,CricketService cricketService,List<MatchAllData> tournament_matches,
+			MatchAllData currentMatch, List<TapeBall> past_tapeBall) throws IOException 
 	{
 		List<TapeBall> tapeBall = new ArrayList<TapeBall>();
 		
@@ -2886,11 +3057,12 @@ public class CricketFunctions {
 								
 								if(data_set) {
 									
-									tapeBall.add(new TapeBall(null, null, mtch.getSetup().getMatchIdent(), runs, wicket));
+									tapeBall.add(new TapeBall(0,null, null, mtch.getSetup().getMatchIdent(), runs, wicket));
 									
 									for (BowlingCard boc : mtch.getMatch().getInning().get(inning_num - 1).getBowlingCard()) {
 										if(boc.getPlayerId() == bowlerId) {
-											tapeBall.get(tapeBall.size() - 1).setPlayer(boc.getPlayer().getTicker_name());
+											tapeBall.get(tapeBall.size() - 1).setPlayerId(boc.getPlayerId());
+											tapeBall.get(tapeBall.size() - 1).setPlayer(boc.getPlayer());
 										}
 									}
 									
@@ -2909,6 +3081,15 @@ public class CricketFunctions {
 			}
 			return tapeBall;
 		case "CURRENT_MATCH_DATA":
+			
+			List<TapeBall> past_tape_ball_clone = past_tapeBall.stream().map(tapeball ->{
+				try {
+					return tapeball.clone();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return tapeball;
+			}).collect(Collectors.toList());
 			
 			int bowlerId = 0,runs = 0,wicket = 0,inning_num = 0;
 			boolean bowler_found = false,data_set = false;
@@ -2960,18 +3141,19 @@ public class CricketFunctions {
 						
 						if(data_set) {
 							
-							tapeBall.add(new TapeBall(null, null, currentMatch.getSetup().getMatchIdent(), runs, wicket));
+							past_tape_ball_clone.add(new TapeBall(0,null, null, currentMatch.getSetup().getMatchIdent(), runs, wicket));
 							
 							for (BowlingCard boc : currentMatch.getMatch().getInning().get(inning_num - 1).getBowlingCard()) {
 								if(boc.getPlayerId() == bowlerId) {
-									tapeBall.get(tapeBall.size() - 1).setPlayer(boc.getPlayer().getTicker_name());
+									past_tape_ball_clone.get(past_tape_ball_clone.size() - 1).setPlayerId(boc.getPlayerId());
+									past_tape_ball_clone.get(past_tape_ball_clone.size() - 1).setPlayer(boc.getPlayer());
 								}
 							}
 							
 							if(CricketFunctions.getHomeAwayPlayer(bowlerId, currentMatch).getTeamId() == currentMatch.getSetup().getHomeTeamId()) {
-								tapeBall.get(tapeBall.size() - 1).setOpponentTeam(currentMatch.getSetup().getAwayTeam().getTeamName1());
+								past_tape_ball_clone.get(past_tape_ball_clone.size() - 1).setOpponentTeam(currentMatch.getSetup().getAwayTeam().getTeamName1());
 							}else {
-								tapeBall.get(tapeBall.size() - 1).setOpponentTeam(currentMatch.getSetup().getHomeTeam().getTeamName1());
+								past_tape_ball_clone.get(past_tape_ball_clone.size() - 1).setOpponentTeam(currentMatch.getSetup().getHomeTeam().getTeamName1());
 							}
 							
 							data_set = false;
@@ -2979,10 +3161,9 @@ public class CricketFunctions {
 					}
 				}
 			}
-			return tapeBall;	
+			return past_tape_ball_clone;	
 		}
 		return null;
-		
 	}
 	public static List<Tournament> extractTournamentStats(String typeOfExtraction,boolean ShowStrikeRate, List<MatchAllData> tournament_matches, 
 			CricketService cricketService,MatchAllData currentMatch, List<Tournament> past_tournament_stat) throws IOException 
@@ -3805,10 +3986,27 @@ public class CricketFunctions {
 	    @Override
 	    public int compare(TapeBall bc1, TapeBall bc2) {
 	    	if(bc2.getWickets() == bc1.getWickets()) {
-	    		return Integer.compare(bc2.getRuns(), bc1.getRuns());
+	    		return Integer.compare(bc1.getRuns(), bc2.getRuns());
 	    	}else {
 	    		return Integer.compare(bc2.getWickets(), bc1.getWickets());
 	    	}
+	    }
+	}
+	
+	public static class LogFiftyWicketsComparator implements Comparator<LogFifty> {
+	    @Override
+	    public int compare(LogFifty boc1, LogFifty boc2) {
+	    	if(boc2.getWickets() == boc1.getWickets()) {
+	    		return Integer.compare(boc1.getRuns(), boc2.getRuns());
+	    	}else {
+	    		return Integer.compare(boc2.getWickets(), boc1.getWickets());
+	    	}
+	    }
+	}
+	public static class LogFiftyRunsComparator implements Comparator<LogFifty> {
+	    @Override
+	    public int compare(LogFifty bc1, LogFifty bc2) {
+	    	return Integer.compare(bc2.getChallengeRuns(), bc1.getChallengeRuns());
 	    }
 	}
 	
