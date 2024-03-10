@@ -7803,12 +7803,16 @@ public class CricketFunctions {
                         		}
                         	}
 					        break;
-				        case CricketUtil.BYE: case CricketUtil.LEG_BYE:
+				        case CricketUtil.BYE: case CricketUtil.LEG_BYE: 
 				        	switch (whatToProcess) {
 				        	case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
 								dots++;
 								break;
 							}
+				        	break;
+				        	
+				        case CricketUtil.NO_BALL:
+				        	dots++;
 				        	break;
 				        
 				        case CricketUtil.LOG_ANY_BALL:
