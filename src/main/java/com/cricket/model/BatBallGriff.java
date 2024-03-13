@@ -22,12 +22,14 @@ public class BatBallGriff {
 	
 	private Player player;
 	
+	private String MatchNumber;
+	
 	public BatBallGriff() {
 		super();
 	}
 
 	public BatBallGriff(int playerId, int runs, int ballsFaced, String status, String how_out, int runsConceded,
-			int wickets, String oversBowled, String opponentTeam, Player player) {
+			int wickets, String oversBowled, String opponentTeam, Player player, String matchNumber) {
 		super();
 		this.playerId = playerId;
 		Runs = runs;
@@ -39,6 +41,7 @@ public class BatBallGriff {
 		this.oversBowled = oversBowled;
 		this.opponentTeam = opponentTeam;
 		this.player = player;
+		MatchNumber = matchNumber;
 	}
 
 	public int getPlayerId() {
@@ -119,6 +122,14 @@ public class BatBallGriff {
 
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+
+	public String getMatchNumber() {
+		return MatchNumber;
+	}
+
+	public void setMatchNumber(String matchNumber) {
+		MatchNumber = matchNumber;
 	}
 
 	@Override
