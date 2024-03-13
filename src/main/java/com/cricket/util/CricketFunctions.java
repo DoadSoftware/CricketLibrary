@@ -6839,7 +6839,7 @@ public class CricketFunctions {
 			this_over = this_over.replace("LOG_WICKET", "w");
 			this_over = this_over.replace("WICKET", "w");
 		}
-		//System.out.println(this_over);
+		System.out.println(this_over);
 		return this_over;
 	}
 	
@@ -7658,7 +7658,7 @@ public class CricketFunctions {
 				
 				switch(events.get(i).getEventType()) {
 				case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-		        case CricketUtil.FOUR: case CricketUtil.SIX: 
+		        case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
 		        	total_runs += events.get(i).getEventRuns();
 		        	ball_count = ball_count + 1;
 		          break;
