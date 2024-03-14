@@ -7671,12 +7671,11 @@ public class CricketFunctions {
 		        	total_runs += events.get(i).getEventRuns();
 			          if (events.get(i).getEventExtra() != null) {
 			        	 total_runs += events.get(i).getEventExtraRuns();
-			        	 ball_count = ball_count + 1;
 			          }
 			          if (events.get(i).getEventSubExtra() != null) {
 			        	 total_runs += events.get(i).getEventSubExtraRuns();
-			        	 ball_count = ball_count + 1;
 			          }
+			          ball_count = ball_count + 1;
 			          break;
 		        case CricketUtil.LOG_ANY_BALL:
 		        	total_runs += events.get(i).getEventRuns();
