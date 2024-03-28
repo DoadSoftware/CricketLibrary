@@ -7193,7 +7193,7 @@ public class CricketFunctions {
 				    		&& (CricketFunctions.getWicketsLeft(match) > 0)) {
 
 				    	matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
-					        	" more run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
+					        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
 				    	if (CricketFunctions.getRequiredBalls(match) > 120) {
 				    		matchSummaryStatus = matchSummaryStatus + CricketFunctions.OverBalls(0,CricketFunctions.getRequiredBalls(match)) + " overs";
 						} else {
@@ -7230,7 +7230,7 @@ public class CricketFunctions {
 		    		if(match.getMatch().getInning().get(whichInning - 1).getTotalRuns() == 0) {
 				    	matchSummaryStatus = batTeamNm + " need " + required_runs + " run" + CricketFunctions.Plural(required_runs) + " to win";
 		    		} else {
-				    	matchSummaryStatus = batTeamNm + " need " + required_runs + " more run" + CricketFunctions.Plural(required_runs) + " to win";
+				    	matchSummaryStatus = batTeamNm + " need " + required_runs + " run" + CricketFunctions.Plural(required_runs) + " to win";
 		    		}
 		    	}
 		    	break;
@@ -8346,19 +8346,23 @@ public class CricketFunctions {
 				return plyr;
 			}
 		}
-		for(Player plyr : match.getSetup().getHomeOtherSquad()) {
-			if(plyr_id == plyr.getPlayerId()) { 
-				return plyr;
-			}
-		}
 		for(Player plyr : match.getSetup().getAwaySquad()) {
 			if(plyr_id == plyr.getPlayerId()) { 
 				return plyr;
 			}
 		}
-		for(Player plyr : match.getSetup().getAwayOtherSquad()) {
+		for(Player plyr : match.getSetup().getHomeOtherSquad()) {
 			if(plyr_id == plyr.getPlayerId()) { 
-				return plyr;
+				if(plyr.getTeamId() == match.getSetup().getHomeTeamId()) {
+					return plyr;
+				}
+			}
+		}
+		for(Player plyr : match.getSetup().getAwayOtherSquad()) {
+			if(plyr_id == plyr.getPlayerId()) {
+				if(plyr.getTeamId() == match.getSetup().getAwayTeamId()) {
+					return plyr;
+				}
 			}
 		}
 		return null;
@@ -8496,7 +8500,7 @@ public class CricketFunctions {
 						{
 							if(boc.getPlayerId() == PlayerId) {
 								player_check = true;
-								//System.out.println("PlayerId1 = " + PlayerId);
+								
 								griffBatBall.add(new BatBallGriff(boc.getPlayerId(), 0, 0, "BALL", "", boc.getRuns(), boc.getWickets(), 
 										CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()),team.get(inn.getBattingTeamId() - 1).getTeamName1(), boc.getPlayer(),
 										match.getMatch().getMatchFileName().replace(".json", "")));
@@ -8521,6 +8525,7 @@ public class CricketFunctions {
 				}
 				
 				if(player_check != true) {
+					
 					griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0","", CricketFunctions.getHomeAwayPlayer(PlayerId, match),
 							match.getMatch().getMatchFileName().replace(".json", "")));
 					
