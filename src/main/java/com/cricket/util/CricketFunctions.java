@@ -1328,354 +1328,259 @@ public class CricketFunctions {
 		}
 		return null;
 }
-//	public static String getInteractive(MatchAllData match) throws IOException {
-//
-//		if(match.getSetup() == null || (match.getSetup().getGenerateInteractiveFile() == null 
-//			|| match.getSetup().getGenerateInteractiveFile().equalsIgnoreCase(CricketUtil.NO))) {
-//			return "";
-//		}
-//		if(match.getEventFile() == null || (match.getEventFile().getEvents() == null 
-//			|| match.getEventFile().getEvents().size() <= 0)) {
-//			return "";
-//		}
-//		
-//		String this_ball_data = "", Bowler = "", Batsman = "", OtherBatsman = "", 
-//			over_number = "", over_ball = "", inning_number = "",batsman_style = "",
-//			bowler_handed = "",this_over = "",this_over_run = "",shot = "-",wagonX = "0", wagonY = "0";
-//		int j = 0;
-//	      
-//		String line_txt = String.format("%-140s", "");
-//		String txt = String.format("%-140s", "");
-//		
-//		txt = addSubString(txt,"============================================================================================================================================================" + "\n\n",0);
-//		txt = addSubString(txt,"# 174-178               Spin text" + "\n",0);
-//		txt = addSubString(txt,"# 167-172               Shot type code" + "\n",0);
-//		txt = addSubString(txt,"# 163-165               Distance of sixes (in metres)" + "\n",0);
-//		txt = addSubString(txt,"# 158-161               This Over text" + "\n",0);
-//		txt = addSubString(txt,"# 132-156               Non-facing batsman name" + "\n",0);
-//		txt = addSubString(txt,"# 130                   Bowler handed ('L' or 'R')" + "\n",0);
-//		txt = addSubString(txt,"# 126-128               Ball landing y ordinate (for boundaries not along the ground only)" + "\n",0);
-//		txt = addSubString(txt,"# 120-122               Ball landing x ordinate (for boundaries not along the ground only)" + "\n",0);
-//		txt = addSubString(txt,"# 116                   Shot Height (for boundaries only)" + "\n",0);
-//		txt = addSubString(txt,"# 111                   Shot played code 2 ('A' for attack, 'D' for defend, 'N' for no shot)" + "\n",0);
-//		txt = addSubString(txt,"# 110                   Shot played code 1 ('P' for played, 'M' for missed, 'N' for no shot, 'E' for edge/miss-hit)" + "\n",0);
-//		txt = addSubString(txt,"# 103                   Batsman style ('L' or 'R')" + "\n",0);
-//		txt = addSubString(txt,"# 96                    Wicket attributed to bowler this ball? (Y or N)" + "\n",0);
-//		txt = addSubString(txt,"# 89 - 91               Wagon Wheel y ordinate" + "\n",0);
-//		txt = addSubString(txt,"# 83 - 85               Wagon Wheel x ordinate" + "\n",0);
-//		txt = addSubString(txt,"# 75                    Runs scored off the bat for this ball" + "\n",0);
-//		txt = addSubString(txt,"# 66 - 67               Ball within over (2 figures, starting at 1)" + "\n",0);
-//		txt = addSubString(txt,"# 61 - 63               Over number (3 figures, starting at 1)" + "\n",0);
-//		txt = addSubString(txt,"# 35 - 59               Bowler name (25 characters)" + "\n",0);
-//		txt = addSubString(txt,"# 9 - 33                Batsman name (25 characters)" + "\n",0);
-//		txt = addSubString(txt,"# 3                     Innings (1 to 4)" + "\n",0);
-//		txt = addSubString(txt,"# " + "\n",0);
-//		txt = addSubString(txt,"# -------               --------" + "\n",0);
-//		txt = addSubString(txt,"# Columns               Contents" + "\n",0);
-//		txt = addSubString(txt,"# File Version 1.5" + "\n",0);
-//		txt = addSubString(txt,"# Match between " + match.getSetup().getHomeTeam().getTeamName1() + " and " + match.getSetup().getAwayTeam().getTeamName1() + "\n",0);
-//		txt = addSubString(txt,"# DOAD Interactive File generated on " + LocalDate.now() + " at " + LocalTime.now() + "\n",0);
-//		txt = addSubString(txt,"============================================================================================================================================================" + "\n\n",0);
-//
-//		if(Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT))) {
-//			Files.delete(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT));
-//		}
-//		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT), 
-//				Arrays.asList(txt), StandardOpenOption.CREATE);
-//	
-//		line_txt = addSubString(line_txt,"Inns",2);
-//		line_txt = addSubString(line_txt,"Batsman",8);
-//		line_txt = addSubString(line_txt,"Bowler",34);
-//		line_txt = addSubString(line_txt,"Over",58);
-//		line_txt = addSubString(line_txt,"Ball",64);
-//		line_txt = addSubString(line_txt,"Runs",72);
-//		line_txt = addSubString(line_txt,"WagonX",80);
-//		line_txt = addSubString(line_txt,"WagonY",87);
-//		line_txt = addSubString(line_txt,"Wkt?",94);
-//		line_txt = addSubString(line_txt,"LH/RH",100);
-//		line_txt = addSubString(line_txt,"Shot",108);
-//		line_txt = addSubString(line_txt,"Hgt",114);
-//		line_txt = addSubString(line_txt,"LandX",119);
-//		line_txt = addSubString(line_txt,"LandY",125);
-//		line_txt = addSubString(line_txt,"Other Batsman",135);
-//		line_txt = addSubString(line_txt,"T/Ov",157);
-//		line_txt = addSubString(line_txt,"6D",162);
-//		line_txt = addSubString(line_txt,"Shot",166);
-//		line_txt = addSubString(line_txt,"Spin  N W T/O-2",173);
-//
-//		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT), 
-//				Arrays.asList(line_txt), StandardOpenOption.APPEND);
-//		
-//		int max_inn = 2;
-//		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
-//			max_inn = 4;
-//		}
-//		
-//	    for (int i = 0; i <= match.getEventFile().getEvents().size() - 1; i++)
-//	    {
-//		  if(match.getEventFile().getEvents().get(i).getEventInningNumber() >= 1 && match.getEventFile().getEvents().get(i).getEventInningNumber() <= max_inn) {
-//			
-//			  switch (match.getEventFile().getEvents().get(i).getEventType().toUpperCase()) {
-//			  case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-//			  case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: 
-//			  case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
-//				  
-//				  line_txt = String.format("%-140s", "");
-//					j = j + 1;
-//					for(Inning inn : match.getMatch().getInning()) {
-//						for(Player hs : match.getSetup().getHomeSquad()) {
-//							if(match.getEventFile().getEvents().get(i).getEventBatterNo() == hs.getPlayerId()) {
-//								if(hs.getBattingStyle() == null) {
-//									batsman_style = "";
-//								}else {
-//									batsman_style = hs.getBattingStyle().toUpperCase().charAt(0) + "";
-//								}
-//		    				}
-//							if(match.getEventFile().getEvents().get(i).getEventBowlerNo() == hs.getPlayerId()) {
-//								if(hs.getBowlingStyle() == null) {
-//									bowler_handed = "";
-//								}else {
-//									bowler_handed = hs.getBowlingStyle().toUpperCase().charAt(0) + "";
-//								}
-//		    				}
-//						}
-//						for(Player as : match.getSetup().getAwaySquad()) {
-//							if(match.getEventFile().getEvents().get(i).getEventBatterNo() == as.getPlayerId()) {
-//								if(as.getBattingStyle() == null) {
-//									batsman_style = "";
-//								}else {
-//									batsman_style = as.getBattingStyle().toUpperCase().charAt(0) + "";
-//								}
-//		    				}
-//							if(match.getEventFile().getEvents().get(i).getEventBowlerNo() == as.getPlayerId()) {
-//								if(as.getBowlingStyle() == null) {
-//									bowler_handed = "";
-//								}else {
-//									bowler_handed = as.getBowlingStyle().toUpperCase().charAt(0) + "";
-//								}
-//		    				}
-//						}
-//		    			for(BattingCard bc : inn.getBattingCard()) {
-//		    				if(match.getEventFile().getEvents().get(i).getEventBatterNo() == bc.getPlayerId()) {
-//		    					Batsman = bc.getPlayer().getTicker_name();
-//		    				}
-//		    				if(match.getEventFile().getEvents().get(i).getEventOtherBatterNo() == bc.getPlayerId()) {
-//		    					OtherBatsman = bc.getPlayer().getTicker_name();
-//		    				}
-//		    			}
-//		    			if(inn.getBowlingCard() != null) {
-//		    				for(BowlingCard boc : inn.getBowlingCard()) {
-//					    		if(match.getEventFile().getEvents().get(i).getEventBowlerNo() == boc.getPlayerId()) {
-//					    			Bowler = boc.getPlayer().getTicker_name();
-//						    	}
-//					    	}
-//		    			}
-//				    }
-//					this_ball_data = "";
-//					inning_number = String.valueOf(match.getEventFile().getEvents().get(i).getEventInningNumber());
-//					if(match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL)) {
-//						over_number = String.valueOf(match.getEventFile().getEvents().get(i).getEventOverNo() + 1);
-//						over_ball = String.valueOf(match.getEventFile().getEvents().get(i).getEventBallNo());
-//					}else {
-//						over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
-//						over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
-//					}
-//					
-//					
-//					line_txt = addSubString(line_txt,inning_number,2);
-//		    		
-//		    		line_txt = addSubString(line_txt,Batsman,8);
-//					
-//					line_txt = addSubString(line_txt,Bowler,34);
-//		    		
-//		    		line_txt = addSubString(line_txt,over_number,63 - over_number.length());
-//		    		
-//		    		line_txt = addSubString(line_txt,over_ball,67 - over_ball.length());
-//		    		
-//		    		if(match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL)) {
-//		    			this_over = match.getEventFile().getEvents().get(i).getEventExtra();
-//		    		}else {
-//		    			this_over = match.getEventFile().getEvents().get(i).getEventType();
-//		    		}
-//		    		
-//		    		if(!this_over.trim().isEmpty()) {
-//		    			
-//						this_over = this_over.replace("WIDE", "WD");
-//						this_over = this_over.replace("NO_BALL", "NB");
-//						this_over = this_over.replace("LEG_BYE", "LB");
-//						this_over = this_over.replace("BYE", "B");
-//						this_over = this_over.replace("PENALTY", "PN");
-//						this_over = this_over.replace("LOG_WICKET", "W");
-//						this_over = this_over.replace("WICKET", "W");
-//					}
-//		    		
-//				  switch (match.getEventFile().getEvents().get(i).getEventType().toUpperCase()){
-//				    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-//				    case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
-//				    	this_ball_data = String.valueOf(match.getEventFile().getEvents().get(i).getEventRuns());
-//				    	this_over_run = this_ball_data;
-//				    	line_txt = addSubString(line_txt,this_ball_data,74);
-//				    	
-//				      break;
-//				    case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
-//				    	this_ball_data = String.valueOf(match.getEventFile().getEvents().get(i).getEventRuns() + match.getEventFile().getEvents().get(i).getEventSubExtraRuns()) + this_over;
-//				    	this_over_run = this_ball_data;
-//				    	line_txt = addSubString(line_txt,"0",74);
-//				      break;
-//				    case CricketUtil.LOG_WICKET:
-//				    	line_txt = addSubString(line_txt,String.valueOf(match.getEventFile().getEvents().get(i).getEventRuns()),74);
-//			    		 
-//				      if (match.getEventFile().getEvents().get(i).getEventRuns() > 0) {
-//				    	  this_over_run = String.valueOf(match.getEventFile().getEvents().get(i).getEventRuns()) + this_over;
-//			    		 
-//				        this_ball_data = String.valueOf(match.getEventFile().getEvents().get(i).getEventRuns()) + this_over;
-//				      } else {
-//				    	  this_over_run = this_over;
-//			    		  
-//				        this_ball_data = this_over;
-//				      }
-//				    
-//				      break;
-//				    case CricketUtil.LOG_ANY_BALL:
-//				    	if (match.getEventFile().getEvents().get(i).getEventExtra() != null) {
-//				    		if(match.getEventFile().getEvents().get(i).getEventSubExtra() != null && match.getEventFile().getEvents().get(i).getEventSubExtraRuns() > 0) {
-//				    			if(match.getEventFile().getEvents().get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
-//				    				int runs = (match.getEventFile().getEvents().get(i).getEventRuns() + match.getEventFile().getEvents().get(i).getEventExtraRuns() + 
-//				    						match.getEventFile().getEvents().get(i).getEventSubExtraRuns());
-//				    				line_txt = addSubString(line_txt,String.valueOf(runs),74);
-//			    					
-//				    				this_ball_data = String.valueOf(runs);
-//				    			}
-//				    		}
-//				    		if(this_ball_data.isEmpty()) {
-//				    			if(match.getEventFile().getEvents().get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
-//				    				if(match.getEventFile().getEvents().get(i).getEventRuns()>0) {
-//				    					this_over_run =  match.getEventFile().getEvents().get(i).getEventRuns() + this_over;
-//				    					line_txt = addSubString(line_txt,"0",74);
-//			    						
-//					    				this_ball_data = match.getEventFile().getEvents().get(i).getEventExtra() + match.getEventFile().getEvents().get(i).getEventRuns();
-//					    			}else {
-//					    				this_over_run = this_over;
-//					    				line_txt = addSubString(line_txt,"0",74);
-//				    					
-//					    				this_ball_data = match.getEventFile().getEvents().get(i).getEventExtra();
-//					    			}
-//				    			}else {
-//				    				if(match.getEventFile().getEvents().get(i).getEventRuns()>0) {
-//				    					line_txt = addSubString(line_txt,String.valueOf(match.getEventFile().getEvents().get(i).getEventRuns()),74);
-//					    				this_ball_data = String.valueOf(match.getEventFile().getEvents().get(i).getEventRuns());
-//					    			}
-//				    			}
-//				    		}else {
-//				    			this_over_run = this_over;
-//				    			line_txt = addSubString(line_txt,"0",74);
-//				    			this_ball_data = this_ball_data + match.getEventFile().getEvents().get(i).getEventExtra();
-//				    		}
-//				    	}
-//					    if (match.getEventFile().getEvents().get(i).getEventSubExtra() != null && match.getEventFile().getEvents().get(i).getEventSubExtraRuns() > 0){
-//					    	if(!match.getEventFile().getEvents().get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
-//					    		if (this_ball_data.isEmpty()) {
-//					    			this_over_run = match.getEventFile().getEvents().get(i).getEventSubExtra().charAt(0) + String.valueOf(match.getEventFile().getEvents().get(i).getEventSubExtraRuns());
-//					    			line_txt = addSubString(line_txt,"0",74);
-//						          this_ball_data = String.valueOf(match.getEventFile().getEvents().get(i).getEventSubExtraRuns()) + match.getEventFile().getEvents().get(i).getEventSubExtra();
-//					        	
-//						        } else {
-//						        	this_over_run = this_over_run + "+" + String.valueOf(match.getEventFile().getEvents().get(i).getEventSubExtraRuns()) + match.getEventFile().getEvents().get(i).getEventSubExtra().charAt(0);
-//						        	line_txt = addSubString(line_txt,"0",74);
-//						          this_ball_data = this_ball_data + "+" + String.valueOf(match.getEventFile().getEvents().get(i).getEventSubExtraRuns()) + match.getEventFile().getEvents().get(i).getEventSubExtra();
-//						        }
-//					    	} 
-//					    }
-//				      if (match.getEventFile().getEvents().get(i).getEventHowOut() != null && !match.getEventFile().getEvents().get(i).getEventHowOut().isEmpty()) {
-//				        if (this_ball_data.isEmpty()) {
-//				          this_ball_data = CricketUtil.WICKET.charAt(0) + "";
-//				          line_txt = addSubString(line_txt,this_ball_data,74);
-//			        	  
-//				        } else {
-//				          this_ball_data = this_ball_data + "+" + CricketUtil.WICKET.charAt(0) + "";
-//				          line_txt = addSubString(line_txt,this_ball_data,74);
-//				        }
-//				      }
-//				      break;
-//					}
-//				  
-//				  //-----------WAGON AND SHOTS------------------//
-//				  
-//				  wagonX = "0";wagonY = "0";shot = "-";
-//				  if(match.getMatch().getWagons() != null) {
-//					  for(int k = 0; k < match.getMatch().getWagons().size(); k++){
-//						  if(match.getEventFile().getEvents().get(i).getEventInningNumber() == match.getMatch().getWagons().get(k).getInningNumber()) {
-//								if(match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getWagons().get(k).getOverNumber()) {
-//									if(match.getEventFile().getEvents().get(i).getEventBallNo() == match.getMatch().getWagons().get(k).getBallNumber()) {
-//										wagonX = String.valueOf(match.getMatch().getWagons().get(k).getWagonXCord());
-//										wagonY = String.valueOf(match.getMatch().getWagons().get(k).getWagonYCord());
-//									}
-//								}
-//							}
-//					  }
-//				  }
-//				  
-//				  if(match.getMatch().getShots() != null) {
-//					  for(int k = 0; k < match.getMatch().getShots().size(); k++){
-//						  if(match.getEventFile().getEvents().get(i).getEventInningNumber() == match.getMatch().getShots().get(k).getInningNumber()) {
-//								if(match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getShots().get(k).getOverNumber()) {
-//									if(match.getEventFile().getEvents().get(i).getEventBallNo() == match.getMatch().getShots().get(k).getBallNumber()) {
-//										if (match.getMatch().getShots().get(k).getShotType().contains("no_shot")) {
-//											shot = "N";
-//										}else if(match.getMatch().getShots().get(k).getShotType().contains("nudge")) {
-//											 shot = "E";
-//										}else if(match.getMatch().getShots().get(k).getShotType().contains("defence") || match.getMatch().getShots().get(k).getShotType().contains("off_drive") || 
-//												match.getMatch().getShots().get(k).getShotType().contains("on_drive") || match.getMatch().getShots().get(k).getShotType().contains("straight_drive") || 
-//												match.getMatch().getShots().get(k).getShotType().contains("front") || match.getMatch().getShots().get(k).getShotType().contains("back")) {
-//											 shot = "P";
-//										}else {
-//											shot = "M";
-//										}
-//										
-//										if (match.getMatch().getShots().get(k).getShotType().contains("no_shot")) {
-//											shot = shot + "N";
-//										}else if(match.getMatch().getShots().get(k).getShotType().contains("defence")) {
-//											shot = shot + "D";
-//										}else {
-//											shot = shot + "A";
-//										}
-//									}
-//								}
-//							}
-//					  }
-//				  }
-//				 line_txt = addSubString(line_txt,wagonX,84);
-//				 line_txt = addSubString(line_txt,wagonY,90);
-//				 
-//				if(match.getEventFile().getEvents().get(i).getEventType().toUpperCase().equalsIgnoreCase(CricketUtil.LOG_WICKET)) {
-//			    	line_txt = addSubString(line_txt,"Y",95);
-//		    		
-//			    }else {
-//			    	line_txt = addSubString(line_txt,"N",95);	
-//			    }
-//				
-//				line_txt = addSubString(line_txt,batsman_style,102);
-//				
-//				line_txt = addSubString(line_txt,shot,109);
-//				line_txt = addSubString(line_txt,"0",115);
-//				line_txt = addSubString(line_txt,"0",121);
-//				line_txt = addSubString(line_txt,"0",127);
-//				line_txt = addSubString(line_txt,bowler_handed,129);
-//				line_txt = addSubString(line_txt,OtherBatsman,131);
-//				line_txt = addSubString(line_txt,this_over_run,157);
-//				  
-//				
-//				Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT), 
-//						Arrays.asList(line_txt), StandardOpenOption.APPEND);
-//				break;
-//		    }
-//	    }
-//    }
-//		return this_ball_data;
-//}
-
-
+	public static void setHeadToHeadData(MatchAllData match, String line_txt, String type) throws IOException {
+		
+		for(Inning inn : match.getMatch().getInning()) {
+			switch(type) {
+			case "BATTING":
+				for(BattingCard bc : inn.getBattingCard()) {
+					line_txt = String.format("%-140s", "");
+					
+					line_txt = addSubString(line_txt,"IS",0);
+					line_txt = addSubString(line_txt,match.getMatch().getMatchFileName(),3);
+					line_txt = addSubString(line_txt,match.getSetup().getGround().getCity(),24);
+					
+					line_txt = addSubString(line_txt,inn.getBatting_team().getTeamName1(),45);
+					line_txt = addSubString(line_txt,inn.getBowling_team().getTeamName1(),66);
+					
+					line_txt = addSubString(line_txt,String.valueOf(bc.getPlayerId()),92 - String.valueOf(bc.getPlayerId()).length());
+					
+					line_txt = addSubString(line_txt,String.valueOf(bc.getRuns()),96-String.valueOf(bc.getRuns()).length());
+					line_txt = addSubString(line_txt,String.valueOf(bc.getBalls()),100-String.valueOf(bc.getBalls()).length());
+					line_txt = addSubString(line_txt,String.valueOf(bc.getFours()),104 - String.valueOf(bc.getFours()).length());
+					line_txt = addSubString(line_txt,String.valueOf(bc.getSixes()),108 - String.valueOf(bc.getSixes()).length());
+					
+					String[] ball_count = ballCountOfFiftyAndHundred(match.getEventFile().getEvents(), inn.getInningNumber(), bc.getPlayerId()).split("-");
+					
+					if(bc.getRuns() >= 50 && bc.getRuns() < 100) {
+						line_txt = addSubString(line_txt,ball_count[0],112-ball_count[0].length());
+						line_txt = addSubString(line_txt,"",116);
+					}else if(bc.getRuns() >= 100) {
+						line_txt = addSubString(line_txt,ball_count[0],112-ball_count[0].length());
+						line_txt = addSubString(line_txt,ball_count[1],116-ball_count[1].length());
+					}else {
+						line_txt = addSubString(line_txt,"",112);
+						line_txt = addSubString(line_txt,"",116);
+					}
+					
+					if(bc.getBatsmanInningStarted() != null && 
+							bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES)) {
+						line_txt = addSubString(line_txt,"Y",117);
+						
+						if(bc.getStatus().equalsIgnoreCase(CricketUtil.OUT)) {
+							line_txt = addSubString(line_txt,"Y",119);
+						}else {
+							line_txt = addSubString(line_txt,"N",119);
+						}
+						
+					}else {
+						line_txt = addSubString(line_txt,"N",117);
+						line_txt = addSubString(line_txt,"",119);
+					}
+					
+					line_txt = addSubString(line_txt,inn.getBatting_team().getTeamName4(),121);
+					line_txt = addSubString(line_txt,inn.getBowling_team().getTeamName4(),126);
+					
+					String[] Runs_Count = getScoreTypeData(CricketUtil.BATSMAN,match, inn.getInningNumber(), bc.getPlayerId(),
+							"-", match.getEventFile().getEvents()).split("-");
+					
+					line_txt = addSubString(line_txt,Runs_Count[0],134-Runs_Count[0].length());
+					line_txt = addSubString(line_txt,Runs_Count[1],138-Runs_Count[1].length());
+					line_txt = addSubString(line_txt,Runs_Count[2],142-Runs_Count[2].length());
+					line_txt = addSubString(line_txt,Runs_Count[3],146-Runs_Count[3].length());
+					
+					String[] Count = caughtAndStumpedCount(match.getEventFile().getEvents(), bc.getPlayerId()).split("-");
+					line_txt = addSubString(line_txt,Count[0],148);
+					line_txt = addSubString(line_txt,Count[1],152);
+					
+					Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+							Arrays.asList(line_txt), StandardOpenOption.APPEND);
+				}
+				break;
+			case "BOWLING":
+				for(BowlingCard boc : inn.getBowlingCard()) {
+					line_txt = String.format("%-140s", "");
+					
+					line_txt = addSubString(line_txt,"BO",0);
+					line_txt = addSubString(line_txt,match.getMatch().getMatchFileName(),3);
+					
+					line_txt = addSubString(line_txt,match.getSetup().getGround().getCity(),24);
+					
+					line_txt = addSubString(line_txt,inn.getBowling_team().getTeamName1(),45);
+					line_txt = addSubString(line_txt,inn.getBatting_team().getTeamName1(),66);
+					
+					line_txt = addSubString(line_txt,String.valueOf(boc.getPlayerId()),92-String.valueOf(boc.getPlayerId()).length());
+					line_txt = addSubString(line_txt,String.valueOf((boc.getOvers() * 6) + boc.getBalls()),96-String.valueOf((boc.getOvers() * 6) + boc.getBalls()).length());
+					line_txt = addSubString(line_txt,String.valueOf(boc.getMaidens()),100-String.valueOf(boc.getMaidens()).length());
+					line_txt = addSubString(line_txt,String.valueOf(boc.getRuns()),104-String.valueOf(boc.getRuns()).length());
+					line_txt = addSubString(line_txt,String.valueOf(boc.getWickets()),108-String.valueOf(boc.getWickets()).length());
+					line_txt = addSubString(line_txt,String.valueOf(boc.getDots()),112-String.valueOf(boc.getDots()).length());
+					
+					line_txt = addSubString(line_txt,inn.getBowling_team().getTeamName4(),113);
+					line_txt = addSubString(line_txt,inn.getBatting_team().getTeamName4(),118);
+					
+					if(boc.getWickets() > 0) {
+						line_txt = addSubString(line_txt,String.valueOf(lastWicketBallCount(match.getEventFile().getEvents(), inn.getInningNumber(), boc.getPlayerId())),
+								126 - String.valueOf(lastWicketBallCount(match.getEventFile().getEvents(), inn.getInningNumber(), boc.getPlayerId())).length());
+					}else {
+						line_txt = addSubString(line_txt,"",123);
+					}
+					
+					Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+							Arrays.asList(line_txt), StandardOpenOption.APPEND);
+				}
+				break;
+			}
+	    }
+	}
 	
+	public static String getHeadToHead(MatchAllData match,String type) throws IOException {
+
+		if(match.getEventFile() == null || (match.getEventFile().getEvents() == null 
+			|| match.getEventFile().getEvents().size() <= 0)) {
+			return "";
+		}
+		String line_txt = String.format("%-140s", "");
+		String txt = String.format("%-140s", "");
+		
+		switch(type.toUpperCase()){
+		case "FULL_WRITE":
+			
+			txt = addSubString(txt,"|",0);
+			txt = addSubString(txt,"|    (B) - 'BO' - Bowling details" + "\n",0);
+			txt = addSubString(txt,"|    (A) - 'IS' - Batting details" + "\n",0);
+			txt = addSubString(txt,"|" + "\n",0);
+			txt = addSubString(txt,"| Contents" + "\n",0);
+			txt = addSubString(txt,"|" + "\n",0);
+			txt = addSubString(txt,"| DOAD H2H File generated on " + LocalDate.now() + " at " + LocalTime.now() + "\n",0);
+			txt = addSubString(txt,"| " + "\n",0);
+			txt = addSubString(txt,"|" + "\n",0);
+			
+//			if(Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
+//				FileOutputStream fs = new FileOutputStream(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT);
+//				fs.write(new byte[0]);
+//				fs.close();
+//			}
+			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+				Arrays.asList(txt), StandardOpenOption.CREATE);
+			
+			txt = String.format("%-140s", "");
+			
+			txt = addSubString(txt,"|",0);
+			txt = addSubString(txt,"|============================================================================================================================================================" + "\n",0);
+			txt = addSubString(txt,"| 152 -154       Stumpings" + "\n",0);
+			txt = addSubString(txt,"| 148 -150       Catches" + "\n",0);
+			txt = addSubString(txt,"| 144 -146       Threes" + "\n",0);
+			txt = addSubString(txt,"| 140 -142       Twos" + "\n",0);
+			txt = addSubString(txt,"| 136 -138       Ones" + "\n",0);
+			txt = addSubString(txt,"| 132 -134       Dots" + "\n",0);
+			txt = addSubString(txt,"| 127 -130       Opponent ticker name" + "\n",0);
+			txt = addSubString(txt,"| 122 -125       Team ticker name" + "\n",0);
+			txt = addSubString(txt,"|      120       Was batsman dismissed?" + "\n",0);
+			txt = addSubString(txt,"|      118       Did batsman innings start?" + "\n",0);
+			txt = addSubString(txt,"| 114 -116       Balls to reach 100" + "\n",0);
+			txt = addSubString(txt,"| 110 -112       Balls to reach 50" + "\n",0);
+			txt = addSubString(txt,"| 106 -108       Sixes" + "\n",0);
+			txt = addSubString(txt,"| 102 -104       Fours" + "\n",0);
+			txt = addSubString(txt,"|  98 -100       Balls" + "\n",0);
+			txt = addSubString(txt,"|  94 - 96       Runs" + "\n",0);
+			txt = addSubString(txt,"|  88 - 92       Batsman code" + "\n",0);
+			txt = addSubString(txt,"|  67 - 86       Opponent full name" + "\n",0);
+			txt = addSubString(txt,"|  46 - 65       Team full name" + "\n",0);
+			txt = addSubString(txt,"|  25 - 44       Venue name" + "\n",0);
+			txt = addSubString(txt,"|   4 - 23       Match file name" + "\n",0);
+			txt = addSubString(txt,"|   1 -  2       Line Ident ('IS')" + "\n",0);
+			txt = addSubString(txt,"|" + "\n",0);
+			txt = addSubString(txt,"|  Columns       Meaning" + "\n",0);
+			txt = addSubString(txt,"|" + "\n",0);
+			txt = addSubString(txt,"|  Batting data" + "\n",0);
+			txt = addSubString(txt,"|" + "\n",0);
+			
+			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+					Arrays.asList(txt), StandardOpenOption.APPEND);
+			
+			line_txt = addSubString(line_txt,"|",0);
+			line_txt = addSubString(line_txt,"<Match File Name   >",3);
+			line_txt = addSubString(line_txt,"< Venue Name       >",24);
+			line_txt = addSubString(line_txt,"< Team name        >",45);
+			line_txt = addSubString(line_txt,"< Opponent Name    >",66);
+			line_txt = addSubString(line_txt,"<BAT>",87);
+			line_txt = addSubString(line_txt,"<R>",93);
+			line_txt = addSubString(line_txt,"<B>",97);
+			line_txt = addSubString(line_txt,"<4>",101);
+			line_txt = addSubString(line_txt,"<6>",105);
+			line_txt = addSubString(line_txt,"<F>",109);
+			line_txt = addSubString(line_txt,"<H>",113);
+			line_txt = addSubString(line_txt,"I",117);
+			line_txt = addSubString(line_txt,"D",119);
+			line_txt = addSubString(line_txt,"<TN>",121);
+			line_txt = addSubString(line_txt,"<ON>",126);
+			line_txt = addSubString(line_txt,"<D>",131);
+			line_txt = addSubString(line_txt,"<1>",135);
+			line_txt = addSubString(line_txt,"<2>",139);
+			line_txt = addSubString(line_txt,"<3>",143);
+			line_txt = addSubString(line_txt,"<C>",147);
+			line_txt = addSubString(line_txt,"<S>",151);
+			
+			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+					Arrays.asList(line_txt), StandardOpenOption.APPEND);
+			
+			setHeadToHeadData(match, line_txt, "BATTING");
+			
+			txt = String.format("%-140s", "");
+			
+			txt = addSubString(txt,"|",0);
+			txt = addSubString(txt,"|============================================================================================================================================================" + "\n",0);
+			txt = addSubString(txt,"| 124 -127       Last wicket ball count" + "\n",0);
+			txt = addSubString(txt,"| 119 -122       Opponent ticker name" + "\n",0);
+			txt = addSubString(txt,"| 114 -117       Team ticker name" + "\n",0);
+			txt = addSubString(txt,"| 110 -112       Dot balls" + "\n",0);
+			txt = addSubString(txt,"| 106 -108       Wickets" + "\n",0);
+			txt = addSubString(txt,"| 102 -104       Runs" + "\n",0);
+			txt = addSubString(txt,"|  98 -100       Maidens" + "\n",0);
+			txt = addSubString(txt,"|  94 - 96       Balls" + "\n",0);
+			txt = addSubString(txt,"|  88 - 92       Bowler code" + "\n",0);
+			txt = addSubString(txt,"|  67 - 86       Opponent name" + "\n",0);
+			txt = addSubString(txt,"|  46 - 65       Team name" + "\n",0);
+			txt = addSubString(txt,"|  25 - 44       Venue name" + "\n",0);
+			txt = addSubString(txt,"|   4 - 23       Match file name" + "\n",0);
+			txt = addSubString(txt,"|   1 -  2       Line Ident ('BO')" + "\n",0);
+			txt = addSubString(txt,"|" + "\n",0);
+			txt = addSubString(txt,"|  Columns       Meaning" + "\n",0);
+			txt = addSubString(txt,"|" + "\n",0);
+			txt = addSubString(txt,"|  Bowling data" + "\n",0);
+			txt = addSubString(txt,"|" + "\n",0);
+			
+			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+					Arrays.asList(txt), StandardOpenOption.APPEND);
+			
+			line_txt = String.format("%-140s", "");
+			
+			line_txt = addSubString(line_txt,"|",0);
+			line_txt = addSubString(line_txt,"<Match File Name   >",3);
+			line_txt = addSubString(line_txt,"< Venue Name       >",24);
+			line_txt = addSubString(line_txt,"< Team name        >",45);
+			line_txt = addSubString(line_txt,"< Opponent Name    >",66);
+			line_txt = addSubString(line_txt,"<BWL>",87);
+			line_txt = addSubString(line_txt,"<B>",93);
+			line_txt = addSubString(line_txt,"<M>",97);
+			line_txt = addSubString(line_txt,"<R>",101);
+			line_txt = addSubString(line_txt,"<W>",105);
+			line_txt = addSubString(line_txt,"<D>",109);
+			line_txt = addSubString(line_txt,"<TN>",113);
+			line_txt = addSubString(line_txt,"<ON>",118);
+			line_txt = addSubString(line_txt,"<LW>",123);
+			
+			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+					Arrays.asList(line_txt), StandardOpenOption.APPEND);
+			
+			setHeadToHeadData(match, line_txt, "BOWLING");
+			
+		    break;
+		}
+		return null;
+	}
+
 	public static String addSubString(String main_string,String sub_string, int position) {
 	    StringBuilder sb = new StringBuilder(main_string);
 		    sb.insert(position, sub_string);
@@ -2316,6 +2221,108 @@ public class CricketFunctions {
 			}
 		}
 		return null;
+	}
+	
+	public static int lastWicketBallCount(List<Event> events, int inningNumber, int playerId) {
+		int ball_count = 0;
+		
+		if(events != null && events.size()>0) {
+			for(Event evnt : events) {
+				if(inningNumber == evnt.getEventInningNumber()) {
+					if(evnt.getEventBowlerNo() == playerId) {
+						switch (evnt.getEventType()) {
+						case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR: case CricketUtil.SIX:
+						case CricketUtil.FIVE: case CricketUtil.BYE: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.LEG_BYE:
+						case CricketUtil.LOG_ANY_BALL:
+			  	        	ball_count ++;
+			  	          break;
+			  	        case CricketUtil.LOG_WICKET:
+			  	        	ball_count = 0;
+			  	        	break;
+			  	        }
+					}
+				}
+			}
+		}
+		return ball_count;
+	}
+	
+	public static String caughtAndStumpedCount(List<Event> events, int playerId) {
+		int caught_count = 0,stumped_count = 0;
+		
+		if(events != null && events.size()>0) {
+			for(Event evnt : events) {
+				if(evnt.getEventHowOutFielderId() > 0) {
+					if(evnt.getEventType().equalsIgnoreCase(CricketUtil.LOG_WICKET)) {
+						if(evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.CAUGHT) || evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.CAUGHT_AND_BOWLED)) {
+							if(evnt.getEventHowOutFielderId() == playerId) {
+								caught_count ++ ;
+							}
+						}else if(evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.STUMPED)) {
+							if(evnt.getEventHowOutFielderId() == playerId) {
+								stumped_count ++ ;
+							}
+						}
+					}
+				}
+			}
+		}
+		return caught_count + "-" + stumped_count;
+	}
+	
+	public static String ballCountOfFiftyAndHundred(List<Event> events, int inningNumber, int playerId) {
+		int ball50_count = 0,ball100_count = 0,runs=0;
+		
+		if(events != null && events.size()>0) {
+			for(Event evnt : events) {
+				if(inningNumber == evnt.getEventInningNumber()) {
+					if(evnt.getEventBatterNo() == playerId) {
+						switch(evnt.getEventType()) {
+						case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR: 
+						case CricketUtil.FIVE: case CricketUtil.SIX: case CricketUtil.NINE:
+							runs = runs + evnt.getEventRuns(); 
+							if(runs > 50 && runs <= 100) {
+								ball100_count ++;
+							}else if(runs <= 50) {
+								ball50_count ++;
+								ball100_count ++;
+							}
+							break;
+						case CricketUtil.LOG_ANY_BALL:
+						  runs = runs + evnt.getEventRuns();
+				          if (evnt.getEventExtra() != null) {
+				        	  runs = runs + evnt.getEventExtraRuns();
+				          }
+				          if (evnt.getEventSubExtra() != null) {
+				        	  runs = runs + evnt.getEventSubExtraRuns();
+				          }
+				          
+				          if(runs > 50 && runs <= 100) {
+								ball100_count ++;
+				          }else if(runs <= 50) {
+								ball50_count ++;
+								ball100_count ++;
+						  }
+				          break;
+						case CricketUtil.LOG_WICKET:
+							if (evnt.getEventRuns() > 0)
+                            {
+								runs = runs + evnt.getEventRuns();
+                            }
+							
+							if(runs > 50 && runs <= 100) {
+								ball100_count ++;
+							}else if(runs <= 50) {
+								ball50_count ++;
+								ball100_count ++;
+							}
+							break;
+						}
+					}
+				}
+			}
+		}
+		return ball50_count + "-" + ball100_count;
 	}
 	
 	public static BowlingCard getCurrentInningCurrentBowler(MatchAllData match) {
@@ -6254,7 +6261,6 @@ public class CricketFunctions {
         return String.valueOf(total_run_PP) + "-" + String.valueOf(total_wickets_PP)+","+Fours+","+Sixes+","+Dots+","+Nines;
     }
 
-	
 	public static List<String> getSplitBallls(int inning_number, int splitvalue, MatchAllData match,List<Event> events) {
 		int total_runs = 0, total_balls = 0 ;
 		List<String> Balls = new ArrayList<String>();
@@ -6842,7 +6848,6 @@ public class CricketFunctions {
 		System.out.println(this_over);
 		return this_over;
 	}
-	
 	
 	public static Event getLastBallData(List<Event> events) 
 	{
@@ -8844,8 +8849,6 @@ public class CricketFunctions {
 		
 		return tournament_stats;
 	}
-	
-	
 	
 	public static class TeamInningStatsComparator implements Comparator<Teams_Total_Score_in_powerplays> {
 	    @Override

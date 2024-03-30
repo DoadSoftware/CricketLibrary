@@ -19,6 +19,7 @@ public class CricketUtil {
 	public final static String CRICKET_DIRECTORY = "C:/Sports/Cricket/";
 	public final static String Cricket_THIRDPARTY = "AE-Cricket-ThirdParty.XML";
 	public final static String INTERACTIVE_DIRECTORY = "Interactive/";
+	public final static String HEADTOHEAD_DIRECTORY = "HeadToHead/";
 	public final static String BACK_UP_DIRECTORY = "Backup/";
 	public final static String EVENT_DIRECTORY = "Event/";
 	public final static String SETUP_DIRECTORY = "Setup/";
@@ -30,6 +31,7 @@ public class CricketUtil {
 	public final static String CLOCK_XML = "Clock.XML";
 	public final static String SPEED_XML = "Speed.XML";
 	public final static String DOAD_INTERACTIVE_TXT = "DOADInteractiveFile.txt";
+	public final static String DOAD_H2H_TXT = "DOADH2HFile.txt";
 	public final static String CRIC_ARCHIVE_XML = "CricArchive.XML";
 	public final static String OUTPUT_XML = "OUTPUT.XML";
 	public final static String LEAGUE_TABLE_DIRECTORY = "LeagueTable/";
