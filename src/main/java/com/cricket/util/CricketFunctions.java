@@ -1456,12 +1456,35 @@ public class CricketFunctions {
 			txt = addSubString(txt,"| " + "\n",0);
 			txt = addSubString(txt,"|" + "\n",0);
 			
-//			if(Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
-//				FileOutputStream fs = new FileOutputStream(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT);
-//				fs.write(new byte[0]);
-//				fs.close();
-//			}
-			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+			if(Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
+				
+				String lastLine = null;
+		        try (BufferedReader reader = new BufferedReader(new FileReader(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
+		            String line;
+		            while ((line = reader.readLine()) != null) {
+		                lastLine = line;
+		            }
+		        }
+		        if(!lastLine.contains(match.getMatch().getMatchFileName())) {
+		        	setTextToTextFile(match, txt,line_txt);
+		        }
+			}else if(!Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
+				Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+						Arrays.asList(txt), StandardOpenOption.CREATE);
+				setTextToTextFile(match, txt,line_txt);
+				
+			}
+			
+			
+		    break;
+		}
+		return null;
+	}
+
+	
+	public static void setTextToTextFile(MatchAllData match,String txt,String line_txt) throws IOException {
+					
+		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
 				Arrays.asList(txt), StandardOpenOption.CREATE);
 			
 			txt = String.format("%-140s", "");
@@ -1575,12 +1598,8 @@ public class CricketFunctions {
 					Arrays.asList(line_txt), StandardOpenOption.APPEND);
 			
 			setHeadToHeadData(match, line_txt, "BOWLING");
-			
-		    break;
-		}
-		return null;
 	}
-
+	
 	public static String addSubString(String main_string,String sub_string, int position) {
 	    StringBuilder sb = new StringBuilder(main_string);
 		    sb.insert(position, sub_string);
