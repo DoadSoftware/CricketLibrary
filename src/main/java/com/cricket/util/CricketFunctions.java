@@ -61,6 +61,7 @@ import com.cricket.model.FallOfWicket;
 import com.cricket.model.FieldersData;
 import com.cricket.model.Fixture;
 import com.cricket.model.ForeignLanguageData;
+import com.cricket.model.HeadToHead;
 import com.cricket.model.Inning;
 import com.cricket.model.LogFifty;
 import com.cricket.model.Match;
@@ -1354,13 +1355,13 @@ public class CricketFunctions {
 					
 					if(bc.getRuns() >= 50 && bc.getRuns() < 100) {
 						line_txt = addSubString(line_txt,ball_count[0],112-ball_count[0].length());
-						line_txt = addSubString(line_txt,"",116);
+						line_txt = addSubString(line_txt,"0",115);
 					}else if(bc.getRuns() >= 100) {
 						line_txt = addSubString(line_txt,ball_count[0],112-ball_count[0].length());
 						line_txt = addSubString(line_txt,ball_count[1],116-ball_count[1].length());
 					}else {
-						line_txt = addSubString(line_txt,"",112);
-						line_txt = addSubString(line_txt,"",116);
+						line_txt = addSubString(line_txt,"0",111);
+						line_txt = addSubString(line_txt,"0",115);
 					}
 					
 					if(bc.getBatsmanInningStarted() != null && 
@@ -1375,7 +1376,7 @@ public class CricketFunctions {
 						
 					}else {
 						line_txt = addSubString(line_txt,"N",117);
-						line_txt = addSubString(line_txt,"",119);
+						line_txt = addSubString(line_txt,"-",119);
 					}
 					
 					line_txt = addSubString(line_txt,inn.getBatting_team().getTeamName4(),121);
@@ -1423,7 +1424,7 @@ public class CricketFunctions {
 						line_txt = addSubString(line_txt,String.valueOf(lastWicketBallCount(match.getEventFile().getEvents(), inn.getInningNumber(), boc.getPlayerId())),
 								126 - String.valueOf(lastWicketBallCount(match.getEventFile().getEvents(), inn.getInningNumber(), boc.getPlayerId())).length());
 					}else {
-						line_txt = addSubString(line_txt,"",123);
+						line_txt = addSubString(line_txt,"0",125);
 					}
 					
 					Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
@@ -1436,10 +1437,6 @@ public class CricketFunctions {
 	
 	public static String getHeadToHead(MatchAllData match,String type) throws IOException {
 
-		if(match.getEventFile() == null || (match.getEventFile().getEvents() == null 
-			|| match.getEventFile().getEvents().size() <= 0)) {
-			return "";
-		}
 		String line_txt = String.format("%-140s", "");
 		String txt = String.format("%-140s", "");
 		
@@ -1600,6 +1597,45 @@ public class CricketFunctions {
 			setHeadToHeadData(match, line_txt, "BOWLING");
 	}
 	
+	public static List<HeadToHead> extractHeadToHead() throws IOException {
+		
+		List<String> headToHead = new ArrayList<String>();
+		List<HeadToHead> headToHead_stats = new ArrayList<HeadToHead>();
+		
+		if(new File (CricketUtil.CRICKET_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT).exists()) {
+			String text_to_return = "";
+			try(BufferedReader br = new BufferedReader(new FileReader(CricketUtil.CRICKET_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))){
+				while((text_to_return = br.readLine()) != null) {
+					if(text_to_return.contains("|")) {
+						
+					}else {
+						if(text_to_return.contains("IS") || text_to_return.contains("BO")) {
+							headToHead.add(text_to_return.trim().replaceAll("(  )+", ","));
+						}
+					}
+				}
+			}
+		}
+		
+		for(int i=0;i<=headToHead.size()-1;i++) {
+			if(headToHead.get(i).contains("IS")) {
+				System.out.println(headToHead.get(i));
+//				headToHead_stats.add(new HeadToHead(Integer.valueOf(headToHead.get(i).split(",")[4].trim()),Integer.valueOf(headToHead.get(i).split(",")[5].trim()), 
+//						Integer.valueOf(headToHead.get(i).split(",")[6].trim()), Integer.valueOf(headToHead.get(i).split(",")[13].trim()), 
+//						Integer.valueOf(headToHead.get(i).split(",")[14].trim()), Integer.valueOf(headToHead.get(i).split(",")[15].trim()), 
+//						Integer.valueOf(headToHead.get(i).split(",")[16].trim()), Integer.valueOf(headToHead.get(i).split(",")[7].trim()), 
+//						Integer.valueOf(headToHead.get(i).split(",")[8].trim()), 0, 0, 0, 0, 0));
+			}
+			else if(headToHead.get(i).contains("BO")) {
+//				headToHead_stats.add(new HeadToHead(Integer.valueOf(headToHead.get(i).split(",")[4].trim()),0, 0, 0, 0, 0, 0, 0, 0, 
+//						Integer.valueOf(headToHead.get(i).split(",")[8].trim()), Integer.valueOf(headToHead.get(i).split(",")[7].trim()), 
+//						Integer.valueOf(headToHead.get(i).split(",")[5].trim()), Integer.valueOf(headToHead.get(i).split(",")[6].trim()), 0));
+			}
+		}
+		
+		return headToHead_stats;
+	}
+
 	public static String addSubString(String main_string,String sub_string, int position) {
 	    StringBuilder sb = new StringBuilder(main_string);
 		    sb.insert(position, sub_string);
