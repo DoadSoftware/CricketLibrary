@@ -16,11 +16,17 @@ public class HeadToHead implements Cloneable {
   private int ballsBowled;
   private int maidens;
   private int balldots;
-  
+  private String MatchFileName;
 
+  private Team Team;
+  private Team OpponentTeam;
+  
+  private String inningStarted;
+  private String dismissed;
 
 public HeadToHead(int playerId, int runs, int ballsFaced, int batdots, int ones, int twos, int threes, int fours,
-		int sixes, int wickets, int runsConceded, int ballsBowled, int maidens, int balldots) {
+		int sixes, int wickets, int runsConceded, int ballsBowled, int maidens, int balldots, String matchFileName,
+		com.cricket.model.Team team, com.cricket.model.Team opponentTeam, String inningStarted, String dismissed) {
 	super();
 	this.playerId = playerId;
 	this.runs = runs;
@@ -36,6 +42,11 @@ public HeadToHead(int playerId, int runs, int ballsFaced, int batdots, int ones,
 	this.ballsBowled = ballsBowled;
 	this.maidens = maidens;
 	this.balldots = balldots;
+	MatchFileName = matchFileName;
+	Team = team;
+	OpponentTeam = opponentTeam;
+	this.inningStarted = inningStarted;
+	this.dismissed = dismissed;
 }
 
 public int getPlayerId() {
@@ -148,6 +159,46 @@ public int getMaidens() {
 
 public void setMaidens(int maidens) {
 	this.maidens = maidens;
+}
+
+public String getMatchFileName() {
+	return MatchFileName;
+}
+
+public void setMatchFileName(String matchFileName) {
+	MatchFileName = matchFileName;
+}
+
+public Team getTeam() {
+	return Team;
+}
+
+public void setTeam(Team team) {
+	Team = team;
+}
+
+public Team getOpponentTeam() {
+	return OpponentTeam;
+}
+
+public void setOpponentTeam(Team opponentTeam) {
+	OpponentTeam = opponentTeam;
+}
+
+public String getInningStarted() {
+	return inningStarted;
+}
+
+public void setInningStarted(String inningStarted) {
+	this.inningStarted = inningStarted;
+}
+
+public String getDismissed() {
+	return dismissed;
+}
+
+public void setDismissed(String dismissed) {
+	this.dismissed = dismissed;
 }
 
 @Override
