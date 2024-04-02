@@ -10,10 +10,16 @@ public class BestStats{
   private Ground whichVenue;
   private String matchNumber;
   private int runs;
+  private int fours;
+  private int sixes;
   private int wickets;
   private int balls;
   private String status;
   private boolean not_out;
+  
+  private int teamId;
+  private int matches;
+  private int challengeRuns;
   
   @JsonIgnore
   private Player player;
@@ -31,6 +37,32 @@ public BestStats(int playerId, int bestEquation, int balls, Team opponentTeam, G
 	this.matchNumber = matchNumber;
 	this.balls = balls;
 	this.status = status;
+	this.player = player;
+}
+
+public BestStats(int playerId, Player player, Team opponentTeam, String matchNumber, int runs, int wickets) {
+	super();
+	this.playerId = playerId;
+	this.player = player;
+	this.opponentTeam = opponentTeam;
+	this.matchNumber = matchNumber;
+	this.runs = runs;
+	this.wickets = wickets;
+}
+
+public BestStats(int teamId, int matches, int challengeRuns) {
+	super();
+	this.teamId = teamId;
+	this.matches = matches;
+	this.challengeRuns = challengeRuns;
+}
+
+public BestStats(int playerId, int runs, int fours, int sixes, Player player) {
+	super();
+	this.playerId = playerId;
+	this.runs = runs;
+	this.fours = fours;
+	this.sixes = sixes;
 	this.player = player;
 }
 
@@ -57,6 +89,30 @@ public int getBowlerEconomySortData() {
 	}
 }
 
+public int getTeamId() {
+	return teamId;
+}
+
+public void setTeamId(int teamId) {
+	this.teamId = teamId;
+}
+
+public int getMatches() {
+	return matches;
+}
+
+public void setMatches(int matches) {
+	this.matches = matches;
+}
+
+public int getChallengeRuns() {
+	return challengeRuns;
+}
+
+public void setChallengeRuns(int challengeRuns) {
+	this.challengeRuns = challengeRuns;
+}
+
 public boolean isNot_out() {
 	return not_out;
 }
@@ -71,6 +127,22 @@ public int getRuns() {
 
 public void setRuns(int runs) {
 	this.runs = runs;
+}
+
+public int getFours() {
+	return fours;
+}
+
+public void setFours(int fours) {
+	this.fours = fours;
+}
+
+public int getSixes() {
+	return sixes;
+}
+
+public void setSixes(int sixes) {
+	this.sixes = sixes;
 }
 
 public int getWickets() {
@@ -150,6 +222,20 @@ public String toString() {
 	return "BestStats [playerId=" + playerId + ", bestEquation=" + bestEquation + ", opponentTeam=" + opponentTeam
 			+ ", matchNumber=" + matchNumber + ", runs=" + runs + ", wickets=" + wickets + ", balls=" + balls
 			+ ", status=" + status + ", not_out=" + not_out + ", player=" + player + "]";
+}
+
+@Override
+public BestStats clone() throws CloneNotSupportedException {
+	BestStats clone = null;
+    try
+    {
+        clone = (BestStats) super.clone();
+    } 
+    catch (CloneNotSupportedException e) 
+    {
+        throw new RuntimeException(e);
+    }
+    return clone;
 }
 
 }
