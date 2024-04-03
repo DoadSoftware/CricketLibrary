@@ -43,6 +43,8 @@ public class Inning {
   
   private int totalNines;
   
+  private int dots;
+  
   private String runRate;
   
   private String isCurrentInning;
@@ -354,6 +356,24 @@ public List<BowlingCard> getBowlingCard() {
 }
 public void setBowlingCard(List<BowlingCard> bowlingCard) {
 	this.bowlingCard = bowlingCard;
+}
+public int getDots() {
+	return dots;
+}
+
+public void setDots(int dots) {
+	this.dots = dots;
+}
+
+public Inning(int inningNumber, int totalRuns, int totalWickets, int totalFours, int totalSixes, int totalNines,int dots) {
+	super();
+	this.inningNumber = inningNumber;
+	this.totalRuns = totalRuns;
+	this.totalWickets = totalWickets;
+	this.totalFours = totalFours;
+	this.totalSixes = totalSixes;
+	this.totalNines = totalNines;
+	this.dots = dots;
 }
 
 @Override
