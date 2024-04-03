@@ -3,6 +3,7 @@ package com.cricket.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Column;
 
 @Entity
@@ -60,6 +61,15 @@ public class Team implements Comparable<Team> {
 //	// TODO Auto-generated constructor stub
 //}
 
+  @Transient
+  private int one;
+  @Transient
+  private int two;
+  @Transient
+  private int three;
+  @Transient
+  private int five;
+  
 public String getFullHindiTeamName() {
 	return FullHindiTeamName;
 }
@@ -180,14 +190,70 @@ public void setTeamGroup(String teamGroup) {
 	this.teamGroup = teamGroup;
 }
 
+public Team() {
+	super();
+	// TODO Auto-generated constructor stub
+}
+
+public int getOne() {
+	return one;
+}
+
+public void setOne(int one) {
+	this.one = one;
+}
+
+public int getTwo() {
+	return two;
+}
+
+public void setTwo(int two) {
+	this.two = two;
+}
+
+public int getThree() {
+	return three;
+}
+
+public void setThree(int three) {
+	this.three = three;
+}
+
+public int getFive() {
+	return five;
+}
+
+public void setFive(int five) {
+	this.five = five;
+}
+
+public Team(int teamId, String teamName1, String teamName4) {
+	super();
+	this.teamId = teamId;
+	this.teamName1 = teamName1;
+	this.teamName4 = teamName4;
+}
+
+public Team(int teamId, String teamName1, String teamName4, int one, int two, int three, int five) {
+	super();
+	this.teamId = teamId;
+	this.teamName1 = teamName1;
+	this.teamName4 = teamName4;
+	this.one = one;
+	this.two = two;
+	this.three = three;
+	this.five = five;
+}
+
 @Override
 public String toString() {
 	return "Team [teamId=" + teamId + ", teamName1=" + teamName1 + ", teamName2=" + teamName2 + ", teamName3="
-			+ teamName3 + ", teamName4=" + teamName4 + ", teamLogo=" + teamLogo + ", captains=" + captains
-			+ ", teamColor=" + teamColor + ", FullHindiTeamName=" + FullHindiTeamName + ", FullTamilTeamName="
-			+ FullTamilTeamName + ", FullTeluguTeamName=" + FullTeluguTeamName + ", ShortHindiTeamName="
-			+ ShortHindiTeamName + ", ShortTamilTeamName=" + ShortTamilTeamName + ", ShortTeluguTeamName="
-			+ ShortTeluguTeamName + "]";
+			+ teamName3 + ", teamName4=" + teamName4 + ", teamGroup=" + teamGroup + ", teamLogo=" + teamLogo
+			+ ", captains=" + captains + ", teamColor=" + teamColor + ", FullHindiTeamName=" + FullHindiTeamName
+			+ ", FullTamilTeamName=" + FullTamilTeamName + ", FullTeluguTeamName=" + FullTeluguTeamName
+			+ ", ShortHindiTeamName=" + ShortHindiTeamName + ", ShortTamilTeamName=" + ShortTamilTeamName
+			+ ", ShortTeluguTeamName=" + ShortTeluguTeamName + ", one=" + one + ", two=" + two + ", three=" + three
+			+ ", five=" + five + "]";
 }
 
 @Override
