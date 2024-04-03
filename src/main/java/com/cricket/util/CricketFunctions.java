@@ -9738,35 +9738,30 @@ public class CricketFunctions {
 						}
 						
 						if(events.get(i).getEventRuns()>=1) {
-							switch(events.get(i).getEventType()) {
-							case CricketUtil.ONE:
+							if(events.get(i).getEventRuns()==1) {
 								if(events.get(i).getEventInningNumber() == 1) {
 									eventsExtract.getTeam_summary().get(0).setOne(eventsExtract.getTeam_summary().get(0).getOne()+1);
 								} else if(events.get(i).getEventInningNumber() == 2) {
 									eventsExtract.getTeam_summary().get(1).setOne(eventsExtract.getTeam_summary().get(0).getOne()+1);
 								}
-								break;
-							case CricketUtil.TWO:
+							}if(events.get(i).getEventRuns()==2) {
 								if(events.get(i).getEventInningNumber() == 1) {
 									eventsExtract.getTeam_summary().get(0).setTwo(eventsExtract.getTeam_summary().get(0).getTwo()+1);
 								} else if(events.get(i).getEventInningNumber() == 2) {
 									eventsExtract.getTeam_summary().get(1).setTwo(eventsExtract.getTeam_summary().get(0).getTwo()+1);
 								}
-								break;
-							case CricketUtil.THREE:
+							}if(events.get(i).getEventRuns()==3) {
 								if(events.get(i).getEventInningNumber() == 1) {
 									eventsExtract.getTeam_summary().get(0).setThree(eventsExtract.getTeam_summary().get(0).getThree()+1);
 								} else if(events.get(i).getEventInningNumber() == 2) {
 									eventsExtract.getTeam_summary().get(1).setThree(eventsExtract.getTeam_summary().get(0).getThree()+1);
 								}
-								break;
-							case CricketUtil.FIVE:
+							}if(events.get(i).getEventRuns()==5) {
 								if(events.get(i).getEventInningNumber() == 1) {
 									eventsExtract.getTeam_summary().get(0).setFive(eventsExtract.getTeam_summary().get(0).getFive()+1);
 								} else if(events.get(i).getEventInningNumber() == 2) {
 									eventsExtract.getTeam_summary().get(1).setFive(eventsExtract.getTeam_summary().get(0).getFive()+1);
 								}
-								break;
 							}
 						}
 						break;	
@@ -9831,19 +9826,14 @@ public class CricketFunctions {
 								case CricketUtil.LOG_ANY_BALL:
 									if(events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
 										if(events.get(i).getEventRuns()>=1) {
-											switch(events.get(i).getEventType()) {
-											case CricketUtil.ONE: 
-												ply.setOne(ply.getOne()+1);	
-												break;
-											case CricketUtil.TWO:
+											if(events.get(i).getEventRuns()==1) {
+												ply.setOne(ply.getOne()+1);
+											}if(events.get(i).getEventRuns()==2) {
 												ply.setTwo(ply.getTwo()+1);
-												break;
-											case CricketUtil.THREE:
+											}if(events.get(i).getEventRuns()==3) {
 												ply.setThree(ply.getThree()+1);
-												break;
-											case CricketUtil.FIVE:
+											}if(events.get(i).getEventRuns()==5) {
 												ply.setFive(ply.getFive()+1);
-												break;
 											}
 										}else {
 											ply.setDot(ply.getDot()+1);
@@ -9913,19 +9903,14 @@ public class CricketFunctions {
 								case CricketUtil.LOG_ANY_BALL:
 									if(events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
 										if(events.get(i).getEventRuns()>=1) {
-											switch(events.get(i).getEventType()) {
-											case CricketUtil.ONE: 
-												ply.getPlayer().setOne(ply.getPlayer().getOne()+1);	
-												break;
-											case CricketUtil.TWO:
+											if(events.get(i).getEventRuns()==1) {
+												ply.getPlayer().setOne(ply.getPlayer().getOne()+1);
+											}if(events.get(i).getEventRuns()==2) {
 												ply.getPlayer().setTwo(ply.getPlayer().getTwo()+1);
-												break;
-											case CricketUtil.THREE:
+											}if(events.get(i).getEventRuns()==3) {
 												ply.getPlayer().setThree(ply.getPlayer().getThree()+1);
-												break;
-											case CricketUtil.FIVE:
+											}if(events.get(i).getEventRuns()==5) {
 												ply.getPlayer().setFive(ply.getPlayer().getFive()+1);
-												break;
 											}
 										}else {
 											ply.getPlayer().setDot(ply.getPlayer().getDot()+1);
