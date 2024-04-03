@@ -12,6 +12,8 @@ public class BattingCard implements Comparable<BattingCard>{
   private int batterPosition;
   
   private String battingStyle;
+
+  private int duration;
   
   private int runs;
   
@@ -47,8 +49,10 @@ public class BattingCard implements Comparable<BattingCard>{
   
   private int concussionPlayerId;
 
-  private long seconds;
- 
+  private String startTime;
+
+  private String endTime;
+  
   private Player player;
 
   @JsonIgnore
@@ -76,7 +80,7 @@ public BattingCard(Player player) {
 public BattingCard(int playerId, int batterPosition, String battingStyle, int runs, int fours, int sixes, int balls,
 		int howOutFielderId, int howOutBowlerId, String batsmanInningStarted, String status, String onStrike,
 		String howOutText, String howOut, String howOutPartOne, String howOutPartTwo, String strikeRate,
-		String wasHowOutFielderSubstitute, int concussionPlayerId, long seconds, Player player,
+		String wasHowOutFielderSubstitute, int concussionPlayerId, String startTime, Player player,
 		Player concussion_player, Player howOutFielder, Player howOutBowler) {
 	super();
 	this.playerId = playerId;
@@ -96,9 +100,9 @@ public BattingCard(int playerId, int batterPosition, String battingStyle, int ru
 	this.howOutPartOne = howOutPartOne;
 	this.howOutPartTwo = howOutPartTwo;
 	this.strikeRate = strikeRate;
-	WasHowOutFielderSubstitute = wasHowOutFielderSubstitute;
+	this.WasHowOutFielderSubstitute = wasHowOutFielderSubstitute;
 	this.concussionPlayerId = concussionPlayerId;
-	this.seconds = seconds;
+	this.startTime = startTime;
 	this.player = player;
 	this.concussion_player = concussion_player;
 	this.howOutFielder = howOutFielder;
@@ -130,11 +134,23 @@ public int getBatsmanScoreSortData() {
 	}
 	return 1000 * sortData + 1000 - this.getBalls();
 }
-public long getSeconds() {
-	return seconds;
+public int getDuration() {
+	return duration;
 }
-public void setSeconds(long seconds) {
-	this.seconds = seconds;
+public void setDuration(int duration) {
+	this.duration = duration;
+}
+public String getEndTime() {
+	return endTime;
+}
+public void setEndTime(String endTime) {
+	this.endTime = endTime;
+}
+public String getStartTime() {
+	return startTime;
+}
+public void setStartTime(String startTime) {
+	this.startTime = startTime;
 }
 public String getStrikeRate() {
 	return strikeRate;
@@ -290,7 +306,7 @@ public String toString() {
 			+ batsmanInningStarted + ", status=" + status + ", onStrike=" + onStrike + ", howOutText=" + howOutText
 			+ ", howOut=" + howOut + ", howOutPartOne=" + howOutPartOne + ", howOutPartTwo=" + howOutPartTwo
 			+ ", strikeRate=" + strikeRate + ", WasHowOutFielderSubstitute=" + WasHowOutFielderSubstitute
-			+ ", concussionPlayerId=" + concussionPlayerId + ", seconds=" + seconds + ", player=" + player
+			+ ", concussionPlayerId=" + concussionPlayerId + ", startTime=" + startTime + ", player=" + player
 			+ ", concussion_player=" + concussion_player + ", howOutFielder=" + howOutFielder + ", howOutBowler="
 			+ howOutBowler + "]";
 }

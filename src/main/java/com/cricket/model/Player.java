@@ -104,8 +104,8 @@ public class Player implements Comparable<Player>
   @Transient
   private String captainWicketKeeper;
 
-  @Transient
-  private String impactPlayer;
+//  @Transient
+//  private String impactPlayer;
 
   public Player() {
 		super();
@@ -117,13 +117,13 @@ public class Player implements Comparable<Player>
 	this.playerPosition = playerPosition;
   }
   
-public String getImpactPlayer() {
-	return impactPlayer;
-}
-
-public void setImpactPlayer(String impactPlayer) {
-	this.impactPlayer = impactPlayer;
-}
+//public String getImpactPlayer() {
+//	return impactPlayer;
+//}
+//
+//public void setImpactPlayer(String impactPlayer) {
+//	this.impactPlayer = impactPlayer;
+//}
 
 public String getFirstname() {
 	return firstname;
@@ -389,7 +389,8 @@ public String toString() {
 			+ ", teamId=" + teamId + ", overseasPlayer=" + overseasPlayer + ", Photo=" + Photo + ", Nationality="
 			+ Nationality + ", text1=" + text1 + ", text2=" + text2 + ", text3=" + text3 + ", question1=" + question1
 			+ ", question2=" + question2 + ", question3=" + question3 + ", playerPosition=" + playerPosition
-			+ ", captainWicketKeeper=" + captainWicketKeeper + ", impactPlayer=" + impactPlayer + "]";
+			+ ", captainWicketKeeper=" + captainWicketKeeper + "]";
+//			+ ", captainWicketKeeper=" + captainWicketKeeper + ", impactPlayer=" + impactPlayer + "]";
 }
 
 }
