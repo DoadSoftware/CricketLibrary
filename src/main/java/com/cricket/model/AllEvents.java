@@ -1,5 +1,6 @@
 package com.cricket.model;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class AllEvents{
@@ -20,6 +21,8 @@ public class AllEvents{
 	
 	private int lastBowlerId;
 	
+	private int secondlastBowlerId;
+	
 	private List<Integer>bothInningDotBalls;
 	
 	private List<Integer>This_over_run_wk;
@@ -27,6 +30,10 @@ public class AllEvents{
 	private List<Player> allRounderCatches;
 	
 	private Inning inningComaprision;
+	
+	private HashMap<String,List<OverByOverData>> overByOverData;
+	
+	private List<PowerPlays> powerplay;
 	
 	public String getThis_Over() {
 		return This_Over;
@@ -123,8 +130,32 @@ public class AllEvents{
 		this.bowler_summary = bowler_summary;
 	}
 
+	public HashMap<String, List<OverByOverData>> getOverByOverData() {
+		return overByOverData;
+	}
+
+	public void setOverByOverData(HashMap<String, List<OverByOverData>> overByOverData) {
+		this.overByOverData = overByOverData;
+	}
+
+	public List<PowerPlays> getPowerplay() {
+		return powerplay;
+	}
+
+	public void setPowerplay(List<PowerPlays> powerplay) {
+		this.powerplay = powerplay;
+	}
+
+	public int getSecondlastBowlerId() {
+		return secondlastBowlerId;
+	}
+
+	public void setSecondlastBowlerId(int secondlastBowlerId) {
+		this.secondlastBowlerId = secondlastBowlerId;
+	}
+
 	public AllEvents(String this_Over, List<Integer> last_Over, List<Integer> last_30_Balls, int ballsSinceLastBoundary,
-			int lastBowlerId, List<Integer> bothInningDotBalls, List<Integer> this_over_run_wk,
+			int lastBowlerId,int secondlastBowlerId, List<Integer> bothInningDotBalls, List<Integer> this_over_run_wk,
 			Inning inningComaprision) {
 		super();
 		This_Over = this_Over;
@@ -132,9 +163,14 @@ public class AllEvents{
 		Last_30_Balls = last_30_Balls;
 		this.ballsSinceLastBoundary = ballsSinceLastBoundary;
 		this.lastBowlerId = lastBowlerId;
+		this.secondlastBowlerId = secondlastBowlerId;
 		this.bothInningDotBalls = bothInningDotBalls;
 		This_over_run_wk = this_over_run_wk;
 		this.inningComaprision = inningComaprision;
-	}	
-	
+	}
+
+	public AllEvents() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 }
