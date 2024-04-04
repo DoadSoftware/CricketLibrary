@@ -124,7 +124,26 @@ public class Player implements Comparable<Player>
 //public void setImpactPlayer(String impactPlayer) {
 //	this.impactPlayer = impactPlayer;
 //}
-
+  @Transient
+  private int one;
+  @Transient
+  private int two;
+  @Transient
+  private int three;
+  @Transient
+  private int five;
+  
+  @Transient
+  private int six;
+  @Transient
+  private int four;
+  @Transient
+  private int nine;
+  @Transient
+  private int dot;
+  @Transient
+  private int catches;
+  
 public String getFirstname() {
 	return firstname;
 }
@@ -371,6 +390,78 @@ public String getZone() {
 
 public void setZone(String zone) {
 	this.zone = zone;
+}
+
+public int getOne() {
+	return one;
+}
+
+public void setOne(int one) {
+	this.one = one;
+}
+
+public int getTwo() {
+	return two;
+}
+
+public void setTwo(int two) {
+	this.two = two;
+}
+
+public int getThree() {
+	return three;
+}
+
+public void setThree(int three) {
+	this.three = three;
+}
+
+public int getFive() {
+	return five;
+}
+
+public void setFive(int five) {
+	this.five = five;
+}
+
+public int getSix() {
+	return six;
+}
+
+public void setSix(int six) {
+	this.six = six;
+}
+
+public int getFour() {
+	return four;
+}
+
+public void setFour(int four) {
+	this.four = four;
+}
+
+public int getNine() {
+	return nine;
+}
+
+public void setNine(int nine) {
+	this.nine = nine;
+}
+
+public int getDot() {
+	return dot;
+}
+
+public void setDot(int dot) {
+	this.dot = dot;
+}
+
+public int getCatches() {
+	return catches;
+}
+
+public void setCatches(int catches) {
+	this.catches = catches;
 }
 
 @Override
