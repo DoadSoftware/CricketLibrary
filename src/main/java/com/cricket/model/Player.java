@@ -104,27 +104,8 @@ public class Player implements Comparable<Player>
   @Transient
   private String captainWicketKeeper;
 
-  @Transient
-  private String impactPlayer;
-  
-  @Transient
-  private int catches;
-  @Transient
-  private int dot;
-  @Transient
-  private int one;
-  @Transient
-  private int two;
-  @Transient
-  private int three;
-  @Transient
-  private int five;
-  @Transient
-  private int four;
-  @Transient
-  private int six;
-  @Transient
-  private int nine;
+//  @Transient
+//  private String impactPlayer;
 
   public Player() {
 		super();
@@ -136,13 +117,13 @@ public class Player implements Comparable<Player>
 	this.playerPosition = playerPosition;
   }
   
-public String getImpactPlayer() {
-	return impactPlayer;
-}
-
-public void setImpactPlayer(String impactPlayer) {
-	this.impactPlayer = impactPlayer;
-}
+//public String getImpactPlayer() {
+//	return impactPlayer;
+//}
+//
+//public void setImpactPlayer(String impactPlayer) {
+//	this.impactPlayer = impactPlayer;
+//}
 
 public String getFirstname() {
 	return firstname;
@@ -397,91 +378,6 @@ public int compareTo(Player pm) {
 	return (int) (this.getPlayerPosition()-pm.getPlayerPosition());
 }
 
-public int getCatches() {
-	return catches;
-}
-
-public void setCatches(int catches) {
-	this.catches = catches;
-}
-
-public int getDot() {
-	return dot;
-}
-
-public void setDot(int dot) {
-	this.dot = dot;
-}
-
-public int getOne() {
-	return one;
-}
-
-public void setOne(int one) {
-	this.one = one;
-}
-
-public int getTwo() {
-	return two;
-}
-
-public void setTwo(int two) {
-	this.two = two;
-}
-
-public int getThree() {
-	return three;
-}
-
-public void setThree(int three) {
-	this.three = three;
-}
-
-public int getFive() {
-	return five;
-}
-
-public void setFive(int five) {
-	this.five = five;
-}
-
-public int getFour() {
-	return four;
-}
-
-public void setFour(int four) {
-	this.four = four;
-}
-
-public int getSix() {
-	return six;
-}
-
-public void setSix(int six) {
-	this.six = six;
-}
-
-public int getNine() {
-	return nine;
-}
-
-public void setNine(int nine) {
-	this.nine = nine;
-}
-
-public Player(int playerId, int dot, int one, int two, int three, int five, int four, int six, int nine) {
-	super();
-	this.playerId = playerId;
-	this.dot = dot;
-	this.one = one;
-	this.two = two;
-	this.three = three;
-	this.five = five;
-	this.four = four;
-	this.six = six;
-	this.nine = nine;
-}
-
 @Override
 public String toString() {
 	return "Player [playerId=" + playerId + ", full_name=" + full_name + ", firstname=" + firstname + ", surname="
@@ -493,9 +389,8 @@ public String toString() {
 			+ ", teamId=" + teamId + ", overseasPlayer=" + overseasPlayer + ", Photo=" + Photo + ", Nationality="
 			+ Nationality + ", text1=" + text1 + ", text2=" + text2 + ", text3=" + text3 + ", question1=" + question1
 			+ ", question2=" + question2 + ", question3=" + question3 + ", playerPosition=" + playerPosition
-			+ ", captainWicketKeeper=" + captainWicketKeeper + ", impactPlayer=" + impactPlayer + ", catches=" + catches
-			+ ", dot=" + dot + ", one=" + one + ", two=" + two + ", three=" + three + ", five=" + five + ", four="
-			+ four + ", six=" + six + ", nine=" + nine + "]";
+			+ ", captainWicketKeeper=" + captainWicketKeeper + "]";
+//			+ ", captainWicketKeeper=" + captainWicketKeeper + ", impactPlayer=" + impactPlayer + "]";
 }
 
 }

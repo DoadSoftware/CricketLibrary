@@ -9,6 +9,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Inning {
 
+  private String startTime;
+
+  private String endTime;
+
+  private int duration;
+  
   private String isDeclared;
 	
   private int inningNumber;
@@ -95,6 +101,30 @@ public Inning() {
 public Inning(int oversRemaining) {
 	super();
 	this.oversRemaining = oversRemaining;
+}
+
+public int getDuration() {
+	return duration;
+}
+
+public void setDuration(int duration) {
+	this.duration = duration;
+}
+
+public String getStartTime() {
+	return startTime;
+}
+
+public void setStartTime(String startTime) {
+	this.startTime = startTime;
+}
+
+public String getEndTime() {
+	return endTime;
+}
+
+public void setEndTime(String endTime) {
+	this.endTime = endTime;
 }
 
 public String getIsDeclared() {
