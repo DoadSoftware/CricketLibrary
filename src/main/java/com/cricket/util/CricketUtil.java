@@ -5,6 +5,7 @@ public class CricketUtil {
 	public final static String ISPL = "ISPL";
 	public final static String DOAD = "DOAD";
 	public final static String DOAD_FRUIT = "DOAD_FRUIT";
+	public final static String DOAD_TRIO = "DOAD_TRIO";
 	public final static String ISPL_FRUIT = "ISPL_FRUIT";
 	public final static String ICC_U19_WorldCup_2024 = "ICC_U19_WORLDCUP_2024";
 	public final static String Doad_Fruit_scene = "D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT/Scenes/Fruit.sum";
@@ -82,6 +83,7 @@ public class CricketUtil {
 	public final static String NINE = "9";
 	
 	public final static String LOG_50_50 = "LOG_50_50";
+	public final static String TRIO_XML = "TRIO.XML";
 
 	public final static String UNDO = "UNDO";
 	public final static String WIDE = "WIDE";
