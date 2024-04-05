@@ -4,10 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Column;
 
 @Entity
 @Table(name = "Players")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Player implements Comparable<Player>
 {
   @Id

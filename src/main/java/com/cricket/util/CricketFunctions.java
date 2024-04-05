@@ -9220,8 +9220,6 @@ public class CricketFunctions {
 	
 	public static  AllEvents EventExtraction(MatchAllData matchData ,List<Event>events) {
 		AllEvents eventsExtract;
-
-
 		eventsExtract = new AllEvents("",  new ArrayList<>(Arrays.asList(0, 0)),  
 				new ArrayList<>(Arrays.asList(0, 0)), 0, 0, 0,  new ArrayList<>(Arrays.asList(0, 0)),
 				new ArrayList<>(Arrays.asList(0, 0)), new Inning(1, 0, 0, 0, 0, 0, 0));
@@ -9246,8 +9244,7 @@ public class CricketFunctions {
 						new ArrayList<>(Arrays.asList(0, 0, 0)), new ArrayList<>(Arrays.asList(0, 0, 0)),
 						new ArrayList<>(Arrays.asList(0, 0, 0)),new ArrayList<>(Arrays.asList(0, 0, 0)),
 						new ArrayList<>(Arrays.asList(0, 0, 0)),new ArrayList<>(Arrays.asList(0, 0, 0))))));
-		
-		
+			
 		HashMap<String, List<OverByOverData>> hash_map = new HashMap<String, List<OverByOverData>>();
 		
 		List<OverByOverData> OverByOverData1=new ArrayList<OverByOverData>();
@@ -9392,7 +9389,6 @@ public class CricketFunctions {
 									    	}
 									      
 									      	break;
-
 
 									    case CricketUtil.LOG_WICKET:
 									    	if(matchData.getEventFile().getEvents().get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)||
@@ -9729,8 +9725,6 @@ public class CricketFunctions {
 								}
 							}
 					}
-					
-						
 /******************************************  Both inning dot balls/zero/one/two/three/five*********************************************************/
 					
 					switch (events.get(i).getEventType()) {
@@ -9973,9 +9967,7 @@ public class CricketFunctions {
 	                            
 	                            switch (events.get(i).getEventType().toUpperCase()) {
 	                                case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
-	                                    	
 	                                	 overbyRun += events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
-	                                    
 	                                    if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() &&
 	                                        !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT) &&
 	                                        !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT) &&
@@ -9985,7 +9977,6 @@ public class CricketFunctions {
 	                                    break;
 	                            }
 	                            break;
-
 	                        case CricketUtil.CHANGE_BOWLER:
 	                            if (events.get(i).getEventBallNo() <= 0) {
 	                                switch (processPowerPlay(CricketUtil.FULL, matchData).replace(CricketUtil.POWERPLAY, "").trim()) {
@@ -9997,7 +9988,7 @@ public class CricketFunctions {
 	                                    	OverByOverData1.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo()+1,
 	                                                overbyRun, overbyWkts, false));
 	                                        break;
-	                                }
+	                                	}
 	                                
 	                                overbyRun = 0;
 	                                overbyWkts = 0;
@@ -10109,7 +10100,6 @@ public class CricketFunctions {
 
 						}
 						
-						
 						if((events.get(i).getEventOverNo() >= (inn.getThirdPowerplayStartOver() - 1)) && 
 								(events.get(i).getEventOverNo() <= (inn.getThirdPowerplayEndOver()-1))) {
 							String balldata = getpowerplay(events.get(i));
@@ -10143,7 +10133,6 @@ public class CricketFunctions {
 							eventsExtract.getPowerplay().get(0).getTotal_four().set(2,  (eventsExtract.getPowerplay().get(0).getTotal_four().get(2)+ Integer.valueOf(balldata.split(",")[3])));
 							eventsExtract.getPowerplay().get(0).getTotal_sixs().set(2,  (eventsExtract.getPowerplay().get(0).getTotal_sixs().get(2)+ Integer.valueOf(balldata.split(",")[4])));
 							eventsExtract.getPowerplay().get(0).getTotal_nines().set(2,  (eventsExtract.getPowerplay().get(0).getTotal_nines().get(2)+ Integer.valueOf(balldata.split(",")[5])));
-
 							
 						}
 					}
@@ -10253,8 +10242,10 @@ public class CricketFunctions {
 		}
 		 Collections.reverse(OverByOverData1);
 		 Collections.reverse(OverByOverData2);
+		 	
 		 	eventsExtract.getLast_Over().set(0,  run_count);
 	        eventsExtract.getLast_Over().set(1,  wicket_count);
+	        
 		 hash_map.put(matchData.getMatch().getInning().get(0).getBatting_team().getTeamName1(), OverByOverData1);
 		 hash_map.put(matchData.getMatch().getInning().get(1).getBatting_team().getTeamName1(), OverByOverData2);
 		 

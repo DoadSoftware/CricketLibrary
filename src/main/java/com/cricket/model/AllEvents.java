@@ -171,6 +171,5 @@ public class AllEvents{
 
 	public AllEvents() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 }
