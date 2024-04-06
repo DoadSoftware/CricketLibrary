@@ -1333,7 +1333,6 @@ public class CricketFunctions {
 }
 	
 	public static void setHeadToHeadData(MatchAllData match, String line_txt, String type) throws IOException {
-		
 		for(Inning inn : match.getMatch().getInning()) {
 			switch(type) {
 			case "BATTING":
@@ -1397,7 +1396,7 @@ public class CricketFunctions {
 					line_txt = addSubString(line_txt,Count[0],148);
 					line_txt = addSubString(line_txt,Count[1],152);
 					
-					Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+					Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + match.getMatch().getMatchFileName().replace(".json", ".txt")), 
 							Arrays.asList(line_txt), StandardOpenOption.APPEND);
 				}
 				break;
@@ -1430,22 +1429,18 @@ public class CricketFunctions {
 						line_txt = addSubString(line_txt,"0",125);
 					}
 					
-					Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+					Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY +match.getMatch().getMatchFileName().replace(".json", ".txt")), 
 							Arrays.asList(line_txt), StandardOpenOption.APPEND);
 				}
 				break;
 			}
 	    }
 	}
-	public static String getHeadToHead(MatchAllData match,String type) throws IOException 
+	public static String getHeadToHead(MatchAllData match) throws IOException 
 	{
-
 		String line_txt = String.format("%-140s", "");
 		String txt = String.format("%-140s", "");
 		
-		switch(type.toUpperCase()){
-		case "FULL_WRITE":
-			
 			txt = addSubString(txt,"|",0);
 			txt = addSubString(txt,"|    (B) - 'BO' - Bowling details" + "\n",0);
 			txt = addSubString(txt,"|    (A) - 'IS' - Batting details" + "\n",0);
@@ -1456,35 +1451,33 @@ public class CricketFunctions {
 			txt = addSubString(txt,"| " + "\n",0);
 			txt = addSubString(txt,"|" + "\n",0);
 			
-			if(Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
-				
-				Boolean lastLine = false;
-		        try (BufferedReader reader = new BufferedReader(new FileReader(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
-		            String line;
-		            while ((line = reader.readLine()) != null) {
-		            	 if(line.contains(match.getMatch().getMatchFileName())) {
-		            		 lastLine=true;
-		            		 break;
-		 		        }
-		            }
-		        }
-		        if(!lastLine) {
-		        	setTextToTextFile(match, txt,line_txt);
-		        }
-			}else if(!Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
-				Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+//			if(Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
+//				
+//				Boolean lastLine = false;
+//		        try (BufferedReader reader = new BufferedReader(new FileReader(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
+//		            String line;
+//		            while ((line = reader.readLine()) != null) {
+//		            	 if(line.contains(match.getMatch().getMatchFileName())) {
+//		            		 lastLine=true;
+//		            		 break;
+//		 		        }
+//		            }
+//		        }
+//		        if(!lastLine) {
+//		        	setTextToTextFile(match, txt,line_txt);
+//		        }
+//			}else 
+				if(!Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY +match.getMatch().getMatchFileName().replace(".json", ".txt")))) {
+				Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY +match.getMatch().getMatchFileName().replace(".json", ".txt")), 
 					Arrays.asList(txt), StandardOpenOption.CREATE);
 				setTextToTextFile(match, txt,line_txt);
 				
 			}
-			
-		    break;
-		}
 		return null;
 	}
 	public static void setTextToTextFile(MatchAllData match,String txt,String line_txt) throws IOException {
-					
-		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+
+		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY +match.getMatch().getMatchFileName().replace(".json", ".txt")), 
 				Arrays.asList(txt), StandardOpenOption.CREATE);
 			
 		txt = String.format("%-140s", "");
@@ -1519,7 +1512,7 @@ public class CricketFunctions {
 		txt = addSubString(txt,"|  Batting data" + "\n",0);
 		txt = addSubString(txt,"|" + "\n",0);
 		
-		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY+ match.getMatch().getMatchFileName().replace(".json", ".txt")), 
 			Arrays.asList(txt), StandardOpenOption.APPEND);
 		
 		line_txt = addSubString(line_txt,"|",0);
@@ -1545,7 +1538,7 @@ public class CricketFunctions {
 		line_txt = addSubString(line_txt,"<C>",147);
 		line_txt = addSubString(line_txt,"<S>",151);
 		
-		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY +match.getMatch().getMatchFileName().replace(".json", ".txt")), 
 				Arrays.asList(line_txt), StandardOpenOption.APPEND);
 		
 		setHeadToHeadData(match, line_txt, "BATTING");
@@ -1574,7 +1567,7 @@ public class CricketFunctions {
 		txt = addSubString(txt,"|  Bowling data" + "\n",0);
 		txt = addSubString(txt,"|" + "\n",0);
 		
-		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY+ match.getMatch().getMatchFileName().replace(".json", ".txt")), 
 				Arrays.asList(txt), StandardOpenOption.APPEND);
 		
 		line_txt = String.format("%-140s", "");
@@ -1594,7 +1587,7 @@ public class CricketFunctions {
 		line_txt = addSubString(line_txt,"<ON>",118);
 		line_txt = addSubString(line_txt,"<LW>",123);
 		
-		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY+match.getMatch().getMatchFileName().replace(".json", ".txt")), 
 			Arrays.asList(line_txt), StandardOpenOption.APPEND);
 		
 		setHeadToHeadData(match, line_txt, "BOWLING");
@@ -9217,6 +9210,24 @@ public class CricketFunctions {
 
 		return arr;
 	}
+	public static  int SecondLastBowlerId(MatchAllData matchData ,List<Event>events) {
+		int over_c=0;
+		for (int i = events.size() - 1; i >= 0; i--) {
+			
+			if (matchData.getEventFile().getEvents().get(i).getEventInningNumber() 
+					== matchData.getMatch().getInning().stream().filter(in -> in.getIsCurrentInning()
+							.equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null).getInningNumber()) {
+
+				if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+					over_c++;
+					if(over_c==2) {
+						return events.get(i).getEventBowlerNo();
+					}
+				}
+			}
+		}
+		return 0;
+	}
 	
 	public static  AllEvents EventExtraction(MatchAllData matchData ,List<Event>events) {
 		AllEvents eventsExtract;
@@ -9520,10 +9531,6 @@ public class CricketFunctions {
 							if(over_c==2) {
 								eventsExtract.setLastBowlerId(events.get(i).getEventBowlerNo());
 							}
-							if(over_c==3) {
-								System.out.println(events.get(i).getEventBowlerNo());
-								eventsExtract.setSecondlastBowlerId(events.get(i).getEventBowlerNo());
-							}
 						}
 					}else {
 						if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
@@ -9532,7 +9539,6 @@ public class CricketFunctions {
 								eventsExtract.setLastBowlerId(events.get(i).getEventBowlerNo());
 							}
 							if(over_c==2) {
-								System.out.println(events.get(i).getEventBowlerNo());
 								eventsExtract.setSecondlastBowlerId(events.get(i).getEventBowlerNo());
 							}
 						}
