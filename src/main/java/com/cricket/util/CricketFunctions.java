@@ -96,7 +96,7 @@ public class CricketFunctions {
 	
 	public static ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 	
-	public static Match processInningTimeData(String whatToProcess, Match matchData, int numberOfSeconds, Match lastMatchData) 
+	public static Match processInningTimeData(String whatToProcess, Match matchData, String timeStatsToProcess, Match lastMatchData) 
 	{
 		if(matchData != null && matchData.getInning() != null && matchData.getInning().size() > 0)
 		{
@@ -107,29 +107,55 @@ public class CricketFunctions {
 			if(this_inn != null) {
 				
 				switch (whatToProcess) {
-				case "ADD_TIME":
-					
-					this_inn.setDuration(this_inn.getDuration() + numberOfSeconds);
-					if(this_inn.getInningStats() == null) {
-						this_inn.setInningStats(new InningStats());
-					}
-					this_inn.getInningStats().setTimeSinceLastBoundary(
-						this_inn.getInningStats().getTimeSinceLastBoundary() + numberOfSeconds);
-					this_inn.getInningStats().setTimeSinceLastRun(
-						this_inn.getInningStats().getTimeSinceLastRun() + numberOfSeconds);
-					this_inn.getInningStats().setTimeSinceLastRunOffBat(
-						this_inn.getInningStats().getTimeSinceLastRunOffBat() + numberOfSeconds);
-					if(this_inn.getBattingCard() != null && this_inn.getBattingCard().size() > 0) {
-						for (BattingCard bc : this_inn.getBattingCard()) {
-							if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES) 
-								&& bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
-								bc.setDuration(bc.getDuration() + numberOfSeconds);
+//				case "ADD_TIME":
+//					
+//					this_inn.setDuration(this_inn.getDuration() + numberOfSeconds);
+//					if(this_inn.getInningStats() == null) {
+//						this_inn.setInningStats(new InningStats());
+//					}
+//					this_inn.getInningStats().setTimeSinceLastBoundary(
+//						this_inn.getInningStats().getTimeSinceLastBoundary() + numberOfSeconds);
+//					this_inn.getInningStats().setTimeSinceLastRun(
+//						this_inn.getInningStats().getTimeSinceLastRun() + numberOfSeconds);
+//					this_inn.getInningStats().setTimeSinceLastRunOffBat(
+//						this_inn.getInningStats().getTimeSinceLastRunOffBat() + numberOfSeconds);
+//					if(this_inn.getBattingCard() != null && this_inn.getBattingCard().size() > 0) {
+//						for (BattingCard bc : this_inn.getBattingCard()) {
+//							if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES) 
+//								&& bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+//								bc.setDuration(bc.getDuration() + numberOfSeconds);
+//							}
+//						}
+//					}
+//					break;
+				
+				case "PROCESS_TIME_STATS":
+
+					if(!timeStatsToProcess.isEmpty() && timeStatsToProcess.split("|").length >= 4) {
+						
+						this_inn.setDuration(Integer.valueOf(timeStatsToProcess.split("|")[0]));
+						if(this_inn.getInningStats() == null) {
+							this_inn.setInningStats(new InningStats());
+						}
+
+						this_inn.getInningStats().setTimeSinceLastBoundary(Integer.valueOf(timeStatsToProcess.split("|")[1]));
+						this_inn.getInningStats().setTimeSinceLastRun(Integer.valueOf(timeStatsToProcess.split("|")[2]));
+						this_inn.getInningStats().setTimeSinceLastRunOffBat(Integer.valueOf(timeStatsToProcess.split("|")[3]));
+						
+						if(timeStatsToProcess.split("|").length >= 5) {
+							if(this_inn.getBattingCard() != null && this_inn.getBattingCard().size() > 0) {
+								List<BattingCard> this_bcs = this_inn.getBattingCard().stream().filter(
+									bc -> bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)).collect(Collectors.toList());
+								for (BattingCard bc : this_bcs) {
+									for(int bc_index = 4; bc_index <= timeStatsToProcess.split("|").length-1; bc_index++) {
+										if(timeStatsToProcess.split("|")[bc_index].contains(String.valueOf(bc.getPlayerId()) + "_")) {
+											bc.setDuration(Integer.valueOf(timeStatsToProcess.split("|")[bc_index].split("_")[1]));
+										}
+									}
+								}
 							}
 						}
 					}
-					break;
-					
-				case "PROCESS_TIME_STATS":
 					
 					if(lastMatchData != null && lastMatchData.getInning() != null && lastMatchData.getInning().size() > 0)
 					{

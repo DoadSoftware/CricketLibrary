@@ -5,10 +5,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MatchAllData {
 
+  private String timeStats;
   private Match match;
   private Setup setup;
   private EventFile eventFile;
   
+public String getTimeStats() {
+	return timeStats;
+}
+public void setTimeStats(String timeStats) {
+	this.timeStats = timeStats;
+}
 public Match getMatch() {
 	return match;
 }
@@ -27,10 +34,10 @@ public EventFile getEventFile() {
 public void setEventFile(EventFile eventFile) {
 	this.eventFile = eventFile;
 }
-
 @Override
 public String toString() {
-	return "MatchAllData [match=" + match + ", setup=" + setup + ", eventFile=" + eventFile + "]";
+	return "MatchAllData [timeStats=" + timeStats + ", match=" + match + ", setup=" + setup + ", eventFile=" + eventFile
+			+ "]";
 }
-  
+
 }
