@@ -14,7 +14,7 @@ public class Inning {
   private String endTime;
 
   private int duration;
-  
+
   private String isDeclared;
 	
   private int inningNumber;
@@ -91,6 +91,7 @@ public class Inning {
 
   private List<Spell> spells;
   
+  private InningStats inningStats;
   @JsonIgnore
   private Map<String, String> stats;
   
@@ -101,6 +102,14 @@ public Inning() {
 public Inning(int oversRemaining) {
 	super();
 	this.oversRemaining = oversRemaining;
+}
+
+public InningStats getInningStats() {
+	return inningStats;
+}
+
+public void setInningStats(InningStats inningStats) {
+	this.inningStats = inningStats;
 }
 
 public int getDuration() {

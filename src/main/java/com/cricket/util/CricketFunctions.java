@@ -34,11 +34,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -67,6 +65,7 @@ import com.cricket.model.Fixture;
 import com.cricket.model.ForeignLanguageData;
 import com.cricket.model.HeadToHead;
 import com.cricket.model.Inning;
+import com.cricket.model.InningStats;
 import com.cricket.model.Match;
 import com.cricket.model.MatchAllData;
 import com.cricket.model.MatchClock;
@@ -97,6 +96,80 @@ public class CricketFunctions {
 	
 	public static ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 	
+	public static Match processInningTimeData(String whatToProcess, Match matchData, int numberOfSeconds, Match lastMatchData) 
+	{
+		if(matchData != null && matchData.getInning() != null && matchData.getInning().size() > 0)
+		{
+			Inning this_inn = matchData.getInning().stream().filter(
+				inn -> inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES) 
+				&& inn.getInningStatus().equalsIgnoreCase(CricketUtil.START)).findAny().orElse(null);
+			
+			if(this_inn != null) {
+				
+				switch (whatToProcess) {
+				case "ADD_TIME":
+					
+					this_inn.setDuration(this_inn.getDuration() + numberOfSeconds);
+					if(this_inn.getInningStats() == null) {
+						this_inn.setInningStats(new InningStats());
+					}
+					this_inn.getInningStats().setTimeSinceLastBoundary(
+						this_inn.getInningStats().getTimeSinceLastBoundary() + numberOfSeconds);
+					this_inn.getInningStats().setTimeSinceLastRun(
+						this_inn.getInningStats().getTimeSinceLastRun() + numberOfSeconds);
+					this_inn.getInningStats().setTimeSinceLastRunOffBat(
+						this_inn.getInningStats().getTimeSinceLastRunOffBat() + numberOfSeconds);
+					if(this_inn.getBattingCard() != null && this_inn.getBattingCard().size() > 0) {
+						for (BattingCard bc : this_inn.getBattingCard()) {
+							if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES) 
+								&& bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+								bc.setDuration(bc.getDuration() + numberOfSeconds);
+							}
+						}
+					}
+					break;
+					
+				case "PROCESS_TIME_STATS":
+					
+					if(lastMatchData != null && lastMatchData.getInning() != null && lastMatchData.getInning().size() > 0)
+					{
+						Inning last_inn = lastMatchData.getInning().stream().filter(
+							inn -> inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES) 
+							&& inn.getInningStatus().equalsIgnoreCase(CricketUtil.START)).findAny().orElse(null);
+						
+						if(last_inn != null) {
+							if(last_inn.getInningStats() == null) {
+								last_inn.setInningStats(new InningStats());
+							}
+							if(last_inn.getTotalRuns() != this_inn.getTotalRuns()) {
+								this_inn.getInningStats().setTimeSinceLastRun(0);
+							}
+							if(last_inn.getTotalFours() != this_inn.getTotalFours()
+								|| last_inn.getTotalSixes() != this_inn.getTotalSixes()) {
+								this_inn.getInningStats().setTimeSinceLastBoundary(0);
+							}
+							if(last_inn.getBattingCard() != null && this_inn.getBattingCard() != null
+								&& last_inn.getBattingCard().size() > 0 && this_inn.getBattingCard().size() > 0) {
+								for (BattingCard last_bc : last_inn.getBattingCard()) {
+									if(last_bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+										for (BattingCard this_bc : this_inn.getBattingCard()) {
+											if(this_bc.getPlayerId() == last_bc.getPlayerId() 
+												&& this_bc.getRuns() != last_bc.getRuns()) {
+												this_inn.getInningStats().setTimeSinceLastRunOffBat(0);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					break;
+				}
+			}
+		}
+		return matchData;
+	}
+	
 	public static AE_Cricket getDataFromThirdParty(String FilePathName) throws JAXBException {
 		AE_Cricket cricket_data =(AE_Cricket)JAXBContext.newInstance(AE_Cricket.class)
 		.createUnmarshaller().unmarshal(new File(FilePathName));
@@ -119,7 +192,6 @@ public class CricketFunctions {
 		MatchAllData this_match = new MatchAllData();
 		this_match.setMatch(new Match());
 		this_match.setSetup(new Setup());
-		
 		
 		if(valueToProcess.toUpperCase().contains("-" + CricketUtil.TEST + "-")) {
 			this_match.getSetup().setMatchType(CricketUtil.TEST);
@@ -331,14 +403,14 @@ public class CricketFunctions {
 														data_to_process.split(",")[i].indexOf("(") + 1))) {
 												
 												this_FoWs.add(new FallOfWicket(Integer.valueOf(data_to_process.split(",")[i].substring(0, 
-														data_to_process.split(",")[i].indexOf("-")).trim()), 
+													data_to_process.split(",")[i].indexOf("-")).trim()), 
 													bc.getPlayer().getPlayerId(), Integer.valueOf(data_to_process.split(",")[i].substring(
 													data_to_process.split(",")[i].indexOf("-") + 1, data_to_process.split(",")[i].indexOf("(") 
 													- data_to_process.split(",")[i].indexOf("-") + 1).trim()), 
 													Integer.valueOf(data_to_process.split(",")[i+1].toUpperCase()
 													.replace("OV)", "").substring(0,data_to_process.split(",")[i+1].indexOf(".")).trim()), 
 													Integer.valueOf(data_to_process.split(",")[i+1].toUpperCase()
-													.replace("OV)", "").substring(data_to_process.split(",")[i+1].indexOf(".")+1).trim())));
+													.replace("OV)", "").substring(data_to_process.split(",")[i+1].indexOf(".")+1).trim()), ""));
 												i++;
 												System.out.println("FoW Variable = " + this_FoWs.get(this_FoWs.size()-1).toString());
 												break;
@@ -880,7 +952,7 @@ public class CricketFunctions {
 					+ match.getMatch().getMatchFileName()), 
 					objectWriter.writeValueAsString(match.getSetup()).getBytes());			
 			}
-			if(match.getSetup().getMatchDataUpdate().equalsIgnoreCase(CricketUtil.START)) {
+			if(match.getSetup().getMatchDataUpdate() != null && match.getSetup().getMatchDataUpdate().equalsIgnoreCase(CricketUtil.START)) {
 				if(whichFileToProcess.toUpperCase().contains(CricketUtil.EVENT)) {
 					Files.write(Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY 
 						+ match.getMatch().getMatchFileName()), 
@@ -895,8 +967,7 @@ public class CricketFunctions {
 			break;
 		case CricketUtil.READ:
 			if(whichFileToProcess.toUpperCase().contains(CricketUtil.SETUP)) {
-				if(new File(CricketUtil.CRICKET_DIRECTORY 
-					+ CricketUtil.SETUP_DIRECTORY + match.getMatch().getMatchFileName().toUpperCase().replace(
+				if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + match.getMatch().getMatchFileName().toUpperCase().replace(
 					".XML", ".JSON")).exists() == true) {
 					match.setSetup(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY 
 							+ CricketUtil.SETUP_DIRECTORY + match.getMatch().getMatchFileName()), Setup.class));
@@ -1232,10 +1303,10 @@ public class CricketFunctions {
 	
 	public static String getInteractive(MatchAllData match,String type) throws IOException {
 
-//		if(match.getSetup() == null || (match.getSetup().getGenerateInteractiveFile() == null 
-//			|| match.getSetup().getGenerateInteractiveFile().equalsIgnoreCase(CricketUtil.NO))) {
-//			return "";
-//		}
+		if(match.getSetup() == null || (match.getSetup().getGenerateInteractiveFile() == null 
+			|| match.getSetup().getGenerateInteractiveFile().equalsIgnoreCase(CricketUtil.NO))) {
+			return "";
+		}
 		if(match.getEventFile() == null || (match.getEventFile().getEvents() == null 
 			|| match.getEventFile().getEvents().size() <= 0)) {
 			return "";
@@ -1437,49 +1508,45 @@ public class CricketFunctions {
 			}
 	    }
 	}
-	public static String getHeadToHead(MatchAllData match,String type) throws IOException 
+	public static String exportHeadToHead(MatchAllData match) throws IOException 
 	{
-
 		String line_txt = String.format("%-140s", "");
 		String txt = String.format("%-140s", "");
 		
-		switch(type.toUpperCase()){
-		case "FULL_WRITE":
+		txt = addSubString(txt,"|",0);
+		txt = addSubString(txt,"|    (B) - 'BO' - Bowling details" + "\n",0);
+		txt = addSubString(txt,"|    (A) - 'IS' - Batting details" + "\n",0);
+		txt = addSubString(txt,"|" + "\n",0);
+		txt = addSubString(txt,"| Contents" + "\n",0);
+		txt = addSubString(txt,"|" + "\n",0);
+		txt = addSubString(txt,"| DOAD H2H File generated on " + LocalDate.now() + " at " + LocalTime.now() + "\n",0);
+		txt = addSubString(txt,"| " + "\n",0);
+		txt = addSubString(txt,"|" + "\n",0);
+
+		//Match_1_H2H.txt, Match_2_H2H.txt
+		if(Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
 			
-			txt = addSubString(txt,"|",0);
-			txt = addSubString(txt,"|    (B) - 'BO' - Bowling details" + "\n",0);
-			txt = addSubString(txt,"|    (A) - 'IS' - Batting details" + "\n",0);
-			txt = addSubString(txt,"|" + "\n",0);
-			txt = addSubString(txt,"| Contents" + "\n",0);
-			txt = addSubString(txt,"|" + "\n",0);
-			txt = addSubString(txt,"| DOAD H2H File generated on " + LocalDate.now() + " at " + LocalTime.now() + "\n",0);
-			txt = addSubString(txt,"| " + "\n",0);
-			txt = addSubString(txt,"|" + "\n",0);
+			Boolean lastLine = false;
+	        try (BufferedReader reader = new BufferedReader(new FileReader(CricketUtil.CRICKET_SERVER_DIRECTORY 
+	        		+ CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
+	            String line;
+	            while ((line = reader.readLine()) != null) {
+	            	 if(line.contains(match.getMatch().getMatchFileName())) {
+	            		 lastLine=true;
+	            		 break;
+	 		        }
+	            }
+	        }
+	        if(!lastLine) {
+	        	setTextToTextFile(match, txt,line_txt);
+	        }
+		}else if(!Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
+			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
+				Arrays.asList(txt), StandardOpenOption.CREATE);
+			setTextToTextFile(match, txt,line_txt);
 			
-			if(Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
-				
-				Boolean lastLine = false;
-		        try (BufferedReader reader = new BufferedReader(new FileReader(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
-		            String line;
-		            while ((line = reader.readLine()) != null) {
-		            	 if(line.contains(match.getMatch().getMatchFileName())) {
-		            		 lastLine=true;
-		            		 break;
-		 		        }
-		            }
-		        }
-		        if(!lastLine) {
-		        	setTextToTextFile(match, txt,line_txt);
-		        }
-			}else if(!Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
-				Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
-					Arrays.asList(txt), StandardOpenOption.CREATE);
-				setTextToTextFile(match, txt,line_txt);
-				
-			}
-			
-		    break;
 		}
+			
 		return null;
 	}
 	public static void setTextToTextFile(MatchAllData match,String txt,String line_txt) throws IOException {

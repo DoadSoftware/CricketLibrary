@@ -13,17 +13,28 @@ public class FallOfWicket implements Comparable<FallOfWicket>
 
   private int fowBalls;
 
+  private String fowDateTime;
+  
 public FallOfWicket() {
 	super();
 }
 
-public FallOfWicket(int fowNumber, int fowPlayerID, int fowRuns, int fowOvers, int fowBalls) {
+public FallOfWicket(int fowNumber, int fowPlayerID, int fowRuns, int fowOvers, int fowBalls, String fowDateTime) {
 	super();
 	this.fowNumber = fowNumber;
 	this.fowPlayerID = fowPlayerID;
 	this.fowRuns = fowRuns;
 	this.fowOvers = fowOvers;
 	this.fowBalls = fowBalls;
+	this.fowDateTime = fowDateTime;
+}
+
+public String getFowDateTime() {
+	return fowDateTime;
+}
+
+public void setFowDateTime(String fowDateTime) {
+	this.fowDateTime = fowDateTime;
 }
 
 public int getFowNumber() {

@@ -23,9 +23,9 @@ public class AllEvents{
 	
 	private int secondlastBowlerId;
 	
-	private List<Integer>bothInningDotBalls;
+	private List<Integer> bothInningDotBalls;
 	
-	private List<Integer>This_over_run_wk;
+	private List<Integer> This_over_run_wk;
 	
 	private List<Player> allRounderCatches;
 	

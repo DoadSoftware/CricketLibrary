@@ -13,8 +13,6 @@ public class Match {
 	
   private String current_speed;
 	
-  private long matchTotalSeconds;
-  
   private String bowlerRunning;
 
   private String ballRelease;
@@ -29,8 +27,6 @@ public class Match {
 
   private List<Wagon> wagons;
   
-  private MatchClock clock;
-
 public String getMatchResult() {
 	return matchResult;
 }
@@ -54,15 +50,6 @@ public String getCurrent_speed() {
 public void setCurrent_speed(String current_speed) {
 	this.current_speed = current_speed;
 }
-
-public long getMatchTotalSeconds() {
-	return matchTotalSeconds;
-}
-
-public void setMatchTotalSeconds(long matchTotalSeconds) {
-	this.matchTotalSeconds = matchTotalSeconds;
-}
-
 public String getBowlerRunning() {
 	return bowlerRunning;
 }
@@ -119,20 +106,11 @@ public void setWagons(List<Wagon> wagons) {
 	this.wagons = wagons;
 }
 
-public MatchClock getClock() {
-	return clock;
-}
-
-public void setClock(MatchClock clock) {
-	this.clock = clock;
-}
-
 @Override
 public String toString() {
 	return "Match [matchResult=" + matchResult + ", matchStatus=" + matchStatus + ", current_speed=" + current_speed
-			+ ", matchTotalSeconds=" + matchTotalSeconds + ", bowlerRunning=" + bowlerRunning + ", ballRelease="
-			+ ballRelease + ", matchFileName=" + matchFileName + ", inning=" + inning + ", daysSessions=" + daysSessions
-			+ ", shots=" + shots + ", wagons=" + wagons + ", clock=" + clock + "]";
+			+ ", bowlerRunning=" + bowlerRunning + ", ballRelease=" + ballRelease + ", matchFileName=" + matchFileName
+			+ ", inning=" + inning + ", daysSessions=" + daysSessions + ", shots=" + shots + ", wagons=" + wagons + "]";
 }
-  
+
 }
