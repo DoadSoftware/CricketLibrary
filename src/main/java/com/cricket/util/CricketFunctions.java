@@ -54,6 +54,7 @@ import com.cricket.model.BattingCard;
 import com.cricket.model.BestStats;
 import com.cricket.model.BowlingCard;
 import com.cricket.model.Configuration;
+import com.cricket.model.DaySession;
 import com.cricket.model.Dictionary;
 import com.cricket.model.DuckWorthLewis;
 import com.cricket.model.Event;
@@ -10347,12 +10348,13 @@ public class CricketFunctions {
 		return eventsExtract;
 	}
 	public static  String getpowerplay(Event event){
-		int run=0, wicket=0, dot=0, four=0, six=0, nine=0;
+		int run=0, wicket=0, dot=0, four=0, six=0, nine=0,ball=0;
 		switch (event.getEventType())
         {
         	case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
         	case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
                 run += event.getEventRuns();
+                ball+=1;
                 switch(event.getEventType()) {
             	case CricketUtil.FOUR:
             		if(event.getEventWasABoundary() != null && 
@@ -10378,9 +10380,13 @@ public class CricketFunctions {
                 }
                 break;
 
-        	case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+        	case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.PENALTY:
                 run += event.getEventRuns();
                 break;
+        	case CricketUtil.BYE: case CricketUtil.LEG_BYE:
+                run += event.getEventRuns();
+                ball+=1;
+                break;    
 
         	case CricketUtil.LOG_WICKET:
                 if (event.getEventRuns() > 0)
@@ -10390,6 +10396,7 @@ public class CricketFunctions {
                 	dot ++;
                 }
                 wicket += 1;
+                ball+=1;
                 break;
 
         	case CricketUtil.LOG_ANY_BALL:
@@ -10417,7 +10424,7 @@ public class CricketFunctions {
                 }
                 break;
         }
-		return run+","+wicket+","+dot+","+four+","+six+","+nine;
+		return run+","+wicket+","+dot+","+four+","+six+","+nine+","+ball;
 		
 	}
 	
@@ -10618,6 +10625,105 @@ public class CricketFunctions {
 			}
 		}
 		return null;
-	}	
+	}
 	
+	public static String getnumeric(int numeric_data)
+	{
+		String value = "";
+		switch (numeric_data) {
+		case 1:
+			value = "first";
+			break;
+		case 2:
+			value = "second";
+			break;
+		case 3:
+			value = "third";
+			break;
+		case 4:
+			value = "fourth";
+			break;
+		case 5:
+			value = "fifth";
+			break;	
+		}
+		return value;
+	}
+	
+	public static String CurrentDayStats(MatchAllData match, String Separator, String whichDay) 
+	{
+		switch (whichDay) {
+        case "CURRENT":
+            int Day_num = match.getMatch().getDaysSessions().get(match.getMatch().getDaysSessions().size() - 1).getDayNumber();
+            int total_runs = 0, total_wickets = 0, totalBalls = 0;
+            double oversInDay = 0.0, overrate = 0.0, runRate = 0.0, durationInMinutes = 0;
+
+            for (DaySession ds : match.getMatch().getDaysSessions()) {
+                if (ds.getDayNumber() == Day_num) {
+                    total_runs += ds.getTotalRuns();
+                    total_wickets += ds.getTotalWickets();
+                    totalBalls += ds.getTotalBalls();
+                    durationInMinutes += ds.getTotalSeconds() / 60;
+                }
+            }
+
+            if (totalBalls % 6 == 0) {
+                oversInDay = totalBalls / 6.0;
+            } else {
+                oversInDay = Double.parseDouble(String.format("%.1f", totalBalls / 6.0));
+            }
+
+            overrate = ((oversInDay / (durationInMinutes / 60)) * 90);
+            runRate = total_runs / oversInDay;
+
+            String over = String.valueOf(oversInDay);
+            if (over.endsWith(".0")) {
+                over = over.replace(".0", "");
+            }
+
+            return total_runs + Separator + over + Separator + total_wickets + Separator + String.format("%.2f", runRate) + Separator + String.format("%.2f", overrate);
+
+        case "AllDAY":
+            Set<Integer> DayNumbers = match.getMatch().getDaysSessions().stream()
+                    .map(DaySession::getDayNumber)
+                    .collect(Collectors.toSet());
+
+            List<String> allDayStats = new ArrayList<>();
+            for (Integer dayNumber : DayNumbers) {
+                 total_runs = 0; total_wickets = 0; totalBalls = 0;
+                 oversInDay = 0.0; overrate = 0.0; runRate = 0.0; durationInMinutes = 0;
+
+                for (DaySession ds : match.getMatch().getDaysSessions()) {
+                    if (dayNumber == ds.getDayNumber()) {
+                        total_runs += ds.getTotalRuns();
+                        total_wickets += ds.getTotalWickets();
+                        totalBalls += ds.getTotalBalls();
+                        durationInMinutes += ds.getTotalSeconds() / 60;
+                    }
+                }
+
+                if (totalBalls % 6 == 0) {
+                    oversInDay = totalBalls / 6.0;
+                } else {
+                    oversInDay = Double.parseDouble(String.format("%.1f", totalBalls / 6.0));
+                }
+
+                overrate = ((oversInDay / (durationInMinutes / 60)) * 90);
+                runRate = total_runs / oversInDay;
+
+                String overStr = String.valueOf(oversInDay);
+                if (overStr.endsWith(".0")) {
+                    overStr = overStr.replace(".0", "");
+                }
+
+                allDayStats.add(dayNumber + Separator + overStr + Separator + total_runs + Separator + total_wickets + Separator + String.format("%.2f", overrate) + Separator + String.format("%.2f", runRate));
+            }
+
+            return String.join("\n", allDayStats);
+
+        default:
+            return "Invalid Input";
+		}
+	}
+			
 }
