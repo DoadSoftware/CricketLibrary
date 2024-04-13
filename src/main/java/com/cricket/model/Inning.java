@@ -92,6 +92,7 @@ public class Inning {
   private List<Spell> spells;
   
   private InningStats inningStats;
+  
   @JsonIgnore
   private Map<String, String> stats;
   
@@ -102,6 +103,7 @@ public Inning() {
 public Inning(int oversRemaining) {
 	super();
 	this.oversRemaining = oversRemaining;
+	this.inningStats = new InningStats();
 }
 
 public InningStats getInningStats() {

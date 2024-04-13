@@ -3,10 +3,12 @@ package com.cricket.util;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -100,96 +102,73 @@ public class CricketFunctions {
 	{
 		if(matchData != null && matchData.getInning() != null && matchData.getInning().size() > 0)
 		{
-			Inning this_inn = matchData.getInning().stream().filter(
-				inn -> inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES) 
-				&& inn.getInningStatus().equalsIgnoreCase(CricketUtil.START)).findAny().orElse(null);
-			
-			if(this_inn != null) {
+			for (Inning this_inn : matchData.getInning()) {
 				
-				switch (whatToProcess) {
-//				case "ADD_TIME":
-//					
-//					this_inn.setDuration(this_inn.getDuration() + numberOfSeconds);
-//					if(this_inn.getInningStats() == null) {
-//						this_inn.setInningStats(new InningStats());
-//					}
-//					this_inn.getInningStats().setTimeSinceLastBoundary(
-//						this_inn.getInningStats().getTimeSinceLastBoundary() + numberOfSeconds);
-//					this_inn.getInningStats().setTimeSinceLastRun(
-//						this_inn.getInningStats().getTimeSinceLastRun() + numberOfSeconds);
-//					this_inn.getInningStats().setTimeSinceLastRunOffBat(
-//						this_inn.getInningStats().getTimeSinceLastRunOffBat() + numberOfSeconds);
-//					if(this_inn.getBattingCard() != null && this_inn.getBattingCard().size() > 0) {
-//						for (BattingCard bc : this_inn.getBattingCard()) {
-//							if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES) 
-//								&& bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
-//								bc.setDuration(bc.getDuration() + numberOfSeconds);
-//							}
-//						}
-//					}
-//					break;
-				
-				case "PROCESS_TIME_STATS":
-
-					if(!timeStatsToProcess.isEmpty() && timeStatsToProcess.split("|").length >= 4) {
-						
-						this_inn.setDuration(Integer.valueOf(timeStatsToProcess.split("|")[0]));
-						if(this_inn.getInningStats() == null) {
-							this_inn.setInningStats(new InningStats());
-						}
-
-						this_inn.getInningStats().setTimeSinceLastBoundary(Integer.valueOf(timeStatsToProcess.split("|")[1]));
-						this_inn.getInningStats().setTimeSinceLastRun(Integer.valueOf(timeStatsToProcess.split("|")[2]));
-						this_inn.getInningStats().setTimeSinceLastRunOffBat(Integer.valueOf(timeStatsToProcess.split("|")[3]));
-						
-						if(timeStatsToProcess.split("|").length >= 5) {
-							if(this_inn.getBattingCard() != null && this_inn.getBattingCard().size() > 0) {
-								List<BattingCard> this_bcs = this_inn.getBattingCard().stream().filter(
-									bc -> bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)).collect(Collectors.toList());
-								for (BattingCard bc : this_bcs) {
-									for(int bc_index = 4; bc_index <= timeStatsToProcess.split("|").length-1; bc_index++) {
-										if(timeStatsToProcess.split("|")[bc_index].contains(String.valueOf(bc.getPlayerId()) + "_")) {
-											bc.setDuration(Integer.valueOf(timeStatsToProcess.split("|")[bc_index].split("_")[1]));
-										}
-									}
-								}
-							}
-						}
-					}
+				if(this_inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES) && this_inn.getInningStatus().equalsIgnoreCase(CricketUtil.START)) {
 					
-					if(lastMatchData != null && lastMatchData.getInning() != null && lastMatchData.getInning().size() > 0)
-					{
-						Inning last_inn = lastMatchData.getInning().stream().filter(
-							inn -> inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES) 
-							&& inn.getInningStatus().equalsIgnoreCase(CricketUtil.START)).findAny().orElse(null);
+					switch (whatToProcess) {
+					case "PROCESS_TIME_STATS":
 						
-						if(last_inn != null) {
-							if(last_inn.getInningStats() == null) {
-								last_inn.setInningStats(new InningStats());
+						if(!timeStatsToProcess.isEmpty() && timeStatsToProcess.split(",").length >= 4) {
+							
+							this_inn.setDuration(Integer.valueOf(timeStatsToProcess.split(",")[0]));
+							if(this_inn.getInningStats() == null) {
+								this_inn.setInningStats(new InningStats());
 							}
-							if(last_inn.getTotalRuns() != this_inn.getTotalRuns()) {
-								this_inn.getInningStats().setTimeSinceLastRun(0);
-							}
-							if(last_inn.getTotalFours() != this_inn.getTotalFours()
-								|| last_inn.getTotalSixes() != this_inn.getTotalSixes()) {
-								this_inn.getInningStats().setTimeSinceLastBoundary(0);
-							}
-							if(last_inn.getBattingCard() != null && this_inn.getBattingCard() != null
-								&& last_inn.getBattingCard().size() > 0 && this_inn.getBattingCard().size() > 0) {
-								for (BattingCard last_bc : last_inn.getBattingCard()) {
-									if(last_bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
-										for (BattingCard this_bc : this_inn.getBattingCard()) {
-											if(this_bc.getPlayerId() == last_bc.getPlayerId() 
-												&& this_bc.getRuns() != last_bc.getRuns()) {
-												this_inn.getInningStats().setTimeSinceLastRunOffBat(0);
+
+							this_inn.getInningStats().setTimeSinceLastBoundary(Integer.valueOf(timeStatsToProcess.split(",")[1]));
+							this_inn.getInningStats().setTimeSinceLastRun(Integer.valueOf(timeStatsToProcess.split(",")[2]));
+							this_inn.getInningStats().setTimeSinceLastRunOffBat(Integer.valueOf(timeStatsToProcess.split(",")[3]));
+							
+							if(timeStatsToProcess.split(",").length >= 5) {
+								if(this_inn.getBattingCard() != null && this_inn.getBattingCard().size() > 0) {
+									List<BattingCard> this_bcs = this_inn.getBattingCard().stream().filter(
+										bc -> bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)).collect(Collectors.toList());
+									for (BattingCard bc : this_bcs) {
+										for(int bc_index = 4; bc_index <= timeStatsToProcess.split(",").length-1; bc_index++) {
+											if(timeStatsToProcess.split(",")[bc_index].contains(String.valueOf(bc.getPlayerId()) + "_")) {
+												bc.setDuration(Integer.valueOf(timeStatsToProcess.split(",")[bc_index].split("_")[1]));
 											}
 										}
 									}
 								}
 							}
 						}
+						
+						if(lastMatchData != null && lastMatchData.getInning() != null && lastMatchData.getInning().size() > 0)
+						{
+							Inning last_inn = lastMatchData.getInning().stream().filter(
+								inn -> inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES) 
+								&& inn.getInningStatus().equalsIgnoreCase(CricketUtil.START)).findAny().orElse(null);
+
+							if(last_inn != null) {
+								if(last_inn.getInningStats() == null) {
+									last_inn.setInningStats(new InningStats());
+								}
+								if(last_inn.getTotalRuns() != this_inn.getTotalRuns()) {
+									this_inn.getInningStats().setTimeSinceLastRun(0);
+								}
+								if(last_inn.getTotalFours() != this_inn.getTotalFours()
+									|| last_inn.getTotalSixes() != this_inn.getTotalSixes()) {
+									this_inn.getInningStats().setTimeSinceLastBoundary(0);
+								}
+								if(last_inn.getBattingCard() != null && this_inn.getBattingCard() != null
+									&& last_inn.getBattingCard().size() > 0 && this_inn.getBattingCard().size() > 0) {
+									for (BattingCard last_bc : last_inn.getBattingCard()) {
+										if(last_bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+											for (BattingCard this_bc : this_inn.getBattingCard()) {
+												if(this_bc.getPlayerId() == last_bc.getPlayerId() 
+													&& this_bc.getRuns() != last_bc.getRuns()) {
+													this_inn.getInningStats().setTimeSinceLastRunOffBat(0);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						break;
 					}
-					break;
 				}
 			}
 		}
@@ -995,8 +974,10 @@ public class CricketFunctions {
 			if(whichFileToProcess.toUpperCase().contains(CricketUtil.SETUP)) {
 				if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + match.getMatch().getMatchFileName().toUpperCase().replace(
 					".XML", ".JSON")).exists() == true) {
-					match.setSetup(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY 
-							+ CricketUtil.SETUP_DIRECTORY + match.getMatch().getMatchFileName()), Setup.class));
+					match.setSetup(new ObjectMapper().readValue(new InputStreamReader(new FileInputStream(new File(CricketUtil.CRICKET_DIRECTORY 
+							+ CricketUtil.SETUP_DIRECTORY + match.getMatch().getMatchFileName())), StandardCharsets.UTF_8), Setup.class));
+//					match.setSetup(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY 
+//							+ CricketUtil.SETUP_DIRECTORY + match.getMatch().getMatchFileName()), Setup.class));
 				}
 			}
 			if(whichFileToProcess.toUpperCase().contains(CricketUtil.EVENT)) {
@@ -1004,7 +985,7 @@ public class CricketFunctions {
 						+ CricketUtil.EVENT_DIRECTORY + match.getMatch().getMatchFileName().toUpperCase().replace(
 						".XML", ".JSON")).exists() == true) {
 					match.setEventFile(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY 
-							+ CricketUtil.EVENT_DIRECTORY + match.getMatch().getMatchFileName()), EventFile.class));
+						+ CricketUtil.EVENT_DIRECTORY + match.getMatch().getMatchFileName()), EventFile.class));
 					}
 			}
 			if(whichFileToProcess.toUpperCase().contains(CricketUtil.MATCH)) {
