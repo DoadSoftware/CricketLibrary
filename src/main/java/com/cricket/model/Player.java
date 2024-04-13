@@ -120,7 +120,10 @@ public class Player implements Comparable<Player>
 	this.playerId = playerId;
 	this.playerPosition = playerPosition;
   }
-  
+  public Player(int playerId) {
+		super();
+		this.playerId = playerId;
+	  }
 //public String getImpactPlayer() {
 //	return impactPlayer;
 //}
@@ -147,6 +150,13 @@ public class Player implements Comparable<Player>
   private int dot;
   @Transient
   private int catches;
+  @Transient
+  private int runs;
+  
+  @Transient
+  private int balls;
+  @Transient
+  private int wickets;
   
 public String getFirstname() {
 	return firstname;
@@ -473,6 +483,49 @@ public int compareTo(Player pm) {
 	return (int) (this.getPlayerPosition()-pm.getPlayerPosition());
 }
 
+public int getRuns() {
+	return runs;
+}
+
+public void setRuns(int runs) {
+	this.runs = runs;
+}
+public int getBalls() {
+	return balls;
+}
+
+public void setBalls(int ball) {
+	this.balls = ball;
+}
+
+public int getWickets() {
+	return wickets;
+}
+
+public void setWickets(int wickets) {
+	this.wickets = wickets;
+}
+
+public Player(int playerId, int runs,int balls,int four,int six,  int nine) {
+	super();
+	this.playerId = playerId;
+	this.runs = runs;
+	this.balls = balls;
+	this.four = four;
+	this.six = six;
+	this.nine = nine;
+	
+	
+}
+
+public Player(int playerId, int runs, int balls, int wickets) {
+	super();
+	this.playerId = playerId;
+	this.runs = runs;
+	this.balls = balls;
+	this.wickets = wickets;
+}
+
 @Override
 public String toString() {
 	return "Player [playerId=" + playerId + ", full_name=" + full_name + ", firstname=" + firstname + ", surname="
@@ -484,8 +537,9 @@ public String toString() {
 			+ ", teamId=" + teamId + ", overseasPlayer=" + overseasPlayer + ", Photo=" + Photo + ", Nationality="
 			+ Nationality + ", text1=" + text1 + ", text2=" + text2 + ", text3=" + text3 + ", question1=" + question1
 			+ ", question2=" + question2 + ", question3=" + question3 + ", playerPosition=" + playerPosition
-			+ ", captainWicketKeeper=" + captainWicketKeeper + "]";
-//			+ ", captainWicketKeeper=" + captainWicketKeeper + ", impactPlayer=" + impactPlayer + "]";
+			+ ", captainWicketKeeper=" + captainWicketKeeper + ", one=" + one + ", two=" + two + ", three=" + three
+			+ ", five=" + five + ", six=" + six + ", four=" + four + ", nine=" + nine + ", dot=" + dot + ", catches="
+			+ catches + ", runs=" + runs + ", balls=" + balls + ", wickets=" + wickets + "]";
 }
 
 }
