@@ -1674,27 +1674,34 @@ public class CricketFunctions {
 		
 		setHeadToHeadData(match, line_txt, "BOWLING");
 	}
-	public static List<HeadToHead> extractHeadToHead(CricketService cricketService) throws IOException {
+	public static List<HeadToHead> extractHeadToHead(File[] files, CricketService cricketService) throws IOException {
 		
 		int playerId = -1;
 		List<String> TeamName = new ArrayList<String>();
 		List<String> headToHead = new ArrayList<String>();
 		List<HeadToHead> headToHead_stats = new ArrayList<HeadToHead>();
 		
-		if(new File (CricketUtil.CRICKET_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT).exists()) {
-			String text_to_return = "";
-			try(BufferedReader br = new BufferedReader(new FileReader(CricketUtil.CRICKET_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))){
-				while((text_to_return = br.readLine()) != null) {
-					if(text_to_return.contains("|")) {
-						
-					}else {
-						if(text_to_return.contains("IS") || text_to_return.contains("BO")) {
-							headToHead.add(text_to_return);
+		for(File file : files) {
+			if (file.isFile() && file.getName().endsWith(".txt")) {
+				if(new File (CricketUtil.CRICKET_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + file.getName()).exists()) {
+					String text_to_return = "";
+					try(BufferedReader br = new BufferedReader(new FileReader(CricketUtil.CRICKET_DIRECTORY + 
+							CricketUtil.HEADTOHEAD_DIRECTORY + file.getName()))){
+						while((text_to_return = br.readLine()) != null) {
+							if(text_to_return.contains("|")) {
+								
+							}else {
+								if(text_to_return.contains("IS") || text_to_return.contains("BO")) {
+									headToHead.add(text_to_return);
+								}
+							}
 						}
 					}
 				}
 			}
 		}
+		
+		
 		
 		for(int i=0;i<=headToHead.size()-1;i++) {
 			if(headToHead.get(i).contains("IS")) {
@@ -2636,7 +2643,6 @@ public class CricketFunctions {
 				}
 			}
 		}
-		
 	}
 	
 	public static List<MatchAllData> getTournamentMatches(File[] files, CricketService cricketService) 
@@ -2695,6 +2701,562 @@ public class CricketFunctions {
 		}
 		
 		return null;
+	}
+	
+	public static List<Tournament> extractPlayersStats(String typeOfExtraction, boolean showBowlerDissmisal, List<MatchAllData> tournament_matches, MatchAllData currentMatch, 
+			List<Tournament> past_tournament_dismissal_stat) throws CloneNotSupportedException 
+	{
+		int playerId = -1;
+		List<Tournament> tournament_dismissal_stats = new ArrayList<Tournament>();
+		switch(typeOfExtraction) {
+		case "COMBINED_PAST_CURRENT_MATCH_DATA":
+			 return extractPlayersStats("CURRENT_MATCH_DATA", showBowlerDissmisal, tournament_matches, currentMatch, 
+					 extractPlayersStats("PAST_MATCHES_DATA", showBowlerDissmisal, tournament_matches, currentMatch, null));
+		case "PAST_MATCHES_DATA":
+			for(MatchAllData match : tournament_matches) {
+				if(!match.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
+					for(Inning inn : match.getMatch().getInning()) {
+						if(inn.getBowlingCard() != null && inn.getBowlingCard().size() > 0) {
+							
+							for(BowlingCard boc : inn.getBowlingCard())
+							{
+								playerId = -1;
+								for(int i=0; i<=tournament_dismissal_stats.size() - 1;i++)
+								{
+									if(boc.getPlayerId() == tournament_dismissal_stats.get(i).getPlayerId()) {
+										playerId = i;
+										break;
+									}
+								}
+								
+								if(playerId >= 0) {
+									if(boc.getWickets() > 0) {
+										switch(String.valueOf(boc.getWickets())) {
+										case CricketUtil.ONE:
+											tournament_dismissal_stats.get(playerId).setOne_wickets(tournament_dismissal_stats.get(playerId).getOne_wickets() + 1);
+											break;
+										case CricketUtil.TWO:
+											tournament_dismissal_stats.get(playerId).setTwo_wickets(tournament_dismissal_stats.get(playerId).getTwo_wickets() + 1);
+											break;
+										case CricketUtil.THREE:
+											tournament_dismissal_stats.get(playerId).setThree_wickets(tournament_dismissal_stats.get(playerId).getThree_wickets() + 1);
+											break;
+										case CricketUtil.FOUR:
+											tournament_dismissal_stats.get(playerId).setFour_wickets(tournament_dismissal_stats.get(playerId).getFour_wickets() + 1);
+											break;
+										case CricketUtil.FIVE:
+											tournament_dismissal_stats.get(playerId).setFive_wickets(tournament_dismissal_stats.get(playerId).getFive_wickets() + 1);
+											break;
+										case CricketUtil.SIX:
+											tournament_dismissal_stats.get(playerId).setSix_wickets(tournament_dismissal_stats.get(playerId).getSix_wickets() + 1);
+											break;
+										}
+									}else {
+										tournament_dismissal_stats.get(playerId).setZero_wickets(tournament_dismissal_stats.get(playerId).getZero_wickets() + 1);
+									}
+									
+									if(showBowlerDissmisal == true) {
+										getBowlerDissmisal(boc.getPlayerId(), playerId, null, tournament_dismissal_stats, match);
+									}
+									
+								}else {
+									tournament_dismissal_stats.add(new Tournament(boc.getPlayerId(), 0, 0, 0, 0, 0, 0, 0, boc.getPlayer()));
+									
+									if(boc.getWickets() > 0) {
+										switch(String.valueOf(boc.getWickets())) {
+										case CricketUtil.ONE:
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size()-1).setOne_wickets(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size()-1).getOne_wickets() + 1);
+											break;
+										case CricketUtil.TWO:
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size()-1).setTwo_wickets(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size()-1).getTwo_wickets() + 1);
+											break;
+										case CricketUtil.THREE:
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size()-1).setThree_wickets(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size()-1).getThree_wickets() + 1);
+											break;
+										case CricketUtil.FOUR:
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size()-1).setFour_wickets(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size()-1).getFour_wickets() + 1);
+											break;
+										case CricketUtil.FIVE:
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size()-1).setFive_wickets(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size()-1).getFive_wickets() + 1);
+											break;
+										case CricketUtil.SIX:
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size()-1).setSix_wickets(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size()-1).getSix_wickets() + 1);
+											break;
+										}
+									}else {
+										tournament_dismissal_stats.get(tournament_dismissal_stats.size()-1).setZero_wickets(
+												tournament_dismissal_stats.get(tournament_dismissal_stats.size()-1).getZero_wickets() + 1);
+									}
+									
+									if(showBowlerDissmisal == true) {
+										getBowlerDissmisal(boc.getPlayerId(), (tournament_dismissal_stats.size()-1), null, tournament_dismissal_stats, match);
+									}
+								}
+							}
+						}
+						
+						if(inn.getBattingCard() != null && inn.getBattingCard().size() > 0) {
+							for(BattingCard bc : inn.getBattingCard())
+							{
+								playerId = -1;
+								for(int i=0; i<=tournament_dismissal_stats.size() - 1;i++)
+								{
+									if(bc.getPlayerId() == tournament_dismissal_stats.get(i).getPlayerId()) {
+										playerId = i;
+										break;
+									}
+								}
+								if(playerId >= 0) {
+									if(bc.getHowOut() != null) {
+										tournament_dismissal_stats.get(playerId).setTotal_dismissal(tournament_dismissal_stats.get(playerId).getTotal_dismissal() + 1);
+										
+										switch (bc.getHowOut().toUpperCase()) {
+										case CricketUtil.CAUGHT:
+											tournament_dismissal_stats.get(playerId).setCaught(tournament_dismissal_stats.get(playerId).getCaught() + 1);
+											break;
+										case CricketUtil.CAUGHT_AND_BOWLED:
+											tournament_dismissal_stats.get(playerId).setCtAndBowled(tournament_dismissal_stats.get(playerId).getCtAndBowled() + 1);
+											break;
+										case CricketUtil.BOWLED:
+											tournament_dismissal_stats.get(playerId).setBowled(tournament_dismissal_stats.get(playerId).getBowled() + 1);
+											break;
+										case CricketUtil.LBW:
+											tournament_dismissal_stats.get(playerId).setLbw(tournament_dismissal_stats.get(playerId).getLbw() + 1);
+											break;
+										case CricketUtil.RUN_OUT:
+											tournament_dismissal_stats.get(playerId).setRun_out(tournament_dismissal_stats.get(playerId).getRun_out() + 1);
+											break;
+										case CricketUtil.STUMPED:
+											tournament_dismissal_stats.get(playerId).setStumped(tournament_dismissal_stats.get(playerId).getStumped() + 1);
+											break;
+										case CricketUtil.HIT_WICKET:
+											tournament_dismissal_stats.get(playerId).setHit_wicket(tournament_dismissal_stats.get(playerId).getHit_wicket() + 1);
+											break;
+										default:
+											tournament_dismissal_stats.get(playerId).setOther(tournament_dismissal_stats.get(playerId).getOther() + 1);
+											break;
+										}
+									}
+									
+									if(bc.getRuns() > 0) {
+										if(bc.getRuns() > 199) {
+											tournament_dismissal_stats.get(playerId).setPlus_199(tournament_dismissal_stats.get(playerId).getPlus_199() + 1);
+										}else if(bc.getRuns() >= 100 && bc.getRuns() <= 199) {
+											tournament_dismissal_stats.get(playerId).setHundred_to_199(tournament_dismissal_stats.get(playerId).getHundred_to_199() + 1);
+										}else if(bc.getRuns() >= 90 && bc.getRuns() <= 99) {
+											tournament_dismissal_stats.get(playerId).setNinty_to_99(tournament_dismissal_stats.get(playerId).getNinty_to_99() + 1);
+										}else if(bc.getRuns() >= 70 && bc.getRuns() <= 89) {
+											tournament_dismissal_stats.get(playerId).setSeventy_to_89(tournament_dismissal_stats.get(playerId).getSeventy_to_89() + 1);
+										}else if(bc.getRuns() >= 50 && bc.getRuns() <= 69) {
+											tournament_dismissal_stats.get(playerId).setFifty_to_69(tournament_dismissal_stats.get(playerId).getFifty_to_69() + 1);
+										}else if(bc.getRuns() >= 40 && bc.getRuns() <= 49) {
+											tournament_dismissal_stats.get(playerId).setForty_to_49(tournament_dismissal_stats.get(playerId).getForty_to_49() + 1);
+										}else if(bc.getRuns() >= 10 && bc.getRuns() <= 39) {
+											tournament_dismissal_stats.get(playerId).setTen_to_39(tournament_dismissal_stats.get(playerId).getTen_to_39() + 1);
+										}else if(bc.getRuns() >= 0 && bc.getRuns() <= 9) {
+											tournament_dismissal_stats.get(playerId).setUnder_10(tournament_dismissal_stats.get(playerId).getUnder_10() + 1);
+										}
+									}else {
+										if(bc.getStatus().equalsIgnoreCase(CricketUtil.OUT)) {
+											tournament_dismissal_stats.get(playerId).setDucks(tournament_dismissal_stats.get(playerId).getDucks() + 1);
+										}else if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+											tournament_dismissal_stats.get(playerId).setUnder_10(tournament_dismissal_stats.get(playerId).getUnder_10() + 1);
+										}
+									}
+									
+								}else {
+									tournament_dismissal_stats.add(new Tournament(bc.getPlayerId(), 0, 0, 0, 0, 0, 0, 0, 0, 0, bc.getPlayer()));
+									
+									if(bc.getHowOut() != null) {
+										tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setTotal_dismissal(
+												tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getTotal_dismissal() + 1);
+										
+										switch (bc.getHowOut().toUpperCase()) {
+										case CricketUtil.CAUGHT:
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setCaught(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getCaught() + 1);
+											break;
+										case CricketUtil.CAUGHT_AND_BOWLED:
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setCtAndBowled(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getCtAndBowled() + 1);
+											break;
+										case CricketUtil.BOWLED:
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setBowled(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getBowled() + 1);
+											break;
+										case CricketUtil.LBW:
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setLbw(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getLbw() + 1);
+											break;
+										case CricketUtil.RUN_OUT:
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setRun_out(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getRun_out() + 1);
+											break;
+										case CricketUtil.STUMPED:
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setStumped(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getStumped() + 1);
+											break;
+										case CricketUtil.HIT_WICKET:
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setHit_wicket(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getHit_wicket() + 1);
+											break;
+										default:
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setOther(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getOther() + 1);
+											break;
+										}
+									}
+									
+									if(bc.getRuns() > 0) {
+										if(bc.getRuns() > 199) {
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setPlus_199(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getPlus_199() + 1);
+										}else if(bc.getRuns() >= 100 && bc.getRuns() <= 199) {
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setHundred_to_199(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getHundred_to_199() + 1);
+										}else if(bc.getRuns() >= 90 && bc.getRuns() <= 99) {
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setNinty_to_99(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getNinty_to_99() + 1);
+										}else if(bc.getRuns() >= 70 && bc.getRuns() <= 89) {
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setSeventy_to_89(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getSeventy_to_89() + 1);
+										}else if(bc.getRuns() >= 50 && bc.getRuns() <= 69) {
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setFifty_to_69(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getFifty_to_69() + 1);
+										}else if(bc.getRuns() >= 40 && bc.getRuns() <= 49) {
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setForty_to_49(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getForty_to_49() + 1);
+										}else if(bc.getRuns() >= 10 && bc.getRuns() <= 39) {
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setTen_to_39(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getTen_to_39() + 1);
+										}else if(bc.getRuns() >= 0 && bc.getRuns() <= 9) {
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setUnder_10(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getUnder_10() + 1);
+										}
+									}else {
+										if(bc.getStatus().equalsIgnoreCase(CricketUtil.OUT)) {
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setDucks(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getDucks() + 1);
+										}else if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+											tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).setUnder_10(
+													tournament_dismissal_stats.get(tournament_dismissal_stats.size() - 1).getUnder_10() + 1);
+										}
+									}
+								}	
+							}
+						}
+					}
+				}
+			}
+			return tournament_dismissal_stats;
+		case "CURRENT_MATCH_DATA":
+			
+			List<Tournament> past_tournament_dismissal_stat_clone = past_tournament_dismissal_stat.stream().map(tourn_stats -> {
+				try {
+					return tourn_stats.clone();
+				} catch (CloneNotSupportedException e) {
+					e.printStackTrace();
+				}
+				return tourn_stats;
+			}).collect(Collectors.toList());
+			
+			for(Inning inn : currentMatch.getMatch().getInning()) {
+				for(BowlingCard boc : inn.getBowlingCard())
+				{
+					playerId = -1;
+					for(int i=0; i<=past_tournament_dismissal_stat_clone.size() - 1;i++)
+					{
+						if(boc.getPlayerId() == past_tournament_dismissal_stat_clone.get(i).getPlayerId()) {
+							playerId = i;
+							break;
+						}
+					}
+					
+					if(playerId >= 0) {
+						if(boc.getWickets() > 0) {
+							switch(String.valueOf(boc.getWickets())) {
+							case CricketUtil.ONE:
+								past_tournament_dismissal_stat_clone.get(playerId).setOne_wickets(past_tournament_dismissal_stat_clone.get(playerId).getOne_wickets() + 1);
+								break;
+							case CricketUtil.TWO:
+								past_tournament_dismissal_stat_clone.get(playerId).setTwo_wickets(past_tournament_dismissal_stat_clone.get(playerId).getTwo_wickets() + 1);
+								break;
+							case CricketUtil.THREE:
+								past_tournament_dismissal_stat_clone.get(playerId).setThree_wickets(past_tournament_dismissal_stat_clone.get(playerId).getThree_wickets() + 1);
+								break;
+							case CricketUtil.FOUR:
+								past_tournament_dismissal_stat_clone.get(playerId).setFour_wickets(past_tournament_dismissal_stat_clone.get(playerId).getFour_wickets() + 1);
+								break;
+							case CricketUtil.FIVE:
+								past_tournament_dismissal_stat_clone.get(playerId).setFive_wickets(past_tournament_dismissal_stat_clone.get(playerId).getFive_wickets() + 1);
+								break;
+							case CricketUtil.SIX:
+								past_tournament_dismissal_stat_clone.get(playerId).setSix_wickets(past_tournament_dismissal_stat_clone.get(playerId).getSix_wickets() + 1);
+								break;
+							}
+						}else {
+							past_tournament_dismissal_stat_clone.get(playerId).setZero_wickets(past_tournament_dismissal_stat_clone.get(playerId).getZero_wickets() + 1);
+						}
+						
+						if(showBowlerDissmisal == true) {
+							getBowlerDissmisal(boc.getPlayerId(), playerId, null, past_tournament_dismissal_stat_clone, currentMatch);
+						}
+						
+					}else {
+						past_tournament_dismissal_stat_clone.add(new Tournament(boc.getPlayerId(), 0, 0, 0, 0, 0, 0, 0, boc.getPlayer()));
+						
+						if(boc.getWickets() > 0) {
+							switch(String.valueOf(boc.getWickets())) {
+							case CricketUtil.ONE:
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size()-1).setOne_wickets(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size()-1).getOne_wickets() + 1);
+								break;
+							case CricketUtil.TWO:
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size()-1).setTwo_wickets(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size()-1).getTwo_wickets() + 1);
+								break;
+							case CricketUtil.THREE:
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size()-1).setThree_wickets(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size()-1).getThree_wickets() + 1);
+								break;
+							case CricketUtil.FOUR:
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size()-1).setFour_wickets(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size()-1).getFour_wickets() + 1);
+								break;
+							case CricketUtil.FIVE:
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size()-1).setFive_wickets(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size()-1).getFive_wickets() + 1);
+								break;
+							case CricketUtil.SIX:
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size()-1).setSix_wickets(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size()-1).getSix_wickets() + 1);
+								break;
+							}
+						}else {
+							past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size()-1).setZero_wickets(
+									past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size()-1).getZero_wickets() + 1);
+						}
+						
+						if(showBowlerDissmisal == true) {
+							getBowlerDissmisal(boc.getPlayerId(), (past_tournament_dismissal_stat_clone.size()-1), null, 
+									past_tournament_dismissal_stat_clone, currentMatch);
+						}
+					}
+				}
+				
+				for(BattingCard bc : inn.getBattingCard())
+				{
+					playerId = -1;
+					for(int i=0; i<=past_tournament_dismissal_stat_clone.size() - 1;i++)
+					{
+						if(bc.getPlayerId() == past_tournament_dismissal_stat_clone.get(i).getPlayerId()) {
+							playerId = i;
+							break;
+						}
+					}
+					
+					if(playerId >= 0) {
+						if(bc.getHowOut() != null) {
+							past_tournament_dismissal_stat_clone.get(playerId).setTotal_dismissal(past_tournament_dismissal_stat_clone.get(playerId).getTotal_dismissal() + 1);
+							
+							switch (bc.getHowOut().toUpperCase()) {
+							case CricketUtil.CAUGHT:
+								past_tournament_dismissal_stat_clone.get(playerId).setCaught(past_tournament_dismissal_stat_clone.get(playerId).getCaught() + 1);
+								break;
+							case CricketUtil.CAUGHT_AND_BOWLED:
+								past_tournament_dismissal_stat_clone.get(playerId).setCtAndBowled(past_tournament_dismissal_stat_clone.get(playerId).getCtAndBowled() + 1);
+								break;
+							case CricketUtil.BOWLED:
+								past_tournament_dismissal_stat_clone.get(playerId).setBowled(past_tournament_dismissal_stat_clone.get(playerId).getBowled() + 1);
+								break;
+							case CricketUtil.LBW:
+								past_tournament_dismissal_stat_clone.get(playerId).setLbw(past_tournament_dismissal_stat_clone.get(playerId).getLbw() + 1);
+								break;
+							case CricketUtil.RUN_OUT:
+								past_tournament_dismissal_stat_clone.get(playerId).setRun_out(past_tournament_dismissal_stat_clone.get(playerId).getRun_out() + 1);
+								break;
+							case CricketUtil.STUMPED:
+								past_tournament_dismissal_stat_clone.get(playerId).setStumped(past_tournament_dismissal_stat_clone.get(playerId).getStumped() + 1);
+								break;
+							case CricketUtil.HIT_WICKET:
+								past_tournament_dismissal_stat_clone.get(playerId).setHit_wicket(past_tournament_dismissal_stat_clone.get(playerId).getHit_wicket() + 1);
+								break;
+							default:
+								past_tournament_dismissal_stat_clone.get(playerId).setOther(past_tournament_dismissal_stat_clone.get(playerId).getOther() + 1);
+								break;
+							}
+						}
+						
+						if(bc.getRuns() > 0) {
+							if(bc.getRuns() > 199) {
+								past_tournament_dismissal_stat_clone.get(playerId).setPlus_199(past_tournament_dismissal_stat_clone.get(playerId).getPlus_199() + 1);
+							}else if(bc.getRuns() >= 100 && bc.getRuns() <= 199) {
+								past_tournament_dismissal_stat_clone.get(playerId).setHundred_to_199(past_tournament_dismissal_stat_clone.get(playerId).getHundred_to_199() + 1);
+							}else if(bc.getRuns() >= 90 && bc.getRuns() <= 99) {
+								past_tournament_dismissal_stat_clone.get(playerId).setNinty_to_99(past_tournament_dismissal_stat_clone.get(playerId).getNinty_to_99() + 1);
+							}else if(bc.getRuns() >= 70 && bc.getRuns() <= 89) {
+								past_tournament_dismissal_stat_clone.get(playerId).setSeventy_to_89(past_tournament_dismissal_stat_clone.get(playerId).getSeventy_to_89() + 1);
+							}else if(bc.getRuns() >= 50 && bc.getRuns() <= 69) {
+								past_tournament_dismissal_stat_clone.get(playerId).setFifty_to_69(past_tournament_dismissal_stat_clone.get(playerId).getFifty_to_69() + 1);
+							}else if(bc.getRuns() >= 40 && bc.getRuns() <= 49) {
+								past_tournament_dismissal_stat_clone.get(playerId).setForty_to_49(past_tournament_dismissal_stat_clone.get(playerId).getForty_to_49() + 1);
+							}else if(bc.getRuns() >= 10 && bc.getRuns() <= 39) {
+								past_tournament_dismissal_stat_clone.get(playerId).setTen_to_39(past_tournament_dismissal_stat_clone.get(playerId).getTen_to_39() + 1);
+							}else if(bc.getRuns() >= 0 && bc.getRuns() <= 9) {
+								past_tournament_dismissal_stat_clone.get(playerId).setUnder_10(past_tournament_dismissal_stat_clone.get(playerId).getUnder_10() + 1);
+							}
+						}else {
+							if(bc.getStatus().equalsIgnoreCase(CricketUtil.OUT)) {
+								past_tournament_dismissal_stat_clone.get(playerId).setDucks(past_tournament_dismissal_stat_clone.get(playerId).getDucks() + 1);
+							}else if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+								past_tournament_dismissal_stat_clone.get(playerId).setUnder_10(past_tournament_dismissal_stat_clone.get(playerId).getUnder_10() + 1);
+							}
+						}
+						
+					}else {
+						past_tournament_dismissal_stat_clone.add(new Tournament(bc.getPlayerId(), 0, 0, 0, 0, 0, 0, 0, 0, 0, bc.getPlayer()));
+						
+						if(bc.getHowOut() != null) {
+							past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setTotal_dismissal(
+									past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getTotal_dismissal() + 1);
+							
+							switch (bc.getHowOut().toUpperCase()) {
+							case CricketUtil.CAUGHT:
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setCaught(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getCaught() + 1);
+								break;
+							case CricketUtil.CAUGHT_AND_BOWLED:
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setCtAndBowled(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getCtAndBowled() + 1);
+								break;
+							case CricketUtil.BOWLED:
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setBowled(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getBowled() + 1);
+								break;
+							case CricketUtil.LBW:
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setLbw(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getLbw() + 1);
+								break;
+							case CricketUtil.RUN_OUT:
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setRun_out(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getRun_out() + 1);
+								break;
+							case CricketUtil.STUMPED:
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setStumped(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getStumped() + 1);
+								break;
+							case CricketUtil.HIT_WICKET:
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setHit_wicket(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getHit_wicket() + 1);
+								break;
+							default:
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setOther(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getOther() + 1);
+								break;
+							}
+						}
+						
+						if(bc.getRuns() > 0) {
+							if(bc.getRuns() > 199) {
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setPlus_199(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getPlus_199() + 1);
+							}else if(bc.getRuns() >= 100 && bc.getRuns() <= 199) {
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setHundred_to_199(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getHundred_to_199() + 1);
+							}else if(bc.getRuns() >= 90 && bc.getRuns() <= 99) {
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setNinty_to_99(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getNinty_to_99() + 1);
+							}else if(bc.getRuns() >= 70 && bc.getRuns() <= 89) {
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setSeventy_to_89(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getSeventy_to_89() + 1);
+							}else if(bc.getRuns() >= 50 && bc.getRuns() <= 69) {
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setFifty_to_69(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getFifty_to_69() + 1);
+							}else if(bc.getRuns() >= 40 && bc.getRuns() <= 49) {
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setForty_to_49(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getForty_to_49() + 1);
+							}else if(bc.getRuns() >= 10 && bc.getRuns() <= 39) {
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setTen_to_39(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getTen_to_39() + 1);
+							}else if(bc.getRuns() >= 0 && bc.getRuns() <= 9) {
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setUnder_10(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getUnder_10() + 1);
+							}
+						}else {
+							if(bc.getStatus().equalsIgnoreCase(CricketUtil.OUT)) {
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setDucks(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getDucks() + 1);
+							}else if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+								past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).setUnder_10(
+										past_tournament_dismissal_stat_clone.get(past_tournament_dismissal_stat_clone.size() - 1).getUnder_10() + 1);
+							}
+						}
+					}	
+				}
+			}
+			return past_tournament_dismissal_stat_clone;
+		}
+		
+		return null;
+	}
+	
+	public static void getBowlerDissmisal(int PlayerId,int Value, CricketService cricketService, List<Tournament> tournament_stats, MatchAllData match) {
+		
+		for (int i = 0; i <= match.getEventFile().getEvents().size() - 1; i++) {
+			if(PlayerId == match.getEventFile().getEvents().get(i).getEventBallNo()) {
+				switch (match.getEventFile().getEvents().get(i).getEventType()) {
+				case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
+					switch (match.getEventFile().getEvents().get(i).getEventHowOut().toUpperCase()) {
+					case CricketUtil.CAUGHT:
+						tournament_stats.get(Value).setCaught_bowler(tournament_stats.get(Value).getCaught_bowler() + 1);
+						break;
+					case CricketUtil.CAUGHT_AND_BOWLED:
+						tournament_stats.get(Value).setCtAndBowled_bowler(tournament_stats.get(Value).getCtAndBowled_bowler() + 1);
+						break;
+					case CricketUtil.BOWLED:
+						tournament_stats.get(Value).setBowled_bowler(tournament_stats.get(Value).getBowled_bowler() + 1);
+						break;
+					case CricketUtil.LBW:
+						tournament_stats.get(Value).setLbw_bowler(tournament_stats.get(Value).getLbw_bowler() + 1);
+						break;
+					case CricketUtil.STUMPED:
+						tournament_stats.get(Value).setStumped_bowler(tournament_stats.get(Value).getStumped_bowler() + 1);
+						break;
+					case CricketUtil.HIT_WICKET:
+						tournament_stats.get(Value).setHit_wicket_bowler(tournament_stats.get(Value).getHit_wicket_bowler() + 1);
+						break;
+					default:
+						tournament_stats.get(Value).setOther_bowler(tournament_stats.get(Value).getOther_bowler() + 1);
+						break;
+					}
+					break;
+				}
+			}
+		}
+	}
+	
+	public static int SecondLastBowlerId(MatchAllData matchData ,List<Event>events) {
+		int over_c=0;
+		for (int i = events.size() - 1; i >= 0; i--) {
+			if (matchData.getEventFile().getEvents().get(i).getEventInningNumber() 
+					== matchData.getMatch().getInning().stream().filter(in -> in.getIsCurrentInning()
+							.equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null).getInningNumber()) {
+
+				if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+					over_c++;
+					if(over_c==2) {
+						return events.get(i).getEventBowlerNo();
+					}
+				}
+			}
+		}
+		return 0;
 	}
 	
 	public static String hundredsTensUnits(String number) {
@@ -4254,11 +4816,11 @@ public class CricketFunctions {
 					switch (teamNameType) {
 					case CricketUtil.SHORT:
 						if(Integer.valueOf(match.getMatch().getMatchResult().split(",")[0]) == match.getSetup().getHomeTeamId()) {
-							resultToShow = match.getSetup().getHomeTeam().getTeamName3();
-							opponentTeamName = match.getSetup().getAwayTeam().getTeamName3();
+							resultToShow = match.getSetup().getHomeTeam().getTeamName4();
+							opponentTeamName = match.getSetup().getAwayTeam().getTeamName4();
 						} else {
-							resultToShow = match.getSetup().getAwayTeam().getTeamName3();
-							opponentTeamName = match.getSetup().getHomeTeam().getTeamName3();
+							resultToShow = match.getSetup().getAwayTeam().getTeamName4();
+							opponentTeamName = match.getSetup().getHomeTeam().getTeamName4();
 						}
 					    break;
 					default:
@@ -4345,9 +4907,9 @@ public class CricketFunctions {
 					switch (teamNameType) {
 					case CricketUtil.SHORT:
 						if(Integer.valueOf(match.getMatch().getMatchResult().split(",")[0]) == match.getSetup().getHomeTeamId()) {
-							resultToShow = match.getSetup().getHomeTeam().getTeamName3();
+							resultToShow = match.getSetup().getHomeTeam().getTeamName4();
 						} else {
-							resultToShow = match.getSetup().getAwayTeam().getTeamName3();
+							resultToShow = match.getSetup().getAwayTeam().getTeamName4();
 						}
 					    break;
 					default:
@@ -7681,7 +8243,7 @@ public class CricketFunctions {
 		return total_runs;
 	}
 	
-	public static String generateMatchSummaryStatus(int whichInning, MatchAllData match, String teamNameType) 
+	public static String generateMatchSummaryStatus(int whichInning, MatchAllData match, String teamNameType, String broadcaster) 
 	{
 		String matchSummaryStatus = generateMatchResult(match, teamNameType);
 
@@ -7734,13 +8296,26 @@ public class CricketFunctions {
 						}
 				    } else if (CricketFunctions.getRequiredRuns(match) <= 0)
 				    {
-				    	matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match) + 
-				    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
+				    	if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
+				    		matchSummaryStatus = batTeamNm + " win by super over";
+						}else {
+							matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match) + 
+						    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
+						}
+				    	
+				    	
 				    }
 				    else if (CricketFunctions.getRequiredRuns(match) == 1 && (CricketFunctions.getRequiredBalls(match) <= 0 
 				    		|| CricketFunctions.getWicketsLeft(match) <= 0)) 
 				    {
-				    	matchSummaryStatus = "Match tied";
+				    	switch (broadcaster) {
+						case "ICC_BIG_SCREEN":
+							matchSummaryStatus = "Match tied - winner will be decided by super over";
+							break;
+						default:
+					    	matchSummaryStatus = "Match tied";
+							break;
+						}
 				    } 
 				    else 
 				    {
@@ -10112,7 +10687,7 @@ public class CricketFunctions {
                             }
                             break;
                     }
-                }
+                }					
 /**************************************PowerPlays*****************************************************************************/
 					if(events.get(i).getEventInningNumber() == 1 && events.get(i).getEventBowlerNo()!=0) {
 						

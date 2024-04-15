@@ -24,6 +24,9 @@ public class Configuration {
 	@XmlElement(name="secondaryBroadcaster")
 	private String secondaryBroadcaster;
 	
+	@XmlElement(name="whichScene")
+	private String whichScene;
+	
 	@XmlElement(name="qtIpAddress")
 	private String qtIpAddress;
 	
@@ -158,9 +161,35 @@ public class Configuration {
 		this.secondaryLanguage = secondaryLanguage;
 		this.preview = preview;
 	}
+	
+	public Configuration(String filename, String broadcaster, String secondaryBroadcaster, String whichScene,
+			String qtIpAddress, int qtPortNumber, String qtScene, String qtLanguage, String primaryIpAddress,
+			int primaryPortNumber, String primaryScene, String primaryLanguage, String secondaryIpAddress,
+			int secondaryPortNumber, String secondaryScene, String secondaryLanguage, String tertiaryIpAddress,
+			int tertiaryPortNumber, String tertiaryScene, String tertiaryLanguage) {
+		super();
+		this.filename = filename;
+		this.broadcaster = broadcaster;
+		this.secondaryBroadcaster = secondaryBroadcaster;
+		this.whichScene = whichScene;
+		this.qtIpAddress = qtIpAddress;
+		this.qtPortNumber = qtPortNumber;
+		this.qtScene = qtScene;
+		this.qtLanguage = qtLanguage;
+		this.primaryIpAddress = primaryIpAddress;
+		this.primaryPortNumber = primaryPortNumber;
+		this.primaryScene = primaryScene;
+		this.primaryLanguage = primaryLanguage;
+		this.secondaryIpAddress = secondaryIpAddress;
+		this.secondaryPortNumber = secondaryPortNumber;
+		this.secondaryScene = secondaryScene;
+		this.secondaryLanguage = secondaryLanguage;
+		this.tertiaryIpAddress = tertiaryIpAddress;
+		this.tertiaryPortNumber = tertiaryPortNumber;
+		this.tertiaryScene = tertiaryScene;
+		this.tertiaryLanguage = tertiaryLanguage;
+	}
 
-	
-	
 	public String getPreview() {
 		return preview;
 	}
@@ -211,6 +240,14 @@ public class Configuration {
 
 	public String getSecondaryBroadcaster() {
 		return secondaryBroadcaster;
+	}
+
+	public String getWhichScene() {
+		return whichScene;
+	}
+
+	public void setWhichScene(String whichScene) {
+		this.whichScene = whichScene;
 	}
 
 	public void setSecondaryBroadcaster(String secondaryBroadcaster) {

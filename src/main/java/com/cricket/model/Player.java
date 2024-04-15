@@ -514,8 +514,6 @@ public Player(int playerId, int runs,int balls,int four,int six,  int nine) {
 	this.four = four;
 	this.six = six;
 	this.nine = nine;
-	
-	
 }
 
 public Player(int playerId, int runs, int balls, int wickets) {

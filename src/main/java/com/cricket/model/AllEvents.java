@@ -153,7 +153,7 @@ public class AllEvents{
 	public void setSecondlastBowlerId(int secondlastBowlerId) {
 		this.secondlastBowlerId = secondlastBowlerId;
 	}
-
+	
 	public AllEvents(String this_Over, List<Integer> last_Over, List<Integer> last_30_Balls, int ballsSinceLastBoundary,
 			int lastBowlerId,int secondlastBowlerId, List<Integer> bothInningDotBalls, List<Integer> this_over_run_wk,
 			Inning inningComaprision) {
