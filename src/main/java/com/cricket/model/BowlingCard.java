@@ -70,7 +70,6 @@ public BowlingCard(Player player,int bowlingPosition, String status, int bowling
 	this.status = status;
 	this.bowling_end = bowling_end;
 }
-
 public BowlingCard(Player player) {
 	super();
 	this.player = player;

@@ -19,6 +19,8 @@ public class BattingCard implements Comparable<BattingCard>{
   
   private int fours;
   
+  private int seconds;
+  
   private int sixes;
   
   private int nines;
@@ -298,6 +300,12 @@ public void setPlayer(Player player) {
 	this.player = player;
 }
 
+public int getSeconds() {
+	return seconds;
+}
+public void setSeconds(int seconds) {
+	this.seconds = seconds;
+}
 @Override
 public String toString() {
 	return "BattingCard [playerId=" + playerId + ", batterPosition=" + batterPosition + ", battingStyle=" + battingStyle
@@ -310,6 +318,7 @@ public String toString() {
 			+ ", concussion_player=" + concussion_player + ", howOutFielder=" + howOutFielder + ", howOutBowler="
 			+ howOutBowler + "]";
 }
+
 @Override
 public int compareTo(BattingCard bc) {
 	return (int) (this.getBatterPosition()-bc.getBatterPosition());

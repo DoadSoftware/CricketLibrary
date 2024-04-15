@@ -139,7 +139,6 @@ public class Player implements Comparable<Player>
   private int three;
   @Transient
   private int five;
-  
   @Transient
   private int six;
   @Transient
@@ -497,7 +496,6 @@ public int getBalls() {
 public void setBalls(int ball) {
 	this.balls = ball;
 }
-
 public int getWickets() {
 	return wickets;
 }
@@ -506,7 +504,8 @@ public void setWickets(int wickets) {
 	this.wickets = wickets;
 }
 
-public Player(int playerId, int runs,int balls,int four,int six,  int nine) {
+
+public Player(int playerId, int runs, int balls, int wickets, int six, int four, int nine) {
 	super();
 	this.playerId = playerId;
 	this.runs = runs;
@@ -515,7 +514,6 @@ public Player(int playerId, int runs,int balls,int four,int six,  int nine) {
 	this.six = six;
 	this.nine = nine;
 }
-
 public Player(int playerId, int runs, int balls, int wickets) {
 	super();
 	this.playerId = playerId;
@@ -538,6 +536,7 @@ public String toString() {
 			+ ", captainWicketKeeper=" + captainWicketKeeper + ", one=" + one + ", two=" + two + ", three=" + three
 			+ ", five=" + five + ", six=" + six + ", four=" + four + ", nine=" + nine + ", dot=" + dot + ", catches="
 			+ catches + ", runs=" + runs + ", balls=" + balls + ", wickets=" + wickets + "]";
+
 }
 
 }
