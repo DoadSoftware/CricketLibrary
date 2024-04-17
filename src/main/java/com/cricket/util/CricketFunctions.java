@@ -4556,7 +4556,7 @@ public class CricketFunctions {
 						}
 						
 						tournament_stats.get(tournament_stats.size() - 1).getBowler_best_Stats().add(new BestStats(mtch.getPlayerId(), 
-								(1000 * mtch.getWickets()) - mtch.getRunsConceded(), mtch.getBallsBowled(), mtch.getOpponentTeam(), null, 
+								((1000 * mtch.getWickets()) - mtch.getRunsConceded()), mtch.getBallsBowled(), mtch.getOpponentTeam(), null, 
 								mtch.getMatchFileName().replace(".json", ""), cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(mtch.getPlayerId())),""));
 					}
 				}
@@ -6883,7 +6883,7 @@ public class CricketFunctions {
 		return catches;
 		
     }
-public static  List<Object>  getSessionPerformer(MatchAllData match ,List<Event> event){
+	public static  List<Object>  getSessionPerformer(MatchAllData match ,List<Event> event){
 		
 		int ball_count = 0;
 		
