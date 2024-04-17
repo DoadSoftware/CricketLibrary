@@ -35,6 +35,12 @@ public class AllEvents{
 	
 	private List<PowerPlays> powerplay;
 	
+	//batsman stats again bolwler
+	private List<Player> BatStats;
+	
+	//bolwler stats again batsman
+	private List<Player> BallStats;
+	
 	public String getThis_Over() {
 		return This_Over;
 	}
@@ -154,6 +160,22 @@ public class AllEvents{
 		this.secondlastBowlerId = secondlastBowlerId;
 	}
 	
+	public List<Player> getBatStats() {
+		return BatStats;
+	}
+
+	public void setBatStats(List<Player> batStats) {
+		BatStats = batStats;
+	}
+
+	public List<Player> getBallStats() {
+		return BallStats;
+	}
+
+	public void setBallStats(List<Player> list) {
+		BallStats = list;
+	}
+
 	public AllEvents(String this_Over, List<Integer> last_Over, List<Integer> last_30_Balls, int ballsSinceLastBoundary,
 			int lastBowlerId,int secondlastBowlerId, List<Integer> bothInningDotBalls, List<Integer> this_over_run_wk,
 			Inning inningComaprision) {

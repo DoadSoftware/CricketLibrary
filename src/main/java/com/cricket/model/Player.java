@@ -7,6 +7,9 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.Column;
 
 @Entity
@@ -107,6 +110,8 @@ public class Player implements Comparable<Player>
 
   @Transient
   private String captainWicketKeeper;
+  @Transient
+  private Set<Player> BatBall;
 
 //  @Transient
 //  private String impactPlayer;
@@ -521,6 +526,20 @@ public Player(int playerId, int runs, int balls, int wickets) {
 	this.balls = balls;
 	this.wickets = wickets;
 }
+public Player(String name, int playerId, int runs, int balls) {
+	super();
+	this.ticker_name=name;
+	this.playerId = playerId;
+	this.runs = runs;
+	this.balls = balls;
+}
+public Set<Player> getBatBall() {
+	return BatBall;
+}
+
+public void setBatBall(Set<Player> bolwer) {
+	BatBall = bolwer;
+}
 
 @Override
 public String toString() {
@@ -538,5 +557,4 @@ public String toString() {
 			+ catches + ", runs=" + runs + ", balls=" + balls + ", wickets=" + wickets + "]";
 
 }
-
 }

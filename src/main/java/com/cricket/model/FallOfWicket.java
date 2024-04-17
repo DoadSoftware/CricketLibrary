@@ -2,7 +2,6 @@ package com.cricket.model;
 
 public class FallOfWicket implements Comparable<FallOfWicket>
 {
-
   private int fowNumber;
   
   private int fowPlayerID;
@@ -12,7 +11,7 @@ public class FallOfWicket implements Comparable<FallOfWicket>
   private int fowOvers;
 
   private int fowBalls;
-
+  
   private String fowDateTime;
   
 public FallOfWicket() {
