@@ -112,6 +112,7 @@ public class Player implements Comparable<Player>
   private String captainWicketKeeper;
   @Transient
   private Set<Player> BatBall;
+  private List<Player> playerPos;
 
 //  @Transient
 //  private String impactPlayer;
@@ -510,6 +511,14 @@ public void setWickets(int wickets) {
 }
 
 
+public List<Player> getPlayerPos() {
+	return playerPos;
+}
+
+public void setPlayerPos(List<Player> playerPos) {
+	this.playerPos = playerPos;
+}
+
 public Player(int playerId, int runs, int balls, int wickets, int six, int four, int nine) {
 	super();
 	this.playerId = playerId;
@@ -535,6 +544,19 @@ public Player(String name, int playerId, int runs, int balls) {
 }
 public Set<Player> getBatBall() {
 	return BatBall;
+}
+
+public Player(int playerPosition, int runs, int balls) {
+	super();
+	this.playerPosition = playerPosition;
+	this.runs = runs;
+	this.balls = balls;
+}
+
+public Player(int playerId,List<Player> playerPos) {
+	super();
+	this.playerId = playerId;
+	this.playerPos = playerPos;
 }
 
 public void setBatBall(Set<Player> bolwer) {

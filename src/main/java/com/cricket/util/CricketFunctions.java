@@ -4431,7 +4431,66 @@ public class CricketFunctions {
 		}
 		return null;
 	}
-	
+
+    public static void extractBatscoreByPosition(List<Team> team) {
+        
+    	for (File file : new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY).listFiles()) {
+            if (file.isFile() && file.getName().endsWith(".txt")) {
+                try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                    String line;
+                    int lineIndex = 0;
+                    while ((line = br.readLine()) != null) {
+                        if (line.startsWith("IS")) {
+                            String[] parts = line.split("\\s+");
+                            if (team == null || team.stream().noneMatch(tm -> tm.getTeamName1().equalsIgnoreCase(parts[4].trim()))) {
+                                team.add(new Team(parts[4].trim(), new ArrayList<Player>()));
+                            }
+                            if (lineIndex == 12) {
+                                lineIndex = 0;
+                            }
+                            lineIndex++;
+                            if (parts.length >= 10) {
+                                String teamName = parts[4].trim();
+                                for (Team tm : team) {
+                                    if (tm.getTeamName1().equals(teamName)) {
+
+                                        int batsmanId = Integer.parseInt(parts[6]);
+                                        int runs = Integer.parseInt(parts[7]);
+                                        int balls = Integer.parseInt(parts[8]);
+                                        
+                                        if (tm.getPlayer() == null || tm.getPlayer().stream().noneMatch(pl -> pl.getPlayerId() == batsmanId)) {
+                                            if (tm.getPlayer() == null) {
+                                                tm.setPlayer(new ArrayList<Player>());
+                                            }
+                                            tm.getPlayer().add(new Player(batsmanId, new ArrayList<>(Arrays.asList(
+                                                    new Player(1, 0, 0), new Player(2, 0, 0), new Player(3, 0, 0),
+                                                    new Player(4, 0, 0), new Player(5, 0, 0), new Player(6, 0, 0),
+                                                    new Player(7, 0, 0), new Player(8, 0, 0), new Player(9, 0, 0),
+                                                    new Player(10, 0, 0), new Player(11, 0, 0)))));
+                                        }
+
+                                        for (Player ply : tm.getPlayer()) {
+                                            if (ply.getPlayerId() == batsmanId) {
+                                                for (Player pos : ply.getPlayerPos()) {
+                                                    if (lineIndex == pos.getPlayerPosition()) {
+                                                        pos.setRuns((pos.getRuns() + runs));
+                                                        pos.setBalls((pos.getBalls() + balls));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 	public static List<Tournament> extractTournamentData(String typeOfExtraction,boolean ShowStrikeRate, List<HeadToHead> headToHead_matches, 
 			CricketService cricketService,MatchAllData currentMatch, List<Tournament> past_tournament_stat){
 		
@@ -10094,6 +10153,7 @@ public class CricketFunctions {
 
 		return arr;
 	}
+	
 	public static  AllEvents EventExtraction(MatchAllData matchData ,List<Event>events) {
 		AllEvents eventsExtract;
 		eventsExtract = new AllEvents("",  new ArrayList<>(Arrays.asList(0, 0)),  
