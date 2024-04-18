@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import java.util.List;
+
 import javax.persistence.Column;
 
 @Entity
@@ -69,6 +72,9 @@ public class Team implements Comparable<Team> {
   private int three;
   @Transient
   private int five;
+  
+  @Transient
+  private List<Player> player;
   
 public String getFullHindiTeamName() {
 	return FullHindiTeamName;
@@ -227,6 +233,14 @@ public void setFive(int five) {
 	this.five = five;
 }
 
+public List<Player> getPlayer() {
+	return player;
+}
+
+public void setPlayer(List<Player> player) {
+	this.player = player;
+}
+
 public Team(int teamId, String teamName1, String teamName4) {
 	super();
 	this.teamId = teamId;
@@ -243,6 +257,12 @@ public Team(int teamId, String teamName1, String teamName4, int one, int two, in
 	this.two = two;
 	this.three = three;
 	this.five = five;
+}
+
+public Team(String teamName1, List<Player> player) {
+	super();
+	this.teamName1 = teamName1;
+	this.player = player;
 }
 
 @Override
