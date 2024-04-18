@@ -11549,4 +11549,23 @@ public class CricketFunctions {
 				return String.valueOf((balls % ball_per_over)+"."+Integer.valueOf((balls / ball_per_over)));
 			}
 	}
+	public static String BetterOverRate(int Overs, int OddBalls, double Mins, String RateX, boolean Valid) {
+		double ti = 0,r = 0;
+		int O = 0 ,b = 0;
+		int Bls = 6 * Overs + OddBalls;
+		if(Mins < 1){
+			RateX = "";
+		    Valid = false;
+		}else{
+			ti = Mins / 60;
+		    r = (Bls / 6) / ti;
+		    O = (int)Math.floor(r);
+		    r = r - O;
+		    b = (int)Math.floor(6 * r);
+		    RateX = String.valueOf(O) + "." + String.valueOf(b);
+		    Valid = true;
+		}
+		System.out.println("RateX = " + RateX);
+		return RateX;
+	}
 }
