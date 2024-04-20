@@ -112,6 +112,7 @@ public class Player implements Comparable<Player>
   private String captainWicketKeeper;
   @Transient
   private Set<Player> BatBall;
+  @Transient
   private List<Player> playerPos;
 
 //  @Transient
