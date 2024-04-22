@@ -1411,6 +1411,145 @@ public class CricketFunctions {
 		return null;
 }
 	
+	public static String writeHeadToHead(MatchAllData match) throws IOException 
+	{
+		String line_txt = String.format("%-140s", "");
+		String txt = String.format("%-140s", "");
+		
+		txt = addSubString(txt,"|",0);
+		txt = addSubString(txt,"|    (B) - 'BO' - Bowling details" + "\n",0);
+		txt = addSubString(txt,"|    (A) - 'IS' - Batting details" + "\n",0);
+		txt = addSubString(txt,"|" + "\n",0);
+		txt = addSubString(txt,"| Contents" + "\n",0);
+		txt = addSubString(txt,"|" + "\n",0);
+		txt = addSubString(txt,"| DOAD H2H File generated on " + LocalDate.now() + " at " + LocalTime.now() + "\n",0);
+		txt = addSubString(txt,"| " + "\n",0);
+		txt = addSubString(txt,"|" + "\n",0);
+
+		//Match_1_H2H.txt, Match_2_H2H.txt
+		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + match.getMatch().
+			getMatchFileName().replace(".json", ".txt")), Arrays.asList(txt), StandardOpenOption.CREATE);
+		setTextToTextFile(match, txt,line_txt);
+			
+		return null;
+	}
+	public static void setTextToTextFile(MatchAllData match,String txt,String line_txt) throws IOException {
+					
+		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + match.getMatch().
+				getMatchFileName().replace(".json", ".txt")), Arrays.asList(txt), StandardOpenOption.CREATE);
+			
+		txt = String.format("%-140s", "");
+		
+		txt = addSubString(txt,"|",0);
+		txt = addSubString(txt,"|============================================================================================================================================================" + "\n",0);
+		txt = addSubString(txt,"| 152 -154       Stumpings" + "\n",0);
+		txt = addSubString(txt,"| 148 -150       Catches" + "\n",0);
+		txt = addSubString(txt,"| 144 -146       Threes" + "\n",0);
+		txt = addSubString(txt,"| 140 -142       Twos" + "\n",0);
+		txt = addSubString(txt,"| 136 -138       Ones" + "\n",0);
+		txt = addSubString(txt,"| 132 -134       Dots" + "\n",0);
+		txt = addSubString(txt,"| 127 -130       Opponent ticker name" + "\n",0);
+		txt = addSubString(txt,"| 122 -125       Team ticker name" + "\n",0);
+		txt = addSubString(txt,"|      120       Was batsman dismissed?" + "\n",0);
+		txt = addSubString(txt,"|      118       Did batsman innings start?" + "\n",0);
+		txt = addSubString(txt,"| 114 -116       Balls to reach 100" + "\n",0);
+		txt = addSubString(txt,"| 110 -112       Balls to reach 50" + "\n",0);
+		txt = addSubString(txt,"| 106 -108       Sixes" + "\n",0);
+		txt = addSubString(txt,"| 102 -104       Fours" + "\n",0);
+		txt = addSubString(txt,"|  98 -100       Balls" + "\n",0);
+		txt = addSubString(txt,"|  94 - 96       Runs" + "\n",0);
+		txt = addSubString(txt,"|  88 - 92       Batsman code" + "\n",0);
+		txt = addSubString(txt,"|  67 - 86       Opponent full name" + "\n",0);
+		txt = addSubString(txt,"|  46 - 65       Team full name" + "\n",0);
+		txt = addSubString(txt,"|  25 - 44       Venue name" + "\n",0);
+		txt = addSubString(txt,"|   4 - 23       Match file name" + "\n",0);
+		txt = addSubString(txt,"|   1 -  2       Line Ident ('IS')" + "\n",0);
+		txt = addSubString(txt,"|" + "\n",0);
+		txt = addSubString(txt,"|  Columns       Meaning" + "\n",0);
+		txt = addSubString(txt,"|" + "\n",0);
+		txt = addSubString(txt,"|  Batting data" + "\n",0);
+		txt = addSubString(txt,"|" + "\n",0);
+		
+		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + match.getMatch().
+				getMatchFileName().replace(".json", ".txt")), Arrays.asList(txt), StandardOpenOption.APPEND);
+		
+		line_txt = addSubString(line_txt,"|",0);
+		line_txt = addSubString(line_txt,"<Match File Name   >",3);
+		line_txt = addSubString(line_txt,"< Venue Name       >",24);
+		line_txt = addSubString(line_txt,"< Team name        >",45);
+		line_txt = addSubString(line_txt,"< Opponent Name    >",66);
+		line_txt = addSubString(line_txt,"<BAT>",87);
+		line_txt = addSubString(line_txt,"<R>",93);
+		line_txt = addSubString(line_txt,"<B>",97);
+		line_txt = addSubString(line_txt,"<4>",101);
+		line_txt = addSubString(line_txt,"<6>",105);
+		line_txt = addSubString(line_txt,"<F>",109);
+		line_txt = addSubString(line_txt,"<H>",113);
+		line_txt = addSubString(line_txt,"I",117);
+		line_txt = addSubString(line_txt,"D",119);
+		line_txt = addSubString(line_txt,"<TN>",121);
+		line_txt = addSubString(line_txt,"<ON>",126);
+		line_txt = addSubString(line_txt,"<D>",131);
+		line_txt = addSubString(line_txt,"<1>",135);
+		line_txt = addSubString(line_txt,"<2>",139);
+		line_txt = addSubString(line_txt,"<3>",143);
+		line_txt = addSubString(line_txt,"<C>",147);
+		line_txt = addSubString(line_txt,"<S>",151);
+		
+		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + match.getMatch().
+				getMatchFileName().replace(".json", ".txt")), Arrays.asList(line_txt), StandardOpenOption.APPEND);
+		
+		setHeadToHeadData(match, line_txt, "BATTING");
+		
+		txt = String.format("%-140s", "");
+		
+		txt = addSubString(txt,"|",0);
+		txt = addSubString(txt,"|============================================================================================================================================================" + "\n",0);
+		txt = addSubString(txt,"| 124 -127       Last wicket ball count" + "\n",0);
+		txt = addSubString(txt,"| 119 -122       Opponent ticker name" + "\n",0);
+		txt = addSubString(txt,"| 114 -117       Team ticker name" + "\n",0);
+		txt = addSubString(txt,"| 110 -112       Dot balls" + "\n",0);
+		txt = addSubString(txt,"| 106 -108       Wickets" + "\n",0);
+		txt = addSubString(txt,"| 102 -104       Runs" + "\n",0);
+		txt = addSubString(txt,"|  98 -100       Maidens" + "\n",0);
+		txt = addSubString(txt,"|  94 - 96       Balls" + "\n",0);
+		txt = addSubString(txt,"|  88 - 92       Bowler code" + "\n",0);
+		txt = addSubString(txt,"|  67 - 86       Opponent name" + "\n",0);
+		txt = addSubString(txt,"|  46 - 65       Team name" + "\n",0);
+		txt = addSubString(txt,"|  25 - 44       Venue name" + "\n",0);
+		txt = addSubString(txt,"|   4 - 23       Match file name" + "\n",0);
+		txt = addSubString(txt,"|   1 -  2       Line Ident ('BO')" + "\n",0);
+		txt = addSubString(txt,"|" + "\n",0);
+		txt = addSubString(txt,"|  Columns       Meaning" + "\n",0);
+		txt = addSubString(txt,"|" + "\n",0);
+		txt = addSubString(txt,"|  Bowling data" + "\n",0);
+		txt = addSubString(txt,"|" + "\n",0);
+		
+		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + match.getMatch().
+				getMatchFileName().replace(".json", ".txt")), Arrays.asList(txt), StandardOpenOption.APPEND);
+		
+		line_txt = String.format("%-140s", "");
+		
+		line_txt = addSubString(line_txt,"|",0);
+		line_txt = addSubString(line_txt,"<Match File Name   >",3);
+		line_txt = addSubString(line_txt,"< Venue Name       >",24);
+		line_txt = addSubString(line_txt,"< Team name        >",45);
+		line_txt = addSubString(line_txt,"< Opponent Name    >",66);
+		line_txt = addSubString(line_txt,"<BWL>",87);
+		line_txt = addSubString(line_txt,"<B>",93);
+		line_txt = addSubString(line_txt,"<M>",97);
+		line_txt = addSubString(line_txt,"<R>",101);
+		line_txt = addSubString(line_txt,"<W>",105);
+		line_txt = addSubString(line_txt,"<D>",109);
+		line_txt = addSubString(line_txt,"<TN>",113);
+		line_txt = addSubString(line_txt,"<ON>",118);
+		line_txt = addSubString(line_txt,"<LW>",123);
+		
+		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + match.getMatch().
+				getMatchFileName().replace(".json", ".txt")), Arrays.asList(line_txt), StandardOpenOption.APPEND);
+		
+		setHeadToHeadData(match, line_txt, "BOWLING");
+	}
 	public static void setHeadToHeadData(MatchAllData match, String line_txt, String type) throws IOException {
 		
 		for(Inning inn : match.getMatch().getInning()) {
@@ -1476,8 +1615,8 @@ public class CricketFunctions {
 					line_txt = addSubString(line_txt,Count[0],148);
 					line_txt = addSubString(line_txt,Count[1],152);
 					
-					Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
-							Arrays.asList(line_txt), StandardOpenOption.APPEND);
+					Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + match.getMatch().
+							getMatchFileName().replace(".json", ".txt")), Arrays.asList(line_txt), StandardOpenOption.APPEND);
 				}
 				break;
 			case "BOWLING":
@@ -1509,199 +1648,36 @@ public class CricketFunctions {
 						line_txt = addSubString(line_txt,"0",125);
 					}
 					
-					Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
-							Arrays.asList(line_txt), StandardOpenOption.APPEND);
+					Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + match.getMatch().
+							getMatchFileName().replace(".json", ".txt")), Arrays.asList(line_txt), StandardOpenOption.APPEND);
 				}
 				break;
 			}
 	    }
 	}
-	public static String exportHeadToHead(MatchAllData match) throws IOException 
-	{
-		String line_txt = String.format("%-140s", "");
-		String txt = String.format("%-140s", "");
-		
-		txt = addSubString(txt,"|",0);
-		txt = addSubString(txt,"|    (B) - 'BO' - Bowling details" + "\n",0);
-		txt = addSubString(txt,"|    (A) - 'IS' - Batting details" + "\n",0);
-		txt = addSubString(txt,"|" + "\n",0);
-		txt = addSubString(txt,"| Contents" + "\n",0);
-		txt = addSubString(txt,"|" + "\n",0);
-		txt = addSubString(txt,"| DOAD H2H File generated on " + LocalDate.now() + " at " + LocalTime.now() + "\n",0);
-		txt = addSubString(txt,"| " + "\n",0);
-		txt = addSubString(txt,"|" + "\n",0);
-
-		//Match_1_H2H.txt, Match_2_H2H.txt
-		if(Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
-			
-			Boolean lastLine = false;
-	        try (BufferedReader reader = new BufferedReader(new FileReader(CricketUtil.CRICKET_SERVER_DIRECTORY 
-	        		+ CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
-	            String line;
-	            while ((line = reader.readLine()) != null) {
-	            	 if(line.contains(match.getMatch().getMatchFileName())) {
-	            		 lastLine=true;
-	            		 break;
-	 		        }
-	            }
-	        }
-	        if(!lastLine) {
-	        	setTextToTextFile(match, txt,line_txt);
-	        }
-		}else if(!Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT))) {
-			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
-				Arrays.asList(txt), StandardOpenOption.CREATE);
-			setTextToTextFile(match, txt,line_txt);
-			
-		}
-			
-		return null;
-	}
-	public static void setTextToTextFile(MatchAllData match,String txt,String line_txt) throws IOException {
-					
-		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
-				Arrays.asList(txt), StandardOpenOption.CREATE);
-			
-		txt = String.format("%-140s", "");
-		
-		txt = addSubString(txt,"|",0);
-		txt = addSubString(txt,"|============================================================================================================================================================" + "\n",0);
-		txt = addSubString(txt,"| 152 -154       Stumpings" + "\n",0);
-		txt = addSubString(txt,"| 148 -150       Catches" + "\n",0);
-		txt = addSubString(txt,"| 144 -146       Threes" + "\n",0);
-		txt = addSubString(txt,"| 140 -142       Twos" + "\n",0);
-		txt = addSubString(txt,"| 136 -138       Ones" + "\n",0);
-		txt = addSubString(txt,"| 132 -134       Dots" + "\n",0);
-		txt = addSubString(txt,"| 127 -130       Opponent ticker name" + "\n",0);
-		txt = addSubString(txt,"| 122 -125       Team ticker name" + "\n",0);
-		txt = addSubString(txt,"|      120       Was batsman dismissed?" + "\n",0);
-		txt = addSubString(txt,"|      118       Did batsman innings start?" + "\n",0);
-		txt = addSubString(txt,"| 114 -116       Balls to reach 100" + "\n",0);
-		txt = addSubString(txt,"| 110 -112       Balls to reach 50" + "\n",0);
-		txt = addSubString(txt,"| 106 -108       Sixes" + "\n",0);
-		txt = addSubString(txt,"| 102 -104       Fours" + "\n",0);
-		txt = addSubString(txt,"|  98 -100       Balls" + "\n",0);
-		txt = addSubString(txt,"|  94 - 96       Runs" + "\n",0);
-		txt = addSubString(txt,"|  88 - 92       Batsman code" + "\n",0);
-		txt = addSubString(txt,"|  67 - 86       Opponent full name" + "\n",0);
-		txt = addSubString(txt,"|  46 - 65       Team full name" + "\n",0);
-		txt = addSubString(txt,"|  25 - 44       Venue name" + "\n",0);
-		txt = addSubString(txt,"|   4 - 23       Match file name" + "\n",0);
-		txt = addSubString(txt,"|   1 -  2       Line Ident ('IS')" + "\n",0);
-		txt = addSubString(txt,"|" + "\n",0);
-		txt = addSubString(txt,"|  Columns       Meaning" + "\n",0);
-		txt = addSubString(txt,"|" + "\n",0);
-		txt = addSubString(txt,"|  Batting data" + "\n",0);
-		txt = addSubString(txt,"|" + "\n",0);
-		
-		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
-			Arrays.asList(txt), StandardOpenOption.APPEND);
-		
-		line_txt = addSubString(line_txt,"|",0);
-		line_txt = addSubString(line_txt,"<Match File Name   >",3);
-		line_txt = addSubString(line_txt,"< Venue Name       >",24);
-		line_txt = addSubString(line_txt,"< Team name        >",45);
-		line_txt = addSubString(line_txt,"< Opponent Name    >",66);
-		line_txt = addSubString(line_txt,"<BAT>",87);
-		line_txt = addSubString(line_txt,"<R>",93);
-		line_txt = addSubString(line_txt,"<B>",97);
-		line_txt = addSubString(line_txt,"<4>",101);
-		line_txt = addSubString(line_txt,"<6>",105);
-		line_txt = addSubString(line_txt,"<F>",109);
-		line_txt = addSubString(line_txt,"<H>",113);
-		line_txt = addSubString(line_txt,"I",117);
-		line_txt = addSubString(line_txt,"D",119);
-		line_txt = addSubString(line_txt,"<TN>",121);
-		line_txt = addSubString(line_txt,"<ON>",126);
-		line_txt = addSubString(line_txt,"<D>",131);
-		line_txt = addSubString(line_txt,"<1>",135);
-		line_txt = addSubString(line_txt,"<2>",139);
-		line_txt = addSubString(line_txt,"<3>",143);
-		line_txt = addSubString(line_txt,"<C>",147);
-		line_txt = addSubString(line_txt,"<S>",151);
-		
-		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
-				Arrays.asList(line_txt), StandardOpenOption.APPEND);
-		
-		setHeadToHeadData(match, line_txt, "BATTING");
-		
-		txt = String.format("%-140s", "");
-		
-		txt = addSubString(txt,"|",0);
-		txt = addSubString(txt,"|============================================================================================================================================================" + "\n",0);
-		txt = addSubString(txt,"| 124 -127       Last wicket ball count" + "\n",0);
-		txt = addSubString(txt,"| 119 -122       Opponent ticker name" + "\n",0);
-		txt = addSubString(txt,"| 114 -117       Team ticker name" + "\n",0);
-		txt = addSubString(txt,"| 110 -112       Dot balls" + "\n",0);
-		txt = addSubString(txt,"| 106 -108       Wickets" + "\n",0);
-		txt = addSubString(txt,"| 102 -104       Runs" + "\n",0);
-		txt = addSubString(txt,"|  98 -100       Maidens" + "\n",0);
-		txt = addSubString(txt,"|  94 - 96       Balls" + "\n",0);
-		txt = addSubString(txt,"|  88 - 92       Bowler code" + "\n",0);
-		txt = addSubString(txt,"|  67 - 86       Opponent name" + "\n",0);
-		txt = addSubString(txt,"|  46 - 65       Team name" + "\n",0);
-		txt = addSubString(txt,"|  25 - 44       Venue name" + "\n",0);
-		txt = addSubString(txt,"|   4 - 23       Match file name" + "\n",0);
-		txt = addSubString(txt,"|   1 -  2       Line Ident ('BO')" + "\n",0);
-		txt = addSubString(txt,"|" + "\n",0);
-		txt = addSubString(txt,"|  Columns       Meaning" + "\n",0);
-		txt = addSubString(txt,"|" + "\n",0);
-		txt = addSubString(txt,"|  Bowling data" + "\n",0);
-		txt = addSubString(txt,"|" + "\n",0);
-		
-		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
-				Arrays.asList(txt), StandardOpenOption.APPEND);
-		
-		line_txt = String.format("%-140s", "");
-		
-		line_txt = addSubString(line_txt,"|",0);
-		line_txt = addSubString(line_txt,"<Match File Name   >",3);
-		line_txt = addSubString(line_txt,"< Venue Name       >",24);
-		line_txt = addSubString(line_txt,"< Team name        >",45);
-		line_txt = addSubString(line_txt,"< Opponent Name    >",66);
-		line_txt = addSubString(line_txt,"<BWL>",87);
-		line_txt = addSubString(line_txt,"<B>",93);
-		line_txt = addSubString(line_txt,"<M>",97);
-		line_txt = addSubString(line_txt,"<R>",101);
-		line_txt = addSubString(line_txt,"<W>",105);
-		line_txt = addSubString(line_txt,"<D>",109);
-		line_txt = addSubString(line_txt,"<TN>",113);
-		line_txt = addSubString(line_txt,"<ON>",118);
-		line_txt = addSubString(line_txt,"<LW>",123);
-		
-		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + CricketUtil.DOAD_H2H_TXT), 
-			Arrays.asList(line_txt), StandardOpenOption.APPEND);
-		
-		setHeadToHeadData(match, line_txt, "BOWLING");
-	}
-	public static List<HeadToHead> extractHeadToHead(File[] files, CricketService cricketService) throws IOException {
-		
+	
+	public static List<HeadToHead> extractHeadToHead(MatchAllData match, CricketService cricketService) throws IOException {
+		//Read Head To Head text file and store Data in Array List
 		int playerId = -1;
 		List<String> TeamName = new ArrayList<String>();
 		List<String> headToHead = new ArrayList<String>();
 		List<HeadToHead> headToHead_stats = new ArrayList<HeadToHead>();
 		
-		for(File file : files) {
-			if (file.isFile() && file.getName().endsWith(".txt")) {
-				if(new File (CricketUtil.CRICKET_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + file.getName()).exists()) {
-					String text_to_return = "";
-					try(BufferedReader br = new BufferedReader(new FileReader(CricketUtil.CRICKET_DIRECTORY + 
-							CricketUtil.HEADTOHEAD_DIRECTORY + file.getName()))){
-						while((text_to_return = br.readLine()) != null) {
-							if(text_to_return.contains("|")) {
-								
-							}else {
-								if(text_to_return.contains("IS") || text_to_return.contains("BO")) {
-									headToHead.add(text_to_return);
-								}
-							}
+		if(new File (CricketUtil.CRICKET_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + match.getMatch().getMatchFileName().replace(".json", ".txt")).exists()) {
+			String text_to_return = "";
+			try(BufferedReader br = new BufferedReader(new FileReader(CricketUtil.CRICKET_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + 
+					match.getMatch().getMatchFileName().replace(".json", ".txt")))){
+				while((text_to_return = br.readLine()) != null) {
+					if(text_to_return.contains("|")) {
+						
+					}else {
+						if(text_to_return.contains("IS") || text_to_return.contains("BO")) {
+							headToHead.add(text_to_return);
 						}
 					}
 				}
 			}
 		}
-		
-		
 		
 		for(int i=0;i<=headToHead.size()-1;i++) {
 			if(headToHead.get(i).contains("IS")) {
