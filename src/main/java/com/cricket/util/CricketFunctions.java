@@ -3217,22 +3217,30 @@ public class CricketFunctions {
 		}
 	}
 	
-	public static int SecondLastBowlerId(MatchAllData matchData ,List<Event>events) {
+	public static int SecondLastBowlerId(MatchAllData matchData,int currentBowlerId) {
 		int over_c=0;
-		for (int i = events.size() - 1; i >= 0; i--) {
+		for (int i = matchData.getEventFile().getEvents().size() - 1; i >= 0; i--) {
 			if (matchData.getEventFile().getEvents().get(i).getEventInningNumber() 
 					== matchData.getMatch().getInning().stream().filter(in -> in.getIsCurrentInning()
 							.equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null).getInningNumber()) {
 
-				if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+				if (matchData.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
 					over_c++;
-					if(over_c==2) {
-						return events.get(i).getEventBowlerNo();
+					if(over_c == 2) {
+						if(matchData.getEventFile().getEvents().get(i).getEventBowlerNo() != currentBowlerId) {
+							return matchData.getEventFile().getEvents().get(i).getEventBowlerNo();
+						}
 					}
 				}
 			}
 		}
 		return 0;
+	}
+	
+	public static Event batsmanSubstitution(MatchAllData matchData,int Inning_Number) {
+		Event event = matchData.getEventFile().getEvents().stream().filter(ent->ent.getEventType().equalsIgnoreCase(CricketUtil.LOG_OVERWRITE_SUBSTITUTION) 
+				&& ent.getEventInningNumber() == Inning_Number).findAny().orElse(null);
+		return event;
 	}
 	
 	public static String hundredsTensUnits(String number) {
