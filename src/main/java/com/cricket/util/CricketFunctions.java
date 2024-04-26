@@ -8186,7 +8186,8 @@ public class CricketFunctions {
 	        case "CURRENT":
 	            int Day_num = match.getMatch().getDaysSessions().get(match.getMatch().getDaysSessions().size() - 1).getDayNumber();
 	            int total_runs = 0, total_wickets = 0, totalBalls = 0;
-	            double oversInDay = 0.0, overrate = 0.0, runRate = 0.0, durationInMinutes = 0;
+	            double durationInMinutes = 0;
+	            String oversInDay = "",overrate = "",runRate = "-";
 
 	            for (DaySession ds : match.getMatch().getDaysSessions()) {
 	                if (ds.getDayNumber() == Day_num) {
@@ -8196,22 +8197,12 @@ public class CricketFunctions {
 	                    durationInMinutes += ds.getTotalSeconds() / 60;
 	                }
 	            }
-
-	            if (totalBalls % 6 == 0) {
-	                oversInDay = totalBalls / 6.0;
-	            } else {
-	                oversInDay = Double.parseDouble(String.format("%.1f", totalBalls / 6.0));
-	            }
-
-	            overrate = ((oversInDay / (durationInMinutes / 60)) * 90);
-	            runRate = total_runs / oversInDay;
-
-	            String over = String.valueOf(oversInDay);
-	            if (over.endsWith(".0")) {
-	                over = over.replace(".0", "");
-	            }
-
-	            return over + Separator + total_runs + Separator + total_wickets + Separator + String.format("%.2f", overrate) + Separator + String.format("%.2f", runRate);
+	            
+	            oversInDay = OverBalls(0, totalBalls);
+	            overrate = BetterOverRate(0, totalBalls, durationInMinutes, "", false);
+	            runRate = generateRunRate(total_runs, 0, totalBalls, 2, match);
+	            
+	            return oversInDay + Separator + total_runs + Separator + total_wickets + Separator + overrate + Separator + runRate;
 
 	        case "AllDAY":
 	            Set<Integer> DayNumbers = match.getMatch().getDaysSessions().stream()
@@ -8221,7 +8212,8 @@ public class CricketFunctions {
 	            List<String> allDayStats = new ArrayList<>();
 	            for (Integer dayNumber : DayNumbers) {
 	                 total_runs = 0; total_wickets = 0; totalBalls = 0;
-	                 oversInDay = 0.0; overrate = 0.0; runRate = 0.0; durationInMinutes = 0;
+	                 durationInMinutes = 0;
+	                 oversInDay = "";overrate = "";runRate = "-";
 
 	                for (DaySession ds : match.getMatch().getDaysSessions()) {
 	                    if (dayNumber == ds.getDayNumber()) {
@@ -8232,21 +8224,12 @@ public class CricketFunctions {
 	                    }
 	                }
 
-	                if (totalBalls % 6 == 0) {
-	                    oversInDay = totalBalls / 6.0;
-	                } else {
-	                    oversInDay = Double.parseDouble(String.format("%.1f", totalBalls / 6.0));
-	                }
-
-	                overrate = ((oversInDay / (durationInMinutes / 60)) * 90);
-	                runRate = total_runs / oversInDay;
-
-	                String overStr = String.valueOf(oversInDay);
-	                if (overStr.endsWith(".0")) {
-	                    overStr = overStr.replace(".0", "");
-	                }
-
-	                allDayStats.add(dayNumber + Separator + overStr + Separator + total_runs + Separator + total_wickets + Separator + String.format("%.2f", overrate) + Separator + String.format("%.2f", runRate));
+	                oversInDay = OverBalls(0, totalBalls);
+		            overrate = BetterOverRate(0, totalBalls, durationInMinutes, "", false);
+		            runRate = generateRunRate(total_runs, 0, totalBalls, 2, match);
+		            
+	                allDayStats.add(dayNumber + Separator + oversInDay + Separator + total_runs + Separator + total_wickets + Separator + 
+	                		overrate + Separator +  runRate);
 	            }
 
 	            return String.join("\n", allDayStats);
