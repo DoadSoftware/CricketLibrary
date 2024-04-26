@@ -113,6 +113,14 @@ public class CricketFunctions {
 						if(!timeStatsToProcess.isEmpty() && timeStatsToProcess.split(",").length >= 4) {
 							
 							this_inn.setDuration(Integer.valueOf(timeStatsToProcess.split(",")[0]));
+							if(matchData.getDaysSessions() != null) {
+								for(DaySession ds : matchData.getDaysSessions()) {
+									if(ds.getIsCurrentSession().equalsIgnoreCase(CricketUtil.YES)) {
+										ds.setTotalSeconds(Integer.valueOf(timeStatsToProcess.split(",")[0]));
+									}
+								}
+							}		
+							
 							if(this_inn.getInningStats() == null) {
 								this_inn.setInningStats(new InningStats());
 							}
