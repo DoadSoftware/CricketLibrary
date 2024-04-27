@@ -8053,13 +8053,22 @@ public class CricketFunctions {
 		    
 		    switch (events.get(i).getEventType())
 		    {
-		    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 		    case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
+		    	if(events.get(i).getEventWasABoundary() != null && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+		    		this_ball_data = String.valueOf(events.get(i).getEventRuns())+"BOUNDARY";
+				    total_runs += events.get(i).getEventRuns();
+		    	}else {
+		    		this_ball_data = String.valueOf(events.get(i).getEventRuns());
+				    total_runs += events.get(i).getEventRuns();
+		    	}
+		    	break;
+		    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
+		    
 		      this_ball_data = String.valueOf(events.get(i).getEventRuns());
 		      total_runs += events.get(i).getEventRuns();
 		      break;
 		    case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
-		    	if((events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()) > 1) {
+		    	if((events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()) >= 1) {
 		    		this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()) + events.get(i).getEventType();
 		    	}else {
 		    		this_ball_data = events.get(i).getEventType();
@@ -8081,7 +8090,7 @@ public class CricketFunctions {
 		    	if (events.get(i).getEventExtra() != null) {
 		    		if(events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0) {
 		    			if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
-		    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns());
+		    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 		    			}
 		    			else if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL) && events.get(i).getEventRuns() <= 0) {
 		    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + 
@@ -8090,7 +8099,7 @@ public class CricketFunctions {
 		    		}
 		    		if(this_ball_data.isEmpty()) {
 		    			if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
-		    				this_ball_data = events.get(i).getEventExtra();
+		    				this_ball_data =events.get(i).getEventExtraRuns()+ events.get(i).getEventExtra();
 		    			}
 		    			else if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 		    				if(events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0) {
@@ -8122,7 +8131,7 @@ public class CricketFunctions {
 		    			}
 		    			
 		    		}else {
-		    			this_ball_data = this_ball_data + " " + events.get(i).getEventExtra();
+		    			this_ball_data = this_ball_data + "" + events.get(i).getEventExtra();
 		    		}
 		    	}
 		    	
@@ -8140,7 +8149,7 @@ public class CricketFunctions {
 		        if (this_ball_data.isEmpty()) {
 		          this_ball_data = CricketUtil.WICKET;
 		        } else {
-		          this_ball_data = this_ball_data + " " + CricketUtil.WICKET;
+		          this_ball_data = this_ball_data + "+" + CricketUtil.WICKET;
 		        }
 		      }
 		    }
@@ -8170,15 +8179,15 @@ public class CricketFunctions {
 		  }
 		}
 		if(!this_over.trim().isEmpty()) {
-			this_over = this_over.replace("WIDE", "wd");
-			this_over = this_over.replace("NO_BALL", "nb");
-			this_over = this_over.replace("LEG_BYE", "lb");
-			this_over = this_over.replace("BYE", "b");
-			this_over = this_over.replace("PENALTY", "pn");
-			this_over = this_over.replace("LOG_WICKET", "w");
-			this_over = this_over.replace("WICKET", "w");
+			this_over = this_over.replace("WIDE", "WD");
+			this_over = this_over.replace("NO_BALL", "NB");
+			this_over = this_over.replace("LEG_BYE", "LB");
+			this_over = this_over.replace("BYE", "B");
+			this_over = this_over.replace("PENALTY", "PN");
+			this_over = this_over.replace("LOG_WICKET", "W");
+			this_over = this_over.replace("WICKET", "W");
 		}
-		System.out.println(this_over);
+		System.out.println("THIS OEVER "+this_over);
 		return this_over;
 	}
 	
