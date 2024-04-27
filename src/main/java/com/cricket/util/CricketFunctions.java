@@ -1417,7 +1417,109 @@ public class CricketFunctions {
 			break;
 		}
 		return null;
-}
+	}
+	
+	public static void exportMatchData(MatchAllData match) throws IOException 
+	{
+		List<String> lineByLineData = new ArrayList<String>();
+		StringBuilder matchDataTxt = new StringBuilder();
+		
+		lineByLineData.add("|");
+		lineByLineData.add("|    (B) - 'BO' - Bowling details");
+		lineByLineData.add("|    (A) - 'IS' - Batting details");
+		lineByLineData.add("|");
+		lineByLineData.add("| DOAD Export File generated on " + LocalDate.now() + " at " + LocalTime.now());
+		lineByLineData.add("|============================================================================================================================================================");
+		lineByLineData.add("| 142 -144       Stumpings");
+		lineByLineData.add("| 138 -140       Catches");
+		lineByLineData.add("| 134 -136       Threes");
+		lineByLineData.add("| 130 -132       Twos");
+		lineByLineData.add("| 126 -128       Ones");
+		lineByLineData.add("| 122 -124       Dots");
+		lineByLineData.add("|      120       Was batsman dismissed?");
+		lineByLineData.add("|      118       Did batsman innings start?");
+		lineByLineData.add("| 114 -116       Balls to reach 100");
+		lineByLineData.add("| 110 -112       Balls to reach 50");
+		lineByLineData.add("| 106 -108       Sixes");
+		lineByLineData.add("| 102 -104       Fours");
+		lineByLineData.add("|  98 -100       Balls");
+		lineByLineData.add("|  94 - 96       Runs");
+		lineByLineData.add("|  88 - 92       Batsman code");
+		lineByLineData.add("|  67 - 86       Opponent full name");
+		lineByLineData.add("|  46 - 65       Team full name");
+		lineByLineData.add("|  25 - 44       Venue name");
+		lineByLineData.add("|   4 - 23       Match file name");
+		lineByLineData.add("|   1 -  2       Line Ident ('IS')('BO')");
+		lineByLineData.add("|");
+		lineByLineData.add("|<Match File Name   >< Venue Name       >< Team name        >< Opponent Name    ><BAT><R><B><4><6><F><H><I><D><TN><ON><D><1><2><3><C><S>");
+		
+		for(Inning inn : match.getMatch().getInning()) {
+			matchDataTxt = new StringBuilder(); 
+			for(BattingCard bc : inn.getBattingCard()) {
+				
+				matchDataTxt.insert(0, "IS"); 
+				matchDataTxt.insert(3, match.getMatch().getMatchFileName()); 
+				matchDataTxt.insert(24, match.getSetup().getGround().getCity());
+				matchDataTxt.insert(45, inn.getBatting_team().getTeamName4());
+				matchDataTxt.insert(66, inn.getBowling_team().getTeamName4());
+				matchDataTxt.insert(88, String.valueOf(bc.getPlayerId()));
+				matchDataTxt.insert(93, String.valueOf(bc.getRuns()));
+				matchDataTxt.insert(97, String.valueOf(bc.getBalls()));
+				matchDataTxt.insert(101, String.valueOf(bc.getFours()));
+				matchDataTxt.insert(105, String.valueOf(bc.getSixes()));
+				
+				String[] ball_count = ballCountOfFiftyAndHundred(match.getEventFile().getEvents(), inn.getInningNumber(), bc.getPlayerId()).split("-");
+				
+				if(bc.getRuns() >= 50 && bc.getRuns() < 100) {
+					matchDataTxt.insert(109, ball_count[0]);
+					matchDataTxt.insert(113, "0");
+				}else if(bc.getRuns() >= 100) {
+					matchDataTxt.insert(109, ball_count[0]);
+					matchDataTxt.insert(113, ball_count[1]);
+				}else {
+					matchDataTxt.insert(109, "0");
+					matchDataTxt.insert(113, "0");
+				}
+				
+				if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES)) {
+					matchDataTxt.insert(117, "Y");
+					if(bc.getStatus().equalsIgnoreCase(CricketUtil.OUT)) {
+						matchDataTxt.insert(119, "Y");
+					}else {
+						matchDataTxt.insert(119, "N");
+					}
+				}else {
+					matchDataTxt.insert(117, "N");
+					matchDataTxt.insert(119, "N");
+				}
+				
+				String[] Runs_Count = getScoreTypeData(CricketUtil.BATSMAN,match, inn.getInningNumber(), bc.getPlayerId(),
+					"-", match.getEventFile().getEvents()).split("-");
+				
+				matchDataTxt.insert(121, Runs_Count[0]);
+				matchDataTxt.insert(125, Runs_Count[1]);
+				matchDataTxt.insert(129, Runs_Count[2]);
+				matchDataTxt.insert(133, Runs_Count[3]);
+				
+				String[] Count = caughtAndStumpedCount(match.getEventFile().getEvents(), bc.getPlayerId()).split("-");
+				matchDataTxt.insert(137, Count[0]);
+				matchDataTxt.insert(141, Count[1]);
+				
+				lineByLineData.add(matchDataTxt.toString());
+				
+			}
+		}
+		
+		//Bowling card data to be added by DJ
+		
+		FileWriter fileWriter = new FileWriter(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY 
+			+ match.getMatch().getMatchFileName().replace(".json", ".h2h"));
+		
+		for(String str: lineByLineData) {
+			fileWriter.write(str + System.lineSeparator());
+		}
+		fileWriter.close();		
+	}
 	
 	public static String writeHeadToHead(MatchAllData match) throws IOException 
 	{
@@ -1505,7 +1607,7 @@ public class CricketFunctions {
 		line_txt = addSubString(line_txt,"<S>",151);
 		
 		Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + match.getMatch().
-				getMatchFileName().replace(".json", ".txt")), Arrays.asList(line_txt), StandardOpenOption.APPEND);
+			getMatchFileName().replace(".json", ".txt")), Arrays.asList(line_txt), StandardOpenOption.APPEND);
 		
 		setHeadToHeadData(match, line_txt, "BATTING");
 		
