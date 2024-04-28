@@ -24,6 +24,12 @@ public DaySession() {
 	super();
 }
 
+public DaySession(int dayNumber, int sessionNumber) {
+	super();
+	this.dayNumber = dayNumber;
+	this.sessionNumber = sessionNumber;
+}
+
 public DaySession(int dayNumber, int sessionNumber, String isCurrentSession) {
 	super();
 	this.dayNumber = dayNumber;
