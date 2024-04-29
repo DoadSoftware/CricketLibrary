@@ -11722,24 +11722,4 @@ public class CricketFunctions {
 		System.out.println("RateX = " + RateX);
 		return RateX;
 	}
-	
-	public static String gettournamentFoursAndSixes(List<MatchAllData> tournament_matches,MatchAllData currentMatch) 
-	{
-		int Four = 0, Six = 0;
-		for(MatchAllData match : tournament_matches) {
-			if(!match.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
-				for(Inning inn : match.getMatch().getInning()) {
-					Four = Four + inn.getTotalFours();
-					Six = Six + inn.getTotalSixes();
-				}
-			}else {
-				for(Inning inn : currentMatch.getMatch().getInning()) {
-					Four = Four + inn.getTotalFours();
-					Six = Six + inn.getTotalSixes();
-				}
-			}
-		}
-		System.out.println(Four + "," + Six);
-		return Four + "," + Six;
-	}
 }
