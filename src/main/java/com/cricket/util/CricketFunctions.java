@@ -10248,7 +10248,7 @@ public class CricketFunctions {
 				new ArrayList<>(Arrays.asList(0, 0)), new Inning(1, 0, 0, 0, 0, 0, 0));
 		
 		List<BattingCard> player = getPlayerListFromMatchData(matchData);		
-		
+		//Team 0 1 2
 		eventsExtract.setTeam_summary(new ArrayList<>(Arrays.asList(
 				new Team(
 					matchData.getMatch().getInning().get(0).getBattingTeamId(), 
@@ -10258,17 +10258,17 @@ public class CricketFunctions {
 						matchData.getMatch().getInning().get(1).getBattingTeamId(), 
 						matchData.getMatch().getInning().get(1).getBatting_team().getTeamName1(), 
 						matchData.getMatch().getInning().get(1).getBatting_team().getTeamName4(), 0, 0, 0, 0))));		
-		
+		//ALL Rounder Catches
 		eventsExtract.setAllRounderCatches(getAllRounderCatches(matchData));
-		
+		//ALL Batsman 0 1 2
 		eventsExtract.setBatsman_summary(player);
-		 
+		//ALL Bowler 0 1 2
 		eventsExtract.setBowler_summary(new ArrayList<Player>());
-
+		//batsman stats against bolwler
 		eventsExtract.setBatStats(player);
-		
+		//bolwler stats against batsman
 		eventsExtract.setBallStats(new ArrayList<Player>());
-		
+		// power plays
         eventsExtract.setPowerplay( new ArrayList<>(Arrays.asList(new PowerPlays(new Team(
 				matchData.getMatch().getInning().get(0).getBatting_team().getTeamId(),
 				matchData.getMatch().getInning().get(0).getBatting_team().getTeamName1(), 

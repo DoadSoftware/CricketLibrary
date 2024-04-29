@@ -35,10 +35,10 @@ public class AllEvents{
 	
 	private List<PowerPlays> powerplay;
 	
-	//batsman stats again bolwler
+	//batsman stats against bolwler
 	private List<BattingCard> BatStats;
 	
-	//bolwler stats again batsman
+	//bolwler stats against batsman
 	private List<Player> BallStats;
 	
 	public String getThis_Over() {
