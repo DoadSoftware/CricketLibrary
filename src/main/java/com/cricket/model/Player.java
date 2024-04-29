@@ -567,6 +567,12 @@ public void setBatBall(Set<Player> bolwer) {
 	BatBall = bolwer;
 }
 
+public Player(int playerId, String ticker_name) {
+	super();
+	this.playerId = playerId;
+	this.ticker_name = ticker_name;
+}
+
 @Override
 public String toString() {
 	return "Player [playerId=" + playerId + ", full_name=" + full_name + ", firstname=" + firstname + ", surname="
