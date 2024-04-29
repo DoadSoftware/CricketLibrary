@@ -1,13 +1,25 @@
 package com.cricket.model;
 
+import java.util.List;
+
 public class InningStats
 {
+	private List<Integer> ballsPerHour;
+	
 	private int timeSinceLastRun;
 	
 	private int timeSinceLastRunOffBat;
 	
 	private int timeSinceLastBoundary;
 	
+	public List<Integer> getBallsPerHour() {
+		return ballsPerHour;
+	}
+
+	public void setBallsPerHour(List<Integer> ballsPerHour) {
+		this.ballsPerHour = ballsPerHour;
+	}
+
 	public int getTimeSinceLastRun() {
 		return timeSinceLastRun;
 	}

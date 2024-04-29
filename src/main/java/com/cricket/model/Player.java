@@ -130,9 +130,9 @@ public class Player implements Comparable<Player>
 	this.playerPosition = playerPosition;
   }
   public Player(int playerId) {
-		super();
-		this.playerId = playerId;
-	  }
+	super();
+	this.playerId = playerId;
+ }
 //public String getImpactPlayer() {
 //	return impactPlayer;
 //}
@@ -140,6 +140,7 @@ public class Player implements Comparable<Player>
 //public void setImpactPlayer(String impactPlayer) {
 //	this.impactPlayer = impactPlayer;
 //}
+  
   @Transient
   private int one;
   @Transient

@@ -124,6 +124,13 @@ public class CricketFunctions {
 							if(this_inn.getInningStats() == null) {
 								this_inn.setInningStats(new InningStats());
 							}
+							if(this_inn.getInningStats().getBallsPerHour() == null) {
+								this_inn.getInningStats().setBallsPerHour(new ArrayList<Integer>());
+							}
+
+							if(this_inn.getDuration() / 3600 > this_inn.getInningStats().getBallsPerHour().size()) {
+								this_inn.getInningStats().getBallsPerHour().add(6 * this_inn.getTotalOvers() + this_inn.getTotalBalls());
+							}
 
 							this_inn.getInningStats().setTimeSinceLastBoundary(Integer.valueOf(timeStatsToProcess.split(",")[1]));
 							this_inn.getInningStats().setTimeSinceLastRun(Integer.valueOf(timeStatsToProcess.split(",")[2]));
@@ -142,6 +149,7 @@ public class CricketFunctions {
 									}
 								}
 							}
+							
 						}
 						
 						if(lastMatchData != null && lastMatchData.getInning() != null && lastMatchData.getInning().size() > 0)
