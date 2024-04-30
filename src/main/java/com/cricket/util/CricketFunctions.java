@@ -10239,6 +10239,34 @@ public class CricketFunctions {
 		return arr;
 		
 	}
+	public static List<Player> getAllRounderCatches(List<BattingCard>batting,MatchAllData match){
+		List<Player>  arr =new ArrayList<Player>();
+			for(BattingCard bat: batting) {
+					
+				if((bat.getHowOut()!=null||!bat.getHowOut().isEmpty())&&
+						(bat.getHowOut().equalsIgnoreCase(CricketUtil.CAUGHT)||
+						bat.getHowOut().equalsIgnoreCase(CricketUtil.CAUGHT_AND_BOWLED))) {
+						
+						int Fielder_Id =bat.getHowOutFielderId();
+						
+						if(arr==null ||arr.stream().noneMatch(bc -> bc.getPlayerId() == Fielder_Id)) {
+							Player player =getPlayerFromMatchData(Fielder_Id ,match);
+							
+							if(player.getRole().equalsIgnoreCase(CricketUtil.ALL_ROUNDER)) {
+								arr.add(player);
+							}
+						}
+						for(Player py : arr) {
+							if(py.getPlayerId()==Fielder_Id) {
+								py.setCatches(py.getCatches()+1);
+							}
+						}
+					}
+			} 
+			
+		return arr;
+		
+	}
 	public static  AllEvents EventExtraction(MatchAllData matchData ,List<Event>events) {
 		
 		AllEvents eventsExtract;
@@ -10248,6 +10276,7 @@ public class CricketFunctions {
 				new ArrayList<>(Arrays.asList(0, 0)), new Inning(1, 0, 0, 0, 0, 0, 0));
 		
 		List<BattingCard> player = getPlayerListFromMatchData(matchData);		
+		
 		//Team 0 1 2
 		eventsExtract.setTeam_summary(new ArrayList<>(Arrays.asList(
 				new Team(
@@ -10259,7 +10288,15 @@ public class CricketFunctions {
 						matchData.getMatch().getInning().get(1).getBatting_team().getTeamName1(), 
 						matchData.getMatch().getInning().get(1).getBatting_team().getTeamName4(), 0, 0, 0, 0))));		
 		//ALL Rounder Catches
-		eventsExtract.setAllRounderCatches(getAllRounderCatches(matchData));
+	
+		eventsExtract.setAllRounderCatches(
+			    getAllRounderCatches(
+			        player.stream()
+			              .filter(ply -> ply.getStatus().equalsIgnoreCase(CricketUtil.OUT))
+			              .collect(Collectors.toList()),
+			        matchData)
+			);
+
 		//ALL Batsman 0 1 2
 		eventsExtract.setBatsman_summary(player);
 		//ALL Bowler 0 1 2
