@@ -20,9 +20,6 @@ public class Fixture {
   @Column(name = "Date")
   private String date;
   
-  @Column(name = "Time")
-  private String time;
-  
   @Column(name = "LOCALTime")
   private String localTime;
   
@@ -59,13 +56,6 @@ public Fixture(int matchnumber) {
 	this.matchnumber = matchnumber;
 }
 
-public String getTime() {
-	return time;
-}
-
-public void setTime(String time) {
-	this.time = time;
-}
 
 public int getMatchnumber() {
 	return matchnumber;

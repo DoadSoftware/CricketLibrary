@@ -13,9 +13,9 @@ public class AllEvents{
 	
 	private List<Team> team_summary;
 	
-	private List<Player> batsman_summary;
+	private List<BattingCard> batsman_summary;
 	
-	private List<BowlingCard> bowler_summary;
+	private List<Player> bowler_summary;
 	
 	private int ballsSinceLastBoundary;
 	
@@ -29,16 +29,16 @@ public class AllEvents{
 	
 	private List<Player> allRounderCatches;
 	
-	private Inning inningComaprision;
+	private Inning inningComparison;
 	
 	private HashMap<String,List<OverByOverData>> overByOverData;
 	
 	private List<PowerPlays> powerplay;
 	
-	//batsman stats again bolwler
-	private List<Player> BatStats;
+	//batsman stats against bolwler
+	private List<BattingCard> BatStats;
 	
-	//bolwler stats again batsman
+	//bolwler stats against batsman
 	private List<Player> BallStats;
 	
 	public String getThis_Over() {
@@ -103,12 +103,12 @@ public class AllEvents{
 		this.allRounderCatches = allRounderCatches;
 	}
 
-	public Inning getInningComaprision() {
-		return inningComaprision;
+	public Inning getInningComparison() {
+		return inningComparison;
 	}
 
-	public void setInningComaprision(Inning inningComaprision) {
-		this.inningComaprision = inningComaprision;
+	public void setInningComparison(Inning inningComparison) {
+		this.inningComparison = inningComparison;
 	}
 
 
@@ -120,19 +120,19 @@ public class AllEvents{
 		this.team_summary = team_summary;
 	}
 
-	public List<Player> getBatsman_summary() {
+	public List<BattingCard> getBatsman_summary() {
 		return batsman_summary;
 	}
 
-	public void setBatsman_summary(List<Player> batsman_summary) {
+	public void setBatsman_summary(List<BattingCard> batsman_summary) {
 		this.batsman_summary = batsman_summary;
 	}
 
-	public List<BowlingCard> getBowler_summary() {
+	public List<Player> getBowler_summary() {
 		return bowler_summary;
 	}
 
-	public void setBowler_summary(List<BowlingCard> bowler_summary) {
+	public void setBowler_summary(List<Player> bowler_summary) {
 		this.bowler_summary = bowler_summary;
 	}
 
@@ -160,11 +160,11 @@ public class AllEvents{
 		this.secondlastBowlerId = secondlastBowlerId;
 	}
 	
-	public List<Player> getBatStats() {
+	public List<BattingCard> getBatStats() {
 		return BatStats;
 	}
 
-	public void setBatStats(List<Player> batStats) {
+	public void setBatStats(List<BattingCard> batStats) {
 		BatStats = batStats;
 	}
 
@@ -178,7 +178,7 @@ public class AllEvents{
 
 	public AllEvents(String this_Over, List<Integer> last_Over, List<Integer> last_30_Balls, int ballsSinceLastBoundary,
 			int lastBowlerId,int secondlastBowlerId, List<Integer> bothInningDotBalls, List<Integer> this_over_run_wk,
-			Inning inningComaprision) {
+			Inning inningComparison) {
 		super();
 		This_Over = this_Over;
 		Last_Over = last_Over;
@@ -188,7 +188,7 @@ public class AllEvents{
 		this.secondlastBowlerId = secondlastBowlerId;
 		this.bothInningDotBalls = bothInningDotBalls;
 		This_over_run_wk = this_over_run_wk;
-		this.inningComaprision = inningComaprision;
+		this.inningComparison = inningComparison;
 	}
 
 	public AllEvents() {
