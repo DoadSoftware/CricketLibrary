@@ -27,6 +27,16 @@ public class Match {
 
   private List<Wagon> wagons;
   
+  private MatchFinishTime matchFinishTime;
+  
+public MatchFinishTime getMatchFinishTime() {
+	return matchFinishTime;
+}
+
+public void setMatchFinishTime(MatchFinishTime matchFinishTime) {
+	this.matchFinishTime = matchFinishTime;
+}
+
 public String getMatchResult() {
 	return matchResult;
 }
@@ -110,7 +120,8 @@ public void setWagons(List<Wagon> wagons) {
 public String toString() {
 	return "Match [matchResult=" + matchResult + ", matchStatus=" + matchStatus + ", current_speed=" + current_speed
 			+ ", bowlerRunning=" + bowlerRunning + ", ballRelease=" + ballRelease + ", matchFileName=" + matchFileName
-			+ ", inning=" + inning + ", daysSessions=" + daysSessions + ", shots=" + shots + ", wagons=" + wagons + "]";
+			+ ", inning=" + inning + ", daysSessions=" + daysSessions + ", shots=" + shots + ", wagons=" + wagons
+			+ ", matchFinishTime=" + matchFinishTime + "]";
 }
 
 }

@@ -76,5 +76,12 @@ public class MatchFinishTime
 	public void setEndOfPlay(String endOfPlay) {
 		this.endOfPlay = endOfPlay;
 	}
+
+	@Override
+	public String toString() {
+		return "MatchFinishTime [startOfPlay=" + startOfPlay + ", startOfLunch=" + startOfLunch + ", endOfLunch="
+				+ endOfLunch + ", startOfTea=" + startOfTea + ", endOfTea=" + endOfTea + ", endOfPlay=" + endOfPlay
+				+ "]";
+	}
 	
 }

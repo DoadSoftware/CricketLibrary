@@ -93,8 +93,6 @@ public class Inning {
   
   private InningStats inningStats;
 
-  private MatchFinishTime matchFinishTime;
-  
   @JsonIgnore
   private Map<String, String> stats;
   
@@ -106,14 +104,6 @@ public Inning(int oversRemaining) {
 	super();
 	this.oversRemaining = oversRemaining;
 	this.inningStats = new InningStats();
-}
-
-public MatchFinishTime getMatchFinishTime() {
-	return matchFinishTime;
-}
-
-public void setMatchFinishTime(MatchFinishTime matchFinishTime) {
-	this.matchFinishTime = matchFinishTime;
 }
 
 public InningStats getInningStats() {
