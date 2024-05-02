@@ -48,6 +48,8 @@ public class BowlingCard implements Comparable<BowlingCard> {
 
   private String ballTypeOverNo;
   
+  private List<DaySession> bowlingSession; 
+  
 public BowlingCard() {
 	super();
 }
@@ -91,6 +93,15 @@ public BowlingCard(int overs, int runs, int balls, int wickets, int playerId, in
 public int getBowlerFigureSortData() {
 	return 1000 * this.getWickets() - this.getRuns();
 }
+
+public List<DaySession> getBowlingSession() {
+	return bowlingSession;
+}
+
+public void setBowlingSession(List<DaySession> bowlingSession) {
+	this.bowlingSession = bowlingSession;
+}
+
 public List<Speed> getSpeeds() {
 	return speeds;
 }
