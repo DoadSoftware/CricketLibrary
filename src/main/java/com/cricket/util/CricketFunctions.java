@@ -10267,6 +10267,136 @@ public class CricketFunctions {
 		return arr;
 		
 	}
+	public static void getAllEventsStats(Match match, List<Event> events) 
+	{
+		
+		String statsDataStr = "";
+		int statsDataInt = 0, statsDataInt2 = 0;
+		BowlingCard currentBowlerBC = match.getInning().stream().filter(in -> in.getIsCurrentInning()
+			.equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null).getBowlingCard().stream()
+		    .filter(bc -> bc.getStatus().equalsIgnoreCase(CricketUtil.CURRENT + CricketUtil.BOWLER) 
+		    || bc.getStatus().equalsIgnoreCase(CricketUtil.LAST + CricketUtil.BOWLER)).findAny().orElse(null);
+				
+		if(events != null && events.size()>0) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+				//This over
+				if(currentBowlerBC != null) {
+					
+					if(events.get(i).getEventBowlerNo() == currentBowlerBC.getPlayerId()) {
+						
+						switch (events.get(i).getEventType())
+						{
+						    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : 
+						    case CricketUtil.DOT: case CricketUtil.FOUR: case CricketUtil.SIX:
+						    	if(!statsDataStr.isEmpty()) {
+						    		statsDataStr = statsDataStr + ",";
+						    	}
+					    		statsDataStr = statsDataStr + String.valueOf(events.get(i).getEventRuns());
+						    	statsDataInt = statsDataInt + events.get(i).getEventRuns();
+						      break;
+						    case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.WIDE: case CricketUtil.PENALTY:
+								switch (events.get(i).getEventType()) {
+						    	case CricketUtil.WIDE:case CricketUtil.NO_BALL:
+							    	if(!statsDataStr.isEmpty()) {
+							    		statsDataStr = statsDataStr + ",";
+							    	}
+						    		if(events.get(i).getEventSubExtraRuns() > 1) {
+							    		statsDataStr = statsDataStr + String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() 
+							    			+ events.get(i).getEventSubExtraRuns()) + "+" +  events.get(i).getEventType();
+						    		} else {
+							    		statsDataStr = statsDataStr  +  events.get(i).getEventType();
+						    		}
+						    		break;
+						    	case CricketUtil.BYE: case CricketUtil.LEG_BYE:
+							    	if(!statsDataStr.isEmpty()) {
+							    		statsDataStr = statsDataStr + ",";
+							    	}
+						    		if(events.get(i).getEventRuns() > 1) {
+							    		statsDataStr = statsDataStr + String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() 
+							    			+ events.get(i).getEventSubExtraRuns()) + events.get(i).getEventType();
+						    		} else {
+							    		statsDataStr = statsDataStr + events.get(i).getEventType();
+						    		}
+						    		break;
+						    	case CricketUtil.PENALTY:
+						    		statsDataStr = statsDataStr + String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() 
+						    			+ events.get(i).getEventSubExtraRuns()) + "+" +  events.get(i).getEventType();
+						    		break;
+						    	default:
+							    	if(!statsDataStr.isEmpty()) {
+							    		statsDataStr = statsDataStr + ",";
+							    	}
+						    		statsDataStr = statsDataStr + String.valueOf(String.valueOf(events.get(i).getEventRuns() 
+						    			+ events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns()) + events.get(i).getEventType());
+						    		break;
+								}
+						    	statsDataInt = statsDataInt + events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() 
+						    		+ events.get(i).getEventSubExtraRuns();
+				    		    break;
+				    		    
+						    case CricketUtil.LOG_ANY_BALL:
+						    	if(!statsDataStr.isEmpty()) {
+						    		statsDataStr = statsDataStr + ",";
+						    	}
+						    	if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
+						    		statsDataStr = statsDataStr + "w";
+						    		statsDataInt2 = statsDataInt2 + 1;
+							    	if(events.get(i).getEventExtra() != null && !events.get(i).getEventExtra().isEmpty()) {
+							    		statsDataStr = statsDataStr + "+";
+							    	}
+						    	}
+						    	
+						    	if (events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns() > 0) {
+						    	    if (events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) && 
+						    	    		events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
+						    	    	
+						    	        statsDataStr += String.valueOf(events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns()) + 
+						    	        		events.get(i).getEventExtra();
+						    	        
+						    	    } else if (events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY)) {
+						    	        
+						    	    	statsDataStr += events.get(i).getEventSubExtra() +
+						    	    			String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns());
+						    	    } else {
+						    	        statsDataStr += events.get(i).getEventExtra() + "+" + String.valueOf(events.get(i).getEventRuns() + 
+						    	        		events.get(i).getEventSubExtraRuns());
+						    	    }
+						    	} else {
+						    	    statsDataStr += events.get(i).getEventSubExtra();
+						    	}
+
+						    	
+						    	
+						    	statsDataInt = statsDataInt + events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() 
+						    		+ events.get(i).getEventSubExtraRuns();
+
+						      	break;
+
+						    case CricketUtil.LOG_WICKET:
+						    	
+								switch (events.get(i).getEventHowOut().toUpperCase()) {
+								case CricketUtil.ABSENT_HURT: case CricketUtil.RETIRED_HURT: 
+									break;
+								default:
+						    		statsDataInt2 = statsDataInt2 + 1;
+							    	if(!statsDataStr.isEmpty()) {
+							    		statsDataStr = statsDataStr + ",";
+							    	}
+						    		statsDataStr = statsDataStr + String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() 
+						    			+ events.get(i).getEventSubExtraRuns()) + events.get(i).getEventType();
+									break;
+								}
+				    		    break;
+						 }
+					} else if(currentBowlerBC.getPlayerId()!=events.get(i).getEventBowlerNo() && 
+							events.get(i).getEventBowlerNo()!=0){
+								currentBowlerBC = null;
+					}
+				}
+			}
+		}
+		System.out.println("this over  :-  "+statsDataStr);
+	}
 	public static  AllEvents EventExtraction(MatchAllData matchData ,List<Event>events) {
 		
 		AllEvents eventsExtract;
