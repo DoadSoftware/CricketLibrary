@@ -7,6 +7,8 @@ public class DaySession {
   private int sessionNumber;
 
   private String isCurrentSession;
+
+  private int totalMaidens;
   
   private int totalRuns;
 
@@ -35,6 +37,14 @@ public DaySession(int dayNumber, int sessionNumber, String isCurrentSession) {
 	this.dayNumber = dayNumber;
 	this.sessionNumber = sessionNumber;
 	this.isCurrentSession = isCurrentSession;
+}
+
+public int getTotalMaidens() {
+	return totalMaidens;
+}
+
+public void setTotalMaidens(int totalMaidens) {
+	this.totalMaidens = totalMaidens;
 }
 
 public String getIsCurrentSession() {
