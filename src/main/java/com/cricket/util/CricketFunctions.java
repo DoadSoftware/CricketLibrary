@@ -8556,8 +8556,13 @@ public class CricketFunctions {
 	}
 
 	public static int getRequiredRuns(MatchAllData match) {
+		int requiredRuns = 0;
+		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
+			 requiredRuns = getTargetRuns(match);	
+		}else {
+			 requiredRuns = getTargetRuns(match) - match.getMatch().getInning().get(1).getTotalRuns();
+		}
 		
-		int requiredRuns = getTargetRuns(match) - match.getMatch().getInning().get(1).getTotalRuns();
 		if(requiredRuns <= 0) {
 			requiredRuns = 0;
 		}
@@ -8566,13 +8571,24 @@ public class CricketFunctions {
 
 	public static int getRequiredBalls(MatchAllData match) {
 		int requiredBalls;
-		if(getTargetOvers(match).contains(".")) {
-			requiredBalls = ((Integer.valueOf(getTargetOvers(match).split(".")[0]) * Integer.valueOf(match.getSetup().getBallsPerOver())) + Integer.valueOf(getTargetOvers(match).split(".")[1])) 
-					- (match.getMatch().getInning().get(1).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(1).getTotalBalls();
-		} else {
-			requiredBalls = ((Integer.valueOf(getTargetOvers(match)) * Integer.valueOf(match.getSetup().getBallsPerOver()))) 
-					- (match.getMatch().getInning().get(1).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(1).getTotalBalls();
+		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
+			if(getTargetOvers(match).contains(".")) {
+				requiredBalls = ((Integer.valueOf(getTargetOvers(match).split(".")[0]) * Integer.valueOf(match.getSetup().getBallsPerOver())) + Integer.valueOf(getTargetOvers(match).split(".")[1])) 
+						- (match.getMatch().getInning().get(3).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(3).getTotalBalls();
+			} else {
+				requiredBalls = ((Integer.valueOf(getTargetOvers(match)) * Integer.valueOf(match.getSetup().getBallsPerOver()))) 
+						- (match.getMatch().getInning().get(3).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(3).getTotalBalls();
+			}
+		}else {
+			if(getTargetOvers(match).contains(".")) {
+				requiredBalls = ((Integer.valueOf(getTargetOvers(match).split(".")[0]) * Integer.valueOf(match.getSetup().getBallsPerOver())) + Integer.valueOf(getTargetOvers(match).split(".")[1])) 
+						- (match.getMatch().getInning().get(1).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(1).getTotalBalls();
+			} else {
+				requiredBalls = ((Integer.valueOf(getTargetOvers(match)) * Integer.valueOf(match.getSetup().getBallsPerOver()))) 
+						- (match.getMatch().getInning().get(1).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(1).getTotalBalls();
+			}
 		}
+		
 		if(requiredBalls <= 0) {
 			requiredBalls = 0;
 		}
