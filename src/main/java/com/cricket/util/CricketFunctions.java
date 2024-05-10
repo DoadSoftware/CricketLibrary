@@ -8795,7 +8795,7 @@ public class CricketFunctions {
 							matchSummaryStatus = "Match tied - winner will be decided by super over";
 							break;
 						default:
-					    	matchSummaryStatus = "Match tied";
+					    	matchSummaryStatus = "Match tied - winner will be decided by super over";
 							break;
 						}
 				    } 
