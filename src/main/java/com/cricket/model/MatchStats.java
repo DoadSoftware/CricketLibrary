@@ -1,113 +1,292 @@
 package com.cricket.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MatchStats{
 	
-	private ThisOverData overData;
-	private BowlingCard BowlingCard; 
-	private List<Team> team_Summary; 
+	private VariousStats overData;
+	private List<VariousStats> playerStats; 
+	private List<OverByOverData> homeOverByOverData; 
+	private List<OverByOverData> awayOverByOverData; 
+	private VariousStats bowlingCard; 
 	private int ballsSinceLastBoundary; 
-	private InningCompare LastoverData;
-	private InningCompare inningCompare;
-	private InningCompare LastThirtyBalls;
+	private VariousStats lastOverData;
+	private VariousStats inningCompare;
+	private VariousStats lastThirtyBalls;
+	private VariousStats homeTeamScoreData;
+	private VariousStats awayTeamScoreData;
+	
+	private PowerPlay homeFirstPowerPlay;
+	private PowerPlay homeSecondPowerPlay;
+	private PowerPlay homeThirdPowerPlay;
+	
+	private PowerPlay awayFirstPowerPlay;
+	private PowerPlay awaySecondPowerPlay;
+	private PowerPlay awayThirdPowerPlay;
+	
+	
 
 	public MatchStats() {
 		super();
-		this.overData = new ThisOverData();
-		this.inningCompare = new InningCompare();
-		this.LastThirtyBalls = new InningCompare();
-		this.LastThirtyBalls.setTotalBalls(30);
-		this.LastoverData = new InningCompare();
-		this.BowlingCard = new BowlingCard();
-		this.team_Summary = new ArrayList<>(Arrays.asList(new Team(),new Team()));
+		this.overData = new VariousStats();
+		this.inningCompare = new VariousStats();
+		this.lastThirtyBalls = new VariousStats();
+		this.lastThirtyBalls.setTotalBalls(30);
+		this.lastOverData = new VariousStats();
+		this.bowlingCard = new VariousStats();
+		this.awayTeamScoreData = new VariousStats();
+		this.homeTeamScoreData = new VariousStats();
+		this.playerStats = new ArrayList<MatchStats.VariousStats>();
+		this.homeFirstPowerPlay = new PowerPlay();
+		this.homeSecondPowerPlay = new PowerPlay();
+		this.homeThirdPowerPlay = new PowerPlay();
+		this.awayFirstPowerPlay = new PowerPlay();
+		this.awaySecondPowerPlay = new PowerPlay();
+		this.awayThirdPowerPlay = new PowerPlay();
 	}
-
 	
-	public List<Team> getTeam_Summary() {
-		return team_Summary;
+	public List<VariousStats> getPlayerStats() {
+		return playerStats;
 	}
 
-
-	public void setTeam_Summary(List<Team> team_Summary) {
-		this.team_Summary = team_Summary;
+	public void setPlayerStats(List<VariousStats> playerStats) {
+		this.playerStats = playerStats;
 	}
 
-
-	@Override
-	public String toString() {
-		return "MatchStats [overData=" + overData + ", BowlingCard=" + BowlingCard + ", team_Summary=" + team_Summary
-				+ ", ballsSinceLastBoundary=" + ballsSinceLastBoundary + ", LastoverData=" + LastoverData
-				+ ", inningCompare=" + inningCompare + ", LastThirtyBalls=" + LastThirtyBalls + "]";
+	public List<OverByOverData> getHomeOverByOverData() {
+		return homeOverByOverData;
 	}
 
+	public void setHomeOverByOverData(List<OverByOverData> homeOverByOverData) {
+		this.homeOverByOverData = homeOverByOverData;
+	}
 
-	public BowlingCard getBowlingCard() {
-		return BowlingCard;
+	public List<OverByOverData> getAwayOverByOverData() {
+		return awayOverByOverData;
 	}
-	public void setBowlingCard(BowlingCard bowlingCard) {
-		BowlingCard = bowlingCard;
+
+	public void setAwayOverByOverData(List<OverByOverData> awayOverByOverData) {
+		this.awayOverByOverData = awayOverByOverData;
 	}
-	public ThisOverData getOverData() {
+
+	public VariousStats getHomeTeamScoreData() {
+		return homeTeamScoreData;
+	}
+
+	public void setHomeTeamScoreData(VariousStats homeTeamScoreData) {
+		this.homeTeamScoreData = homeTeamScoreData;
+	}
+
+	public VariousStats getAwayTeamScoreData() {
+		return awayTeamScoreData;
+	}
+
+	public void setAwayTeamScoreData(VariousStats awayTeamScoreData) {
+		this.awayTeamScoreData = awayTeamScoreData;
+	}
+
+	public VariousStats getLastOverData() {
+		return lastOverData;
+	}
+
+	public void setLastOverData(VariousStats lastOverData) {
+		this.lastOverData = lastOverData;
+	}
+
+	public VariousStats getOverData() {
 		return overData;
+	}
+
+	public void setOverData(VariousStats overData) {
+		this.overData = overData;
+	}
+
+	public VariousStats getBowlingCard() {
+		return bowlingCard;
+	}
+
+	public void setBowlingCard(VariousStats bowlingCard) {
+		this.bowlingCard = bowlingCard;
 	}
 
 	public int getBallsSinceLastBoundary() {
 		return ballsSinceLastBoundary;
 	}
 
-
 	public void setBallsSinceLastBoundary(int ballsSinceLastBoundary) {
 		this.ballsSinceLastBoundary = ballsSinceLastBoundary;
 	}
 
-
-	public void setOverData(ThisOverData overData) {
-		this.overData = overData;
-	}
-
-	public InningCompare getInningCompare() {
+	public VariousStats getInningCompare() {
 		return inningCompare;
 	}
 
-	public void setInningCompare(InningCompare InningCompare) {
-		this.inningCompare = InningCompare;
+	public void setInningCompare(VariousStats inningCompare) {
+		this.inningCompare = inningCompare;
 	}
 
-	public InningCompare getLastThirtyBalls() {
-		return LastThirtyBalls;
+	public VariousStats getLastThirtyBalls() {
+		return lastThirtyBalls;
 	}
 
-	public void setLastThirtyBalls(InningCompare last30Balls) {
-		this.LastThirtyBalls = last30Balls;
-	}
-	public InningCompare getLastoverData() {
-		return LastoverData;
+	public void setLastThirtyBalls(VariousStats lastThirtyBalls) {
+		this.lastThirtyBalls = lastThirtyBalls;
 	}
 
-	public void setLastoverData(InningCompare lastoverData) {
-		LastoverData = lastoverData;
+	public PowerPlay getHomeFirstPowerPlay() {
+		return homeFirstPowerPlay;
 	}
-	public class Team{
-		private String name;
+
+	public void setHomeFirstPowerPlay(PowerPlay homeFirstPowerPlay) {
+		this.homeFirstPowerPlay = homeFirstPowerPlay;
+	}
+
+	public PowerPlay getHomeSecondPowerPlay() {
+		return homeSecondPowerPlay;
+	}
+
+	public void setHomeSecondPowerPlay(PowerPlay homeSecondPowerPlay) {
+		this.homeSecondPowerPlay = homeSecondPowerPlay;
+	}
+
+	public PowerPlay getHomeThirdPowerPlay() {
+		return homeThirdPowerPlay;
+	}
+
+	public void setHomeThirdPowerPlay(PowerPlay homeThirdPowerPlay) {
+		this.homeThirdPowerPlay = homeThirdPowerPlay;
+	}
+
+	public PowerPlay getAwayFirstPowerPlay() {
+		return awayFirstPowerPlay;
+	}
+
+	public void setAwayFirstPowerPlay(PowerPlay awayFirstPowerPlay) {
+		this.awayFirstPowerPlay = awayFirstPowerPlay;
+	}
+
+	public PowerPlay getAwaySecondPowerPlay() {
+		return awaySecondPowerPlay;
+	}
+
+	public void setAwaySecondPowerPlay(PowerPlay awaySecondPowerPlay) {
+		this.awaySecondPowerPlay = awaySecondPowerPlay;
+	}
+
+	public PowerPlay getAwayThirdPowerPlay() {
+		return awayThirdPowerPlay;
+	}
+
+	public void setAwayThirdPowerPlay(PowerPlay awayThirdPowerPlay) {
+		this.awayThirdPowerPlay = awayThirdPowerPlay;
+	}
+
+	@Override
+	public String toString() {
+		return "MatchStats [overData=" + overData + ", playerStats=" + playerStats + ", homeOverByOverData="
+				+ homeOverByOverData + ", awayOverByOverData=" + awayOverByOverData + ", bowlingCard=" + bowlingCard
+				+ ", ballsSinceLastBoundary=" + ballsSinceLastBoundary + ", lastOverData=" + lastOverData
+				+ ", inningCompare=" + inningCompare + ", lastThirtyBalls=" + lastThirtyBalls + ", homeTeamScoreData="
+				+ homeTeamScoreData + ", awayTeamScoreData=" + awayTeamScoreData + ", homeFirstPowerPlay="
+				+ homeFirstPowerPlay + ", homeSecondPowerPlay=" + homeSecondPowerPlay + ", homeThirdPowerPlay="
+				+ homeThirdPowerPlay + ", awayFirstPowerPlay=" + awayFirstPowerPlay + ", awaySecondPowerPlay="
+				+ awaySecondPowerPlay + ", awayThirdPowerPlay=" + awayThirdPowerPlay + "]";
+	}
+	public static class PowerPlay{
 		private int totalRuns;
+		private int totalWickets;
+		private int totalFours;
+		private int totalSixes;
+		private int totalNines;
+		private int StartOver;
+		private int EndOver;
+		public int getTotalRuns() {
+			return totalRuns;
+		}
+		public void setTotalRuns(int totalRuns) {
+			this.totalRuns = totalRuns;
+		}
+		public int getTotalWickets() {
+			return totalWickets;
+		}
+		public void setTotalWickets(int totalWickets) {
+			this.totalWickets = totalWickets;
+		}
+		public int getTotalFours() {
+			return totalFours;
+		}
+		public void setTotalFours(int totalFours) {
+			this.totalFours = totalFours;
+		}
+		public int getTotalSixes() {
+			return totalSixes;
+		}
+		public void setTotalSixes(int totalSixes) {
+			this.totalSixes = totalSixes;
+		}
+		public int getTotalNines() {
+			return totalNines;
+		}
+		public void setTotalNines(int totalNines) {
+			this.totalNines = totalNines;
+		}
+		public int getStartOver() {
+			return StartOver;
+		}
+		public void setStartOver(int startOver) {
+			StartOver = startOver;
+		}
+		public int getEndOver() {
+			return EndOver;
+		}
+		public void setEndOver(int endOver) {
+			EndOver = endOver;
+		}
+		
+		public PowerPlay() {
+			super();
+		}
+		
+		@Override
+		public String toString() {
+			return "PowerPlay [totalRuns=" + totalRuns + ", totalWickets=" + totalWickets
+					+ ", totalFours=" + totalFours + ", totalSixes=" + totalSixes + ", totalNines=" + totalNines
+					+ ", StartOver=" + StartOver + ", EndOver=" + EndOver + "]";
+		}
+		
+	}
+	public static class VariousStats{
+		
+		private int totalRuns;
+		private int totalBalls;
 		private int id;
 		private int totalWickets;
 		private int totalDots;
-		private int totalones;
+		private int totalOnes;
 		private int totalTwos;
 		private int totalThrees;
 		private int totalFours;
 		private int totalFives;
 		private int totalSixes;
 		private int totalNines;
-		public String getName() {
-			return name;
+		private String thisOverTxt;
+		private int lastBowlerId;
+		private int replacementBowlerId;
+		
+		public VariousStats() {
+			super();
+			this.thisOverTxt = "";
 		}
-		public void setName(String name) {
-			this.name = name;
+		public VariousStats(int id) {
+			super();
+			this.id = id;
+		}
+		public int getTotalBalls() {
+			return totalBalls;
+		}
+		public void setTotalBalls(int totalBalls) {
+			this.totalBalls = totalBalls;
 		}
 		public int getTotalRuns() {
 			return totalRuns;
@@ -133,30 +312,11 @@ public class MatchStats{
 		public void setTotalDots(int totalDots) {
 			this.totalDots = totalDots;
 		}
-		public int getTotalFours() {
-			return totalFours;
-		}
-		public void setTotalFours(int totalFours) {
-			this.totalFours = totalFours;
-		}
-		public int getTotalSixes() {
-			return totalSixes;
-		}
-		public void setTotalSixes(int totalSixes) {
-			this.totalSixes = totalSixes;
-		}
-		public int getTotalNines() {
-			return totalNines;
-		}
-		public void setTotalNines(int totalNines) {
-			this.totalNines = totalNines;
-		}
-		
 		public int getTotalOnes() {
-			return totalones;
+			return totalOnes;
 		}
-		public void setTotalOnes(int totalones) {
-			this.totalones = totalones;
+		public void setTotalOnes(int totalOnes) {
+			this.totalOnes = totalOnes;
 		}
 		public int getTotalTwos() {
 			return totalTwos;
@@ -170,68 +330,17 @@ public class MatchStats{
 		public void setTotalThrees(int totalThrees) {
 			this.totalThrees = totalThrees;
 		}
-		public int getTotalFives() {
-			return totalFives;
-		}
-		public void setTotalFives(int totalFives) {
-			this.totalFives = totalFives;
-		}
-		public Team() {
-			super();
-			this.totalDots =0;
-			this.totalRuns =0;
-			this.id =0;
-			this.totalWickets = 0;
-			this.totalones =0;
-			this.totalTwos = 0;
-			this.totalThrees = 0;
-			this.totalFours =0;
-			this.totalFives = 0;
-			this.totalNines = 0;
-			this.totalSixes = 0;
-			
-		}
-		@Override
-		public String toString() {
-			return "Team [name=" + name + ", totalRuns=" + totalRuns + ", id=" + id + ", totalWickets=" + totalWickets
-					+ ", totalDots=" + totalDots + ", totalFours=" + totalFours + ", totalSixes=" + totalSixes
-					+ ", totalNines=" + totalNines + "]";
-		}
-		
-	}
-	public class InningCompare{
-
-		private int totalRuns;
-		private int totalBalls;
-		private int totalWickets;
-		private int totalDots;
-		private int totalFours;
-		private int totalSixes;
-		private int totalNines;
-		
-		public int getTotalRuns() {
-			return totalRuns;
-		}
-		public void setTotalRuns(int totalRuns) {
-			this.totalRuns = totalRuns;
-		}
-		public int getTotalWickets() {
-			return totalWickets;
-		}
-		public void setTotalWickets(int totalWickets) {
-			this.totalWickets = totalWickets;
-		}
-		public int getTotalDots() {
-			return totalDots;
-		}
-		public void setTotalDots(int totalDots) {
-			this.totalDots = totalDots;
-		}
 		public int getTotalFours() {
 			return totalFours;
 		}
 		public void setTotalFours(int totalFours) {
 			this.totalFours = totalFours;
+		}
+		public int getTotalFives() {
+			return totalFives;
+		}
+		public void setTotalFives(int totalFives) {
+			this.totalFives = totalFives;
 		}
 		public int getTotalSixes() {
 			return totalSixes;
@@ -245,135 +354,33 @@ public class MatchStats{
 		public void setTotalNines(int totalNines) {
 			this.totalNines = totalNines;
 		}
-		
-		public int getTotalBalls() {
-			return totalBalls;
-		}
-		public void setTotalBalls(int totalBalls) {
-			this.totalBalls = totalBalls;
-		}
-		public InningCompare() {
-			super();
-			this.totalDots =0;
-			this.totalRuns =0;
-			this.totalBalls =0;
-			this.totalWickets = 0;
-			this.totalNines = 0;
-			this.totalSixes = 0;
-			this.totalFours =0;
-
-		}
-		@Override
-		public String toString() {
-			return "InningCompare [totalRuns=" + totalRuns + ", totalBalls=" + totalBalls + ", totalWickets="
-					+ totalWickets + ", totalDots=" + totalDots + ", totalFours=" + totalFours + ", totalSixes="
-					+ totalSixes + ", totalNines=" + totalNines + "]";
-		}
-		
-	}
-	
-	public class ThisOverData{
-		
-		private int totalRuns;
-		private int totalWickets;
-		private String thisOverTxt;
-		
-		public int getTotalRuns() {
-			return totalRuns;
-		}
-		public void setTotalRuns(int totalRuns) {
-			this.totalRuns = totalRuns;
-		}
-		public int getTotalWickets() {
-			return totalWickets;
-		}
-		public void setTotalWickets(int totalWickets) {
-			this.totalWickets = totalWickets;
-		}
 		public String getThisOverTxt() {
 			return thisOverTxt;
 		}
 		public void setThisOverTxt(String thisOverTxt) {
 			this.thisOverTxt = thisOverTxt;
 		}
-		public ThisOverData() {
-			super();
-			this.totalRuns = 0;
-			this.totalWickets = 0;
-			this.thisOverTxt = "";
+		public int getLastBowlerId() {
+			return lastBowlerId;
+		}
+		public void setLastBowlerId(int lastBowlerId) {
+			this.lastBowlerId = lastBowlerId;
+		}
+		public int getReplacementBowlerId() {
+			return replacementBowlerId;
+		}
+		public void setReplacementBowlerId(int replacementBowlerId) {
+			this.replacementBowlerId = replacementBowlerId;
 		}
 		@Override
 		public String toString() {
-			return "ThisOverData [totalRuns=" + totalRuns + ", totalWickets=" + totalWickets + ", thisOverTxt="
-					+ thisOverTxt + "]";
-		}
-		
-	}
-	
-	public class BowlingCard{
-		
-		private int Last_bowler_id;
-		private int SLast_bowler_id;
-		private String name;
-		private int totalRuns;
-		private int totalWickets;
-
-		
-		
-
-		public int getLast_bowler_id() {
-			return Last_bowler_id;
+			return "VariousStats [totalRuns=" + totalRuns + ", id=" + id + ", totalWickets="
+					+ totalWickets + ", totalDots=" + totalDots + ", totalOnes=" + totalOnes + ", totalTwos="
+					+ totalTwos + ", totalThrees=" + totalThrees + ", totalFours=" + totalFours + ", totalFives="
+					+ totalFives + ", totalSixes=" + totalSixes + ", totalNines=" + totalNines + ", thisOverTxt="
+					+ thisOverTxt + ", lastBowlerId=" + lastBowlerId + ", replacementBowlerId=" + replacementBowlerId
+					+ "]";
 		}
 
-		public void setLast_bowler_id(int last_bowler_id) {
-			Last_bowler_id = last_bowler_id;
-		}
-
-		public int getSLast_bowler_id() {
-			return SLast_bowler_id;
-		}
-		public void setSLast_bowler_id(int sLast_bowler_id) {
-			SLast_bowler_id = sLast_bowler_id;
-		}
-
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public int getTotalRuns() {
-			return totalRuns;
-		}
-
-		public void setTotalRuns(int totalRuns) {
-			this.totalRuns = totalRuns;
-		}
-
-		public int getTotalWickets() {
-			return totalWickets;
-		}
-
-		public void setTotalWickets(int totalWickets) {
-			this.totalWickets = totalWickets;
-		}
-
-		public BowlingCard() {
-			super();
-			this.Last_bowler_id = 0;
-			this.SLast_bowler_id = 0;
-			this.totalWickets = 0;
-			this.totalWickets = 0;
-			this.name = "";
-		}
-
-		@Override
-		public String toString() {
-			return "BowlingCard [Last_bowler_id=" + Last_bowler_id + ", SLast_bowler_id=" + SLast_bowler_id + ", name="
-					+ name + ", totalRuns=" + totalRuns + ", totalWickets=" + totalWickets + "]";
-		}
-		
-		
 	}
 }
