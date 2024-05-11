@@ -8578,14 +8578,14 @@ public class CricketFunctions {
 		return requiredBalls;
 	}
 
-	public static int getWicketsLeft(MatchAllData match) {
+	public static int getWicketsLeft(MatchAllData match, int whichInning) {
 		
 		int wicketsLeft = 0;
 		
 		if(match.getSetup().getMaxOvers() == 1) {
-			wicketsLeft = 2 - (match.getMatch().getInning().get(1).getTotalWickets()); 
+			wicketsLeft = 2 - (match.getMatch().getInning().get(whichInning-1).getTotalWickets()); 
 		} else {
-			wicketsLeft = 10 - (match.getMatch().getInning().get(1).getTotalWickets()); 
+			wicketsLeft = 10 - (match.getMatch().getInning().get(whichInning-1).getTotalWickets()); 
 		}
 		
 		if(wicketsLeft <= 0) {
@@ -8648,17 +8648,28 @@ public class CricketFunctions {
 		    		return CricketFunctions.generateTossResult(match, CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL, CricketUtil.CHOSE);
 		    	}
 		    case 2: case 3:
-		    	if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
-		    		if(lead_by > 0) {
-				    	matchSummaryStatus = batTeamNm + " lead by " + lead_by + " run" + Plural(lead_by);
-		    		} else if(lead_by == 0) {
-				    	matchSummaryStatus = "Scores are level";
+		    	
+		    	if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST) 
+		    		|| match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.FC)) {
+
+		    		if(lead_by >= 0) {
+			    		if(lead_by > 0) {
+					    	matchSummaryStatus = batTeamNm + " lead by " + lead_by + " run" + Plural(lead_by);
+			    		} else if(lead_by == 0) {
+					    	matchSummaryStatus = "Scores are level";
+			    		}
 		    		} else {
-				    	matchSummaryStatus = batTeamNm + " trail by " + (-1 * lead_by) + " run" + Plural(-1 * lead_by);
+		    			if(whichInning == 3 && CricketFunctions.getWicketsLeft(match,whichInning) <= 0) {
+		    				matchSummaryStatus = batTeamNm + " win by innings & " + (-1 * lead_by) + " run" + Plural(-1 * lead_by);
+		    			} else {
+					    	matchSummaryStatus = batTeamNm + " trail by " + (-1 * lead_by) + " run" + Plural(-1 * lead_by);
+		    			}
 		    		}
+		    		
 		    	} else {
+		    		
 				    if ((CricketFunctions.getRequiredRuns(match) > 0) && (CricketFunctions.getRequiredBalls(match) > 0) 
-				    		&& (CricketFunctions.getWicketsLeft(match) > 0)) {
+				    		&& (CricketFunctions.getWicketsLeft(match,whichInning) > 0)) {
 
 				    	matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
 					        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
@@ -8673,14 +8684,12 @@ public class CricketFunctions {
 				    	if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
 				    		matchSummaryStatus = batTeamNm + " win by super over";
 						}else {
-							matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match) + 
-						    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
+							matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) + 
+						    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning));
 						}
-				    	
-				    	
 				    }
 				    else if (CricketFunctions.getRequiredRuns(match) == 1 && (CricketFunctions.getRequiredBalls(match) <= 0 
-				    		|| CricketFunctions.getWicketsLeft(match) <= 0)) 
+				    		|| CricketFunctions.getWicketsLeft(match,whichInning) <= 0)) 
 				    {
 				    	switch (broadcaster) {
 						case "ICC_BIG_SCREEN":
@@ -8705,13 +8714,26 @@ public class CricketFunctions {
 				    }
 		    	}
 		    	break;
+		    	
 		    case 4:
-		    	int required_runs = 1 - lead_by;
-		    	if(required_runs > 0) {
-		    		if(match.getMatch().getInning().get(whichInning - 1).getTotalRuns() == 0) {
-				    	matchSummaryStatus = batTeamNm + " need " + required_runs + " run" + CricketFunctions.Plural(required_runs) + " to win";
+
+		    	if((1 - lead_by) <= 0) {
+		    		matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) 
+		    			+ " wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning));
+		    	} else {
+		    		if(CricketFunctions.getWicketsLeft(match,whichInning) <= 0) {
+		    			if(CricketFunctions.getRequiredRuns(match) == 1) {
+		    				matchSummaryStatus = "match tied";
+		    			} else {
+		    				matchSummaryStatus = bowlTeamNm + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
+					    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
+		    			}
 		    		} else {
-				    	matchSummaryStatus = batTeamNm + " need " + required_runs + " run" + CricketFunctions.Plural(required_runs) + " to win";
+			    		if(match.getMatch().getInning().get(whichInning - 1).getTotalRuns() == 0) {
+					    	matchSummaryStatus = batTeamNm + " need " + (1 - lead_by) + " run" + CricketFunctions.Plural((1 - lead_by)) + " to win";
+			    		} else {
+					    	matchSummaryStatus = batTeamNm + " need " + (1 - lead_by) + " run" + CricketFunctions.Plural((1 - lead_by)) + " to win";
+			    		}
 		    		}
 		    	}
 		    	break;
@@ -8751,17 +8773,28 @@ public class CricketFunctions {
 		    		return CricketFunctions.generateTossResult(match, CricketUtil.FULL, CricketUtil.FIELD, CricketUtil.FULL, CricketUtil.CHOSE);
 		    	}
 		    case 2: case 3:
-		    	if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
-		    		if(lead_by > 0) {
-				    	matchSummaryStatus = batTeamNm + " lead by " + lead_by + " run" + Plural(lead_by);
-		    		} else if(lead_by == 0) {
-				    	matchSummaryStatus = "Scores are level";
+		    	
+		    	if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST) 
+			    	|| match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.FC)) {
+
+		    		if(lead_by >= 0) {
+			    		if(lead_by > 0) {
+					    	matchSummaryStatus = batTeamNm + " lead by " + lead_by + " run" + Plural(lead_by);
+			    		} else if(lead_by == 0) {
+					    	matchSummaryStatus = "Scores are level";
+			    		}
 		    		} else {
-				    	matchSummaryStatus = batTeamNm + " trail by " + (-1 * lead_by) + " run" + Plural(-1 * lead_by);
+		    			if(whichInning == 3 && CricketFunctions.getWicketsLeft(match,whichInning) <= 0) {
+		    				matchSummaryStatus = batTeamNm + " win by innings & " + (-1 * lead_by) + " run" + Plural(-1 * lead_by);
+		    			} else {
+					    	matchSummaryStatus = batTeamNm + " trail by " + (-1 * lead_by) + " run" + Plural(-1 * lead_by);
+		    			}
 		    		}
+			    		
 		    	} else {
+		    		
 				    if ((CricketFunctions.getRequiredRuns(match) > 0) && (CricketFunctions.getRequiredBalls(match) > 0) 
-				    		&& (CricketFunctions.getWicketsLeft(match) > 0)) {
+				    		&& (CricketFunctions.getWicketsLeft(match,whichInning) > 0)) {
 				    	
 				    	if(CricketFunctions.getRequiredRuns(match) == 1) {
 				    		matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
@@ -8789,22 +8822,23 @@ public class CricketFunctions {
 								}
 							}else {
 								if(SplitSummaryText.isEmpty()) {
-									matchSummaryStatus = batTeamNm + " beat " + bowlTeamNm + " by " + CricketFunctions.getWicketsLeft(match) + 
-								    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
+									matchSummaryStatus = batTeamNm + " beat " + bowlTeamNm + " by " + CricketFunctions.getWicketsLeft(match,whichInning) + 
+								    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning));
 								} else {
-									matchSummaryStatus = batTeamNm + " beat " + bowlTeamNm + SplitSummaryText + "by " + CricketFunctions.getWicketsLeft(match) + 
-								    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
+									matchSummaryStatus = batTeamNm + " beat " + bowlTeamNm + SplitSummaryText 
+										+ "by " + CricketFunctions.getWicketsLeft(match,whichInning) + " wicket" 
+										+ CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning));
 								}
 							}
 							break;
 						default:
-					    	matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match) + 
-					    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match));
+					    	matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) + 
+					    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning));
 							break;
 						}
 				    }
 				    else if (CricketFunctions.getRequiredRuns(match) == 1 && (CricketFunctions.getRequiredBalls(match) <= 0 
-				    		|| CricketFunctions.getWicketsLeft(match) <= 0)) 
+				    		|| CricketFunctions.getWicketsLeft(match,whichInning) <= 0)) 
 				    {
 				    	switch (broadcaster) {
 						case "ICC-U19-2023":
@@ -8855,14 +8889,25 @@ public class CricketFunctions {
 		    	}
 		    	break;
 		    case 4:
-		    	int required_runs = 1 - lead_by;
-		    	if(required_runs > 0) {
-		    		if(match.getMatch().getInning().get(whichInning - 1).getTotalRuns() == 0) {
-				    	matchSummaryStatus = batTeamNm + " need " + required_runs + " run" + CricketFunctions.Plural(required_runs) + " to win";
+		    	if((1 - lead_by) <= 0) {
+		    		matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) 
+		    			+ " wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning));
+		    	} else {
+		    		if(CricketFunctions.getWicketsLeft(match,whichInning) <= 0) {
+		    			if(CricketFunctions.getRequiredRuns(match) == 1) {
+		    				matchSummaryStatus = "match tied";
+		    			} else {
+		    				matchSummaryStatus = bowlTeamNm + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
+					    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
+		    			}
 		    		} else {
-				    	matchSummaryStatus = batTeamNm + " need " + required_runs + " more run" + CricketFunctions.Plural(required_runs) + " to win";
+			    		if(match.getMatch().getInning().get(whichInning - 1).getTotalRuns() == 0) {
+					    	matchSummaryStatus = batTeamNm + " need " + (1 - lead_by) + " run" + CricketFunctions.Plural((1 - lead_by)) + " to win";
+			    		} else {
+					    	matchSummaryStatus = batTeamNm + " need " + (1 - lead_by) + " run" + CricketFunctions.Plural((1 - lead_by)) + " to win";
+			    		}
 		    		}
-		    	}
+		    	}		    	
 		    	break;
 		    }
 	    }
@@ -10662,7 +10707,6 @@ public class CricketFunctions {
 		System.out.println(matchStats);
 		return matchStats;
 	}
-
 
 	public static  AllEvents EventExtraction(MatchAllData matchData ,List<Event>events) {
 		
