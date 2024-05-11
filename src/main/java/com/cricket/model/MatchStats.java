@@ -25,8 +25,6 @@ public class MatchStats{
 	private PowerPlay awaySecondPowerPlay;
 	private PowerPlay awayThirdPowerPlay;
 	
-	
-
 	public MatchStats() {
 		super();
 		this.overData = new VariousStats();
@@ -185,13 +183,13 @@ public class MatchStats{
 	@Override
 	public String toString() {
 		return "MatchStats [overData=" + overData + ", playerStats=" + playerStats + ", homeOverByOverData="
-				+ homeOverByOverData + ", awayOverByOverData=" + awayOverByOverData + ", bowlingCard=" + bowlingCard
-				+ ", ballsSinceLastBoundary=" + ballsSinceLastBoundary + ", lastOverData=" + lastOverData
-				+ ", inningCompare=" + inningCompare + ", lastThirtyBalls=" + lastThirtyBalls + ", homeTeamScoreData="
-				+ homeTeamScoreData + ", awayTeamScoreData=" + awayTeamScoreData + ", homeFirstPowerPlay="
-				+ homeFirstPowerPlay + ", homeSecondPowerPlay=" + homeSecondPowerPlay + ", homeThirdPowerPlay="
-				+ homeThirdPowerPlay + ", awayFirstPowerPlay=" + awayFirstPowerPlay + ", awaySecondPowerPlay="
-				+ awaySecondPowerPlay + ", awayThirdPowerPlay=" + awayThirdPowerPlay + "]";
+			+ homeOverByOverData + ", awayOverByOverData=" + awayOverByOverData + ", bowlingCard=" + bowlingCard
+			+ ", ballsSinceLastBoundary=" + ballsSinceLastBoundary + ", lastOverData=" + lastOverData
+			+ ", inningCompare=" + inningCompare + ", lastThirtyBalls=" + lastThirtyBalls + ", homeTeamScoreData="
+			+ homeTeamScoreData + ", awayTeamScoreData=" + awayTeamScoreData + ", homeFirstPowerPlay="
+			+ homeFirstPowerPlay + ", homeSecondPowerPlay=" + homeSecondPowerPlay + ", homeThirdPowerPlay="
+			+ homeThirdPowerPlay + ", awayFirstPowerPlay=" + awayFirstPowerPlay + ", awaySecondPowerPlay="
+			+ awaySecondPowerPlay + ", awayThirdPowerPlay=" + awayThirdPowerPlay + "]";
 	}
 	public static class PowerPlay{
 		private int totalRuns;
@@ -270,6 +268,7 @@ public class MatchStats{
 		private int totalFives;
 		private int totalSixes;
 		private int totalNines;
+		private String statsType;
 		private String thisOverTxt;
 		private int lastBowlerId;
 		private int replacementBowlerId;
@@ -281,6 +280,12 @@ public class MatchStats{
 		public VariousStats(int id) {
 			super();
 			this.id = id;
+		}
+		public String getStatsType() {
+			return statsType;
+		}
+		public void setStatsType(String statsType) {
+			this.statsType = statsType;
 		}
 		public int getTotalBalls() {
 			return totalBalls;
