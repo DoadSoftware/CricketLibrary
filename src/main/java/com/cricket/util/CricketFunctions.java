@@ -9460,7 +9460,11 @@ public class CricketFunctions {
 				        	break;
 				        	
 				        case CricketUtil.NO_BALL:
-				        	dots++;
+				        	switch (whatToProcess) {
+				        	case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
+								dots++;
+								break;
+							}
 				        	break;
 				        
 				        case CricketUtil.LOG_ANY_BALL:
