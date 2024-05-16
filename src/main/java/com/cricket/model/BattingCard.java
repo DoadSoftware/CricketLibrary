@@ -83,37 +83,6 @@ public BattingCard(Player player) {
 	super();
 	this.player = player;
 }
-public BattingCard(int playerId, int batterPosition, String battingStyle, int runs, int fours, int sixes, int balls,
-		int howOutFielderId, int howOutBowlerId, String batsmanInningStarted, String status, String onStrike,
-		String howOutText, String howOut, String howOutPartOne, String howOutPartTwo, String strikeRate,
-		String wasHowOutFielderSubstitute, int concussionPlayerId, String startTime, Player player,
-		Player concussion_player, Player howOutFielder, Player howOutBowler) {
-	super();
-	this.playerId = playerId;
-	this.batterPosition = batterPosition;
-	this.battingStyle = battingStyle;
-	this.runs = runs;
-	this.fours = fours;
-	this.sixes = sixes;
-	this.balls = balls;
-	this.howOutFielderId = howOutFielderId;
-	this.howOutBowlerId = howOutBowlerId;
-	this.batsmanInningStarted = batsmanInningStarted;
-	this.status = status;
-	this.onStrike = onStrike;
-	this.howOutText = howOutText;
-	this.howOut = howOut;
-	this.howOutPartOne = howOutPartOne;
-	this.howOutPartTwo = howOutPartTwo;
-	this.strikeRate = strikeRate;
-	this.WasHowOutFielderSubstitute = wasHowOutFielderSubstitute;
-	this.concussionPlayerId = concussionPlayerId;
-	this.startTime = startTime;
-	this.player = player;
-	this.concussion_player = concussion_player;
-	this.howOutFielder = howOutFielder;
-	this.howOutBowler = howOutBowler;
-}
 public BattingCard(int playerId, int howOutFielderId, int howOutBowlerId, String status, 
 		int concussionPlayerId, String how_out) {
 	super();
