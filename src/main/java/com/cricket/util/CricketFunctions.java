@@ -8745,6 +8745,7 @@ public class CricketFunctions {
 		    	break;
 		    }
 	    	
+			System.out.println("whichInning = " + whichInning);			
 		    switch (whichInning) {
 		    case 1: 
 		    	if (((match.getMatch().getInning().get(whichInning - 1)).getTotalRuns() > 0) || 
@@ -8824,7 +8825,7 @@ public class CricketFunctions {
 		    	break;
 		    	
 		    case 4:
-
+		    	
 		    	if((1 - lead_by) <= 0) {
 		    		matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) 
 		    			+ " wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning));
