@@ -8223,13 +8223,16 @@ public class CricketFunctions {
 		      this_ball_data = String.valueOf(events.get(i).getEventRuns());
 		      total_runs += events.get(i).getEventRuns();
 		      break;
-		    case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+		    case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
 		    	if((events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()) >= 1) {
 		    		this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()) + events.get(i).getEventType();
 		    	}else {
 		    		this_ball_data = events.get(i).getEventType();
 		    	}
 		      break;
+		    case CricketUtil.WIDE:
+		    	this_ball_data = events.get(i).getEventType();
+		      break;  
 		    case CricketUtil.LOG_WICKET: 
 		      if(events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)) {
 		    	  break;
@@ -9458,7 +9461,11 @@ public class CricketFunctions {
 				        	break;
 				        	
 				        case CricketUtil.NO_BALL:
-				        	dots++;
+				        	switch (whatToProcess) {
+				        	case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
+								dots++;
+								break;
+							}
 				        	break;
 				        
 				        case CricketUtil.LOG_ANY_BALL:
