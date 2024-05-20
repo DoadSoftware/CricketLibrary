@@ -8246,7 +8246,7 @@ public class CricketFunctions {
 		      }
 		      break;
 		    case CricketUtil.LOG_ANY_BALL:
-		    	if (events.get(i).getEventExtra() != null) {
+		    	if (events.get(i).getEventExtra() != null && !events.get(i).getEventExtra().isEmpty()) {
 		    		if(!events.get(i).getEventSubExtra().isEmpty()&& events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0) {
 		    			if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
 		    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
@@ -8264,14 +8264,15 @@ public class CricketFunctions {
 		    				if(!events.get(i).getEventSubExtra().isEmpty()&& events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0) {
 		    					if(events.get(i).getEventRuns()>0) {
 				    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() + "+" + 
-				    						events.get(i).getEventSubExtraRuns() + "+" + events.get(i).getEventSubExtra();
+				    						events.get(i).getEventSubExtraRuns() + events.get(i).getEventSubExtra();
+				    				
 				    			}else {
 				    				this_ball_data = events.get(i).getEventExtra() + "+" + 
-				    						events.get(i).getEventSubExtraRuns() + "+" + events.get(i).getEventSubExtra();
+				    						events.get(i).getEventSubExtraRuns() + events.get(i).getEventSubExtra();
 				    			}
-		    				}else if(events.get(i).getEventSubExtra() != null && !events.get(i).getEventSubExtra().isEmpty()&& events.get(i).getEventSubExtraRuns() <= 0) {
+		    				}else if(!events.get(i).getEventSubExtra().isEmpty()&& events.get(i).getEventSubExtra() != null && !events.get(i).getEventSubExtra().isEmpty()&& events.get(i).getEventSubExtraRuns() <= 0) {
 		    					if(events.get(i).getEventRuns()>0) {
-				    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() + "" + 
+				    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() +
 				    						events.get(i).getEventSubExtra();
 				    			}else {
 				    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventSubExtra();
@@ -8294,16 +8295,6 @@ public class CricketFunctions {
 		    		}
 		    	}
 		    	
-			    if (events.get(i).getEventSubExtra() != null && !events.get(i).getEventSubExtra().isEmpty()&& !events.get(i).getEventSubExtra().isEmpty()&&  events.get(i).getEventSubExtraRuns() > 0){
-			    	if(!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE) && !events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
-			    		if (this_ball_data.isEmpty()) {
-				          this_ball_data = String.valueOf(events.get(i).getEventSubExtraRuns()) + events.get(i).getEventSubExtra();
-				        } else {
-				          this_ball_data = this_ball_data + " " + String.valueOf(events.get(i).getEventSubExtraRuns()) + events.get(i).getEventSubExtra();
-				        }
-			    	}
-			        
-			    }
 		      if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
 		        if (this_ball_data.isEmpty()) {
 		          this_ball_data = CricketUtil.WICKET;
@@ -8346,7 +8337,7 @@ public class CricketFunctions {
 			this_over = this_over.replace("LOG_WICKET", "W");
 			this_over = this_over.replace("WICKET", "W");
 		}
-		System.out.println("THIS OEVER "+this_over);
+		System.out.println("THIS OVER "+this_over);
 		return this_over;
 	}
 	
