@@ -9108,7 +9108,8 @@ public class CricketFunctions {
 						break;
 					}
  
-					if(ball_count >= ((inning.getFirstPowerplayStartOver()-1) * Integer.valueOf(match.getSetup().getBallsPerOver())) && ball_count < (inning.getFirstPowerplayEndOver() * Integer.valueOf(match.getSetup().getBallsPerOver()))) {
+					if(ball_count >= ((inning.getFirstPowerplayStartOver()-1) * Integer.valueOf(match.getSetup().getBallsPerOver())) && 
+							ball_count < (inning.getFirstPowerplayEndOver() * Integer.valueOf(match.getSetup().getBallsPerOver()))) {
 						switch(match.getEventFile().getEvents().get(i).getEventType()) {
 						case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 						case CricketUtil.FOUR: case CricketUtil.SIX: 
