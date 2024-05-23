@@ -161,7 +161,19 @@ public class Configuration {
 		this.secondaryLanguage = secondaryLanguage;
 		this.preview = preview;
 	}
-	
+	public Configuration(String selectedMatch, String select_broadcaster, String select_second_broadcaster,
+			String primaryIpAddress, int primaryPortNumber, String primaryLanguage, String secondaryIpAddress,
+			int secondaryPortNumber, String secondaryLanguage) {
+			super();
+			this.filename = selectedMatch;
+			this.broadcaster = select_broadcaster;
+			this.secondaryBroadcaster = select_second_broadcaster;
+			this.primaryIpAddress = primaryIpAddress;
+			this.primaryPortNumber = primaryPortNumber;
+			this.primaryLanguage = primaryLanguage;
+			this.secondaryIpAddress = secondaryIpAddress;
+			this.secondaryPortNumber = secondaryPortNumber;
+	}
 	public Configuration(String filename, String broadcaster, String secondaryBroadcaster, String whichScene,
 			String qtIpAddress, int qtPortNumber, String qtScene, String qtLanguage, String primaryIpAddress,
 			int primaryPortNumber, String primaryScene, String primaryLanguage, String secondaryIpAddress,
@@ -189,7 +201,6 @@ public class Configuration {
 		this.tertiaryScene = tertiaryScene;
 		this.tertiaryLanguage = tertiaryLanguage;
 	}
-
 	public String getPreview() {
 		return preview;
 	}

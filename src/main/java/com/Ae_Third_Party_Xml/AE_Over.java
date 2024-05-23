@@ -3,44 +3,44 @@ package com.Ae_Third_Party_Xml;
 import javax.xml.bind.annotation.*;
 
 public class AE_Over {
-	private Integer No,Runs;
+	@XmlAttribute(name="Runs")
+	private Integer Runs;
+	@XmlAttribute(name="RunRate")
 	private String RunRate;
-	private Wicket Wicket;
 	@XmlAttribute(name="No")
+	private Integer No;
+	@XmlElement(name="Wicket")
+	private AE_Wicket Wicket;
+	
+	
+	
 	public Integer getNo() {
 		return No;
 	}
 	public void setNo(Integer no) {
-		No = no;
+		this.No = no;
 	}
-	@XmlAttribute(name="Runs")
+	
 	public Integer getRuns() {
 		return Runs;
 	}
 	public void setRuns(Integer run) {
-		Runs = run;
+		this.Runs = run;
 	}
-	@XmlAttribute(name="RunRate")
+	
 	public String getRunRate() {
 		return RunRate;
 	}
 	public void setRunRate(String runRate) {
-		RunRate = runRate;
+		this.RunRate = runRate;
 	}
-	@XmlElement(name="Wicket")
-	public Wicket getWicket() {
+	
+	public AE_Wicket getWicket() {
 		return Wicket;
 	}
-	public void setWicket(Wicket wicket) {
-		Wicket = wicket;
+	public void setWicket(AE_Wicket wicket) {
+		this.Wicket = wicket;
 	}
 	
 
-}
-class Wicket{
-	private String ID;
-	@XmlAttribute(name="ID")
-	public String getID() {
-		return ID;
-	}
 }

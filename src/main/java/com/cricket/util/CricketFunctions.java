@@ -48,6 +48,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import com.Ae_Third_Party_Xml.AE_Cricket;
+import com.Ae_Third_Party_Xml.AE_Last_Ball;
+import com.Ae_Third_Party_Xml.AE_Six_Distance;
 import com.cricket.archive.Archive;
 import com.cricket.archive.ArchiveData;
 import com.cricket.model.BatBallGriff;
@@ -199,7 +201,12 @@ public class CricketFunctions {
 		.createUnmarshaller().unmarshal(new File(FilePathName));
 		return cricket_data;
 	}
-	
+	public static AE_Last_Ball getSpeed_of_ball_from_ThirdParty(String FilePathName) throws JAXBException {
+		AE_Last_Ball cricket_data =(AE_Last_Ball)JAXBContext.newInstance(AE_Last_Ball.class)
+		.createUnmarshaller().unmarshal(new File(FilePathName));
+		
+	return cricket_data;
+}
 	public static MatchAllData getMatchDataFromWebsite(WebDriver driver, String whatToProcess, 
 		String broadcaster, String valueToProcess, List<Team> all_teams) throws StreamWriteException, DatabindException, JAXBException, IOException, URISyntaxException
 	{
@@ -12528,5 +12535,12 @@ public class CricketFunctions {
 		}
 		System.out.println("RateX = " + RateX);
 		return RateX;
+	}
+
+	public static AE_Six_Distance getDistance_of_ball_from_ThirdParty(String FilePathName) throws JAXBException {
+		AE_Six_Distance cricket_data =(AE_Six_Distance)JAXBContext.newInstance(AE_Six_Distance.class)
+		.createUnmarshaller().unmarshal(new File(FilePathName));
+		
+	return cricket_data;
 	}
 }

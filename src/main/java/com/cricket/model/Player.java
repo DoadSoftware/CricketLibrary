@@ -24,6 +24,9 @@ public class Player implements Comparable<Player>
   @Column(name = "FULLNAME")
   private String full_name;
 
+  @Column(name = "AE_Id")
+  private Integer ae_Id;
+  
   @Column(name = "FIRSTNAME")
   private String firstname;
 
@@ -571,6 +574,13 @@ public Player(int playerId, String ticker_name) {
 	super();
 	this.playerId = playerId;
 	this.ticker_name = ticker_name;
+}
+public Integer getAe_Id() {
+	return ae_Id;
+}
+
+public void setAe_Id(Integer ae_Id) {
+	this.ae_Id = ae_Id;
 }
 
 @Override

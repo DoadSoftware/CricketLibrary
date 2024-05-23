@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class AE_Combination {
 	private Integer Batsman,Bowler,Balls,Runs;
 	@XmlAttribute(name="Batsman")
-	public int getBatsman() {
+	public Integer getBatsman() {
 		return Batsman;
 	}
 

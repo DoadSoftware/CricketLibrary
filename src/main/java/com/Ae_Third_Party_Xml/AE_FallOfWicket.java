@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.*;
 public class AE_FallOfWicket {
 	private Integer Wicket,Score,ID;
 	private String Batsman;
+	
 	@XmlAttribute(name="Wicket")
 	public Integer getWicket() {
 		return Wicket;

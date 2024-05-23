@@ -10,6 +10,7 @@ import com.cricket.dao.CricketDao;
 import com.cricket.model.Bugs;
 import com.cricket.model.Commentator;
 import com.cricket.model.Dictionary;
+import com.cricket.model.FantasyImages;
 import com.cricket.model.Fixture;
 import com.cricket.model.Ground;
 import com.cricket.model.InfobarStats;
@@ -19,6 +20,7 @@ import com.cricket.model.Player;
 import com.cricket.model.Playoff;
 import com.cricket.model.Pointers;
 import com.cricket.model.Season;
+import com.cricket.model.Sponsor;
 import com.cricket.model.Staff;
 import com.cricket.model.Statistics;
 import com.cricket.model.StatsType;
@@ -148,4 +150,16 @@ public List<Staff> getStaff() {
 public List<POTT> getPott() {
 	return cricketDao.getPott();
 }
+
+
+@Override
+public List<Sponsor> getSponsor() {
+	return cricketDao.getSponsor();
+}
+
+@Override
+public List<FantasyImages> getFantasyImages() {
+	return cricketDao.getFantasyImages();
+}
+
 }
