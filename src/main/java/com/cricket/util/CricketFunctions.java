@@ -1061,6 +1061,30 @@ public class CricketFunctions {
 		}
 		return "";
 	}
+	
+	public static String checkConcussedPlayer(List<Event> events,int inning_number,int player_id) {
+		if ((events != null) && (events.size() > 0)) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+				if((player_id == events.get(i).getEventBatterNo() && events.get(i).getSubstitutionMade()!=null && events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.CONCUSSED))|| 
+						(player_id == events.get(i).getEventBatterNo() && events.get(i).getEventType().equalsIgnoreCase("LOG_OVERWRITE_SUBSTITUTION"))) {
+					return CricketUtil.YES;
+				}
+			}
+		}
+		return "";
+	}
+	
+	public static String checkConcussedPlayerBowler(List<Event> events,int inning_number,int player_id) {
+		if ((events != null) && (events.size() > 0)) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+				if((player_id == events.get(i).getEventBowlerNo() && events.get(i).getSubstitutionMade()!=null  && events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.CONCUSSED)) || 
+						(player_id == events.get(i).getEventBowlerNo() && events.get(i).getEventType().equalsIgnoreCase("LOG_OVERWRITE_SUBSTITUTION"))) {
+					return CricketUtil.YES;
+				}
+			}
+		}
+		return "";
+	}
 	public static String printInitials(String name)
     {
         if (name.length() > 0) {
