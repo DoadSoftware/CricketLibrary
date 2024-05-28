@@ -21,12 +21,14 @@ public class HeadToHead implements Cloneable {
   private Team Team;
   private Team OpponentTeam;
   
+  private String venue;
+  
   private String inningStarted;
   private String dismissed;
 
 public HeadToHead(int playerId, int runs, int ballsFaced, int batdots, int ones, int twos, int threes, int fours,
 		int sixes, int wickets, int runsConceded, int ballsBowled, int maidens, int balldots, String matchFileName,
-		com.cricket.model.Team team, com.cricket.model.Team opponentTeam, String inningStarted, String dismissed) {
+		com.cricket.model.Team team, com.cricket.model.Team opponentTeam, String inningStarted, String dismissed, String venue) {
 	super();
 	this.playerId = playerId;
 	this.runs = runs;
@@ -47,6 +49,7 @@ public HeadToHead(int playerId, int runs, int ballsFaced, int batdots, int ones,
 	OpponentTeam = opponentTeam;
 	this.inningStarted = inningStarted;
 	this.dismissed = dismissed;
+	this.venue = venue;
 }
 
 public int getPlayerId() {
@@ -199,6 +202,14 @@ public String getDismissed() {
 
 public void setDismissed(String dismissed) {
 	this.dismissed = dismissed;
+}
+
+public String getVenue() {
+	return venue;
+}
+
+public void setVenue(String venue) {
+	this.venue = venue;
 }
 
 @Override

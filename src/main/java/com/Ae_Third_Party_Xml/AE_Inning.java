@@ -134,6 +134,19 @@ public class AE_Inning {
 		Batsman = batsman;
 	}
 	
+	@XmlElementWrapper(name="TopBatsman")
+	@XmlElement(name="Player")
+	private List<AE_TopPlayer> TopPlayer;
+
+	
+	public List<AE_TopPlayer> getTopPlayer() {
+		return TopPlayer;
+	}
+
+	public void setTopPlayer(List<AE_TopPlayer> topPlayer) {
+		TopPlayer = topPlayer;
+	}
+
 	@XmlElementWrapper(name="Bowling")
 	@XmlElement(name="Bowler")
 	private List<AE_Bowler>Bowler;
@@ -146,6 +159,19 @@ public class AE_Inning {
 		Bowler = bowler;
 	}
 	
+	@XmlElementWrapper(name="BestBowler")
+	@XmlElement(name="Player")
+	private List<AE_TopBowler> TopBowler;
+	
+	
+	
+	public List<AE_TopBowler> getTopBowler() {
+		return TopBowler;
+	}
+
+	public void setTopBowler(List<AE_TopBowler> topBowler) {
+		TopBowler = topBowler;
+	}
 
 	@XmlElementWrapper(name="PartnershipData")
 	@XmlElement(name="Partnership")
@@ -181,15 +207,13 @@ public class AE_Inning {
 	}
 
 	@XmlElementWrapper(name="FallOfWickets")
-	@XmlElement(name="FallOfWicket ")
-	private List<AE_FallOfWicket>FallOfWicket ;
-
+	@XmlElement(name="FallOfWicket")
+	private List<AE_FallOfWicket>FallOfWickets;	
 	public List<AE_FallOfWicket> getFallOfWicket() {
-		return FallOfWicket;
+		return FallOfWickets;
 	}
-
-	public void setFallOfWicket(List<AE_FallOfWicket> fallOfWicket) {
-		FallOfWicket = fallOfWicket;
+	public void setFallOfWicket(List<AE_FallOfWicket> fallOfWickets) {
+		FallOfWickets = fallOfWickets;
 	}
 	
 	@XmlAttribute(name="ShortName")

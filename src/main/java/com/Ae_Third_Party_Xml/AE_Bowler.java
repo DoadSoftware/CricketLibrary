@@ -3,7 +3,12 @@ package com.Ae_Third_Party_Xml;
 import javax.xml.bind.annotation.*;
 @XmlRootElement(name="Bowler")
 public class AE_Bowler {
-	private Integer Position,ID,Maidens,DotBalls,Runs,Wickets;
+	private Integer Position;
+	private Integer ID;
+	private Integer Maidens;
+	private Integer DotBalls;
+	private Integer Runs;
+	private Integer Wickets;
 	private String Economy,Overs;
 	private String BowlingNow,BowlingEnd,Name;
 	 @XmlAttribute(name = "Position")

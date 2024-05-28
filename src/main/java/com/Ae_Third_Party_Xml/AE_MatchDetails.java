@@ -17,6 +17,7 @@ public class AE_MatchDetails {
 	private AE_ScheduledOvers ScheduledOvers;
     private AE_Comparison Comparison;
     private AE_Status Status;
+    private AE_Projection  Projection ;
     
     @XmlElement(name="Status")
     public AE_Status getStatus() {
@@ -90,6 +91,14 @@ public class AE_MatchDetails {
 	public void setComparison(AE_Comparison comparisons) {
 		this.Comparison = comparisons;
 	}
+	@XmlElement(name="Projection")
+	public AE_Projection getProjection() {
+		return Projection;
+	}
+	public void setProjection(AE_Projection projection) {
+		Projection = projection;
+	}
+	
 
 	}
     

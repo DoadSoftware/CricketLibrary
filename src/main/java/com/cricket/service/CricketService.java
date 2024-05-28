@@ -10,6 +10,8 @@ import com.cricket.model.Ground;
 import com.cricket.model.InfobarStats;
 import com.cricket.model.NameSuper;
 import com.cricket.model.POTT;
+import com.cricket.model.Sponsor;
+import com.cricket.model.FantasyImages;
 import com.cricket.model.Player;
 import com.cricket.model.Playoff;
 import com.cricket.model.Pointers;
@@ -45,4 +47,6 @@ public interface CricketService {
   List<Commentator> getCommentator();
   List<Staff> getStaff();
   List<POTT> getPott();
+  List<Sponsor> getSponsor();
+  List<FantasyImages>  getFantasyImages();
 }

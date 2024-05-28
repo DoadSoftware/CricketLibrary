@@ -235,5 +235,7 @@ public class CricketUtil {
 	public final static String TEAMNAME_4 = "TEAMNAME4";
 	
 	public final static String CRIC_INFO = "CRIC_INFO";
+	public final static String DISTANCE_DIRECTORY = "Distance/";
+	public final static String Cricket_LAST_BALL_SPEED_THIRDPARTY = "SpeedOfLastBall.XML";
 	
 }

@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class AE_ScheduledOvers {
 	private Integer originalOvers;
     private String reducedOvers;
-    private Integer secondInningsTargetOvers;
+    private String secondInningsTargetOvers;
     
     @XmlAttribute(name = "OriginalOvers")
 	public Integer getOriginalOvers() {
@@ -23,10 +23,10 @@ public class AE_ScheduledOvers {
 		this.reducedOvers = reducedOvers;
 	}
 	@XmlAttribute(name = "SecondInningsTargetOvers")
-	public Integer getSecondInningsTargetOvers() {
+	public String getSecondInningsTargetOvers() {
 		return secondInningsTargetOvers;
 	}
-	public void setSecondInningsTargetOvers(Integer secondInningsTargetOvers) {
+	public void setSecondInningsTargetOvers(String secondInningsTargetOvers) {
 		this.secondInningsTargetOvers = secondInningsTargetOvers;
 	}
 }

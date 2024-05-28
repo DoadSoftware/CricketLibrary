@@ -32,7 +32,7 @@ public class AE_CurrentPosition {
 	public void setCurrentInningsWickets(String currentInningsWickets) {
 		CurrentInningsWickets = currentInningsWickets;
 	}
-	 @XmlAttribute(name = "CurrentOverBowled")
+	 @XmlAttribute(name = "CurrentOversBowled")
 	public String getCurrentOversBowled() {
 		return CurrentOversBowled;
 	}

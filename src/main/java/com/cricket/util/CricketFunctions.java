@@ -48,6 +48,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import com.Ae_Third_Party_Xml.AE_Cricket;
+import com.Ae_Third_Party_Xml.AE_Last_Ball;
+import com.Ae_Third_Party_Xml.AE_Six_Distance;
 import com.cricket.archive.Archive;
 import com.cricket.archive.ArchiveData;
 import com.cricket.model.BatBallGriff;
@@ -199,7 +201,12 @@ public class CricketFunctions {
 		.createUnmarshaller().unmarshal(new File(FilePathName));
 		return cricket_data;
 	}
-	
+	public static AE_Last_Ball getSpeed_of_ball_from_ThirdParty(String FilePathName) throws JAXBException {
+		AE_Last_Ball cricket_data =(AE_Last_Ball)JAXBContext.newInstance(AE_Last_Ball.class)
+		.createUnmarshaller().unmarshal(new File(FilePathName));
+		
+	return cricket_data;
+}
 	public static MatchAllData getMatchDataFromWebsite(WebDriver driver, String whatToProcess, 
 		String broadcaster, String valueToProcess, List<Team> all_teams) throws StreamWriteException, DatabindException, JAXBException, IOException, URISyntaxException
 	{
@@ -1035,9 +1042,9 @@ public class CricketFunctions {
 	public static String checkImpactPlayer(List<Event> events,int inning_number,int player_id) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
-				if((player_id == events.get(i).getEventBatterNo() && events.get(i).getSubstitutionMade() != null) || 
+				if((player_id == events.get(i).getEventBatterNo() && events.get(i).getSubstitutionMade()!=null && events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.IMPACT))|| 
 						(player_id == events.get(i).getEventBatterNo() && events.get(i).getEventType().equalsIgnoreCase("LOG_OVERWRITE_SUBSTITUTION"))) {
-					return "YES";
+					return CricketUtil.YES;
 				}
 			}
 		}
@@ -1046,9 +1053,33 @@ public class CricketFunctions {
 	public static String checkImpactPlayerBowler(List<Event> events,int inning_number,int player_id) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
-				if((player_id == events.get(i).getEventBowlerNo() && events.get(i).getSubstitutionMade() != null) || 
+				if((player_id == events.get(i).getEventBowlerNo() && events.get(i).getSubstitutionMade()!=null  && events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.IMPACT)) || 
 						(player_id == events.get(i).getEventBowlerNo() && events.get(i).getEventType().equalsIgnoreCase("LOG_OVERWRITE_SUBSTITUTION"))) {
-					return "YES";
+					return CricketUtil.YES;
+				}
+			}
+		}
+		return "";
+	}
+	
+	public static String checkConcussedPlayer(List<Event> events,int inning_number,int player_id) {
+		if ((events != null) && (events.size() > 0)) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+				if((player_id == events.get(i).getEventBatterNo() && events.get(i).getSubstitutionMade()!=null && events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.CONCUSSED))|| 
+						(player_id == events.get(i).getEventBatterNo() && events.get(i).getEventType().equalsIgnoreCase("LOG_OVERWRITE_SUBSTITUTION"))) {
+					return CricketUtil.YES;
+				}
+			}
+		}
+		return "";
+	}
+	
+	public static String checkConcussedPlayerBowler(List<Event> events,int inning_number,int player_id) {
+		if ((events != null) && (events.size() > 0)) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+				if((player_id == events.get(i).getEventBowlerNo() && events.get(i).getSubstitutionMade()!=null  && events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.CONCUSSED)) || 
+						(player_id == events.get(i).getEventBowlerNo() && events.get(i).getEventType().equalsIgnoreCase("LOG_OVERWRITE_SUBSTITUTION"))) {
+					return CricketUtil.YES;
 				}
 			}
 		}
@@ -1867,7 +1898,7 @@ public class CricketFunctions {
 							Integer.valueOf(headToHead.get(i).substring(96,99).trim()), 0, 0, 0, 0, 0, headToHead.get(i).substring(2,22).trim(),
 							cricketService.getTeams().stream().filter(team -> team.getTeamName4().equalsIgnoreCase(TeamName.get(0))).findAny().orElse(null),
 							cricketService.getTeams().stream().filter(team -> team.getTeamName4().equalsIgnoreCase(TeamName.get(1))).findAny().orElse(null),
-							headToHead.get(i).substring(106,108),headToHead.get(i).substring(109,111)));
+							headToHead.get(i).substring(106,108),headToHead.get(i).substring(109,111),headToHead.get(i).substring(23,42)));
 				} catch (Exception e) {
 					
 				}
@@ -3472,6 +3503,125 @@ public class CricketFunctions {
 		return hundReds + "," + tens + "," + units;
 	}
 
+	public static Statistics updateTournamentWithH2h(Statistics stats,List<HeadToHead> headToHead_matches,MatchAllData currentMatch) throws JsonMappingException, JsonProcessingException, InterruptedException 
+	{
+		boolean player_found = false,impact_player_found=false;
+		
+		Statistics statsdata = stats;
+		ObjectMapper objectMapper = new ObjectMapper();    
+		Statistics stat = objectMapper.readValue(objectMapper.writeValueAsString(statsdata), Statistics.class);
+		
+		for(HeadToHead match : headToHead_matches) {
+			//System.out.println(match.getMatch().getMatchFileName());
+			if(!match.getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
+				if(stat.getStats_type().getStats_short_name().contains(currentMatch.getSetup().getMatchType())) {
+//					TimeUnit.MILLISECONDS.sleep(500);
+					if(match.getPlayerId() == stat.getPlayer_id()) {
+						player_found = true;
+						if(match.getInningStarted().equalsIgnoreCase("Y")) {
+							stat.setInnings(stat.getInnings() + 1);
+						}
+						stat.setRuns(stat.getRuns() + match.getRuns());
+						stat.setFours(stat.getFours() + match.getFours());
+						stat.setSixes(stat.getSixes() + match.getSixes());
+						stat.setBalls_faced(stat.getBalls_faced() + match.getBallsFaced());
+						
+						if(match.getDismissed().equalsIgnoreCase("N")) {
+							stat.setNot_out(stat.getNot_out() + 1);
+						}
+						
+						if(match.getRuns() < 50 && match.getRuns() >= 30) {
+							stat.setThirties(stat.getThirties() + 1);
+						}else if(match.getRuns() < 100 && match.getRuns() >= 50) {
+							stat.setFifties(stat.getFifties() + 1);
+						}else if(match.getRuns() >= 100){
+							stat.setHundreds(stat.getHundreds() + 1);
+						}
+						
+						if(stat.getBest_score().equalsIgnoreCase("0")) {
+							if(match.getDismissed().equalsIgnoreCase("N")) {
+								stat.setBest_score(match.getRuns() + "*");
+							}else if(match.getDismissed().equalsIgnoreCase("Y")) {
+								stat.setBest_score(String.valueOf(match.getRuns()));
+							}
+							stat.setBest_score_against(match.getOpponentTeam().getTeamName1());
+							stat.setBest_score_venue(match.getVenue() + ", " + Year.now());
+						}else {
+							if(stat.getBest_score().contains("*")) {
+								if(Integer.valueOf(stat.getBest_score().replace("*", "")) < match.getRuns()) {
+									if(match.getDismissed().equalsIgnoreCase("N")) {
+										stat.setBest_score(match.getRuns()+"*");
+									}else if(match.getDismissed().equalsIgnoreCase("Y")) {
+										stat.setBest_score(String.valueOf(match.getRuns()));
+									}
+									stat.setBest_score_against(match.getOpponentTeam().getTeamName1());
+									stat.setBest_score_venue(match.getVenue() + ", " + Year.now());
+								}
+							}else {
+								if(Integer.valueOf(stat.getBest_score()) == match.getRuns() && match.getDismissed().equalsIgnoreCase("N")) {
+									stat.setBest_score(match.getRuns() + "*");
+									stat.setBest_score_against(match.getOpponentTeam().getTeamName1());
+									stat.setBest_score_venue(match.getVenue() + ", " + Year.now());
+								}
+								else if(Integer.valueOf(stat.getBest_score()) < match.getRuns()) {
+									if(match.getDismissed().equalsIgnoreCase("N")) {
+										stat.setBest_score(match.getRuns() + "*");
+									}else if(match.getDismissed().equalsIgnoreCase("Y")) {
+										stat.setBest_score(String.valueOf(match.getRuns()));
+									}
+									stat.setBest_score_against(match.getOpponentTeam().getTeamName1());
+									stat.setBest_score_venue(match.getVenue() + ", " + Year.now());
+								}
+							}
+						}
+					}
+					
+//-------------------------------------------Bowler------------------------------------------------------------------------------//
+					
+					if(match.getPlayerId() == stat.getPlayer_id()) {
+						stat.setWickets(stat.getWickets() + match.getWickets());
+						stat.setRuns_conceded(stat.getRuns_conceded() + match.getRunsConceded());
+						stat.setBalls_bowled(stat.getBalls_bowled() + match.getBallsBowled());
+						stat.setDotbowled(stat.getDotbowled() + match.getBalldots());
+						if(match.getWickets() < 5 && match.getWickets() >= 3) {
+							stat.setPlus_3(stat.getPlus_3() + 1);
+						}	
+						else if(match.getWickets() >= 5){
+							stat.setPlus_5(stat.getPlus_5() + 1);
+						}
+						
+						if(stat.getBest_figures().equalsIgnoreCase("0")) {
+							stat.setBest_figures(match.getWickets() + "-" + match.getRunsConceded());
+							stat.setBest_figures_against(match.getTeam().getTeamName1());
+							stat.setBest_figures_venue(match.getVenue() + ", " + Year.now());
+						}else {
+							if(match.getWickets() > Integer.valueOf(stat.getBest_figures().split("-")[0])) {
+								stat.setBest_figures(match.getWickets() + "-" + match.getRunsConceded());
+								stat.setBest_figures_against(match.getTeam().getTeamName1());
+								stat.setBest_figures_venue(match.getVenue() + ", " + Year.now());
+							}
+							else if(match.getWickets() == Integer.valueOf(stat.getBest_figures().split("-")[0]) && 
+									match.getRunsConceded() < Integer.valueOf(stat.getBest_figures().split("-")[1])) {
+								stat.setBest_figures(match.getWickets() + "-" + match.getRunsConceded());
+								stat.setBest_figures_against(match.getTeam().getTeamName1());
+								stat.setBest_figures_venue(match.getVenue() + ", " + Year.now());
+							}
+						}
+					}
+					
+					if(player_found == true){
+						player_found = false;
+						stat.setMatches(stat.getMatches() + 1);
+					}
+					if(impact_player_found == true){
+						impact_player_found = false;
+						stat.setMatches(stat.getMatches() + 1);
+					}
+				}
+			}
+		}
+		return stat;
+	}
 	public static Statistics updateTournamentDataWithStats(Statistics stats,List<MatchAllData> tournament_matches,MatchAllData currentMatch) throws JsonMappingException, JsonProcessingException, InterruptedException 
 	{
 		boolean player_found = false,impact_player_found=false;
@@ -8224,7 +8374,7 @@ public class CricketFunctions {
 		      total_runs += events.get(i).getEventRuns();
 		      break;
 		    case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
-		    	if((events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()) >= 1) {
+		    	if((events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()) > 1) {
 		    		this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()) + events.get(i).getEventType();
 		    	}else {
 		    		this_ball_data = events.get(i).getEventType();
@@ -8246,8 +8396,8 @@ public class CricketFunctions {
 		      }
 		      break;
 		    case CricketUtil.LOG_ANY_BALL:
-		    	if (events.get(i).getEventExtra() != null) {
-		    		if(events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0) {
+		    	if (events.get(i).getEventExtra() != null && !events.get(i).getEventExtra().isEmpty()) {
+		    		if(!events.get(i).getEventSubExtra().isEmpty()&& events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0) {
 		    			if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
 		    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 		    			}
@@ -8261,17 +8411,18 @@ public class CricketFunctions {
 		    				this_ball_data =events.get(i).getEventExtraRuns()+ events.get(i).getEventExtra();
 		    			}
 		    			else if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
-		    				if(events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0) {
+		    				if(!events.get(i).getEventSubExtra().isEmpty()&& events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0) {
 		    					if(events.get(i).getEventRuns()>0) {
 				    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() + "+" + 
-				    						events.get(i).getEventSubExtraRuns() + "+" + events.get(i).getEventSubExtra();
+				    						events.get(i).getEventSubExtraRuns() + events.get(i).getEventSubExtra();
+				    				
 				    			}else {
 				    				this_ball_data = events.get(i).getEventExtra() + "+" + 
-				    						events.get(i).getEventSubExtraRuns() + "+" + events.get(i).getEventSubExtra();
+				    						events.get(i).getEventSubExtraRuns() + events.get(i).getEventSubExtra();
 				    			}
-		    				}else if(events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() <= 0) {
+		    				}else if(!events.get(i).getEventSubExtra().isEmpty()&& events.get(i).getEventSubExtra() != null && !events.get(i).getEventSubExtra().isEmpty()&& events.get(i).getEventSubExtraRuns() <= 0) {
 		    					if(events.get(i).getEventRuns()>0) {
-				    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() + "" + 
+				    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() +
 				    						events.get(i).getEventSubExtra();
 				    			}else {
 				    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventSubExtra();
@@ -8294,16 +8445,6 @@ public class CricketFunctions {
 		    		}
 		    	}
 		    	
-			    if (events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0){
-			    	if(!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE) && !events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
-			    		if (this_ball_data.isEmpty()) {
-				          this_ball_data = String.valueOf(events.get(i).getEventSubExtraRuns()) + events.get(i).getEventSubExtra();
-				        } else {
-				          this_ball_data = this_ball_data + " " + String.valueOf(events.get(i).getEventSubExtraRuns()) + events.get(i).getEventSubExtra();
-				        }
-			    	}
-			        
-			    }
 		      if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
 		        if (this_ball_data.isEmpty()) {
 		          this_ball_data = CricketUtil.WICKET;
@@ -8346,7 +8487,7 @@ public class CricketFunctions {
 			this_over = this_over.replace("LOG_WICKET", "W");
 			this_over = this_over.replace("WICKET", "W");
 		}
-		System.out.println("THIS OEVER "+this_over);
+		System.out.println("THIS OVER "+this_over);
 		return this_over;
 	}
 	
@@ -9116,7 +9257,8 @@ public class CricketFunctions {
 						break;
 					}
  
-					if(ball_count >= ((inning.getFirstPowerplayStartOver()-1) * Integer.valueOf(match.getSetup().getBallsPerOver())) && ball_count < (inning.getFirstPowerplayEndOver() * Integer.valueOf(match.getSetup().getBallsPerOver()))) {
+					if(ball_count >= ((inning.getFirstPowerplayStartOver()-1) * Integer.valueOf(match.getSetup().getBallsPerOver())) && 
+							ball_count < (inning.getFirstPowerplayEndOver() * Integer.valueOf(match.getSetup().getBallsPerOver()))) {
 						switch(match.getEventFile().getEvents().get(i).getEventType()) {
 						case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 						case CricketUtil.FOUR: case CricketUtil.SIX: 
@@ -9150,7 +9292,9 @@ public class CricketFunctions {
 							break;
 						}
 					}else if(ball_count >= ((inning.getFirstPowerplayStartOver()-1) * Integer.valueOf(match.getSetup().getBallsPerOver())) && ball_count == (inning.getFirstPowerplayEndOver() * Integer.valueOf(match.getSetup().getBallsPerOver()))){
-						if(!match.getEventFile().getEvents().get(i-2).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+						if(match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+							break;
+						}else if(!match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
             				switch (match.getEventFile().getEvents().get(i).getEventType())
                             {
                             case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
@@ -9190,7 +9334,7 @@ public class CricketFunctions {
                                 }
                                 break;
                             }
-            			}
+						}
 					}
 				}
 			}
@@ -10620,19 +10764,19 @@ public class CricketFunctions {
 						    			|| events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL))) {
 						    			
 						    	    	matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() 
-						    	    		+ String.valueOf(events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns()) + 
+						    	    		+ String.valueOf(events.get(i).getEventRuns() +events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns()) +"+"+ 
 						    	        	events.get(i).getEventExtra());
 						    	    	
 						    	    } else if (events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY)) {
 						    	    	
-						    	    	matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventSubExtra() +
+						    	    	matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() +"+"+ events.get(i).getEventSubExtra() +
 						    	    		String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()));
 						    	    	
 						    	    } else {
 						    	    	
 						    	    	matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() 
-						    	    		+ events.get(i).getEventExtra() + "+" + String.valueOf(events.get(i).getEventRuns() + 
-						    	        	events.get(i).getEventSubExtraRuns()));
+						    	    		+ events.get(i).getEventExtra() + "+" + String.valueOf(events.get(i).getEventRuns() +
+						    	    				events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()));
 						    	    	
 						    	    }
 						    	} else {
@@ -10848,8 +10992,7 @@ public class CricketFunctions {
 								matchStats.getAwayTeamScoreData().setTotalDots(matchStats.getAwayTeamScoreData().getTotalDots()+1);
 							}
 							break;
-						case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
-							//extra and sub-extra checking by Sakshi. Ask Arpit sir
+						case CricketUtil.LOG_WICKET:
 							switch (String.valueOf(events.get(i).getEventRuns())) {
 							case CricketUtil.DOT:
 								if(events.get(i).getEventInningNumber() == 1) {
@@ -10887,6 +11030,10 @@ public class CricketFunctions {
 								}
 								break;
 							}
+							break;
+						case CricketUtil.LOG_ANY_BALL:
+							//extra and sub-extra checking by Sakshi. Ask Arpit sir
+							
 							break;	
 						}
 						//Player stats
@@ -12420,5 +12567,12 @@ public class CricketFunctions {
 		}
 		System.out.println("RateX = " + RateX);
 		return RateX;
+	}
+
+	public static AE_Six_Distance getDistance_of_ball_from_ThirdParty(String FilePathName) throws JAXBException {
+		AE_Six_Distance cricket_data =(AE_Six_Distance)JAXBContext.newInstance(AE_Six_Distance.class)
+		.createUnmarshaller().unmarshal(new File(FilePathName));
+		
+	return cricket_data;
 	}
 }

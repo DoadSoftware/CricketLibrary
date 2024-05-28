@@ -11,6 +11,7 @@ import com.cricket.dao.CricketDao;
 import com.cricket.model.Bugs;
 import com.cricket.model.Commentator;
 import com.cricket.model.Dictionary;
+import com.cricket.model.FantasyImages;
 import com.cricket.model.Fixture;
 import com.cricket.model.Ground;
 import com.cricket.model.InfobarStats;
@@ -20,6 +21,7 @@ import com.cricket.model.Player;
 import com.cricket.model.Playoff;
 import com.cricket.model.Pointers;
 import com.cricket.model.Season;
+import com.cricket.model.Sponsor;
 import com.cricket.model.Staff;
 import com.cricket.model.Statistics;
 import com.cricket.model.StatsType;
@@ -94,6 +96,16 @@ public List<NameSuper> getNameSupers() {
 @Override
 public List<InfobarStats> getInfobarStats() {
 	return sessionFactory.getCurrentSession().createQuery("from InfobarStats").list();
+}
+
+@Override
+public List<Sponsor> getSponsor() {
+	return sessionFactory.getCurrentSession().createQuery("from Sponsor").list();
+}
+
+@Override
+public List<FantasyImages> getFantasyImages() {
+	return sessionFactory.getCurrentSession().createQuery("from FantasyImages").list();
 }
 
 @Override

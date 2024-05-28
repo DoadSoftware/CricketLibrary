@@ -25,6 +25,9 @@ public class Statistics
   
   @Column(name="INNINGS")
   private Integer innings;
+  
+  @Column(name="BOWLERINNING")
+  private Integer bowler_inning;
 
   @Column(name="NOTOUT")
   private Integer not_out;
@@ -327,6 +330,14 @@ public int getTournament_sixes() {
 
 public void setTournament_sixes(int tournament_sixes) {
 	this.tournament_sixes = tournament_sixes;
+}
+
+public Integer getBowler_inning() {
+	return bowler_inning;
+}
+
+public void setBowler_inning(Integer bowler_inning) {
+	this.bowler_inning = bowler_inning;
 }
 
 }
