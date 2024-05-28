@@ -8748,7 +8748,6 @@ public class CricketFunctions {
 		    	break;
 		    }
 	    	
-			System.out.println("whichInning = " + whichInning);			
 		    switch (whichInning) {
 		    case 1: 
 		    	if (((match.getMatch().getInning().get(whichInning - 1)).getTotalRuns() > 0) || 
@@ -8920,17 +8919,18 @@ public class CricketFunctions {
 				    		matchSummaryStatus = matchSummaryStatus + CricketFunctions.OverBalls(0,CricketFunctions.getRequiredBalls(match)) + " overs";
 						} else {
 							matchSummaryStatus = matchSummaryStatus + CricketFunctions.getRequiredBalls(match) + 
-									" ball" + CricketFunctions.Plural(CricketFunctions.getRequiredBalls(match));
+								" ball" + CricketFunctions.Plural(CricketFunctions.getRequiredBalls(match));
 						}
-				    } else if (CricketFunctions.getRequiredRuns(match) <= 0)
+				    } 
+				    else if (CricketFunctions.getRequiredRuns(match) <= 0) 
 				    {
 				    	switch (broadcaster) {
 						case "ICC-U19-2023":
 							if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
 								if(SplitSummaryText.isEmpty()) {
-							    	matchSummaryStatus =  batTeamNm + " beat " + bowlTeamNm + " by super over";
+							    	matchSummaryStatus =  batTeamNm + " beat " + bowlTeamNm + " in the super over";
 								} else {
-							    	matchSummaryStatus =  batTeamNm + " beat " + bowlTeamNm + SplitSummaryText + "by super over";
+							    	matchSummaryStatus =  batTeamNm + " beat " + bowlTeamNm + SplitSummaryText + "in the super over";
 								}
 							}else {
 								if(SplitSummaryText.isEmpty()) {
@@ -8944,8 +8944,12 @@ public class CricketFunctions {
 							}
 							break;
 						default:
-					    	matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) + 
-					    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning));
+							if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
+						    	matchSummaryStatus = batTeamNm + " win the super over";
+							} else {
+						    	matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) + 
+						    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning));
+							}
 							break;
 						}
 				    }
@@ -8971,9 +8975,9 @@ public class CricketFunctions {
 						case "ICC-U19-2023":
 							if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
 								if(SplitSummaryText.isEmpty()) {
-							    	matchSummaryStatus =  bowlTeamNm + " beat " + batTeamNm + " by super over";
+							    	matchSummaryStatus =  bowlTeamNm + " beat " + batTeamNm + " in the super over";
 								} else {
-							    	matchSummaryStatus =  bowlTeamNm + " beat " + batTeamNm + SplitSummaryText + "by super over";
+							    	matchSummaryStatus =  bowlTeamNm + " beat " + batTeamNm + SplitSummaryText + "in the super over";
 								}
 							}else {
 								if(SplitSummaryText.isEmpty()) {
@@ -8986,8 +8990,12 @@ public class CricketFunctions {
 							}
 							break;
 						default:
-					    	matchSummaryStatus = bowlTeamNm + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
-					    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
+							if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
+						    	matchSummaryStatus = bowlTeamNm + " win the super over";
+							} else {
+						    	matchSummaryStatus = bowlTeamNm + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
+						    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
+							}
 							break;
 						}
 				    }
