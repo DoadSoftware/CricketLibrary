@@ -1042,8 +1042,8 @@ public class CricketFunctions {
 	public static String checkImpactPlayer(List<Event> events,int inning_number,int player_id) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
-				if((player_id == events.get(i).getEventBatterNo() && events.get(i).getSubstitutionMade()!=null && events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.IMPACT))|| 
-						(player_id == events.get(i).getEventBatterNo() && events.get(i).getEventType().equalsIgnoreCase("LOG_OVERWRITE_SUBSTITUTION"))) {
+				if((player_id == events.get(i).getEventBatterNo() && events.get(i).getSubstitutionMade()!=null && 
+						events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.IMPACT))) {
 					return CricketUtil.YES;
 				}
 			}
@@ -1053,10 +1053,56 @@ public class CricketFunctions {
 	public static String checkImpactPlayerBowler(List<Event> events,int inning_number,int player_id) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
-				if((player_id == events.get(i).getEventBowlerNo() && events.get(i).getSubstitutionMade()!=null  && events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.IMPACT)) || 
-						(player_id == events.get(i).getEventBowlerNo() && events.get(i).getEventType().equalsIgnoreCase("LOG_OVERWRITE_SUBSTITUTION"))) {
+				if((player_id == events.get(i).getEventBowlerNo() && events.get(i).getSubstitutionMade()!=null  && 
+						events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.IMPACT))) {
 					return CricketUtil.YES;
 				}
+			}
+		}
+		return "";
+	}
+	
+	public static String checkImpactInOutPlayer(List<Event> events,int player_id,String type) {
+		if ((events != null) && (events.size() > 0)) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+				switch (type.toUpperCase()) {
+				case "IN":
+					if((player_id == events.get(i).getEventBatterNo() && events.get(i).getSubstitutionMade()!=null && 
+							events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.IMPACT))) {
+						return "IN";
+					}
+					break;
+				case "OUT":
+					if((player_id == events.get(i).getEventOtherBatterNo() && events.get(i).getSubstitutionMade()!=null && 
+							events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.IMPACT))) {
+						return "OUT";
+					}
+					break;	
+				}
+				
+			}
+		}
+		return "";
+	}
+	
+	public static String checkImpactInOutBowler(List<Event> events,int player_id,String type) {
+		if ((events != null) && (events.size() > 0)) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+				switch (type.toUpperCase()) {
+				case "IN":
+					if((player_id == events.get(i).getEventBowlerNo() && events.get(i).getSubstitutionMade()!=null && 
+							events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.IMPACT))) {
+						return "IN";
+					}
+					break;
+				case "OUT":
+					if((player_id == events.get(i).getEventOtherBowlerNo() && events.get(i).getSubstitutionMade()!=null && 
+							events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.IMPACT))) {
+						return "OUT";
+					}
+					break;	
+				}
+				
 			}
 		}
 		return "";
@@ -1065,8 +1111,8 @@ public class CricketFunctions {
 	public static String checkConcussedPlayer(List<Event> events,int inning_number,int player_id) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
-				if((player_id == events.get(i).getEventBatterNo() && events.get(i).getSubstitutionMade()!=null && events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.CONCUSSED))|| 
-						(player_id == events.get(i).getEventBatterNo() && events.get(i).getEventType().equalsIgnoreCase("LOG_OVERWRITE_SUBSTITUTION"))) {
+				if((player_id == events.get(i).getEventBatterNo() && events.get(i).getSubstitutionMade()!=null && 
+						events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.CONCUSSED))) {
 					return CricketUtil.YES;
 				}
 			}
@@ -1077,8 +1123,8 @@ public class CricketFunctions {
 	public static String checkConcussedPlayerBowler(List<Event> events,int inning_number,int player_id) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
-				if((player_id == events.get(i).getEventBowlerNo() && events.get(i).getSubstitutionMade()!=null  && events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.CONCUSSED)) || 
-						(player_id == events.get(i).getEventBowlerNo() && events.get(i).getEventType().equalsIgnoreCase("LOG_OVERWRITE_SUBSTITUTION"))) {
+				if((player_id == events.get(i).getEventBowlerNo() && events.get(i).getSubstitutionMade()!=null  && 
+						events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.CONCUSSED))) {
 					return CricketUtil.YES;
 				}
 			}
