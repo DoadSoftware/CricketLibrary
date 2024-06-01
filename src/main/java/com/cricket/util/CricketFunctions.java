@@ -48,6 +48,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import com.Ae_Third_Party_Xml.AE_Cricket;
+import com.Ae_Third_Party_Xml.AE_Inning;
 import com.Ae_Third_Party_Xml.AE_Last_Ball;
 import com.Ae_Third_Party_Xml.AE_Six_Distance;
 import com.cricket.archive.Archive;
@@ -1073,7 +1074,7 @@ public class CricketFunctions {
 					}
 					break;
 				case "OUT":
-					if((player_id == events.get(i).getEventOtherBatterNo() && events.get(i).getSubstitutionMade()!=null && 
+					if((player_id == events.get(i).getEventConcussionReplacePlayerId() && events.get(i).getSubstitutionMade()!=null && 
 							events.get(i).getSubstitutionMade().equalsIgnoreCase(CricketUtil.IMPACT))) {
 						return "OUT";
 					}
@@ -10080,6 +10081,84 @@ public class CricketFunctions {
 			}
 		}
 		return players;
+	}
+	public static List<DuckWorthLewis> populateDuckWorthLewisAe(AE_Cricket match) throws InterruptedException 
+	{
+		int noOfWicket = 0;
+		Document htmlFile = null; 
+		try {
+//			for(Inning inn : match.getMatch().getInning()) {
+//				if (inn.getIsCurrentInning().toUpperCase().equalsIgnoreCase(CricketUtil.YES)) {
+//					int totalball = 0;
+//					totalball =((inn.getTotalOvers()* Integer.valueOf(match.getSetup().getBallsPerOver())) + inn.getTotalBalls());
+//					if(totalball < 42) {
+//						htmlFile = Jsoup.parse(new File("C:\\Sports\\Cricket\\ParScores BB.html"), "ISO-8859-1");
+//
+//					}else if(totalball >= 42) {
+//						htmlFile = Jsoup.parse(new File("C:\\Sports\\Cricket\\ParScores OO.html"), "ISO-8859-1");
+//
+//					}
+//				}
+//			}
+			htmlFile = Jsoup.parse(new File("C:\\Sports\\Cricket\\ParScores BB.html"), "ISO-8859-1");
+			
+		} catch (IOException e) {  
+			e.printStackTrace(); 
+		} 
+		
+		List<DuckWorthLewis> this_dls = new ArrayList<DuckWorthLewis>();
+		for(int i=14; i<htmlFile.body().getElementsByTag("font").size() - 1;i++) {
+			if(htmlFile.body().getElementsByTag("font").get(i).text().contains("TableID")) {
+				i = i + 15;
+				if(i > htmlFile.body().getElementsByTag("font").size()) {
+					break;
+				}
+			}
+			
+			for(AE_Inning inn : match.getInning()) {
+				if(match.getMatchDetails().getStatus().getCurrentInnings() == inn.getNumber()) {
+					if(inn.getNoOfWickets() < 10) {
+						noOfWicket = inn.getNoOfWickets();
+					}else {
+						noOfWicket = 9;
+					}
+					this_dls.add(new DuckWorthLewis(htmlFile.body().getElementsByTag("font").get(i).text(),
+							htmlFile.body().getElementsByTag("font").get(i+(2+(noOfWicket))).text()));
+				}
+			}
+			i = i +11;
+			
+		}
+		
+		return this_dls;
+	}
+	public static String populateDlsAe(AE_Cricket match,String teamNameType,int dlsRuns) throws InterruptedException 
+	{
+		String team="",ahead_behind="";
+		int runs = 0;
+		for(AE_Inning inn : match.getInning()) {
+			if(match.getMatchDetails().getStatus().getCurrentInnings() == inn.getNumber()) {
+				team = inn.getShortName();
+				
+				runs = (inn.getRuns() - dlsRuns);
+				
+				if(runs < 0)
+                {
+                    ahead_behind = team + " are " + (Math.abs(runs)) + " runs behind";
+                }
+
+                if (runs > 0)
+                {
+                    ahead_behind = team + " are " + runs + " runs ahead";
+                }
+                
+                if (runs == 0)
+                {
+                	ahead_behind = "DLS score is level";
+                }
+			}
+		}
+		return ahead_behind;
 	}
 	public static List<DuckWorthLewis> populateDuckWorthLewis(MatchAllData match) throws InterruptedException 
 	{
