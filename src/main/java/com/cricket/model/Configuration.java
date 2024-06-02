@@ -99,6 +99,30 @@ public class Configuration {
 		this.broadcaster = broadcaster;
 	}
 	
+	
+	
+	public Configuration(String filename, String broadcaster, String whichScene,
+			String primaryIpAddress, int primaryPortNumber, String primaryScene, String primaryLanguage,
+			String secondaryIpAddress, int secondaryPortNumber, String secondaryScene, String secondaryLanguage,
+			String tertiaryIpAddress, int tertiaryPortNumber, String tertiaryScene, String tertiaryLanguage) {
+		super();
+		this.filename = filename;
+		this.broadcaster = broadcaster;
+		this.whichScene = whichScene;
+		this.primaryIpAddress = primaryIpAddress;
+		this.primaryPortNumber = primaryPortNumber;
+		this.primaryScene = primaryScene;
+		this.primaryLanguage = primaryLanguage;
+		this.secondaryIpAddress = secondaryIpAddress;
+		this.secondaryPortNumber = secondaryPortNumber;
+		this.secondaryScene = secondaryScene;
+		this.secondaryLanguage = secondaryLanguage;
+		this.tertiaryIpAddress = tertiaryIpAddress;
+		this.tertiaryPortNumber = tertiaryPortNumber;
+		this.tertiaryScene = tertiaryScene;
+		this.tertiaryLanguage = tertiaryLanguage;
+	}
+
 	public Configuration(String filename, String broadcaster, String speedUnit,String qudich,String wagon,String audio, String primaryIpAddress, 
 			int primaryPortNumber, String primaryLanguage) {
 		super();
