@@ -1,5 +1,7 @@
 package com.Ae_Third_Party_Xml;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.*;
 
 public class AE_Over {
@@ -10,7 +12,7 @@ public class AE_Over {
 	@XmlAttribute(name="No")
 	private Integer No;
 	@XmlElement(name="Wicket")
-	private AE_Wicket Wicket;
+	private List <AE_Wicket> Wicket;
 	
 	
 	
@@ -35,10 +37,10 @@ public class AE_Over {
 		this.RunRate = runRate;
 	}
 	
-	public AE_Wicket getWicket() {
+	public List <AE_Wicket> getWicket() {
 		return Wicket;
 	}
-	public void setWicket(AE_Wicket wicket) {
+	public void setWicket(List <AE_Wicket> wicket) {
 		this.Wicket = wicket;
 	}
 	
