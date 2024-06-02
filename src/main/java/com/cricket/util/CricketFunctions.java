@@ -10138,7 +10138,14 @@ public class CricketFunctions {
 		int runs = 0;
 		for(AE_Inning inn : match.getInning()) {
 			if(match.getMatchDetails().getStatus().getCurrentInnings() == inn.getNumber()) {
-				team = inn.getShortName();
+				
+				if(inn.getShortName().equalsIgnoreCase(match.getMatchDetails().getHomeTeam().getShortName())) {
+					team = match.getMatchDetails().getHomeTeam().getLongName();
+				}else {
+					team = match.getMatchDetails().getAwayTeam().getLongName();
+				}
+				
+				System.out.println("team = "+ team);
 				
 				runs = (inn.getRuns() - dlsRuns);
 				
