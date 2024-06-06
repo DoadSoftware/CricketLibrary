@@ -1969,6 +1969,17 @@ public class CricketFunctions {
 					headToHead_stats.get(playerId).setBallsBowled(Integer.valueOf(headToHead.get(i).substring(87,90).trim()));
 					headToHead_stats.get(playerId).setMaidens(Integer.valueOf(headToHead.get(i).substring(90,93).trim()));
 					headToHead_stats.get(playerId).setBalldots(Integer.valueOf(headToHead.get(i).substring(99,102).trim()));
+				}else {
+					TeamName.add(headToHead.get(i).substring(112,116).trim());	
+					TeamName.add(headToHead.get(i).substring(116,120).trim());
+					headToHead_stats.add(new HeadToHead(Integer.valueOf(headToHead.get(i).substring(83,86).trim()), 0, 0, 0, 0, 0, 0, 0, 0, 
+							Integer.valueOf(headToHead.get(i).substring(96,99).trim()), Integer.valueOf(headToHead.get(i).substring(93,96).trim()), 
+							Integer.valueOf(headToHead.get(i).substring(87,90).trim()), Integer.valueOf(headToHead.get(i).substring(90,93).trim()), 
+							Integer.valueOf(headToHead.get(i).substring(99,102).trim()), headToHead.get(i).substring(2,22).trim(), 
+							cricketService.getTeams().stream().filter(team -> team.getTeamName4().equalsIgnoreCase(TeamName.get(0))).findAny().orElse(null),
+							cricketService.getTeams().stream().filter(team -> team.getTeamName4().equalsIgnoreCase(TeamName.get(1))).findAny().orElse(null),
+							"Y", "-", headToHead.get(i).substring(23,42)));
+					TeamName.clear();
 				}
 			}
 		}
@@ -5155,6 +5166,11 @@ public class CricketFunctions {
 		case "PAST_MATCHES_DATA":
 			
 			for(HeadToHead mtch : headToHead_matches) {
+				if(mtch.getPlayerId() == 130) {
+					System.out.println("N: "+mtch.getPlayerId());
+					System.out.println("W : "+mtch.getWickets());
+				}
+				
 				if(!mtch.getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
 					
 					playerId = -1;
