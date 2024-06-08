@@ -35,7 +35,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -99,11 +101,79 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.InputStream;
 public class CricketFunctions {
 	
 	public static ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 	
+	public static Map<String, Map<String, String>> ReadExcel(String Path, String type) {
+        Map<String, Map<String, String>> dataMap = new LinkedHashMap<>();
+
+        try (InputStream inputStream = new FileInputStream(Path);
+             Workbook workbook = new XSSFWorkbook(inputStream)) {
+        	Sheet sheet = null;
+//        	switch(type.toUpperCase()) {
+//        	case "FF":
+//        		 sheet = workbook.getSheetAt(0); 
+//        		break;
+//        	case "LT":
+//        		 sheet = workbook.getSheetAt(1); 
+//        		break;
+//        	}
+   		 sheet = workbook.getSheetAt(0); 
+
+            Row headerRow = sheet.getRow(0); 
+
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) { 
+                Row row = sheet.getRow(i);
+                if (row != null && row.getCell(0) != null) {
+                    String key = row.getCell(0).getStringCellValue();
+                    Map<String, String> rowData = new LinkedHashMap<>();
+
+                    for (int j = 1; j < row.getLastCellNum(); j++) {
+                        String header = headerRow.getCell(j).getStringCellValue();
+                        String cellValue = getCellValueAsString(row.getCell(j));
+                        if(!cellValue.isEmpty()) {
+                            rowData.put(header, cellValue);
+                        }
+                    }
+                    dataMap.put(key, rowData);
+                }
+            }
+            dataMap.forEach((key, value) -> {
+                System.out.println(key + " : " + value+"\n");
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		return dataMap;
+    }
+	private static String getCellValueAsString(Cell cell) {
+        if (cell == null) {
+            return "";
+        }
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue();
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    return cell.getDateCellValue().toString();
+                } else {
+                    return String.valueOf(cell.getNumericCellValue());
+                }
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case FORMULA:
+                return cell.getCellFormula();
+            case BLANK:
+                return "";
+            default:
+                return "Unknown cell type";
+        }
+	}
 	public static Match processInningTimeData(String whatToProcess, Match matchData, String timeStatsToProcess, Match lastMatchData) 
 	{
 		if(matchData != null && matchData.getInning() != null && matchData.getInning().size() > 0)

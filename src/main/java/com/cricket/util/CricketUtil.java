@@ -237,5 +237,8 @@ public class CricketUtil {
 	public final static String CRIC_INFO = "CRIC_INFO";
 	public final static String DISTANCE_DIRECTORY = "Distance/";
 	public final static String Cricket_LAST_BALL_SPEED_THIRDPARTY = "SpeedOfLastBall.XML";
+	public final static String FF_EXCEL = "C:\\Sports\\FF_EXCEL.xlsx";
+	public final static String LT_EXCEL = "C:\\Sports\\Cricket\\Trio\\IND v NZ LTs and KPIs.xlsx";
+
 	
 }
