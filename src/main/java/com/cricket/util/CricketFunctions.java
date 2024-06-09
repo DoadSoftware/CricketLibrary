@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -43,6 +44,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -146,6 +151,7 @@ public class CricketFunctions {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("dataMap = " + dataMap);
 		return dataMap;
     }
 	private static String getCellValueAsString(Cell cell) {
@@ -275,9 +281,16 @@ public class CricketFunctions {
 		return matchData;
 	}
 	
-	public static AE_Cricket getDataFromThirdParty(String FilePathName) throws JAXBException {
+	@SuppressWarnings("resource")
+	public static AE_Cricket getDataFromThirdParty(String FilePathName) throws JAXBException, FileNotFoundException, IOException {
+		
+		new FileOutputStream(FilePathName).write(
+				FileUtils.readFileToString(new File("C:\\Temp\\AE-Cricket-ThirdParty.XML"), 
+				"UTF-8").replace("&", "&amp;").replace("'", "&apos;").getBytes());
+		
 		AE_Cricket cricket_data =(AE_Cricket)JAXBContext.newInstance(AE_Cricket.class)
 		.createUnmarshaller().unmarshal(new File(FilePathName));
+
 		return cricket_data;
 	}
 	public static AE_Last_Ball getSpeed_of_ball_from_ThirdParty(String FilePathName) throws JAXBException {
