@@ -9175,6 +9175,8 @@ public class CricketFunctions {
 			return CricketUtil.TOSS + ": " + TeamNameToUse;
 		case CricketUtil.SHORT:
 			return TeamNameToUse + " won the toss & " + decisionText;
+		case "NO_TOSS":
+			return TeamNameToUse + " won and elected to " + decisionText;	
 		default:
 			if(electedOrChoose == null) {
 				return TeamNameToUse + " won the toss";
