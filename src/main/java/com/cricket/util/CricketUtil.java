@@ -238,7 +238,9 @@ public class CricketUtil {
 	public final static String DISTANCE_DIRECTORY = "Distance/";
 	public final static String Cricket_LAST_BALL_SPEED_THIRDPARTY = "SpeedOfLastBall.XML";
 	public final static String FF_EXCEL = "C:\\Sports\\FF_EXCEL.xlsx";
-	public final static String LT_EXCEL = "C:\\Sports\\Cricket\\Trio\\IND v NZ LTs and KPIs.xlsx";
+	public final static String LT_EXCEL = "C:\\Sports\\LT_EXCEL.xlsx";
+	public final static String FAIRPLAY = "C:\\Sports\\Faiplay.xlsx";
+	public final static String FANTASY = "C:\\Sports\\Fantasy_11.xlsx";
 
 	
 }

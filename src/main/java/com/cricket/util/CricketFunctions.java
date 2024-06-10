@@ -119,7 +119,6 @@ public class CricketFunctions {
 
         try (InputStream inputStream = new FileInputStream(Path);
              Workbook workbook = new XSSFWorkbook(inputStream)) {
-
             Sheet sheet = workbook.getSheetAt(0); 
             Row headerRow = sheet.getRow(0); // Read the header row
 
@@ -153,6 +152,39 @@ public class CricketFunctions {
         }
         System.out.println("dataMap = " + dataMap);
 		return dataMap;
+    }
+	public static Map<String, Object> Read_Excel(String Path) {
+
+        Map<String, Object> rowData = new LinkedHashMap<>();
+
+        try (InputStream inputStream = new FileInputStream(Path);
+             Workbook workbook = new XSSFWorkbook(inputStream)) {
+            Sheet sheet = workbook.getSheetAt(0); 
+            Row headerRow = sheet.getRow(0); // Read the header row
+            
+            for (int i = 0; i <= sheet.getLastRowNum(); i++) { 
+                Row row = sheet.getRow(i);
+                if (row != null && row.getCell(0) != null) {
+                	for (int j = 0; j < row.getLastCellNum(); j++) {
+                            String header = getCellValueAsString(headerRow.getCell(j)).trim();
+                            Object cellValue = getCellValue(row.getCell(j));
+                            if (cellValue != null && !cellValue.toString().isEmpty()) {
+                                rowData.put(header, cellValue);
+                            }
+                    }
+                }
+            }
+
+            // Print the HashMap
+            rowData.forEach((key, value) -> {
+                System.out.println(key + " : " + value);
+            });
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		return rowData;
     }
 	private static String getCellValueAsString(Cell cell) {
 	        Object value = getCellValue(cell);
@@ -285,7 +317,7 @@ public class CricketFunctions {
 	public static AE_Cricket getDataFromThirdParty(String FilePathName) throws JAXBException, FileNotFoundException, IOException {
 		
 		new FileOutputStream(FilePathName).write(
-				FileUtils.readFileToString(new File("C:\\Temp\\AE-Cricket-ThirdParty.XML"), 
+				FileUtils.readFileToString(new File(FilePathName), 
 				"UTF-8").replace("&", "&amp;").replace("'", "&apos;").getBytes());
 		
 		AE_Cricket cricket_data =(AE_Cricket)JAXBContext.newInstance(AE_Cricket.class)
