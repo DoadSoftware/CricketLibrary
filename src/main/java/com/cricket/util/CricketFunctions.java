@@ -6188,7 +6188,7 @@ public class CricketFunctions {
 							if(bc.getHowOutFielderId() <= 0) {
 								return "run out|(substitute)| | ";
 							} else {
-								return "run out|" + "sub (" + bc.getHowOutFielder().getTicker_name() + ")| | ";
+								return "run out|" + "( sub -" + bc.getHowOutFielder().getTicker_name() + ")| | ";
 							}
 						} else {
 							if(bc.getHowOutFielderId() <= 0) {
