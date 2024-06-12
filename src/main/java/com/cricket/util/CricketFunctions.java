@@ -316,9 +316,9 @@ public class CricketFunctions {
 	@SuppressWarnings("resource")
 	public static AE_Cricket getDataFromThirdParty(String FilePathName) throws JAXBException, FileNotFoundException, IOException {
 		
-		new FileOutputStream(FilePathName).write(
-				FileUtils.readFileToString(new File(FilePathName), 
-				"UTF-8").replace("&", "&amp;").replace("'", "&apos;").getBytes());
+//		new FileOutputStream(FilePathName).write(
+//				FileUtils.readFileToString(new File("C:\\Temp\\AE-Cricket-ThirdParty.XML"), 
+//				"UTF-8").replace("&", "&amp;").replace("'", "&apos;").getBytes());
 		
 		AE_Cricket cricket_data =(AE_Cricket)JAXBContext.newInstance(AE_Cricket.class)
 		.createUnmarshaller().unmarshal(new File(FilePathName));
