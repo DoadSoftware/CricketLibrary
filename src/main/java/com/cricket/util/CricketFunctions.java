@@ -8647,10 +8647,13 @@ public class CricketFunctions {
 		        	}
 		          break;  
 		          
-		        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+		        case CricketUtil.BYE: case CricketUtil.LEG_BYE:
 		        	ball_count = ball_count + 1;
 		        	total_runs += events.get(i).getEventRuns();
 		        	break;
+		        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.PENALTY:
+		        	total_runs += events.get(i).getEventRuns();
+		        	break;	
 		        case CricketUtil.LOG_WICKET:
 		        	ball_count = ball_count + 1;
 		        	if (events.get(i).getEventRuns() > 0) {
