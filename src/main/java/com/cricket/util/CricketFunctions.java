@@ -219,6 +219,15 @@ public class CricketFunctions {
         }
     }
 	
+	public static String TournamentFoursAndSixes(List<Tournament> past_tournament_stat) {
+    	int fours=0;int sixes=0;
+    	for(Tournament tn:past_tournament_stat) {
+    		fours = fours + tn.getFours();
+    		sixes =sixes + tn.getSixes();
+    	}
+		return String.valueOf(fours+","+sixes);
+    	
+    }
 	
 	public static Match processInningTimeData(String whatToProcess, Match matchData, String timeStatsToProcess, Match lastMatchData) 
 	{
@@ -4217,6 +4226,9 @@ public class CricketFunctions {
 		for(MatchAllData match : tournament_matches) {
 			//System.out.println(match.getMatch().getMatchFileName());
 			if(!match.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
+				if(stat.getStats_type().getStats_short_name().equalsIgnoreCase("MPL S1")) {
+					stat.getStats_type().setStats_short_name("DT20");
+				}
 				if(stat.getStats_type().getStats_short_name().contains(match.getSetup().getMatchType())) {
 //					TimeUnit.MILLISECONDS.sleep(500);
 					for(Inning inn : match.getMatch().getInning()) {
@@ -5582,7 +5594,7 @@ public class CricketFunctions {
 							break;
 						}
 					}
-					
+					System.out.println("PLAYER ID : "+playerId);
 					if(playerId >= 0) {
 						
 						tournament_stats.get(playerId).setRuns(tournament_stats.get(playerId).getRuns() + mtch.getRuns());
@@ -5663,7 +5675,12 @@ public class CricketFunctions {
 									mtch.getBallsFaced(),mtch.getOpponentTeam(), null,mtch.getMatchFileName().replace(".json", ""), 
 									cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(mtch.getPlayerId())),CricketUtil.NOT_OUT));
 						}else if(mtch.getDismissed().trim().contains("Y")) {
-							tournament_stats.get(tournament_stats.size() - 1).getBatsman_best_Stats().add(new BestStats(mtch.getPlayerId(), (mtch.getRuns()*2), 
+							tournament_stats.get(tournament_stats.size() - 1).getBatsman_best_Stats().add(new BestStats(mtch.getPlayerId(), (mtch.getRuns() * 2), 
+									mtch.getBallsFaced(),mtch.getOpponentTeam(), null,mtch.getMatchFileName().replace(".json", ""), 
+									cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(mtch.getPlayerId())),CricketUtil.NOT_OUT));
+
+						}else if(mtch.getDismissed().equalsIgnoreCase("Y")) {
+							tournament_stats.get(tournament_stats.size() - 1).getBatsman_best_Stats().add(new BestStats(mtch.getPlayerId(), (mtch.getRuns() * 2), 
 									mtch.getBallsFaced(), mtch.getOpponentTeam(), null, mtch.getMatchFileName().replace(".json", ""),
 									cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(mtch.getPlayerId())),CricketUtil.OUT));
 						}
