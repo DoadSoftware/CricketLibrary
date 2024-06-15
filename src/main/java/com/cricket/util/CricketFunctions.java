@@ -2068,7 +2068,8 @@ public class CricketFunctions {
 			if(headToHead.get(i).contains("IS")) {
 				
 				TeamName.add(headToHead.get(i).substring(43,63).trim());	
-				TeamName.add(headToHead.get(i).substring(63,86).trim());
+				TeamName.add(headToHead.get(i).substring(63,82).trim());
+				
 				try {
 					headToHead_stats.add(new HeadToHead(Integer.valueOf(headToHead.get(i).substring(83,86).trim()),Integer.valueOf(headToHead.get(i).substring(87,90).trim()), 
 							Integer.valueOf(headToHead.get(i).substring(90,93).trim()), Integer.valueOf(headToHead.get(i).substring(119,122).trim()), 
