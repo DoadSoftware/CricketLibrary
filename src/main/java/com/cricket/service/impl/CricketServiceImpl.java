@@ -20,6 +20,7 @@ import com.cricket.model.Player;
 import com.cricket.model.Playoff;
 import com.cricket.model.Pointers;
 import com.cricket.model.Season;
+import com.cricket.model.Split;
 import com.cricket.model.Sponsor;
 import com.cricket.model.Staff;
 import com.cricket.model.Statistics;
@@ -84,6 +85,11 @@ public List<InfobarStats> getInfobarStats() {
 @Override
 public List<Bugs> getBugs() {
 	return cricketDao.getBugs();
+}
+
+@Override
+public List<Split> getSplit() {
+	return cricketDao.getSplit();
 }
 
 @Override
