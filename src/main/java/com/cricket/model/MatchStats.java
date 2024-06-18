@@ -16,14 +16,14 @@ public class MatchStats{
 	private VariousStats lastThirtyBalls;
 	private VariousStats homeTeamScoreData;
 	private VariousStats awayTeamScoreData;
+
+	private VariousStats homeFirstPowerPlay;
+	private VariousStats homeSecondPowerPlay;
+	private VariousStats homeThirdPowerPlay;
 	
-	private PowerPlay homeFirstPowerPlay;
-	private PowerPlay homeSecondPowerPlay;
-	private PowerPlay homeThirdPowerPlay;
-	
-	private PowerPlay awayFirstPowerPlay;
-	private PowerPlay awaySecondPowerPlay;
-	private PowerPlay awayThirdPowerPlay;
+	private VariousStats awayFirstPowerPlay;
+	private VariousStats awaySecondPowerPlay;
+	private VariousStats awayThirdPowerPlay;
 	
 	public MatchStats() {
 		super();
@@ -36,16 +36,64 @@ public class MatchStats{
 		this.awayTeamScoreData = new VariousStats();
 		this.homeTeamScoreData = new VariousStats();
 		this.playerStats = new ArrayList<MatchStats.VariousStats>();
-		this.homeFirstPowerPlay = new PowerPlay();
-		this.homeSecondPowerPlay = new PowerPlay();
-		this.homeThirdPowerPlay = new PowerPlay();
-		this.awayFirstPowerPlay = new PowerPlay();
-		this.awaySecondPowerPlay = new PowerPlay();
-		this.awayThirdPowerPlay = new PowerPlay();
+		this.homeFirstPowerPlay = new VariousStats();
+		this.homeSecondPowerPlay = new VariousStats();
+		this.homeThirdPowerPlay = new VariousStats();
+		this.awayFirstPowerPlay = new VariousStats();
+		this.awaySecondPowerPlay = new VariousStats();
+		this.awayThirdPowerPlay = new VariousStats();
 	}
 	
 	public List<VariousStats> getPlayerStats() {
 		return playerStats;
+	}
+
+	public VariousStats getHomeFirstPowerPlay() {
+		return homeFirstPowerPlay;
+	}
+
+	public void setHomeFirstPowerPlay(VariousStats homeFirstPowerPlay) {
+		this.homeFirstPowerPlay = homeFirstPowerPlay;
+	}
+
+	public VariousStats getHomeSecondPowerPlay() {
+		return homeSecondPowerPlay;
+	}
+
+	public void setHomeSecondPowerPlay(VariousStats homeSecondPowerPlay) {
+		this.homeSecondPowerPlay = homeSecondPowerPlay;
+	}
+
+	public VariousStats getHomeThirdPowerPlay() {
+		return homeThirdPowerPlay;
+	}
+
+	public void setHomeThirdPowerPlay(VariousStats homeThirdPowerPlay) {
+		this.homeThirdPowerPlay = homeThirdPowerPlay;
+	}
+
+	public VariousStats getAwayFirstPowerPlay() {
+		return awayFirstPowerPlay;
+	}
+
+	public void setAwayFirstPowerPlay(VariousStats awayFirstPowerPlay) {
+		this.awayFirstPowerPlay = awayFirstPowerPlay;
+	}
+
+	public VariousStats getAwaySecondPowerPlay() {
+		return awaySecondPowerPlay;
+	}
+
+	public void setAwaySecondPowerPlay(VariousStats awaySecondPowerPlay) {
+		this.awaySecondPowerPlay = awaySecondPowerPlay;
+	}
+
+	public VariousStats getAwayThirdPowerPlay() {
+		return awayThirdPowerPlay;
+	}
+
+	public void setAwayThirdPowerPlay(VariousStats awayThirdPowerPlay) {
+		this.awayThirdPowerPlay = awayThirdPowerPlay;
 	}
 
 	public void setPlayerStats(List<VariousStats> playerStats) {
@@ -132,128 +180,68 @@ public class MatchStats{
 		this.lastThirtyBalls = lastThirtyBalls;
 	}
 
-	public PowerPlay getHomeFirstPowerPlay() {
-		return homeFirstPowerPlay;
-	}
-
-	public void setHomeFirstPowerPlay(PowerPlay homeFirstPowerPlay) {
-		this.homeFirstPowerPlay = homeFirstPowerPlay;
-	}
-
-	public PowerPlay getHomeSecondPowerPlay() {
-		return homeSecondPowerPlay;
-	}
-
-	public void setHomeSecondPowerPlay(PowerPlay homeSecondPowerPlay) {
-		this.homeSecondPowerPlay = homeSecondPowerPlay;
-	}
-
-	public PowerPlay getHomeThirdPowerPlay() {
-		return homeThirdPowerPlay;
-	}
-
-	public void setHomeThirdPowerPlay(PowerPlay homeThirdPowerPlay) {
-		this.homeThirdPowerPlay = homeThirdPowerPlay;
-	}
-
-	public PowerPlay getAwayFirstPowerPlay() {
-		return awayFirstPowerPlay;
-	}
-
-	public void setAwayFirstPowerPlay(PowerPlay awayFirstPowerPlay) {
-		this.awayFirstPowerPlay = awayFirstPowerPlay;
-	}
-
-	public PowerPlay getAwaySecondPowerPlay() {
-		return awaySecondPowerPlay;
-	}
-
-	public void setAwaySecondPowerPlay(PowerPlay awaySecondPowerPlay) {
-		this.awaySecondPowerPlay = awaySecondPowerPlay;
-	}
-
-	public PowerPlay getAwayThirdPowerPlay() {
-		return awayThirdPowerPlay;
-	}
-
-	public void setAwayThirdPowerPlay(PowerPlay awayThirdPowerPlay) {
-		this.awayThirdPowerPlay = awayThirdPowerPlay;
-	}
-
-	@Override
+@Override
 	public String toString() {
 		return "MatchStats [overData=" + overData + ", playerStats=" + playerStats + ", homeOverByOverData="
-			+ homeOverByOverData + ", awayOverByOverData=" + awayOverByOverData + ", bowlingCard=" + bowlingCard
-			+ ", ballsSinceLastBoundary=" + ballsSinceLastBoundary + ", lastOverData=" + lastOverData
-			+ ", inningCompare=" + inningCompare + ", lastThirtyBalls=" + lastThirtyBalls + ", homeTeamScoreData="
-			+ homeTeamScoreData + ", awayTeamScoreData=" + awayTeamScoreData + ", homeFirstPowerPlay="
-			+ homeFirstPowerPlay + ", homeSecondPowerPlay=" + homeSecondPowerPlay + ", homeThirdPowerPlay="
-			+ homeThirdPowerPlay + ", awayFirstPowerPlay=" + awayFirstPowerPlay + ", awaySecondPowerPlay="
-			+ awaySecondPowerPlay + ", awayThirdPowerPlay=" + awayThirdPowerPlay + "]";
+				+ homeOverByOverData + ", awayOverByOverData=" + awayOverByOverData + ", bowlingCard=" + bowlingCard
+				+ ", ballsSinceLastBoundary=" + ballsSinceLastBoundary + ", lastOverData=" + lastOverData
+				+ ", inningCompare=" + inningCompare + ", lastThirtyBalls=" + lastThirtyBalls + ", homeTeamScoreData="
+				+ homeTeamScoreData + ", awayTeamScoreData=" + awayTeamScoreData + ", homeFirstPowerPlay="
+				+ homeFirstPowerPlay + ", homeSecondPowerPlay=" + homeSecondPowerPlay + ", homeThirdPowerPlay="
+				+ homeThirdPowerPlay + ", awayFirstPowerPlay=" + awayFirstPowerPlay + ", awaySecondPowerPlay="
+				+ awaySecondPowerPlay + ", awayThirdPowerPlay=" + awayThirdPowerPlay + "]";
 	}
-	public static class PowerPlay{
-		private int totalRuns;
-		private int totalWickets;
-		private int totalFours;
-		private int totalSixes;
-		private int totalNines;
-		private int StartOver;
-		private int EndOver;
-		public int getTotalRuns() {
-			return totalRuns;
-		}
-		public void setTotalRuns(int totalRuns) {
-			this.totalRuns = totalRuns;
-		}
-		public int getTotalWickets() {
-			return totalWickets;
-		}
-		public void setTotalWickets(int totalWickets) {
-			this.totalWickets = totalWickets;
-		}
-		public int getTotalFours() {
-			return totalFours;
-		}
-		public void setTotalFours(int totalFours) {
-			this.totalFours = totalFours;
-		}
-		public int getTotalSixes() {
-			return totalSixes;
-		}
-		public void setTotalSixes(int totalSixes) {
-			this.totalSixes = totalSixes;
-		}
-		public int getTotalNines() {
-			return totalNines;
-		}
-		public void setTotalNines(int totalNines) {
-			this.totalNines = totalNines;
-		}
-		public int getStartOver() {
-			return StartOver;
-		}
-		public void setStartOver(int startOver) {
-			StartOver = startOver;
-		}
-		public int getEndOver() {
-			return EndOver;
-		}
-		public void setEndOver(int endOver) {
-			EndOver = endOver;
-		}
-		
-		public PowerPlay() {
-			super();
-		}
-		
-		@Override
-		public String toString() {
-			return "PowerPlay [totalRuns=" + totalRuns + ", totalWickets=" + totalWickets
-					+ ", totalFours=" + totalFours + ", totalSixes=" + totalSixes + ", totalNines=" + totalNines
-					+ ", StartOver=" + StartOver + ", EndOver=" + EndOver + "]";
-		}
-		
-	}
+
+	//	public static class PowerPlay{
+//		
+//		private int totalRuns;
+//		private int totalWickets;
+//		private int totalFours;
+//		private int totalSixes;
+//		private int totalNines;
+////		private int StartOver;
+////		private int EndOver;
+//		
+//		public int getTotalRuns() {
+//			return totalRuns;
+//		}
+//		public void setTotalRuns(int totalRuns) {
+//			this.totalRuns = totalRuns;
+//		}
+//		public int getTotalWickets() {
+//			return totalWickets;
+//		}
+//		public void setTotalWickets(int totalWickets) {
+//			this.totalWickets = totalWickets;
+//		}
+//		public int getTotalFours() {
+//			return totalFours;
+//		}
+//		public void setTotalFours(int totalFours) {
+//			this.totalFours = totalFours;
+//		}
+//		public int getTotalSixes() {
+//			return totalSixes;
+//		}
+//		public void setTotalSixes(int totalSixes) {
+//			this.totalSixes = totalSixes;
+//		}
+//		public int getTotalNines() {
+//			return totalNines;
+//		}
+//		public void setTotalNines(int totalNines) {
+//			this.totalNines = totalNines;
+//		}
+//		public PowerPlay() {
+//			super();
+//		}
+//		@Override
+//		public String toString() {
+//			return "PowerPlay [totalRuns=" + totalRuns + ", totalWickets=" + totalWickets + ", totalFours=" + totalFours
+//					+ ", totalSixes=" + totalSixes + ", totalNines=" + totalNines + "]";
+//		}
+//		
+//	}
 	public static class VariousStats{
 		
 		private int totalRuns;
@@ -273,6 +261,14 @@ public class MatchStats{
 		private int lastBowlerId;
 		private int replacementBowlerId;
 		
+		public VariousStats(int totalRuns, int totalWickets, int totalFours, int totalSixes, int totalNines) {
+			super();
+			this.totalRuns = totalRuns;
+			this.totalWickets = totalWickets;
+			this.totalFours = totalFours;
+			this.totalSixes = totalSixes;
+			this.totalNines = totalNines;
+		}
 		public VariousStats() {
 			super();
 			this.thisOverTxt = "";
@@ -280,6 +276,11 @@ public class MatchStats{
 		public VariousStats(int id) {
 			super();
 			this.id = id;
+		}
+		public VariousStats(int id, String statsType) {
+			super();
+			this.id = id;
+			this.statsType = statsType;
 		}
 		public String getStatsType() {
 			return statsType;

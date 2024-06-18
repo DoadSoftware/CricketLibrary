@@ -3,6 +3,7 @@ package com.cricket.model;
 import java.util.List;
 
 public class PowerPlays {
+	
 	private Team Team;
 	private List<Integer> Total_runs;
 	private List<Integer> Total_wickets;
