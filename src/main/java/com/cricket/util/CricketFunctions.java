@@ -1252,7 +1252,95 @@ public class CricketFunctions {
 		}
 		return "";
 	}
-	
+	public static ArrayList<String> TeamStatsComparison(List<Event> events) {
+		ArrayList<String> TeamStats= new ArrayList<String>();
+		int inn_one=0,inn_two=0,inn_three=0,inn_five=0,inn_dot=0,one=0,two=0,three=0,five=0,dot=0;
+		
+		if ((events != null) && (events.size() > 0)) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+				switch (events.get(i).getEventType()) {
+				case CricketUtil.ONE:
+					if(events.get(i).getEventInningNumber() == 1) {
+						inn_one++;
+					} else if(events.get(i).getEventInningNumber() == 2) {
+						one++;					}
+					break;
+				case CricketUtil.TWO:
+					if(events.get(i).getEventInningNumber() == 1) {
+						inn_two++;
+					} else if(events.get(i).getEventInningNumber() == 2) {
+						two++;
+					}
+					break;
+				case CricketUtil.THREE:
+					if(events.get(i).getEventInningNumber() == 1) {
+						inn_three++;
+					} else if(events.get(i).getEventInningNumber() == 2) {
+						three++;
+					}
+					break;
+				case CricketUtil.FIVE:
+					if(events.get(i).getEventInningNumber() == 1) {
+						inn_five++;
+
+					} else if(events.get(i).getEventInningNumber() == 2) {
+						five++;
+					}
+					break;
+				case CricketUtil.DOT:
+					if(events.get(i).getEventInningNumber() == 1) {
+						inn_dot++;
+					} else if(events.get(i).getEventInningNumber() == 2) {
+						dot++;
+					}
+					break;
+				case CricketUtil.LOG_WICKET:
+					switch (String.valueOf(events.get(i).getEventRuns())) {
+					case CricketUtil.ONE:
+						if(events.get(i).getEventInningNumber() == 1) {
+							inn_one++;
+						} else if(events.get(i).getEventInningNumber() == 2) {
+							one++;					}
+						break;
+					case CricketUtil.TWO:
+						if(events.get(i).getEventInningNumber() == 1) {
+							inn_two++;
+						} else if(events.get(i).getEventInningNumber() == 2) {
+							two++;
+						}
+						break;
+					case CricketUtil.THREE:
+						if(events.get(i).getEventInningNumber() == 1) {
+							inn_three++;
+						} else if(events.get(i).getEventInningNumber() == 2) {
+							three++;
+						}
+						break;
+					case CricketUtil.FIVE:
+						if(events.get(i).getEventInningNumber() == 1) {
+							inn_five++;
+
+						} else if(events.get(i).getEventInningNumber() == 2) {
+							five++;
+						}
+						break;
+					case CricketUtil.DOT:
+						if(events.get(i).getEventInningNumber() == 1) {
+							inn_dot++;
+						} else if(events.get(i).getEventInningNumber() == 2) {
+							dot++;
+						}
+						break;
+					}
+					break;
+				}
+				
+			}
+		}
+		TeamStats.add(inn_dot+","+inn_one+","+inn_two+","+inn_three+","+inn_five);
+		TeamStats.add(dot+","+one+","+two+","+three+","+five);
+		return TeamStats;
+	}
 	public static String checkConcussedPlayerBowler(List<Event> events,int inning_number,int player_id) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
@@ -11435,52 +11523,128 @@ public class CricketFunctions {
 		
 	}
 
-	public static MatchStats getAllEventsStats(Match match, List<Event> events) 
+	public static MatchStats getAllEventsStats(Match match, List<Event> events, Setup setup) 
 	{
 		MatchStats matchStats = new MatchStats();
 		String typeOfStats = "";
 		BowlingCard currentBowlerBC = null;
 		Inning currentInning = null;
 		int firstPlyrId = 0, secondPlyrId = 0;
-		
 		typeOfStats = "INNING_COMPARE,";
+		if(setup.getTargetType()!=null && !setup.getTargetType().isEmpty()) {
+			typeOfStats +="DLS,";
+		}
+		if(setup.getMatchType().equalsIgnoreCase(CricketUtil.D10)) {
+			//Home team
+			matchStats.getHomeFirstPowerPlay().setStartOver(1);
+			matchStats.getHomeFirstPowerPlay().setEndOver(2);
+			
+			matchStats.getHomeSecondPowerPlay().setStartOver(3);
+			matchStats.getHomeSecondPowerPlay().setEndOver(6);
+			
+			matchStats.getHomeThirdPowerPlay().setStartOver(7);
+			matchStats.getHomeThirdPowerPlay().setEndOver(10);
+			//Away team
+			matchStats.getAwayFirstPowerPlay().setStartOver(1);
+			matchStats.getAwayFirstPowerPlay().setEndOver(2);
+			
+			matchStats.getAwaySecondPowerPlay().setStartOver(3);
+			matchStats.getAwaySecondPowerPlay().setEndOver(6);
+			
+			matchStats.getAwayThirdPowerPlay().setStartOver(7);
+			matchStats.getAwayThirdPowerPlay().setEndOver(10);
+			
+		}if((setup.getMatchType().equalsIgnoreCase(CricketUtil.DT20)||
+				(setup.getMatchType().equalsIgnoreCase(CricketUtil.IT20)))) {
+			//Home team
+			matchStats.getHomeFirstPowerPlay().setStartOver(1);
+			matchStats.getHomeFirstPowerPlay().setEndOver(6);
+			
+			matchStats.getHomeSecondPowerPlay().setStartOver(7);
+			matchStats.getHomeSecondPowerPlay().setEndOver(15);
+			
+			matchStats.getHomeThirdPowerPlay().setStartOver(16);
+			matchStats.getHomeThirdPowerPlay().setEndOver(20);
+			//Away team
+			matchStats.getAwayFirstPowerPlay().setStartOver(1);
+			matchStats.getAwayFirstPowerPlay().setEndOver(6);
+			
+			matchStats.getAwaySecondPowerPlay().setStartOver(7);
+			matchStats.getAwaySecondPowerPlay().setEndOver(15);
+			
+			matchStats.getAwayThirdPowerPlay().setStartOver(16);
+			matchStats.getAwayThirdPowerPlay().setEndOver(20);
+			
+		}if((setup.getMatchType().equalsIgnoreCase(CricketUtil.ODI))){
+			//Home team
+			matchStats.getHomeFirstPowerPlay().setStartOver(1);
+			matchStats.getHomeFirstPowerPlay().setEndOver(10);
+			
+			matchStats.getHomeSecondPowerPlay().setStartOver(11);
+			matchStats.getHomeSecondPowerPlay().setEndOver(40);
+			
+			matchStats.getHomeThirdPowerPlay().setStartOver(41);
+			matchStats.getHomeThirdPowerPlay().setEndOver(50);
+			//Away team
+			matchStats.getAwayFirstPowerPlay().setStartOver(1);
+			matchStats.getAwayFirstPowerPlay().setEndOver(10);
+			
+			matchStats.getAwaySecondPowerPlay().setStartOver(11);
+			matchStats.getAwaySecondPowerPlay().setEndOver(40);
+			
+			matchStats.getAwayThirdPowerPlay().setStartOver(41);
+			matchStats.getAwayThirdPowerPlay().setEndOver(50);
+		}
 		for (Inning inn : match.getInning()) {
 			if(inn.getInningNumber()==1) {
-				
-				//check test match, F-c match
-				//check if ODI, OD
-				matchStats.getHomeFirstPowerPlay().setStartOver(inn.getFirstPowerplayStartOver());
-				matchStats.getHomeFirstPowerPlay().setEndOver(inn.getFirstPowerplayEndOver());
-				
-				matchStats.getHomeSecondPowerPlay().setStartOver(inn.getSecondPowerplayStartOver());
-				matchStats.getHomeSecondPowerPlay().setEndOver(inn.getSecondPowerplayEndOver());
-				
-				matchStats.getHomeThirdPowerPlay().setStartOver(inn.getThirdPowerplayStartOver());
-				matchStats.getHomeThirdPowerPlay().setEndOver(inn.getThirdPowerplayEndOver());
-				
+				if(setup.getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
+					if(typeOfStats.contains("DLS")) {
+						//Home team
+						matchStats.getHomeFirstPowerPlay().setStartOver(inn.getFirstPowerplayStartOver());
+						matchStats.getHomeFirstPowerPlay().setEndOver(inn.getFirstPowerplayEndOver());
+						
+						matchStats.getHomeSecondPowerPlay().setStartOver(inn.getSecondPowerplayStartOver());
+						matchStats.getHomeSecondPowerPlay().setEndOver(inn.getSecondPowerplayEndOver());
+						
+						matchStats.getHomeThirdPowerPlay().setStartOver(inn.getThirdPowerplayStartOver());
+						matchStats.getHomeThirdPowerPlay().setEndOver(inn.getThirdPowerplayEndOver());
+						//Away team
+						matchStats.getAwayFirstPowerPlay().setStartOver(inn.getFirstPowerplayStartOver());
+						matchStats.getAwayFirstPowerPlay().setEndOver(inn.getFirstPowerplayEndOver());
+						
+						matchStats.getAwaySecondPowerPlay().setStartOver(inn.getSecondPowerplayStartOver());
+						matchStats.getAwaySecondPowerPlay().setEndOver(inn.getSecondPowerplayEndOver());
+						
+						matchStats.getAwayThirdPowerPlay().setStartOver(inn.getThirdPowerplayStartOver());
+						matchStats.getAwayThirdPowerPlay().setEndOver(inn.getThirdPowerplayEndOver());
+					}
+				}
 			}
 			if(inn.getInningNumber() == 2 && (inn.getTotalOvers() > 0 || inn.getTotalBalls() > 0 
 				|| inn.getTotalRuns() > 0 || inn.getTotalExtras() > 0)) 
 			{
 				typeOfStats = typeOfStats.replace("INNING_COMPARE,", "");
-				
-				matchStats.getHomeFirstPowerPlay().setStartOver(inn.getFirstPowerplayStartOver());
-				matchStats.getHomeFirstPowerPlay().setEndOver(inn.getFirstPowerplayEndOver());
-				
-				matchStats.getHomeSecondPowerPlay().setStartOver(inn.getSecondPowerplayStartOver());
-				matchStats.getHomeSecondPowerPlay().setEndOver(inn.getSecondPowerplayEndOver());
-				
-				matchStats.getHomeThirdPowerPlay().setStartOver(inn.getThirdPowerplayStartOver());
-				matchStats.getHomeThirdPowerPlay().setEndOver(inn.getThirdPowerplayEndOver());
-				
-				matchStats.getAwayFirstPowerPlay().setStartOver(inn.getFirstPowerplayStartOver());
-				matchStats.getAwayFirstPowerPlay().setEndOver(inn.getFirstPowerplayEndOver());
-				
-				matchStats.getAwaySecondPowerPlay().setStartOver(inn.getSecondPowerplayStartOver());
-				matchStats.getAwaySecondPowerPlay().setEndOver(inn.getSecondPowerplayEndOver());
-				
-				matchStats.getAwayThirdPowerPlay().setStartOver(inn.getThirdPowerplayStartOver());
-				matchStats.getAwayThirdPowerPlay().setEndOver(inn.getThirdPowerplayEndOver());
+				if(setup.getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
+					if(typeOfStats.contains("DLS")) {
+						matchStats.getHomeFirstPowerPlay().setStartOver(inn.getFirstPowerplayStartOver());
+						matchStats.getHomeFirstPowerPlay().setEndOver(inn.getFirstPowerplayEndOver());
+						
+						matchStats.getHomeSecondPowerPlay().setStartOver(inn.getSecondPowerplayStartOver());
+						matchStats.getHomeSecondPowerPlay().setEndOver(inn.getSecondPowerplayEndOver());
+						
+						matchStats.getHomeThirdPowerPlay().setStartOver(inn.getThirdPowerplayStartOver());
+						matchStats.getHomeThirdPowerPlay().setEndOver(inn.getThirdPowerplayEndOver());
+						
+						matchStats.getAwayFirstPowerPlay().setStartOver(inn.getFirstPowerplayStartOver());
+						matchStats.getAwayFirstPowerPlay().setEndOver(inn.getFirstPowerplayEndOver());
+						
+						matchStats.getAwaySecondPowerPlay().setStartOver(inn.getSecondPowerplayStartOver());
+						matchStats.getAwaySecondPowerPlay().setEndOver(inn.getSecondPowerplayEndOver());
+						
+						matchStats.getAwayThirdPowerPlay().setStartOver(inn.getThirdPowerplayStartOver());
+						matchStats.getAwayThirdPowerPlay().setEndOver(inn.getThirdPowerplayEndOver());
+					}
+				}
 				
 			}
 		}
@@ -11864,10 +12028,6 @@ public class CricketFunctions {
 								}
 								break;
 							}
-							break;
-						case CricketUtil.LOG_ANY_BALL:
-							//extra and sub-extra checking by Sakshi. Ask Arpit sir
-							
 							break;	
 						}
 						//Player stats
