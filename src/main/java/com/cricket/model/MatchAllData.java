@@ -1,5 +1,7 @@
 package com.cricket.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -9,7 +11,14 @@ public class MatchAllData {
   private Match match;
   private Setup setup;
   private EventFile eventFile;
+  private List<String> eventsDataList;
   
+public List<String> getEventsDataList() {
+	return eventsDataList;
+}
+public void setEventsDataList(List<String> eventsDataList) {
+	this.eventsDataList = eventsDataList;
+}
 public String getTimeStats() {
 	return timeStats;
 }

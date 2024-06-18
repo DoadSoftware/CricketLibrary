@@ -268,7 +268,7 @@ public class CricketFunctions {
 	}
 	
 	public static AE_Cricket getDataFromThirdParty(String FilePathName) throws JAXBException {
-		AE_Cricket cricket_data =(AE_Cricket)JAXBContext.newInstance(AE_Cricket.class)
+		AE_Cricket cricket_data =(AE_Cricket) JAXBContext.newInstance(AE_Cricket.class)
 		.createUnmarshaller().unmarshal(new File(FilePathName));
 		return cricket_data;
 	}
@@ -11366,7 +11366,7 @@ public class CricketFunctions {
 		                    case CricketUtil.DOT:  
 		                    	matchStats.getInningCompare().setTotalDots(matchStats.getInningCompare().getTotalDots()+1);
 		                    	break;
-		                    case CricketUtil.FOUR: 
+		                    case CricketUtil.FOUR:
 		                    	matchStats.getInningCompare().setTotalFours(matchStats.getInningCompare().getTotalFours()+1);
 		                    	break;
 		                    case CricketUtil.SIX: 
