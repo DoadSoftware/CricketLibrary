@@ -15,6 +15,7 @@ import com.cricket.model.Player;
 import com.cricket.model.Playoff;
 import com.cricket.model.Pointers;
 import com.cricket.model.Season;
+import com.cricket.model.Split;
 import com.cricket.model.Sponsor;
 import com.cricket.model.Staff;
 import com.cricket.model.Statistics;
@@ -34,6 +35,7 @@ public interface CricketDao {
   List<NameSuper> getNameSupers();
   List<InfobarStats> getInfobarStats();
   List<Bugs> getBugs();
+  List<Split> getSplit();
   List<Pointers> getPointers();
   List<Ground> getGrounds();
   List<Venue> getVenues();

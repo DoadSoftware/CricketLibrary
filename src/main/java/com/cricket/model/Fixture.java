@@ -35,6 +35,9 @@ public class Fixture {
   @Column(name = "Winner")
   private String winnerteam;
   
+  @Column(name = "Margin")
+  private String margin;
+  
   @Column(name = "TeamGroup")
   private String teamgroup;
   
@@ -151,6 +154,14 @@ public String getVenue() {
 
 public void setVenue(String venue) {
 	this.venue = venue;
+}
+
+public String getMargin() {
+	return margin;
+}
+
+public void setMargin(String margin) {
+	this.margin = margin;
 }
 
 }

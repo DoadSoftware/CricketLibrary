@@ -27,6 +27,21 @@ public class BatBallGriff {
 	public BatBallGriff() {
 		super();
 	}
+	
+
+	public BatBallGriff(int runs, int ballsFaced, String status, int runsConceded, int wickets, String oversBowled,
+			String opponentTeam, String matchNumber) {
+		super();
+		this.Runs = runs;
+		this.ballsFaced = ballsFaced;
+		this.status = status;
+		this.RunsConceded = runsConceded;
+		this.wickets = wickets;
+		this.oversBowled = oversBowled;
+		this.opponentTeam = opponentTeam;
+		this.MatchNumber = matchNumber;
+	}
+
 
 	public BatBallGriff(int playerId, int runs, int ballsFaced, String status, String how_out, int runsConceded,
 			int wickets, String oversBowled, String opponentTeam, Player player, String matchNumber) {

@@ -59,6 +59,7 @@ public class CricketUtil {
 	public final static String EVENT = "EVENT";
 	public final static String ELECTED = "ELECTED";
 	public final static String CHOSE = "CHOSE";
+	
 
 	public final static String LOG_VARIOUS = "LOG_VARIOUS";
 	public final static String BOWLER_RUNNING = "BOWLER_RUNNING";
@@ -238,7 +239,9 @@ public class CricketUtil {
 	public final static String DISTANCE_DIRECTORY = "Distance/";
 	public final static String Cricket_LAST_BALL_SPEED_THIRDPARTY = "SpeedOfLastBall.XML";
 	public final static String FF_EXCEL = "C:\\Sports\\FF_EXCEL.xlsx";
-	public final static String LT_EXCEL = "C:\\Sports\\Cricket\\Trio\\IND v NZ LTs and KPIs.xlsx";
+	public final static String LT_EXCEL = "C:\\Sports\\LT_EXCEL.xlsx";
+	public final static String FAIRPLAY = "C:\\Sports\\Faiplay.xlsx";
+	public final static String FANTASY = "C:\\Sports\\Fantasy_11.xlsx";
 
 	
 }
