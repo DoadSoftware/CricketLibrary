@@ -42,6 +42,8 @@ public class MatchStats{
 		this.awayFirstPowerPlay = new VariousStats();
 		this.awaySecondPowerPlay = new VariousStats();
 		this.awayThirdPowerPlay = new VariousStats();
+		this.homeOverByOverData = new ArrayList<OverByOverData>();
+		this.awayOverByOverData = new ArrayList<OverByOverData>();
 	}
 	
 	public List<VariousStats> getPlayerStats() {
@@ -191,57 +193,6 @@ public class MatchStats{
 				+ homeThirdPowerPlay + ", awayFirstPowerPlay=" + awayFirstPowerPlay + ", awaySecondPowerPlay="
 				+ awaySecondPowerPlay + ", awayThirdPowerPlay=" + awayThirdPowerPlay + "]";
 	}
-
-	//	public static class PowerPlay{
-//		
-//		private int totalRuns;
-//		private int totalWickets;
-//		private int totalFours;
-//		private int totalSixes;
-//		private int totalNines;
-////		private int StartOver;
-////		private int EndOver;
-//		
-//		public int getTotalRuns() {
-//			return totalRuns;
-//		}
-//		public void setTotalRuns(int totalRuns) {
-//			this.totalRuns = totalRuns;
-//		}
-//		public int getTotalWickets() {
-//			return totalWickets;
-//		}
-//		public void setTotalWickets(int totalWickets) {
-//			this.totalWickets = totalWickets;
-//		}
-//		public int getTotalFours() {
-//			return totalFours;
-//		}
-//		public void setTotalFours(int totalFours) {
-//			this.totalFours = totalFours;
-//		}
-//		public int getTotalSixes() {
-//			return totalSixes;
-//		}
-//		public void setTotalSixes(int totalSixes) {
-//			this.totalSixes = totalSixes;
-//		}
-//		public int getTotalNines() {
-//			return totalNines;
-//		}
-//		public void setTotalNines(int totalNines) {
-//			this.totalNines = totalNines;
-//		}
-//		public PowerPlay() {
-//			super();
-//		}
-//		@Override
-//		public String toString() {
-//			return "PowerPlay [totalRuns=" + totalRuns + ", totalWickets=" + totalWickets + ", totalFours=" + totalFours
-//					+ ", totalSixes=" + totalSixes + ", totalNines=" + totalNines + "]";
-//		}
-//		
-//	}
 	public static class VariousStats{
 		
 		private int totalRuns;
@@ -380,12 +331,12 @@ public class MatchStats{
 		}
 		@Override
 		public String toString() {
-			return "VariousStats [totalRuns=" + totalRuns + ", id=" + id + ", totalWickets="
-					+ totalWickets + ", totalDots=" + totalDots + ", totalOnes=" + totalOnes + ", totalTwos="
-					+ totalTwos + ", totalThrees=" + totalThrees + ", totalFours=" + totalFours + ", totalFives="
-					+ totalFives + ", totalSixes=" + totalSixes + ", totalNines=" + totalNines + ", thisOverTxt="
-					+ thisOverTxt + ", lastBowlerId=" + lastBowlerId + ", replacementBowlerId=" + replacementBowlerId
-					+ "]";
+			return "VariousStats [totalRuns=" + totalRuns + ", totalBalls=" + totalBalls + ", id=" + id
+					+ ", totalWickets=" + totalWickets + ", totalDots=" + totalDots + ", totalOnes=" + totalOnes
+					+ ", totalTwos=" + totalTwos + ", totalThrees=" + totalThrees + ", totalFours=" + totalFours
+					+ ", totalFives=" + totalFives + ", totalSixes=" + totalSixes + ", totalNines=" + totalNines
+					+ ", statsType=" + statsType + ", thisOverTxt=" + thisOverTxt + ", lastBowlerId=" + lastBowlerId
+					+ ", replacementBowlerId=" + replacementBowlerId + "]";
 		}
 
 	}
