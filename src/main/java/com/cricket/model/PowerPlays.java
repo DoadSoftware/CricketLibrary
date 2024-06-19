@@ -11,7 +11,7 @@ public class PowerPlays {
 	private List<Integer> Total_four;
 	private List<Integer> Total_dots;
 	
-	private List<Integer> Total_sixs;
+	private List<Integer> Total_sixes;
 	private List<Integer> Total_nines;
 	
 	public Team getTeam() {
@@ -44,11 +44,11 @@ public class PowerPlays {
 	public void setTotal_dots(List<Integer> total_dots) {
 		Total_dots = total_dots;
 	}
-	public List<Integer> getTotal_sixs() {
-		return Total_sixs;
+	public List<Integer> getTotal_sixes() {
+		return Total_sixes;
 	}
-	public void setTotal_sixs(List<Integer> total_sixs) {
-		Total_sixs = total_sixs;
+	public void setTotal_sixes(List<Integer> Total_sixes) {
+		Total_sixes = Total_sixes;
 	}
 	public List<Integer> getTotal_nines() {
 		return Total_nines;
@@ -64,14 +64,14 @@ public class PowerPlays {
 	}
 	
 	public PowerPlays(com.cricket.model.Team team, List<Integer> total_runs, List<Integer> total_wickets,
-			List<Integer> total_four, List<Integer> total_dots, List<Integer> total_sixs, List<Integer> total_nines) {
+			List<Integer> total_four, List<Integer> total_dots, List<Integer> Total_sixes, List<Integer> total_nines) {
 		super();
 		Team = team;
 		Total_runs = total_runs;
 		Total_wickets = total_wickets;
 		Total_four = total_four;
 		Total_dots = total_dots;
-		Total_sixs = total_sixs;
+		Total_sixes = Total_sixes;
 		Total_nines = total_nines;
 	}
 	public PowerPlays() {
