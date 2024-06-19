@@ -11354,30 +11354,27 @@ public class CricketFunctions {
 							    	}
 						    	}
 						    	if (events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns() > 0) {
-						    		if(!events.get(i).getEventSubExtra().isEmpty()&& events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0) {
-						    			if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
-						    				matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt()
-						    						+String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns()));
-						    			}
-						    			else if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL) && events.get(i).getEventRuns() <= 0) {
-						    				matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt()+String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + 
-						    						events.get(i).getEventSubExtraRuns()));
-						    			}
-						    		}
-						    		 if (events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY)) {
+						    		if(events.get(i).getEventSubExtra().equalsIgnoreCase(events.get(i).getEventExtra()) 
+							    			&& (events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) 
+							    			|| events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL))) {
+							    			
+							    	    	matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() 
+							    	    		+ String.valueOf(events.get(i).getEventRuns() +events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns()) +"+"+ 
+							    	        	events.get(i).getEventExtra());
+							    	     } else if (events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY)) {
 						    	    	
-						    	    	matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() +"+"+ events.get(i).getEventSubExtra() +
+							    	    	matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() +"+"+ events.get(i).getEventSubExtra() +
 						    	    		String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()));
 						    	    	
-						    	    } else {
-						    	    	if(events.get(i).getEventRuns()>0) {
-						    	    		matchStats.getOverData().setThisOverTxt(events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() + "+" + 
-						    						events.get(i).getEventSubExtraRuns() + events.get(i).getEventSubExtra());
-						    				
-						    			}else {
-						    				matchStats.getOverData().setThisOverTxt(events.get(i).getEventExtra() + "+" + 
-						    						events.get(i).getEventSubExtraRuns() + events.get(i).getEventSubExtra());
-						    			}
+							    	     } else {
+							    	    	if(events.get(i).getEventRuns()>0) {
+							    	    		matchStats.getOverData().setThisOverTxt(events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() + "+" + 
+							    						events.get(i).getEventSubExtraRuns() + events.get(i).getEventSubExtra());
+							    				
+							    			}else {
+							    				matchStats.getOverData().setThisOverTxt(events.get(i).getEventExtra() + "+" + 
+							    						events.get(i).getEventSubExtraRuns() + events.get(i).getEventSubExtra());
+							    			}
 						    	    }
 						    	} else {
 						    		matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() +events.get(i).getEventSubExtra());
