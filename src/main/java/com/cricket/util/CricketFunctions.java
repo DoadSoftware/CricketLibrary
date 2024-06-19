@@ -11658,36 +11658,82 @@ public class CricketFunctions {
 								break;
 							case CricketUtil.TWO:
 								if(varStat.getId() == firstPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BOWL)) {
-									varStat.setTotalOnes(varStat.getTotalTwos() + 1);
+									varStat.setTotalTwos(varStat.getTotalTwos() + 1);
 								}
 								if(varStat.getId() == secondPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BAT)) {
-									varStat.setTotalOnes(varStat.getTotalTwos() + 1);
+									varStat.setTotalTwos(varStat.getTotalTwos() + 1);
 								}
 								break;
 							case CricketUtil.THREE:
 								if(varStat.getId() == firstPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BOWL)) {
-									varStat.setTotalOnes(varStat.getTotalThrees() + 1);
+									varStat.setTotalThrees(varStat.getTotalThrees() + 1);
 								}
 								if(varStat.getId() == secondPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BAT)) {
-									varStat.setTotalOnes(varStat.getTotalThrees() + 1);
+									varStat.setTotalThrees(varStat.getTotalThrees() + 1);
 								}
 								break;
 							case CricketUtil.FIVE:
 								if(varStat.getId() == firstPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BOWL)) {
-									varStat.setTotalOnes(varStat.getTotalFives() + 1);
+									varStat.setTotalFives(varStat.getTotalFives() + 1);
 								}
 								if(varStat.getId() == secondPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BAT)) {
-									varStat.setTotalOnes(varStat.getTotalFives() + 1);
+									varStat.setTotalFives(varStat.getTotalFives() + 1);
 								}
 								break;
 							case CricketUtil.DOT:
 								if(varStat.getId() == firstPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BOWL)) {
-									varStat.setTotalOnes(varStat.getTotalDots() + 1);
+									varStat.setTotalDots(varStat.getTotalDots() + 1);
 								}
 								if(varStat.getId() == secondPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BAT)) {
-									varStat.setTotalOnes(varStat.getTotalDots() + 1);
+									varStat.setTotalDots(varStat.getTotalDots() + 1);
 								}
 								break;
+							case CricketUtil.FOUR:
+								if(varStat.getId() == firstPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BOWL)) {
+									varStat.setTotalFours(varStat.getTotalFours() + 1);
+								}
+								if(varStat.getId() == secondPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BAT)) {
+									varStat.setTotalFours(varStat.getTotalFours() + 1);
+								}
+								break;
+							case CricketUtil.SIX:
+								if(varStat.getId() == firstPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BOWL)) {
+									varStat.setTotalSixes(varStat.getTotalDots() + 1);
+								}
+								if(varStat.getId() == secondPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BAT)) {
+									varStat.setTotalSixes(varStat.getTotalDots() + 1);
+								}
+								break;
+							case CricketUtil.LOG_ANY_BALL:
+                                if (events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+                                    if (events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
+                                    	if(varStat.getId() == firstPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BOWL)) {
+    										varStat.setTotalDots(varStat.getTotalDots() + 1);
+    									}
+    									if(varStat.getId() == secondPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BAT)) {
+    										varStat.setTotalDots(varStat.getTotalDots() + 1);
+    									}
+                                    }
+                                    if ((events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) && (events.get(i).getEventWasABoundary() != null) &&
+                                            (events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+                                    	if(varStat.getId() == firstPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BOWL)) {
+    										varStat.setTotalFours(varStat.getTotalFours() + 1);
+    									}
+    									if(varStat.getId() == secondPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BAT)) {
+    										varStat.setTotalFours(varStat.getTotalFours() + 1);
+    									}
+                                    }
+                                    if ((events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX)) && (events.get(i).getEventWasABoundary() != null) &&
+                                            (events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+                                    	if(varStat.getId() == firstPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BOWL)) {
+    										varStat.setTotalSixes(varStat.getTotalSixes() + 1);
+    									}
+    									if(varStat.getId() == secondPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BAT)) {
+    										varStat.setTotalSixes(varStat.getTotalSixes() + 1);
+    									}
+                                    }
+                                }
+                                break;
 							case CricketUtil.LOG_WICKET:
 								switch (String.valueOf(events.get(i).getEventRuns())) {
 								case CricketUtil.ONE:
@@ -11700,34 +11746,34 @@ public class CricketFunctions {
 									break;
 								case CricketUtil.TWO:
 									if(varStat.getId() == firstPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BOWL)) {
-										varStat.setTotalOnes(varStat.getTotalTwos() + 1);
+										varStat.setTotalTwos(varStat.getTotalTwos() + 1);
 									}
 									if(varStat.getId() == secondPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BAT)) {
-										varStat.setTotalOnes(varStat.getTotalTwos() + 1);
+										varStat.setTotalTwos(varStat.getTotalTwos() + 1);
 									}
 									break;
 								case CricketUtil.THREE:
 									if(varStat.getId() == firstPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BOWL)) {
-										varStat.setTotalOnes(varStat.getTotalThrees() + 1);
+										varStat.setTotalThrees(varStat.getTotalThrees() + 1);
 									}
 									if(varStat.getId() == secondPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BAT)) {
-										varStat.setTotalOnes(varStat.getTotalThrees() + 1);
+										varStat.setTotalThrees(varStat.getTotalThrees() + 1);
 									}
 									break;
 								case CricketUtil.FIVE:
 									if(varStat.getId() == firstPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BOWL)) {
-										varStat.setTotalOnes(varStat.getTotalFives() + 1);
+										varStat.setTotalFives(varStat.getTotalFives() + 1);
 									}
 									if(varStat.getId() == secondPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BAT)) {
-										varStat.setTotalOnes(varStat.getTotalFives() + 1);
+										varStat.setTotalFives(varStat.getTotalFives() + 1);
 									}
 									break;
 								case CricketUtil.DOT:
 									if(varStat.getId() == firstPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BOWL)) {
-										varStat.setTotalOnes(varStat.getTotalDots() + 1);
+										varStat.setTotalDots(varStat.getTotalDots() + 1);
 									}
 									if(varStat.getId() == secondPlyrId && varStat.getStatsType().equalsIgnoreCase(CricketUtil.BAT)) {
-										varStat.setTotalOnes(varStat.getTotalDots() + 1);
+										varStat.setTotalDots(varStat.getTotalDots() + 1);
 									}
 									break;
 								}
@@ -11845,14 +11891,13 @@ public class CricketFunctions {
 									overbyWkts1 ++;
 								}
 							}
-								break;
+						break;
 						default:
 							if(events.get(i).getEventInningNumber()==1) {
 								overbyRun += events.get(i).getEventRuns();
 							}else if(events.get(i).getEventInningNumber()==2) {
 								overbyRun1 += events.get(i).getEventRuns();
 							}
-                       	 	
 							break;
 						}
 					} 
