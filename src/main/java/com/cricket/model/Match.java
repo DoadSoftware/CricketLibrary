@@ -28,7 +28,17 @@ public class Match {
   private List<Wagon> wagons;
   
   private MatchFinishTime matchFinishTime;
+
+  private MatchStats matchStats;
   
+public MatchStats getMatchStats() {
+	return matchStats;
+}
+
+public void setMatchStats(MatchStats matchStats) {
+	this.matchStats = matchStats;
+}
+
 public MatchFinishTime getMatchFinishTime() {
 	return matchFinishTime;
 }
@@ -121,7 +131,7 @@ public String toString() {
 	return "Match [matchResult=" + matchResult + ", matchStatus=" + matchStatus + ", current_speed=" + current_speed
 			+ ", bowlerRunning=" + bowlerRunning + ", ballRelease=" + ballRelease + ", matchFileName=" + matchFileName
 			+ ", inning=" + inning + ", daysSessions=" + daysSessions + ", shots=" + shots + ", wagons=" + wagons
-			+ ", matchFinishTime=" + matchFinishTime + "]";
+			+ ", matchFinishTime=" + matchFinishTime + ", matchStats=" + matchStats + "]";
 }
 
 }
