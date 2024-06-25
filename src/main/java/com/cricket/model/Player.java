@@ -120,8 +120,8 @@ public class Player implements Comparable<Player>
   @Transient
   private List<Player> playerPos;
 
-//  @Transient
-//  private String impactPlayer;
+  @Transient
+  private String substitutionType;
 
   public Player() {
 		super();
@@ -136,15 +136,16 @@ public class Player implements Comparable<Player>
 	super();
 	this.playerId = playerId;
  }
-//public String getImpactPlayer() {
-//	return impactPlayer;
-//}
-//
-//public void setImpactPlayer(String impactPlayer) {
-//	this.impactPlayer = impactPlayer;
-//}
   
-  @Transient
+  public String getSubstitutionType() {
+	return substitutionType;
+}
+
+public void setSubstitutionType(String substitutionType) {
+	this.substitutionType = substitutionType;
+}
+
+@Transient
   private int one;
   @Transient
   private int two;
