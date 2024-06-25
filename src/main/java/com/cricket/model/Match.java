@@ -31,6 +31,15 @@ public class Match {
 
   private MatchStats matchStats;
   
+public Match() {
+	super();
+}
+
+public Match(String matchFileName) {
+	super();
+	this.matchFileName = matchFileName;
+}
+
 public MatchStats getMatchStats() {
 	return matchStats;
 }

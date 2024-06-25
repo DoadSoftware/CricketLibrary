@@ -514,23 +514,25 @@ public void setMatchDataUpdate(String matchDataUpdate) {
 
 @Override
 public String toString() {
-	return "Setup [noBallsRuns=" + noBallsRuns + ", ballsPerOver=" + ballsPerOver + ", matchDataUpdate="
-			+ matchDataUpdate + ", saveMatchFileAs=" + saveMatchFileAs + ", generateInteractiveFile="
-			+ generateInteractiveFile + ", wagonXOffSet=" + wagonXOffSet + ", wagonYOffSet=" + wagonYOffSet
-			+ ", followOn=" + followOn + ", followOnThreshold=" + followOnThreshold + ", homeSubstitutesNumber="
-			+ homeSubstitutesNumber + ", awaySubstitutesNumber=" + awaySubstitutesNumber + ", reviewsPerTeam="
-			+ reviewsPerTeam + ", matchFileTimeStamp=" + matchFileTimeStamp + ", speedFilePath=" + speedFilePath
-			+ ", matchType=" + matchType + ", readPhotoColumn=" + readPhotoColumn + ", tossResult=" + tossResult
-			+ ", tossWinningDecision=" + tossWinningDecision + ", tournament=" + tournament + ", matchIdent="
-			+ matchIdent + ", tossWinningTeam=" + tossWinningTeam + ", numberOfPowerplays=" + numberOfPowerplays
-			+ ", maxOvers=" + maxOvers + ", reducedOvers=" + reducedOvers + ", homeTeamId=" + homeTeamId
-			+ ", awayTeamId=" + awayTeamId + ", groundId=" + groundId + ", seasonId=" + seasonId + ", targetRuns="
-			+ targetRuns + ", targetType=" + targetType + ", targetOvers=" + targetOvers + ", venueName=" + venueName
-			+ ", homeTeam=" + homeTeam + ", awayTeam=" + awayTeam + ", setupHomeTeam=" + setupHomeTeam
-			+ ", setupAwayTeam=" + setupAwayTeam + ", homeSquad=" + homeSquad + ", homeSubstitutes=" + homeSubstitutes
-			+ ", awaySquad=" + awaySquad + ", awaySubstitutes=" + awaySubstitutes + ", homeOtherSquad=" + homeOtherSquad
-			+ ", awayOtherSquad=" + awayOtherSquad + ", ground=" + ground + ", nameSuper=" + nameSuper + ", LastXball="
-			+ LastXball + ", selected_inning=" + selected_inning + ", which_key_press=" + which_key_press + "]";
+	return "Setup [specialMatchRules=" + specialMatchRules + ", noBallsRuns=" + noBallsRuns + ", ballsPerOver="
+			+ ballsPerOver + ", matchDataUpdate=" + matchDataUpdate + ", saveMatchFileAs=" + saveMatchFileAs
+			+ ", generateInteractiveFile=" + generateInteractiveFile + ", wagonXOffSet=" + wagonXOffSet
+			+ ", wagonYOffSet=" + wagonYOffSet + ", followOn=" + followOn + ", followOnThreshold=" + followOnThreshold
+			+ ", homeSubstitutesNumber=" + homeSubstitutesNumber + ", awaySubstitutesNumber=" + awaySubstitutesNumber
+			+ ", reviewsPerTeam=" + reviewsPerTeam + ", matchFileTimeStamp=" + matchFileTimeStamp + ", speedFilePath="
+			+ speedFilePath + ", matchType=" + matchType + ", readPhotoColumn=" + readPhotoColumn + ", tossResult="
+			+ tossResult + ", tossWinningDecision=" + tossWinningDecision + ", tournament=" + tournament
+			+ ", matchIdent=" + matchIdent + ", tossWinningTeam=" + tossWinningTeam + ", numberOfPowerplays="
+			+ numberOfPowerplays + ", maxOvers=" + maxOvers + ", reducedOvers=" + reducedOvers + ", homeTeamId="
+			+ homeTeamId + ", awayTeamId=" + awayTeamId + ", groundId=" + groundId + ", seasonId=" + seasonId
+			+ ", targetRuns=" + targetRuns + ", targetType=" + targetType + ", targetOvers=" + targetOvers
+			+ ", secondaryTargetRuns=" + secondaryTargetRuns + ", secondaryTargetOvers=" + secondaryTargetOvers
+			+ ", venueName=" + venueName + ", homeTeam=" + homeTeam + ", awayTeam=" + awayTeam + ", setupHomeTeam="
+			+ setupHomeTeam + ", setupAwayTeam=" + setupAwayTeam + ", homeSquad=" + homeSquad + ", homeSubstitutes="
+			+ homeSubstitutes + ", awaySquad=" + awaySquad + ", awaySubstitutes=" + awaySubstitutes
+			+ ", homeOtherSquad=" + homeOtherSquad + ", awayOtherSquad=" + awayOtherSquad + ", ground=" + ground
+			+ ", nameSuper=" + nameSuper + ", LastXball=" + LastXball + ", selected_inning=" + selected_inning
+			+ ", which_key_press=" + which_key_press + "]";
 }
 
 }
