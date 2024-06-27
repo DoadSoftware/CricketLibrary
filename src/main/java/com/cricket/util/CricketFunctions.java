@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -108,28 +109,31 @@ public class CricketFunctions {
 	
 	public static ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 	
-	public static Map<String, Map<String, Object>> ReadExcel(String Path) {
+	public static Map<String, Map<String, Object>> ReadExcel(String Path) throws InterruptedException {
 
         Map<String, Map<String, Object>> dataMap = new LinkedHashMap<>();
         try (InputStream inputStream = new FileInputStream(Path);
              Workbook workbook = new XSSFWorkbook(inputStream)) {
-        	  Sheet sheet = workbook.getSheetAt(0); 
-              Row headerRow = sheet.getRow(0); 
 
-              for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            Sheet sheet = workbook.getSheetAt(0); 
+            Row headerRow = sheet.getRow(0); // Read the header row
+            
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) { 
                 Row row = sheet.getRow(i);
-                String key = getCellValueAsString(row.getCell(0)).trim();
-                if (!key.isEmpty()) {
-                    Map<String, Object> rowData = new LinkedHashMap<>();
-
-                    for (int j = 1; j < row.getLastCellNum(); j++) {
-                        String header = getCellValueAsString(headerRow.getCell(j)).trim();
-                        Object cellValue = getCellValue(row.getCell(j));
-                        if (cellValue != null && !cellValue.toString().isEmpty()) {
-                            rowData.put(header, cellValue);
+                if (row != null && row.getCell(0) != null) {
+                	TimeUnit.MILLISECONDS.sleep(200);
+                    String key = getCellValueAsString(row.getCell(0)).trim();
+                    if (!key.isEmpty()) {
+                    	Map<String, Object> rowData = new LinkedHashMap<>();
+                        for (int j = 1; j < row.getLastCellNum(); j++) {
+                            String header = getCellValueAsString(headerRow.getCell(j)).trim();
+                            Object cellValue = getCellValue(row.getCell(j));
+                            if (cellValue != null && !cellValue.toString().isEmpty()) {
+                                rowData.put(header, cellValue);
+                            }
                         }
+                        dataMap.put(key, rowData);
                     }
-                    dataMap.put(key, rowData);
                 }
             }
             dataMap.forEach((key, value) -> {
@@ -225,7 +229,6 @@ public class CricketFunctions {
                 return "Unknown cell type";
         }
     }
-
 	public static ArrayList<String> TeamStatsComparison(MatchAllData matchAllData) {
 		ArrayList<String> TeamStats= new ArrayList<String>();
 		int first_dot = 0, first_one = 0, first_two = 0, first_three= 0, first_four = 0, first_five = 0, first_six = 0,
