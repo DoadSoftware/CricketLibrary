@@ -1,5 +1,7 @@
 package com.cricket.model;
 
+import java.util.List;
+
 public class BatBallGriff {
 
 	private int playerId;
@@ -18,7 +20,7 @@ public class BatBallGriff {
   
 	private String oversBowled;
 
-	private String opponentTeam;
+	private Team opponentTeam;
 	
 	private Player player;
 	
@@ -30,7 +32,7 @@ public class BatBallGriff {
 	
 
 	public BatBallGriff(int runs, int ballsFaced, String status, int runsConceded, int wickets, String oversBowled,
-			String opponentTeam, String matchNumber) {
+			Team opponentTeam, String matchNumber) {
 		super();
 		this.Runs = runs;
 		this.ballsFaced = ballsFaced;
@@ -44,7 +46,7 @@ public class BatBallGriff {
 
 
 	public BatBallGriff(int playerId, int runs, int ballsFaced, String status, String how_out, int runsConceded,
-			int wickets, String oversBowled, String opponentTeam, Player player, String matchNumber) {
+			int wickets, String oversBowled, Team opponentTeam, Player player, String matchNumber) {
 		super();
 		this.playerId = playerId;
 		Runs = runs;
@@ -122,14 +124,18 @@ public class BatBallGriff {
 	public void setOversBowled(String oversBowled) {
 		this.oversBowled = oversBowled;
 	}
+	
 
-	public String getOpponentTeam() {
+
+	public Team getOpponentTeam() {
 		return opponentTeam;
 	}
 
-	public void setOpponentTeam(String opponentTeam) {
+
+	public void setOpponentTeam(Team opponentTeam) {
 		this.opponentTeam = opponentTeam;
 	}
+
 
 	public Player getPlayer() {
 		return player;

@@ -111,7 +111,8 @@ public class CricketUtil {
 	public final static String IMPACT = "IMPACT";
 	public final static String INCOMING = "INCOMING";
 	public final static String OUTGOING = "OUTGOING";
-	
+	public final static String LOG_IMPACT = "LOG_IMPACT";
+
 	public final static String OUT = "OUT";
 	public final static String NOT_OUT = "NOT OUT";
 	public final static String STILL_TO_BAT = "STILLTOBAT";

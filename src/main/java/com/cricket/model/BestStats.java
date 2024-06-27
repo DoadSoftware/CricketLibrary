@@ -57,13 +57,14 @@ public BestStats(int teamId, int matches, int challengeRuns) {
 	this.challengeRuns = challengeRuns;
 }
 
-public BestStats(int playerId, int runs, int fours, int sixes, Player player) {
+public BestStats(int playerId, int runs, int balls, int fours, int sixes, Player player) {
 	super();
 	this.playerId = playerId;
 	this.runs = runs;
 	this.fours = fours;
 	this.sixes = sixes;
 	this.player = player;
+	this.balls = balls;
 }
 
 public int getBatsmanStrikeRateSortData() {
