@@ -4,7 +4,16 @@ import java.util.ArrayList;
 
 public class EventFile {
 
+  private String status;
   private ArrayList<Event> events;
+
+public String getStatus() {
+	return status;
+}
+
+public void setStatus(String status) {
+	this.status = status;
+}
 
 public ArrayList<Event> getEvents() {
 	return events;

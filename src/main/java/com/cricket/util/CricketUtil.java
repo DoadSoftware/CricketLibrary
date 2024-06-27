@@ -59,7 +59,7 @@ public class CricketUtil {
 	public final static String EVENT = "EVENT";
 	public final static String ELECTED = "ELECTED";
 	public final static String CHOSE = "CHOSE";
-	
+	public final static String DUPLICATE = "DUPLICATE";
 
 	public final static String LOG_VARIOUS = "LOG_VARIOUS";
 	public final static String BOWLER_RUNNING = "BOWLER_RUNNING";

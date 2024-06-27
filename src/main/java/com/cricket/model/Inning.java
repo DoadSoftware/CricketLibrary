@@ -401,7 +401,6 @@ public void setBowlingCard(List<BowlingCard> bowlingCard) {
 public int getDots() {
 	return dots;
 }
-
 public void setDots(int dots) {
 	this.dots = dots;
 }

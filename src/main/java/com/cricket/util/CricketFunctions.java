@@ -99,6 +99,9 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+
+import net.sf.json.JSONObject;
+
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.InputStream;
@@ -106,6 +109,23 @@ import java.io.InputStream;
 public class CricketFunctions {
 	
 	public static ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+	
+	public static String findConsecutiveDupicateEvents(List<Event> allEvents, Event currentEvent)
+	{
+		System.out.println("allEvents.size() = " + allEvents.size());
+		System.out.println("currentEvent = " + currentEvent.toString());
+		if(allEvents.size() > 0) {
+			Event last_event = allEvents.get(allEvents.size()-1);
+			last_event.setEventNumber(currentEvent.getEventNumber());
+			System.out.println("last_event = " + last_event.toString());
+			System.out.println("Event match = " + JSONObject.fromObject(last_event).toString().equals(
+				JSONObject.fromObject(currentEvent).toString()));
+			if(JSONObject.fromObject(last_event).toString().equals(JSONObject.fromObject(currentEvent).toString())) {
+				return CricketUtil.DUPLICATE + " " + currentEvent.getEventType();
+			}
+		}
+		return "";
+	}
 	
 	public static Map<String, Map<String, Object>> ReadExcel(String Path) {
 
