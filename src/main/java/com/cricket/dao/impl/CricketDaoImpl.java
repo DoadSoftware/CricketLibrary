@@ -20,6 +20,7 @@ import com.cricket.model.POTT;
 import com.cricket.model.Player;
 import com.cricket.model.Playoff;
 import com.cricket.model.Pointers;
+import com.cricket.model.Performer;
 import com.cricket.model.Season;
 import com.cricket.model.Split;
 import com.cricket.model.Sponsor;
@@ -180,6 +181,11 @@ public List<Staff> getStaff() {
 @Override
 public List<POTT> getPott() {
 	return sessionFactory.getCurrentSession().createQuery("from POTT").list();
+}
+
+@Override
+public List<Performer> getPerformer() {
+	return sessionFactory.getCurrentSession().createQuery("from Performer").list();
 }
 
 }

@@ -19,6 +19,7 @@ import com.cricket.model.POTT;
 import com.cricket.model.Player;
 import com.cricket.model.Playoff;
 import com.cricket.model.Pointers;
+import com.cricket.model.Performer;
 import com.cricket.model.Season;
 import com.cricket.model.Split;
 import com.cricket.model.Sponsor;
@@ -166,6 +167,11 @@ public List<Sponsor> getSponsor() {
 @Override
 public List<FantasyImages> getFantasyImages() {
 	return cricketDao.getFantasyImages();
+}
+
+@Override
+public List<Performer> getPerformer() {
+	return cricketDao.getPerformer();
 }
 
 }

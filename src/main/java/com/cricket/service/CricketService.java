@@ -15,6 +15,7 @@ import com.cricket.model.FantasyImages;
 import com.cricket.model.Player;
 import com.cricket.model.Playoff;
 import com.cricket.model.Pointers;
+import com.cricket.model.Performer;
 import com.cricket.model.Season;
 import com.cricket.model.Split;
 import com.cricket.model.Staff;
@@ -51,4 +52,5 @@ public interface CricketService {
   List<POTT> getPott();
   List<Sponsor> getSponsor();
   List<FantasyImages>  getFantasyImages();
+  List<Performer> getPerformer();
 }
