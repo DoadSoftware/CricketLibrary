@@ -113,14 +113,9 @@ public class CricketFunctions {
 	
 	public static String findConsecutiveDupicateEvents(List<Event> allEvents, Event currentEvent)
 	{
-		System.out.println("allEvents.size() = " + allEvents.size());
-		System.out.println("currentEvent = " + currentEvent.toString());
 		if(allEvents.size() > 0) {
 			Event last_event = allEvents.get(allEvents.size()-1);
 			last_event.setEventNumber(currentEvent.getEventNumber());
-			System.out.println("last_event = " + last_event.toString());
-			System.out.println("Event match = " + JSONObject.fromObject(last_event).toString().equals(
-				JSONObject.fromObject(currentEvent).toString()));
 			if(JSONObject.fromObject(last_event).toString().equals(JSONObject.fromObject(currentEvent).toString())) {
 				return CricketUtil.DUPLICATE + " " + currentEvent.getEventType();
 			}
