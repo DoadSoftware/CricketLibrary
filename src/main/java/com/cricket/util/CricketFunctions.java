@@ -10902,7 +10902,6 @@ public class CricketFunctions {
 								{
 									if(bc.getPlayerId() == PlayerId) {
 										player_check = true;
-										
 										griffBatBall.add(new BatBallGriff(bc.getPlayerId(), bc.getRuns(), bc.getBalls(), bc.getStatus(), bc.getHowOut(), 0, 0, "0",
 												team.get(inn.getBowlingTeamId() - 1), bc.getPlayer(), mtch.getMatch().getMatchFileName().replace(".json", "")));
 										break;
