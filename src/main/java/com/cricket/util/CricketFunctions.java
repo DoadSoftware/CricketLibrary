@@ -11482,8 +11482,14 @@ public class CricketFunctions {
 							    		matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + ",");
 							    	}
 									matchStats.getOverData().setTotalWickets(matchStats.getOverData().getTotalWickets() + 1);
-							    	matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() 
-						    			+ events.get(i).getEventSubExtraRuns()) + events.get(i).getEventType());
+									if(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() 
+						    			+ events.get(i).getEventSubExtraRuns()>0) {
+										matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() 
+								    			+ events.get(i).getEventSubExtraRuns()) +"+"+ events.get(i).getEventType());	
+									}else {
+										matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventType());
+									}
+							    	
 									break;
 								}
 				    		    break;						    		
@@ -11821,7 +11827,8 @@ public class CricketFunctions {
 						    switch(events.get(i).getEventType()) {
 						    	case CricketUtil.LOG_ANY_BALL:case CricketUtil.WIDE:case CricketUtil.NO_BALL:
 							    	if( events.get(i).getEventBowlerNo() > 0) {
-										if (events.get(i).getEventOverNo() < (match.getInning().get(events.get(i).getEventInningNumber()-1).getFirstPowerplayEndOver() - 1)) {
+										if (events.get(i).getEventOverNo() < (match.getInning().get(events.get(i).getEventInningNumber()-1).getFirstPowerplayEndOver())) {
+
 											statsData = getpowerplay(events.get(i));
 											if(statsData.contains(",") && statsData.split(",").length >= 7) {
 												if(events.get(i).getEventInningNumber()==1) {
@@ -11846,9 +11853,10 @@ public class CricketFunctions {
 												
 												}
 											}
-											if ((events.get(i).getEventOverNo() == (match.getInning().get(events.get(i).getEventInningNumber()-1).getSecondPowerplayStartOver() - 1))||
-													((events.get(i).getEventOverNo() > (match.getInning().get(events.get(i).getEventInningNumber()-1).getSecondPowerplayStartOver() - 1))&&(events.get(i).getEventOverNo() < 
-															(match.getInning().get(events.get(i).getEventInningNumber()-1).getThirdPowerplayStartOver() - 1)))) {
+										if ((events.get(i).getEventOverNo() == (match.getInning().get(events.get(i).getEventInningNumber()-1).getSecondPowerplayStartOver() - 1))||
+												((events.get(i).getEventOverNo() > (match.getInning().get(events.get(i).getEventInningNumber()-1).getSecondPowerplayStartOver() - 1))
+														&&(events.get(i).getEventOverNo() < (match.getInning().get(events.get(i).getEventInningNumber()-1).getSecondPowerplayEndOver())))) {
+
 												statsData = getpowerplay(events.get(i));
 												
 												if(statsData.contains(",") && statsData.split(",").length >= 7) {
@@ -11874,8 +11882,9 @@ public class CricketFunctions {
 											}
 											if ((events.get(i).getEventOverNo() == (match.getInning().get(events.get(i).getEventInningNumber()-1).getThirdPowerplayStartOver() - 1))||
 													((events.get(i).getEventOverNo() > (match.getInning().get(events.get(i).getEventInningNumber()-1).getThirdPowerplayStartOver() - 1))
-															&&(events.get(i).getEventOverNo() < (match.getInning().get(events.get(i).getEventInningNumber()-1).getThirdPowerplayEndOver() - 1)))) {
-													statsData = getpowerplay(events.get(i));
+															&&(events.get(i).getEventOverNo() <= (match.getInning().get(events.get(i).getEventInningNumber()-1).getThirdPowerplayEndOver())))) {
+												
+												statsData = getpowerplay(events.get(i));
 													
 													if(statsData.contains(",") && statsData.split(",").length >= 7) {
 														if(events.get(i).getEventInningNumber()==1) {
@@ -11889,7 +11898,7 @@ public class CricketFunctions {
 														
 														}else if(events.get(i).getEventInningNumber()==2) {
 															
-															matchStats.setHomeThirdPowerPlay(new VariousStats(
+															matchStats.setAwayThirdPowerPlay(new VariousStats(
 																	matchStats.getAwayThirdPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
 																	matchStats.getAwayThirdPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
 																	matchStats.getAwayThirdPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
@@ -11931,9 +11940,10 @@ public class CricketFunctions {
 												
 												}
 											}
-											if ((((events.get(i).getEventOverNo()*6)+events.get(i).getEventBallNo()) >(match.getInning().get(events.get(i).getEventInningNumber()-1).getSecondPowerplayStartOver() - 1)*6 &&
-													((events.get(i).getEventOverNo()*6)+events.get(i).getEventBallNo()) <= (match.getInning().get(events.get(i).getEventInningNumber()-1).getSecondPowerplayEndOver())*6)) {
-												
+										
+										if ((((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) >= (((match.getInning().get(events.get(i).getEventInningNumber() - 1).getSecondPowerplayStartOver() - 1) * 6) + 1)) &&
+											    (((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) <= ((match.getInning().get(events.get(i).getEventInningNumber() - 1).getSecondPowerplayEndOver()) * 6))) {
+											 
 												statsData = getpowerplay(events.get(i));
 												
 												if(statsData.contains(",") && statsData.split(",").length >= 7) {
@@ -11957,8 +11967,9 @@ public class CricketFunctions {
 													 }
 												}
 											}
-											if ((((events.get(i).getEventOverNo()*6)+events.get(i).getEventBallNo()) >(match.getInning().get(events.get(i).getEventInningNumber()-1).getThirdPowerplayStartOver() - 1)*6 &&
-													((events.get(i).getEventOverNo()*6)+events.get(i).getEventBallNo()) <= (match.getInning().get(events.get(i).getEventInningNumber()-1).getThirdPowerplayEndOver())*6)) {
+										if ((((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) >= (((match.getInning().get(events.get(i).getEventInningNumber() - 1).getThirdPowerplayStartOver() - 1) * 6) + 1)) &&
+											    (((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) <= ((match.getInning().get(events.get(i).getEventInningNumber() - 1).getThirdPowerplayEndOver()) * 6))) {
+											   
 
 													statsData = getpowerplay(events.get(i));
 													
@@ -11974,7 +11985,7 @@ public class CricketFunctions {
 														
 														}else if(events.get(i).getEventInningNumber()==2) {
 															
-															matchStats.setHomeThirdPowerPlay(new VariousStats(
+															matchStats.setAwayThirdPowerPlay(new VariousStats(
 																	matchStats.getAwayThirdPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
 																	matchStats.getAwayThirdPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
 																	matchStats.getAwayThirdPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
@@ -12019,7 +12030,8 @@ public class CricketFunctions {
 				}
 			}
 		Collections.reverse(matchStats.getHomeOverByOverData());
-		Collections.reverse(matchStats.getAwayOverByOverData());
+		Collections.reverse(matchStats.getAwayOverByOverData());		
+		
 		return matchStats;
 	}
 
