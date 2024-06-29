@@ -240,6 +240,7 @@ public class CricketFunctions {
                 return "Unknown cell type";
         }
     }
+    
 	public static Match processInningTimeData(String whatToProcess, Match matchData, String timeStatsToProcess, Match lastMatchData) 
 	{
 		if(matchData != null && matchData.getInning() != null && matchData.getInning().size() > 0)
@@ -10556,6 +10557,76 @@ public class CricketFunctions {
 			}
 		}
 		return ahead_behind;
+	}
+	
+	public static ArrayList<BestStats> getBowlerVsAllBat(int PlayerId,int inn_number,List<Player> plyer,MatchAllData match) {
+		ArrayList<BestStats> batsman_data = new ArrayList<BestStats>();
+		int playerId = -1,four=0,six=0, ball = 0;
+		Player this_batter = new Player();
+		
+		for (int i = 0; i <= match.getEventFile().getEvents().size() - 1; i++) {
+			if(match.getEventFile().getEvents().get(i).getEventInningNumber() == inn_number) {
+				if(PlayerId == match.getEventFile().getEvents().get(i).getEventBowlerNo()) {
+					switch (match.getEventFile().getEvents().get(i).getEventType()) {
+					case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR: 
+					case CricketUtil.FIVE: case CricketUtil.SIX:
+						if(batsman_data.size() > 0 && match.getEventFile().getEvents().get(i).getEventBatterNo() > 0) {
+							playerId = -1;
+							for(int j=0; j<=batsman_data.size()-1; j++) {
+								if(batsman_data.get(j).getPlayerId() == match.getEventFile().getEvents().get(i).getEventBatterNo()) {
+									playerId = j;
+									break;
+								}
+							}
+							
+							if(playerId >=0) {
+								batsman_data.get(playerId).setBalls(batsman_data.get(playerId).getBalls()+1);
+								batsman_data.get(playerId).setRuns(batsman_data.get(playerId).getRuns() + match.getEventFile().getEvents().get(i).getEventRuns());
+							}else {
+								int Player_id = match.getEventFile().getEvents().get(i).getEventBatterNo();
+								
+								this_batter = plyer.stream().filter(plyr -> plyr.getPlayerId() == Player_id).findAny().orElse(null);
+								batsman_data.add(new BestStats(Player_id,match.getEventFile().getEvents().get(i).getEventRuns(), ball,four,six, this_batter));
+							}
+						}else {
+							ball = 1;
+							int Player_id = match.getEventFile().getEvents().get(i).getEventBatterNo();
+							this_batter = plyer.stream().filter(plyr -> plyr.getPlayerId() == Player_id).findAny().orElse(null);
+							
+							batsman_data.add(new BestStats(Player_id,match.getEventFile().getEvents().get(i).getEventRuns(), ball,four,six, this_batter));
+						}
+						break;
+					case CricketUtil.LOG_WICKET:
+						if(batsman_data.size() > 0 && match.getEventFile().getEvents().get(i).getEventBatterNo() > 0) {
+							playerId = -1;
+							for(int j=0; j<=batsman_data.size()-1; j++) {
+								if(batsman_data.get(j).getPlayerId() == match.getEventFile().getEvents().get(i).getEventBatterNo()) {
+									playerId = j;
+									break;
+								}
+							}
+							
+							if(playerId >=0) {
+								batsman_data.get(playerId).setBalls(batsman_data.get(playerId).getBalls()+1);
+							}else {
+								int Player_id = match.getEventFile().getEvents().get(i).getEventBatterNo();
+								ball = 1;
+								this_batter = plyer.stream().filter(plyr -> plyr.getPlayerId() == Player_id).findAny().orElse(null);
+								batsman_data.add(new BestStats(Player_id,match.getEventFile().getEvents().get(i).getEventRuns(), ball,four,six, this_batter));
+							}
+						}else {
+							ball = 1;
+							int Player_id = match.getEventFile().getEvents().get(i).getEventBatterNo();
+							this_batter = plyer.stream().filter(plyr -> plyr.getPlayerId() == Player_id).findAny().orElse(null);
+							
+							batsman_data.add(new BestStats(Player_id,match.getEventFile().getEvents().get(i).getEventRuns(), ball,four,six, this_batter));
+						}
+						break;
+					}
+				}
+			}
+		}
+		return batsman_data;
 	}
 	
 	public static ArrayList<BestStats> getBatsmanRunsVsAllBowlers(int PlayerId,int inn_number,List<Player> plyer,MatchAllData match) {
