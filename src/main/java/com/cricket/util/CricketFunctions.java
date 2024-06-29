@@ -11306,7 +11306,7 @@ public class CricketFunctions {
 		String typeOfStats = "", statsData = "";
 		BowlingCard currentBowlerBC = null;
 		Inning currentInning = null;
-		int overbyRun=0, overbyWkts=0, overbyRun1=0, overbyWkts1=0;
+		int overbyRun=0, overbyWkts=0, overbyRun1=0, overbyWkts1=0,bowler=0;
 		typeOfStats = "INNING_COMPARE,";
 		
 		for (Inning inn : match.getInning()) {
@@ -11328,9 +11328,10 @@ public class CricketFunctions {
 				
 				if(currentInning != null) {
 					if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
-						if(matchStats.getBowlingCard().getLastBowlerId() > 0) {
+						bowler++;
+						if(matchStats.getBowlingCard().getLastBowlerId() > 0 && bowler==2) {
 							matchStats.getBowlingCard().setReplacementBowlerId(events.get(i).getEventBowlerNo());
-						} else {
+						} else if(bowler==1) {
 							matchStats.getBowlingCard().setLastBowlerId(events.get(i).getEventBowlerNo());
 						}
 					}
