@@ -2,6 +2,8 @@ package com.cricket.model;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EventFile {
 
   private String status;
