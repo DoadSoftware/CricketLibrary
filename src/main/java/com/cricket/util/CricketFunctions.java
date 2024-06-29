@@ -11386,14 +11386,20 @@ public class CricketFunctions {
 				}
 				
 				if(currentInning != null) {
-					if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
 						bowler++;
-						if(matchStats.getBowlingCard().getLastBowlerId() > 0 && bowler==2) {
-							matchStats.getBowlingCard().setReplacementBowlerId(events.get(i).getEventBowlerNo());
-						} else if(bowler==1) {
-							matchStats.getBowlingCard().setLastBowlerId(events.get(i).getEventBowlerNo());
+						if(events.get(events.size()-1).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+							if(bowler==2) {
+								matchStats.getBowlingCard().setLastBowlerId(events.get(i).getEventBowlerNo());
+							}if(bowler==3) {
+								matchStats.getBowlingCard().setReplacementBowlerId(events.get(i).getEventBowlerNo());
+							}
+						}else {
+							if(bowler==1) {
+								matchStats.getBowlingCard().setLastBowlerId(events.get(i).getEventBowlerNo());
+							}if(bowler==2) {
+								matchStats.getBowlingCard().setReplacementBowlerId(events.get(i).getEventBowlerNo());
+							}
 						}
-					}
 				}
 				switch (events.get(i).getEventType()) {
 				case CricketUtil.CHANGE_BOWLER:
