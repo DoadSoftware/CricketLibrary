@@ -126,59 +126,43 @@ public class CricketFunctions {
 	public static Map<String, Map<String, Object>> ReadExcel(String Path) {
 
         Map<String, Map<String, Object>> dataMap = new LinkedHashMap<>();
+
         try (InputStream inputStream = new FileInputStream(Path);
              Workbook workbook = new XSSFWorkbook(inputStream)) {
-        	  Sheet sheet = workbook.getSheetAt(0); 
-              Row headerRow = sheet.getRow(0); 
+            Sheet sheet = workbook.getSheetAt(0); 
+            Row headerRow = sheet.getRow(0); // Read the header row
 
-              for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) { 
                 Row row = sheet.getRow(i);
-                String key = getCellValueAsString(row.getCell(0)).trim();
-                if (!key.isEmpty()) {
-                    Map<String, Object> rowData = new LinkedHashMap<>();
+                if (row != null && row.getCell(0) != null) {
+                    String key = getCellValueAsString(row.getCell(0)).trim();
+                    if (!key.isEmpty()) {
+                        Map<String, Object> rowData = new LinkedHashMap<>();
 
-                    for (int j = 1; j < row.getLastCellNum(); j++) {
-                        String header = getCellValueAsString(headerRow.getCell(j)).trim();
-                        Object cellValue = getCellValue(row.getCell(j));
-                        if (cellValue != null && !cellValue.toString().isEmpty()) {
-                            rowData.put(header, cellValue);
+                        for (int j = 1; j < row.getLastCellNum(); j++) {
+                            String header = getCellValueAsString(headerRow.getCell(j)).trim();
+                            Object cellValue = getCellValue(row.getCell(j));
+                            if (cellValue != null && !cellValue.toString().isEmpty()) {
+                                rowData.put(header, cellValue);
+                            }
                         }
+                        dataMap.put(key, rowData);
                     }
-                    dataMap.put(key, rowData);
                 }
             }
-            dataMap.forEach((key, value) -> {
-                System.out.println(key + " : " + value+"\n");
-            });
+
+            // Print the HashMap
+//            dataMap.forEach((key, value) -> {
+//                System.out.println(key + " : " + value);
+//            });
+
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("dataMap = " + dataMap);
 		return dataMap;
     }
-	private static String getCellValueAsString(Cell cell) {
-        if (cell == null) {
-            return "";
-        }
-        switch (cell.getCellType()) {
-            case STRING:
-                return cell.getStringCellValue();
-            case NUMERIC:
-                if (DateUtil.isCellDateFormatted(cell)) {
-                    return cell.getDateCellValue().toString();
-                } else {
-                    return String.valueOf(cell.getNumericCellValue());
-                }
-            case BOOLEAN:
-                return String.valueOf(cell.getBooleanCellValue());
-            case FORMULA:
-                return cell.getCellFormula();
-            case BLANK:
-                return "";
-            default:
-                return "Unknown cell type";
-        }
-	}
 	public static Map<String, Object> Read_Excel(String Path) {
 
         Map<String, Object> rowData = new LinkedHashMap<>();
@@ -212,22 +196,26 @@ public class CricketFunctions {
         }
 		return rowData;
     }
-    private static Object getCellValue(Cell cell) {
+	private static String getCellValueAsString(Cell cell) {
+	        Object value = getCellValue(cell);
+	        return value == null ? "" : value.toString();
+	    }
+	private static Object getCellValue(Cell cell) {
         if (cell == null) {
             return "";
         }
         switch (cell.getCellType()) {
             case STRING:
-                return cell.getStringCellValue().trim();
+                return cell.getStringCellValue();
             case NUMERIC:
                 if (DateUtil.isCellDateFormatted(cell)) {
                     return cell.getDateCellValue().toString();
                 } else {
                     double numericValue = cell.getNumericCellValue();
                     if (numericValue == (long) numericValue) {
-                        return (long) numericValue; // Return as Long if it's an integer value
+                        return (long) numericValue; 
                     } else {
-                        return numericValue; // Return as Double if it's a decimal value
+                        return numericValue;
                     }
                 }
             case BOOLEAN:
