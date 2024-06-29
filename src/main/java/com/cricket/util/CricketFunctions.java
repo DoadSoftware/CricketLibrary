@@ -4061,6 +4061,8 @@ public class CricketFunctions {
 //				}
 			}
 		}
+		
+		System.out.println("MATCHES : "+stat.getMatches()+" : "+stat.getRuns());
 		return stat;
 	}
 	
@@ -5429,10 +5431,6 @@ public class CricketFunctions {
 		case "PAST_MATCHES_DATA":
 			
 			for(HeadToHead mtch : headToHead_matches) {
-				if(mtch.getPlayerId() == 130) {
-					System.out.println("N: "+mtch.getPlayerId());
-					System.out.println("W : "+mtch.getWickets());
-				}
 				
 				if(!mtch.getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
 					
