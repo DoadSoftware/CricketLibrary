@@ -8717,36 +8717,67 @@ public class CricketFunctions {
 	    int count_lb = 0;
 	    boolean exitLoop = false;
 	    if ((events != null) && (events.size() > 0)) {
-	      for (Event evnt : events)
-	      {
-	    	  if(evnt.getEventInningNumber() == inn_number) {
-	    		  if (((whatToProcess.equalsIgnoreCase(CricketUtil.BOUNDARY)) 
-	  	        		&& (evnt.getEventType().equalsIgnoreCase(CricketUtil.SIX))) 
-	  	        		|| (evnt.getEventType().equalsIgnoreCase(CricketUtil.FOUR))) {
-	    			  count_lb = 0;
-	    			  //break;
-	  	        	}
-	  	        switch (evnt.getEventType()) {
-	  	        case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.DOT: case CricketUtil.FIVE: case CricketUtil.BYE: 
-	  	        case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET:
-	  	          count_lb += 1;
-	  	          break;
-	  	        case CricketUtil.LOG_ANY_BALL: 
-	  	          if (((evnt.getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (evnt.getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
-	  	        		  && (evnt.getEventWasABoundary() != null) &&  (evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
-	  	        	count_lb = 0;
-	  	            //exitLoop = true;
-	  	          }else {
-	  	        	count_lb += 1;
-	  	          }
-	  	          break;
-	  	        }
-	  	        if (exitLoop == true) {
-	  	          break;
-	  	        }
-	    	  }
-	      }
+	    	for(int i = events.size()-1; i>=0; i--) {
+	    		if(events.get(i).getEventInningNumber() == inn_number) {
+	    			 if (((whatToProcess.equalsIgnoreCase(CricketUtil.BOUNDARY)) 
+	 	  	        		&& (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX))) 
+	 	  	        		|| (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR))) {
+	 	    			  break;
+	 	  	        	}
+	    			 switch (events.get(i).getEventType()) {
+		 	  	        case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.DOT: case CricketUtil.FIVE: case CricketUtil.BYE: 
+		 	  	        case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET:
+		 	  	        	System.out.println("HELLO "+events.get(i).getEventType()+" : "+events.get(i).getEventInningNumber());
+		 	  	          count_lb += 1;
+		 	  	          System.out.println(count_lb);
+		 	  	          break;
+		 	  	        case CricketUtil.LOG_ANY_BALL: 
+		 	  	          if (((events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
+		 	  	        		  && (events.get(i).getEventWasABoundary() != null) &&  (events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+		 	  	            exitLoop = true;
+		 	  	          }else {
+		 	  	        	count_lb += 1;
+		 	  	          }
+		 	  	          break;
+	 	  	        }
+	 	  	        if (exitLoop == true) {
+		  	          break;
+		  	        }
+	    		}
+	    	}
+//	      for (Event evnt : events)
+//	      {
+//	    	  if(evnt.getEventInningNumber() == inn_number) {
+//	    		  if (((whatToProcess.equalsIgnoreCase(CricketUtil.BOUNDARY)) 
+//	  	        		&& (evnt.getEventType().equalsIgnoreCase(CricketUtil.SIX))) 
+//	  	        		|| (evnt.getEventType().equalsIgnoreCase(CricketUtil.FOUR))) {
+//	    			  count_lb = 0;
+////	    			  break;
+//	  	        	}
+//	  	        switch (evnt.getEventType()) {
+//	  	        case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.DOT: case CricketUtil.FIVE: case CricketUtil.BYE: 
+//	  	        case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET:
+//	  	        	System.out.println("HELLO");
+//	  	          count_lb += 1;
+//	  	          break;
+//	  	        case CricketUtil.LOG_ANY_BALL: 
+//	  	          if (((evnt.getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (evnt.getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
+//	  	        		  && (evnt.getEventWasABoundary() != null) &&  (evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+//	  	        	count_lb = 0;
+//	  	            //exitLoop = true;
+//	  	          }else {
+//	  	        	System.out.println("HI");
+//	  	        	count_lb += 1;
+//	  	          }
+//	  	          break;
+//	  	        }
+//	  	        if (exitLoop == true) {
+//	  	          break;
+//	  	        }
+//	    	  }
+//	      }
 	    }
+	    System.out.println("COUNT "+ count_lb);
 	    return String.valueOf(count_lb);
 	}
 	
@@ -8773,9 +8804,12 @@ public class CricketFunctions {
 		        			events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
 		        		total_sixes = total_sixes + 1;
 		        	}
-		          break;  
+		          break; 
+		        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.PENALTY:
+		        	total_runs += events.get(i).getEventRuns();
+		        	break;
 		          
-		        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+		        case CricketUtil.BYE: case CricketUtil.LEG_BYE: 
 		        	ball_count = ball_count + 1;
 		        	total_runs += events.get(i).getEventRuns();
 		        	break;
