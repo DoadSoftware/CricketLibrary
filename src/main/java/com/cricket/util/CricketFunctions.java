@@ -2185,10 +2185,14 @@ public class CricketFunctions {
 		}
 		
 		for(int i=0;i<=headToHead.size()-1;i++) {
-			if(headToHead.get(i).contains("IS")) {
+			if(headToHead.get(i).substring(0,3).trim().contains("IS")) {
+//				for(int w=0;w<1;w++) {
+//					System.out.println(headToHead.get(i));
+//					System.out.println("PLAYER ID : " + Integer.valueOf(headToHead.get(i).substring(83,86).trim()));
+//				}
 				
-				TeamName.add(headToHead.get(i).substring(112,116).trim());	
-				TeamName.add(headToHead.get(i).substring(116,120).trim());
+				TeamName.add(headToHead.get(i).substring(43,63).trim());	
+				TeamName.add(headToHead.get(i).substring(63,82).trim());
 				try {
 					headToHead_stats.add(new HeadToHead(Integer.valueOf(headToHead.get(i).substring(83,86).trim()),Integer.valueOf(headToHead.get(i).substring(87,90).trim()), 
 							Integer.valueOf(headToHead.get(i).substring(90,93).trim()), Integer.valueOf(headToHead.get(i).substring(119,122).trim()), 
@@ -2204,11 +2208,12 @@ public class CricketFunctions {
 				TeamName.clear();
 				
 			}
-			else if(headToHead.get(i).contains("BO")) {
+			else if(headToHead.get(i).substring(0,3).trim().contains("BO")) {
 				
 				playerId = -1;
 				for(int j=0;j<=headToHead_stats.size()-1;j++)
 				{
+					
 					if(headToHead_stats.get(j).getPlayerId() == Integer.valueOf(headToHead.get(i).substring(83,86).trim()) &&
 							headToHead_stats.get(j).getMatchFileName().equalsIgnoreCase(headToHead.get(i).substring(2,22).trim())) {
 						playerId = j;
@@ -2221,9 +2226,10 @@ public class CricketFunctions {
 					headToHead_stats.get(playerId).setBallsBowled(Integer.valueOf(headToHead.get(i).substring(87,90).trim()));
 					headToHead_stats.get(playerId).setMaidens(Integer.valueOf(headToHead.get(i).substring(90,93).trim()));
 					headToHead_stats.get(playerId).setBalldots(Integer.valueOf(headToHead.get(i).substring(99,102).trim()));
+					
 				}else {
-					TeamName.add(headToHead.get(i).substring(112,116).trim());	
-					TeamName.add(headToHead.get(i).substring(116,120).trim());
+					TeamName.add(headToHead.get(i).substring(43,63).trim());	
+					TeamName.add(headToHead.get(i).substring(63,82).trim());
 					headToHead_stats.add(new HeadToHead(Integer.valueOf(headToHead.get(i).substring(83,86).trim()), 0, 0, 0, 0, 0, 0, 0, 0, 
 							Integer.valueOf(headToHead.get(i).substring(96,99).trim()), Integer.valueOf(headToHead.get(i).substring(93,96).trim()), 
 							Integer.valueOf(headToHead.get(i).substring(87,90).trim()), Integer.valueOf(headToHead.get(i).substring(90,93).trim()), 
@@ -8727,9 +8733,7 @@ public class CricketFunctions {
 	    			 switch (events.get(i).getEventType()) {
 		 	  	        case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.DOT: case CricketUtil.FIVE: case CricketUtil.BYE: 
 		 	  	        case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET:
-		 	  	        	System.out.println("HELLO "+events.get(i).getEventType()+" : "+events.get(i).getEventInningNumber());
 		 	  	          count_lb += 1;
-		 	  	          System.out.println(count_lb);
 		 	  	          break;
 		 	  	        case CricketUtil.LOG_ANY_BALL: 
 		 	  	          if (((events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
@@ -8745,39 +8749,7 @@ public class CricketFunctions {
 		  	        }
 	    		}
 	    	}
-//	      for (Event evnt : events)
-//	      {
-//	    	  if(evnt.getEventInningNumber() == inn_number) {
-//	    		  if (((whatToProcess.equalsIgnoreCase(CricketUtil.BOUNDARY)) 
-//	  	        		&& (evnt.getEventType().equalsIgnoreCase(CricketUtil.SIX))) 
-//	  	        		|| (evnt.getEventType().equalsIgnoreCase(CricketUtil.FOUR))) {
-//	    			  count_lb = 0;
-////	    			  break;
-//	  	        	}
-//	  	        switch (evnt.getEventType()) {
-//	  	        case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.DOT: case CricketUtil.FIVE: case CricketUtil.BYE: 
-//	  	        case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET:
-//	  	        	System.out.println("HELLO");
-//	  	          count_lb += 1;
-//	  	          break;
-//	  	        case CricketUtil.LOG_ANY_BALL: 
-//	  	          if (((evnt.getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (evnt.getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
-//	  	        		  && (evnt.getEventWasABoundary() != null) &&  (evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
-//	  	        	count_lb = 0;
-//	  	            //exitLoop = true;
-//	  	          }else {
-//	  	        	System.out.println("HI");
-//	  	        	count_lb += 1;
-//	  	          }
-//	  	          break;
-//	  	        }
-//	  	        if (exitLoop == true) {
-//	  	          break;
-//	  	        }
-//	    	  }
-//	      }
 	    }
-	    System.out.println("COUNT "+ count_lb);
 	    return String.valueOf(count_lb);
 	}
 	
