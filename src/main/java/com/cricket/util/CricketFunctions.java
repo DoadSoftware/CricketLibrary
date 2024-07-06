@@ -11670,7 +11670,7 @@ public class CricketFunctions {
 										matchStats.setBallsSinceLastBoundary(matchStats.getBallsSinceLastBoundary() + 1);
 										break;
 									case CricketUtil.LOG_ANY_BALL:
-										if((events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) && !events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL))) {
+										if((!events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) && !events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL))) {
 											if(!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY)&&!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL)
 													&&!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
 												matchStats.setBallsSinceLastBoundary(matchStats.getBallsSinceLastBoundary() + 1);
