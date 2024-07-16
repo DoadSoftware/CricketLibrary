@@ -8740,8 +8740,14 @@ public class CricketFunctions {
 		 	  	          if (((events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
 		 	  	        		  && (events.get(i).getEventWasABoundary() != null) &&  (events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
 		 	  	            exitLoop = true;
-		 	  	          }else {
-		 	  	        	count_lb += 1;
+		 	  	          }
+		 	  	          else {
+		 	  	        	if((!events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) && !events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL))) {
+		 	  	        		if(!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY) && !events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL)
+										&& !events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
+		 	  	        			count_lb += 1;
+								}
+		 	  	        	}
 		 	  	          }
 		 	  	          break;
 	 	  	        }
@@ -9026,6 +9032,13 @@ public class CricketFunctions {
 		    		}else {
 		    			this_ball_data = this_ball_data + "" + events.get(i).getEventExtra();
 		    		}
+		    	}else {
+		    		if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY)) {
+	    				this_ball_data = String.valueOf(events.get(i).getEventSubExtraRuns()) + CricketUtil.PENALTY;
+	    				if(events.get(i).getEventRuns() > 0) {
+			    			this_ball_data = this_ball_data + "+" + events.get(i).getEventRuns(); 
+			    		}
+	    			}
 		    	}
 		    	
 		      if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
