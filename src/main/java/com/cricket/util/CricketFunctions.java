@@ -117,7 +117,7 @@ public class CricketFunctions {
 			Event last_event = allEvents.get(allEvents.size()-1);
 			last_event.setEventNumber(currentEvent.getEventNumber());
 			if(JSONObject.fromObject(last_event).toString().equals(JSONObject.fromObject(currentEvent).toString())) {
-				return CricketUtil.DUPLICATE + " " + currentEvent.getEventType();
+				return CricketUtil.BACK_TO_BACK + " " + currentEvent.getEventType();
 			}
 		}
 		return "";
@@ -281,7 +281,6 @@ public class CricketFunctions {
 							}
 							
 						}
-						
 						if(lastMatchData != null && lastMatchData.getInning() != null && lastMatchData.getInning().size() > 0)
 						{
 							Inning last_inn = lastMatchData.getInning().stream().filter(
@@ -321,7 +320,6 @@ public class CricketFunctions {
 		}
 		return matchData;
 	}
-	
 	public static AE_Cricket getDataFromThirdParty(String FilePathName) throws JAXBException {
 		AE_Cricket cricket_data =(AE_Cricket) JAXBContext.newInstance(AE_Cricket.class)
 		.createUnmarshaller().unmarshal(new File(FilePathName));

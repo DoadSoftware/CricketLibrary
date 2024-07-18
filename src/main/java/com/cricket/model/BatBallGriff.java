@@ -1,7 +1,5 @@
 package com.cricket.model;
 
-import java.util.List;
-
 public class BatBallGriff {
 
 	private int playerId;
