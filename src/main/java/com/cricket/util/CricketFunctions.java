@@ -8746,6 +8746,7 @@ public class CricketFunctions {
 		 	  	        			count_lb += 1;
 								}
 		 	  	        	}
+
 		 	  	          }
 		 	  	          break;
 	 	  	        }
@@ -10052,8 +10053,7 @@ public class CricketFunctions {
 			
 			for(int i = events.size() - 1; i >= 0; i--) {
 				if(events.get(i).getEventBowlerNo() != 0){
-					if ((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)|| events.get(i).getEventBowlerNo() != player_id)
-							&& events.get(i).getEventBallNo() <= 0) {
+					if ((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)|| events.get(i).getEventBowlerNo() != player_id)) {
 						break;
 					}
 				}
