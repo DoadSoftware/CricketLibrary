@@ -32,8 +32,8 @@ public class Team implements Comparable<Team> {
   @Column(name = "TeamGroup")
   private String teamGroup;
   
-  @Column(name = "TeamLogo")
-  private String teamLogo;
+  @Column(name = "TeamBadge")
+  private String teamBadge;
   
   @Column(name = "Captains")
   private String captains;
@@ -164,14 +164,6 @@ public void setShortTeluguTeamName(String shortTeluguTeamName) {
 	ShortTeluguTeamName = shortTeluguTeamName;
 }
 
-public String getTeamLogo() {
-	return teamLogo;
-}
-
-public void setTeamLogo(String teamLogo) {
-	this.teamLogo = teamLogo;
-}
-
 public String getCaptains() {
 	return captains;
 }
@@ -241,6 +233,26 @@ public void setPlayer(List<Player> player) {
 	this.player = player;
 }
 
+
+@Override
+public String toString() {
+	return "Team [teamId=" + teamId + ", teamName1=" + teamName1 + ", teamName2=" + teamName2 + ", teamName3="
+			+ teamName3 + ", teamName4=" + teamName4 + ", teamGroup=" + teamGroup + ", teamBadge=" + teamBadge
+			+ ", captains=" + captains + ", teamColor=" + teamColor + ", FullHindiTeamName=" + FullHindiTeamName
+			+ ", FullTamilTeamName=" + FullTamilTeamName + ", FullTeluguTeamName=" + FullTeluguTeamName
+			+ ", ShortHindiTeamName=" + ShortHindiTeamName + ", ShortTamilTeamName=" + ShortTamilTeamName
+			+ ", ShortTeluguTeamName=" + ShortTeluguTeamName + ", one=" + one + ", two=" + two + ", three=" + three
+			+ ", five=" + five + ", player=" + player + "]";
+}
+
+public String getTeamBadge() {
+	return teamBadge;
+}
+
+public void setTeamBadge(String teamBadge) {
+	this.teamBadge = teamBadge;
+}
+
 public Team(int teamId, String teamName1, String teamName4) {
 	super();
 	this.teamId = teamId;
@@ -265,16 +277,6 @@ public Team(String teamName1, List<Player> player) {
 	this.player = player;
 }
 
-@Override
-public String toString() {
-	return "Team [teamId=" + teamId + ", teamName1=" + teamName1 + ", teamName2=" + teamName2 + ", teamName3="
-			+ teamName3 + ", teamName4=" + teamName4 + ", teamGroup=" + teamGroup + ", teamLogo=" + teamLogo
-			+ ", captains=" + captains + ", teamColor=" + teamColor + ", FullHindiTeamName=" + FullHindiTeamName
-			+ ", FullTamilTeamName=" + FullTamilTeamName + ", FullTeluguTeamName=" + FullTeluguTeamName
-			+ ", ShortHindiTeamName=" + ShortHindiTeamName + ", ShortTamilTeamName=" + ShortTamilTeamName
-			+ ", ShortTeluguTeamName=" + ShortTeluguTeamName + ", one=" + one + ", two=" + two + ", three=" + three
-			+ ", five=" + five + "]";
-}
 
 @Override
 public int compareTo(Team tm) {
