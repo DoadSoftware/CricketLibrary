@@ -171,6 +171,7 @@ public class CricketUtil {
 	public final static String WICKET_KEEPER = "WICKET_KEEPER";
 	public final static String SUBSTITUTE = "SUBSTITUTE";
 	
+	public final static String TEAM_BADGE = "TEAM_BADGE";
 	public final static String FULL = "FULL";
 	public final static String SHORT = "SHORT";
 	public final static String MINI = "MINI";

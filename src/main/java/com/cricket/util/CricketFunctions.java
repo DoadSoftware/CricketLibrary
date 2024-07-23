@@ -9302,6 +9302,13 @@ public class CricketFunctions {
 			break;
 		}
 		switch (teamNameType) {
+		case CricketUtil.TEAM_BADGE:
+			if(match.getSetup().getTossWinningTeam() == match.getSetup().getHomeTeamId()) {
+				TeamNameToUse = match.getSetup().getHomeTeam().getTeamBadge();
+			} else {
+				TeamNameToUse = match.getSetup().getAwayTeam().getTeamBadge();
+			}
+		    break;
 		case CricketUtil.SHORT:
 			if(match.getSetup().getTossWinningTeam() == match.getSetup().getHomeTeamId()) {
 				TeamNameToUse = match.getSetup().getHomeTeam().getTeamName4();
