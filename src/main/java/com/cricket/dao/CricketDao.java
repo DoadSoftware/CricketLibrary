@@ -24,6 +24,7 @@ import com.cricket.model.StatsType;
 import com.cricket.model.Team;
 import com.cricket.model.VariousText;
 import com.cricket.model.Venue;
+import com.cricket.model.Weather;
 
 public interface CricketDao {
   Player getPlayer(String whatToProcess, String valueToProcess);
@@ -53,4 +54,5 @@ public interface CricketDao {
   List<Sponsor> getSponsor();
   List<FantasyImages> getFantasyImages();
   List<Performer> getPerformer();
+  List<Weather> getWeather();
 }

@@ -30,6 +30,7 @@ import com.cricket.model.StatsType;
 import com.cricket.model.Team;
 import com.cricket.model.VariousText;
 import com.cricket.model.Venue;
+import com.cricket.model.Weather;
 import com.cricket.util.CricketUtil;
 
 @Transactional
@@ -186,6 +187,11 @@ public List<POTT> getPott() {
 @Override
 public List<Performer> getPerformer() {
 	return sessionFactory.getCurrentSession().createQuery("from Performer").list();
+}
+
+@Override
+public List<Weather> getWeather() {
+	return sessionFactory.getCurrentSession().createQuery("from Weather").list();
 }
 
 }

@@ -29,6 +29,7 @@ import com.cricket.model.StatsType;
 import com.cricket.model.Team;
 import com.cricket.model.VariousText;
 import com.cricket.model.Venue;
+import com.cricket.model.Weather;
 import com.cricket.service.CricketService;
 
 @Service("cricketService")
@@ -172,6 +173,11 @@ public List<FantasyImages> getFantasyImages() {
 @Override
 public List<Performer> getPerformer() {
 	return cricketDao.getPerformer();
+}
+
+@Override
+public List<Weather> getWeather(){
+	return cricketDao.getWeather();
 }
 
 }
