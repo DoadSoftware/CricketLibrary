@@ -9188,9 +9188,9 @@ public class CricketFunctions {
 			case 0: 
 				System.out.println("DECIMAL "+((100%balls)*runs));
 				if(((runs%balls)*100) <= 500) {
-					return String.valueOf((100/balls) * runs);
+					return String.valueOf((int)sr_val);
 				}else {
-					return String.valueOf(((100/balls) * runs)+1);
+					return String.valueOf(((int)sr_val+1));
 				}
 			case 1:
 				strike_rate = String.format("%.01f", sr_val);
@@ -9363,7 +9363,7 @@ public class CricketFunctions {
 	}
 	
 	public static String Plural(int count){
-		if (count == 1){
+		if (count == 1 || count == 0){
 			return "";
 		} else{
 			return "s";
@@ -9488,6 +9488,10 @@ public class CricketFunctions {
 			String batTeamNm = "", bowlTeamNm = "";
 
 			switch (teamNameType) {
+			case CricketUtil.TEAMNAME_3:
+				batTeamNm = match.getMatch().getInning().get(whichInning - 1).getBatting_team().getTeamName3();
+		    	bowlTeamNm = match.getMatch().getInning().get(whichInning - 1).getBowling_team().getTeamName3();
+		    	break;
 		    case CricketUtil.SHORT: 
 		    	batTeamNm = match.getMatch().getInning().get(whichInning - 1).getBatting_team().getTeamName4();
 		    	bowlTeamNm = match.getMatch().getInning().get(whichInning - 1).getBowling_team().getTeamName4();
