@@ -8731,7 +8731,7 @@ public class CricketFunctions {
 	 	  	        	}
 	    			 switch (events.get(i).getEventType()) {
 		 	  	        case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.DOT: case CricketUtil.FIVE: case CricketUtil.BYE: 
-		 	  	        case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET:
+		 	  	        case CricketUtil.LEG_BYE: case CricketUtil.LOG_WICKET:
 		 	  	          count_lb += 1;
 		 	  	          break;
 		 	  	        case CricketUtil.LOG_ANY_BALL: 

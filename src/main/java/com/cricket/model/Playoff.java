@@ -24,6 +24,9 @@ public class Playoff {
   
   @Column(name = "Winner")
   private String winner;
+  
+  @Column(name = "Date")
+  private String date;
 
 public int getPlayoffId() {
 	return playoffId;
@@ -65,12 +68,19 @@ public void setWinner(String winner) {
 	this.winner = winner;
 }
 
+
+public String getDate() {
+	return date;
+}
+
+public void setDate(String date) {
+	this.date = date;
+}
+
 @Override
 public String toString() {
 	return "Playoff [playoffId=" + playoffId + ", playoffType=" + playoffType + ", team1=" + team1 + ", team2=" + team2
-			+ ", winner=" + winner + "]";
+			+ ", winner=" + winner + ", date=" + date + "]";
 }
-
-
 
 }
