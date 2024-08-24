@@ -4323,7 +4323,7 @@ public class CricketFunctions {
 					}
 //				}
 			}
-			if(player_found == true){
+			if(player_found == true && impact_player_found == false){
 				player_found = false;
 				stat.setMatches(stat.getMatches() + 1);
 			}
@@ -4331,6 +4331,7 @@ public class CricketFunctions {
 				impact_player_found = false;
 				stat.setMatches(stat.getMatches() + 1);
 			}
+			System.out.println("Matchh = " + stat.getMatches());
 //		}
 		return stat;
 	}
@@ -9130,7 +9131,6 @@ public class CricketFunctions {
 						    }
 			  		        break;
 			  		       
-			  		        
 					    case CricketUtil.CHANGE_BOWLER: 
 					    	
 					    	if(events.get(i).getEventBallNo() <= 0) {
