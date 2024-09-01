@@ -9128,9 +9128,18 @@ public class CricketFunctions {
 									&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED)) {
 										total_wickets = total_wickets + 1;
 								}
+								break;
 						    }
 			  		        break;
-			  		       
+					    case CricketUtil.LOG_OVERWRITE_BATSMAN_HOWOUT:
+					    	total_runs = total_runs + events.get(i).getEventBattingCard().getRuns();
+					    	
+							if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
+								&& events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_OUT)) {
+									total_wickets = total_wickets + 1;
+							}
+							break;
+							
 					    case CricketUtil.CHANGE_BOWLER: 
 					    	
 					    	if(events.get(i).getEventBallNo() <= 0) {
