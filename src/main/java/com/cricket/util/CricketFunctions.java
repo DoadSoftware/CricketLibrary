@@ -11698,6 +11698,7 @@ public class CricketFunctions {
 							if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX) 
 					    		|| events.get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR)
 					    		|| events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NINE)
+					    		|| events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL)
 					    		&& events.get(i).getEventWasABoundary() != null
 					    		&& events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
 								typeOfStats += "LAST_BOUNDARY,";
