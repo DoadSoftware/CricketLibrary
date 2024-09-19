@@ -110,6 +110,7 @@ import java.io.InputStream;
 public class CricketFunctions {
 	
 	public static ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+	private static long lastModifiedTime = -1;
 	
 	public static String findConsecutiveDupicateEvents(List<Event> allEvents, Event currentEvent)
 	{
@@ -2841,7 +2842,7 @@ public class CricketFunctions {
 		Speed speed_to_return = new Speed();
 		BufferedWriter writer;
 
-		switch (broadcaster) {
+		switch (broadcaster.toUpperCase()) {
 		case CricketUtil.HAWKEYE:
 
 			File this_dir = new File(speedSourcePath);
@@ -2856,6 +2857,7 @@ public class CricketFunctions {
 			        	for(String str_line : Files.readAllLines(Paths.get(
 			        			speedSourcePath + opFile.get().getName()), StandardCharsets.UTF_8)) {
 			        		if(str_line.contains(",")) {
+			        			System.out.println("str_line = " + str_line);
 								speed_to_return.setSpeedValue(str_line.split(",")[1]);
 								speed_to_return.setSpeedFileModifiedTime(opFile.get().lastModified());
 								writer = new BufferedWriter(new FileWriter(speedDestinationPath));
@@ -2867,6 +2869,63 @@ public class CricketFunctions {
 		        	}
 		        }
 		    }
+			break;
+		case CricketUtil.KHELAI:
+
+//			File this_dir1 = new File(speedSourcePath);
+//			
+//		    if (this_dir1.isDirectory()) {
+//		    	
+//		        Optional<File> opFile = Arrays.stream(this_dir1.listFiles(File::isFile))
+//		          .max((f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified()));
+//		        
+//		        if (opFile.isPresent()){
+//		        	if(lastSpeed.getSpeedFileModifiedTime() != opFile.get().lastModified()) {
+//			        	for(String str_line : Files.readAllLines(Paths.get(
+//			        			speedSourcePath + opFile.get().getName()), StandardCharsets.UTF_8)) {
+//			        		speed_to_return.setSpeedValue(str_line);
+//							speed_to_return.setSpeedFileModifiedTime(opFile.get().lastModified());
+//							writer = new BufferedWriter(new FileWriter(speedDestinationPath));
+//						    writer.write(str_line.trim());
+//						    writer.close();							
+//							return speed_to_return;
+//			        	}
+//		        	}
+//		        }
+//		    }
+			
+			File this_dir1 = new File(speedSourcePath);
+
+	        if (this_dir1.isDirectory()) {
+	            Optional<File> opFile = Arrays.stream(this_dir1.listFiles(File::isFile))
+	                .max((f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified()));
+
+	            if (opFile.isPresent()) {
+	                File latestFile = opFile.get();
+	                long currentModifiedTime = latestFile.lastModified();
+
+	                // Check if the file has been modified
+	                if (lastModifiedTime != currentModifiedTime) {
+	                    lastModifiedTime = currentModifiedTime; // Update global timestamp
+
+	                    // Read the file content
+	                    for (String str_line : Files.readAllLines(Paths.get(latestFile.getPath()), StandardCharsets.UTF_8)) {
+	                        //SpeedObject speedToReturn = new SpeedObject();
+	                    	speed_to_return.setSpeedValue(str_line);
+	                    	speed_to_return.setSpeedFileModifiedTime(currentModifiedTime);
+
+	                        // Write to the destination file
+	                        try (BufferedWriter writers = new BufferedWriter(new FileWriter(speedDestinationPath))) {
+	                            writers.write(str_line.trim());
+	                        }
+
+	                        return speed_to_return; // Return the updated speed object
+	                    }
+	                }
+	            }
+	        }
+
+	        //return null;
 			break;
 		}
 		return null;

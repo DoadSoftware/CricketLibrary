@@ -108,6 +108,7 @@ public class CricketUtil {
 	public final static String SHOT = "SHOT";
 	public final static String WAGON = "WAGON";
 	public final static String HAWKEYE = "HAWKEYE";
+	public final static String KHELAI = "KHELAI";
 	public final static String IMPACT = "IMPACT";
 	public final static String INCOMING = "INCOMING";
 	public final static String OUTGOING = "OUTGOING";
