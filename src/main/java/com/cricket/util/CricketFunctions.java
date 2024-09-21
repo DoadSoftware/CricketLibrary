@@ -89,6 +89,7 @@ import com.cricket.model.Setup;
 import com.cricket.model.Speed;
 import com.cricket.model.Staff;
 import com.cricket.model.Statistics;
+import com.cricket.model.StatsType;
 import com.cricket.model.Team;
 import com.cricket.model.PowerPlays;
 import com.cricket.model.Tournament;
@@ -3074,6 +3075,19 @@ public class CricketFunctions {
 			}
 		}
 		return fixtures;
+	}
+	
+	public static List<Statistics> processAllStats(CricketService cricketService){
+		List<Statistics> stats = cricketService.getAllStats();
+		for(Statistics s : stats) {
+			for(StatsType st : cricketService.getAllStatsType()) {
+				if(st.getStats_id() == s.getStats_type_id()) {
+					s.setStats_type(st);
+					break;
+				}
+			}
+		}
+		return stats;
 	}
 	
 	public static List<Staff> processAllStaff(CricketService cricketService, int teamId) {
