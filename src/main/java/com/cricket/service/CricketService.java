@@ -10,6 +10,7 @@ import com.cricket.model.Ground;
 import com.cricket.model.InfobarStats;
 import com.cricket.model.NameSuper;
 import com.cricket.model.POTT;
+import com.cricket.model.PerformanceBug;
 import com.cricket.model.Sponsor;
 import com.cricket.model.FantasyImages;
 import com.cricket.model.Player;
@@ -55,4 +56,5 @@ public interface CricketService {
   List<FantasyImages>  getFantasyImages();
   List<Performer> getPerformer();
   List<Weather> getWeather();
+  List<PerformanceBug> getPerformanceBugs();
 }

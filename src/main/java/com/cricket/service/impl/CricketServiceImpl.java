@@ -16,6 +16,7 @@ import com.cricket.model.Ground;
 import com.cricket.model.InfobarStats;
 import com.cricket.model.NameSuper;
 import com.cricket.model.POTT;
+import com.cricket.model.PerformanceBug;
 import com.cricket.model.Player;
 import com.cricket.model.Playoff;
 import com.cricket.model.Pointers;
@@ -178,6 +179,11 @@ public List<Performer> getPerformer() {
 @Override
 public List<Weather> getWeather(){
 	return cricketDao.getWeather();
+}
+
+@Override
+public List<PerformanceBug> getPerformanceBugs() {
+	return cricketDao.getPerformanceBugs();
 }
 
 }
