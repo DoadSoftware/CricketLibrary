@@ -9282,6 +9282,9 @@ public class CricketFunctions {
 				break;
 			}
 		}
+		if(strike_rate.contains(".0")) {
+			return strike_rate.split(".0")[0];
+		}
 		return strike_rate;
 	}
 	public static String CurrentDayStats(MatchAllData match, String Separator, String whichDay) {
