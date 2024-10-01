@@ -9268,7 +9268,6 @@ public class CricketFunctions {
 			float sr_val = (100 / (float) balls) * (float) runs;
 			switch (numberOfDecimals) {
 			case 0: 
-				System.out.println("DECIMAL "+((100%balls)*runs));
 				if(((runs%balls)*100) <= 500) {
 					return String.valueOf((int)sr_val);
 				}else {
@@ -9282,8 +9281,8 @@ public class CricketFunctions {
 				break;
 			}
 		}
-		if(strike_rate.contains(".0")) {
-			return strike_rate.split(".0")[0];
+		if(strike_rate.split("\\.")[1].charAt(0) == '0') {
+			return strike_rate.split("\\.")[0];
 		}
 		return strike_rate;
 	}
