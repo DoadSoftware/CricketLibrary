@@ -6025,6 +6025,15 @@ public class CricketFunctions {
 	    }
 	}
 	
+	public static class BowlerEconomyComparator implements Comparator<BowlingCard> {
+
+		@Override
+		public int compare(BowlingCard boc1, BowlingCard boc2) {
+			return Float.compare(Float.valueOf(CricketFunctions.getEconomy(boc1.getRuns(), (boc1.getOvers()*6)+(boc1.getBalls()), 2, "0")), Float.valueOf(CricketFunctions.getEconomy(boc2.getRuns(), (boc2.getOvers()*6)+(boc2.getBalls()), 2, "0")));
+		}
+		
+	}
+	
 	public static class BatsmenMostRunComparator implements Comparator<Tournament> {
 	    @Override
 	    public int compare(Tournament bc1, Tournament bc2) {
@@ -9184,6 +9193,10 @@ public class CricketFunctions {
 		if ((events != null) && (events.size() > 0)) {
 			  for (int i = 0; i <=events.size()-1; i++) {
 				  if(events.get(i).getEventInningNumber() == inn_num) {
+//					  if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
+//						  System.out.println("HELO "+events.get(i).getEventNumber());
+//						  System.out.println(events.get(i).getEventType()+" "+events.get(i).getEventNumber());
+//					  }
 					  switch (events.get(i).getEventType().toUpperCase()) {
 					    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT: case CricketUtil.FOUR: 
 					    case CricketUtil.SIX: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
@@ -9224,6 +9237,9 @@ public class CricketFunctions {
 							    			total_runs, total_wickets, true));
 						    		break;
 						    	default:
+//						    		System.out.println("CHANGED BOWLER");
+//						    		System.out.println("INN : " + events.get(i).getEventInningNumber() + " - OVER : " + events.get(i).getEventOverNo() +
+//						    				" - RUNS/WICKETS : " + total_runs + "/" + total_wickets);
 							    	over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
 							    			total_runs, total_wickets, false));
 						    		break;
@@ -9643,6 +9659,9 @@ public class CricketFunctions {
 				    	switch (broadcaster) {
 						case "ICC_BIG_SCREEN":
 							matchSummaryStatus = "Match tied - winner will be decided by super over";
+							break;
+						case "DOAD_LLC":
+							matchSummaryStatus = "Match tied";
 							break;
 						default:
 					    	matchSummaryStatus = "Match tied - winner will be decided by super over";
