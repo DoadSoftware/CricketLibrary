@@ -9655,7 +9655,7 @@ public class CricketFunctions {
 							matchSummaryStatus = "Match tied - winner will be decided by super over";
 							break;
 						case "DOAD_LLC":
-							matchSummaryStatus = "Match tied";
+							matchSummaryStatus = "Match tied - super over to follow";
 							break;
 						default:
 					    	matchSummaryStatus = "Match tied - winner will be decided by super over";
