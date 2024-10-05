@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -52,6 +53,8 @@ import com.Ae_Third_Party_Xml.AE_Cricket;
 import com.Ae_Third_Party_Xml.AE_Inning;
 import com.Ae_Third_Party_Xml.AE_Last_Ball;
 import com.Ae_Third_Party_Xml.AE_Six_Distance;
+import com.WTV.BatsmanStats;
+import com.WTV.BowlerStats;
 import com.cricket.archive.Archive;
 import com.cricket.archive.ArchiveData;
 import com.cricket.model.BatBallGriff;
@@ -2251,6 +2254,144 @@ public class CricketFunctions {
 	    return sb.toString();
 	}
 	
+	public static void processCricketStats() {
+        // Store batsman and bowler stats per innings
+        Map<Integer, Map<String, BatsmanStats>> inningsBatsmanStats = new HashMap<>();
+        Map<Integer, Map<String, BowlerStats>> inningsBowlerStats = new HashMap<>();
+
+        String lastLine = null;
+        String lastBatsman = null;
+        String lastBowler = null;
+        String lastOtherBatsman = null;
+        
+        Map<Integer, List<String>> overBallData = new HashMap<>(); // Stores ball-by-ball data per over
+        int lastFullOver = -1; // Stores the number of the last full over (6 balls)
+        String lastFullOverTOvData = null; // To store T/Ov data of the last full over for the specified innings
+
+        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Sports\\Cricket\\WT_File.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+            	
+            	if (line.trim().isEmpty() || line.startsWith("#")) {
+                    continue;
+                }
+            	
+            	lastLine = line;
+            	
+            	int overNumber;
+            	int innings;
+            	
+            	try {
+                    innings = Integer.parseInt(line.substring(1, 4).trim());
+                } catch (StringIndexOutOfBoundsException | NumberFormatException e) {
+                    System.err.println("Skipping line due to format issue: " + line);
+                    continue; // Skip this line if it doesn't match the expected format
+                }
+               // innings = Integer.parseInt(line.substring(1, 4).trim());
+
+                try {
+                    overNumber = Integer.parseInt(line.substring(60, 64).trim());
+                } catch (StringIndexOutOfBoundsException | NumberFormatException e) {
+                    System.err.println("Skipping line due to format issue: " + line);
+                    continue; // Skip this line if it doesn't match the expected format
+                }
+
+                // Track ball-by-ball data for the current over
+              //  overBallData.computeIfAbsent(overNumber, k -> new ArrayList<>()).add(line);
+
+                // If the over has reached 6 balls, mark it as the last full over
+                if (innings == Integer.valueOf(lastLine.substring(1, 4).trim())) {
+                	String tovData = line.substring(157, 162).trim();
+                    overBallData.computeIfAbsent(overNumber, k -> new ArrayList<>()).add(tovData);
+                    
+                    if (overBallData.get(overNumber).size() <= 6) {
+                        lastFullOver = overNumber;
+                    }
+                }
+
+                // Extract batsman, bowler, runs, and wicket
+                String batsman = line.substring(8, 34).trim();
+                String bowler = line.substring(34, 60).trim();
+                String runsStr = line.substring(74, 78).trim();
+                String wicket = line.substring(95, 97).trim(); // 'Y' indicates a wicket
+                int runs = runsStr.isEmpty() ? 0 : Integer.parseInt(runsStr);
+
+                // Initialize stats for the current innings if necessary
+                inningsBatsmanStats.computeIfAbsent(innings, k -> new HashMap<>());
+                inningsBowlerStats.computeIfAbsent(innings, k -> new HashMap<>());
+
+                // Update batsman stats
+                Map<String, BatsmanStats> batsmanStatsMap = inningsBatsmanStats.get(innings);
+                batsmanStatsMap.computeIfAbsent(batsman, k -> new BatsmanStats()).addRuns(runs);
+                batsmanStatsMap.get(batsman).addBall();
+
+                // Update bowler stats
+                Map<String, BowlerStats> bowlerStatsMap = inningsBowlerStats.get(innings);
+                bowlerStatsMap.computeIfAbsent(bowler, k -> new BowlerStats()).addRunsConceded(runs);
+                bowlerStatsMap.get(bowler).addBall();
+
+                // If a wicket was taken, add it to the bowler's stats
+                if ("Y".equals(wicket)) {
+                    bowlerStatsMap.get(bowler).addWicket();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (lastFullOver != -1) {
+            System.out.println("\nT/Ov data for the last full over (" + lastFullOver + ") in Innings " + ":");
+            List<String> lastOverTovData = overBallData.get(lastFullOver);
+            for (String tov : lastOverTovData) {
+                System.out.println(tov);
+            }
+        } else {
+            System.out.println("\nNo full over found in Innings " + ".");
+        }
+        
+        if (lastLine != null && lastLine.length() >= 128) {
+            lastBatsman = lastLine.substring(8, 34).trim();
+            lastBowler = lastLine.substring(34, 60).trim();
+            lastOtherBatsman = lastLine.substring(131, 157).trim();  // Other batsman name
+
+            System.out.println("\nDetails from the last valid line:");
+            System.out.println("Batsman: " + lastBatsman);
+            System.out.println("Other Batsman: " + lastOtherBatsman);
+            System.out.println("Bowler: " + lastBowler);
+        } else {
+            System.out.println("\nNo valid last line found or line too short for extraction.");
+        }
+        
+        // Print Batsman Stats per Innings
+        System.out.println("Batsman Stats per Innings:");
+        for (Map.Entry<Integer, Map<String, BatsmanStats>> inningsEntry : inningsBatsmanStats.entrySet()) {
+            int innings = inningsEntry.getKey();
+            System.out.println("\nInnings " + innings + ":");
+            for (Map.Entry<String, BatsmanStats> entry : inningsEntry.getValue().entrySet()) {
+            	
+            	if(lastBatsman.equalsIgnoreCase(entry.getKey())) {
+            		System.out.println(entry.getKey() + " -> " + entry.getValue());
+            	}else if(lastOtherBatsman.equalsIgnoreCase(entry.getKey())) {
+            		System.out.println(entry.getKey() + " -> " + entry.getValue());
+            	}
+                
+            }
+        }
+
+        // Print Bowler Stats per Innings
+        System.out.println("\nBowler Stats per Innings:");
+        for (Map.Entry<Integer, Map<String, BowlerStats>> inningsEntry : inningsBowlerStats.entrySet()) {
+            int innings = inningsEntry.getKey();
+            System.out.println("\nInnings " + innings + ":");
+            for (Map.Entry<String, BowlerStats> entry : inningsEntry.getValue().entrySet()) {
+            	
+            	if(lastBowler.equalsIgnoreCase(entry.getKey())) {
+            		System.out.println(entry.getKey() + " -> " + entry.getValue());
+            	}
+               // System.out.println(entry.getKey() + " -> " + entry.getValue());
+            }
+        }
+    }
 	public static ForeignLanguageData generateMatchResultForeignLanguage(MatchAllData match, String teamNameType, 
 			MultiLanguageDatabase multiLanguageDb)
 	{
@@ -9630,8 +9771,18 @@ public class CricketFunctions {
 				    if ((CricketFunctions.getRequiredRuns(match) > 0) && (CricketFunctions.getRequiredBalls(match) > 0) 
 				    		&& (CricketFunctions.getWicketsLeft(match,whichInning) > 0)) {
 
-				    	matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
-					        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
+				    	switch (broadcaster.toUpperCase()) {
+						case "ICC_BIGSCREEN_DOAD_SCORING":
+							matchSummaryStatus = "need " + CricketFunctions.getRequiredRuns(match) + 
+				        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " off ";
+							break;
+
+						default:
+							matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
+				        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
+							break;
+						}
+				    	
 				    	if (CricketFunctions.getRequiredBalls(match) > 120) {
 				    		matchSummaryStatus = matchSummaryStatus + CricketFunctions.OverBalls(0,CricketFunctions.getRequiredBalls(match)) + " overs";
 						} else {
