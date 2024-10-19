@@ -105,7 +105,9 @@ public BattingCard(int playerId, int runs, int fours, int sixes, int balls) {
 public int getBatsmanScoreSortData() {
 	int sortData = this.getRuns();
 	if(this.getStatus() != null && this.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
-		sortData = sortData + 1;
+		sortData = 2*sortData + 1;
+	}else {
+		sortData = 2*sortData;
 	}
 	return 1000 * sortData + 1000 - this.getBalls();
 }

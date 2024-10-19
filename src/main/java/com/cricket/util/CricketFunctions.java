@@ -6158,6 +6158,22 @@ public class CricketFunctions {
 	       return Integer.compare(bc2.getBatsmanScoreSortData(), bc1.getBatsmanScoreSortData());
 	    }
 	}
+	
+	public static class BatsmenRunComparator implements Comparator<BattingCard> {
+	    @Override
+	    public int compare(BattingCard bc1, BattingCard bc2) {
+	    	if(bc2.getRuns() == bc1.getRuns()) {
+	    		if(bc2.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT) || bc1.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+	    			return Integer.compare(bc2.getBatsmanScoreSortData(), bc1.getBatsmanScoreSortData());
+	    		}
+	    		if(bc1.getBalls() == bc2.getBalls()) {
+	    			return Integer.compare(bc2.getFours(), bc1.getFours());
+	    		}
+	    		return Integer.compare(bc1.getBalls(), bc2.getBalls());
+	    	}
+	    	return Integer.compare(bc2.getRuns(), bc1.getRuns());
+	    }
+	}
 
 	public static class BowlerFiguresComparator implements Comparator<BowlingCard> {
 	    @Override
