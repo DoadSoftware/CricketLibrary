@@ -1,6 +1,8 @@
 package com.cricket.model;
 
 import java.util.List;
+
+import com.cricket.util.CricketUtil;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -91,7 +93,13 @@ public BowlingCard(int overs, int runs, int balls, int wickets, int playerId, in
 	this.dots = dots;
 }
 public int getBowlerFigureSortData() {
-	return 1000 * this.getWickets() - this.getRuns();
+	int sortData = this.getWickets();
+//	if(this.getStatus() != null && this.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+//		sortData = sortData + 1;
+//	}else {
+//		sortData = sortData;
+//	}
+	return 1000 * sortData - this.getRuns();
 }
 
 public List<DaySession> getBowlingSession() {
