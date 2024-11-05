@@ -12731,6 +12731,34 @@ public class CricketFunctions {
 				return String.valueOf((balls % ball_per_over)+"."+Integer.valueOf((balls / ball_per_over)));
 			}
 	}
+	public static String BowlerVsBatsmanLHS_RHS(int Bolwer_num, int BowlerTeam, String Type, MatchAllData match) {
+	    int run = 0, ball = 0, wicket = 0;
+
+	    List<Player> squad = (BowlerTeam == match.getSetup().getHomeTeam().getTeamId()) 
+	            ? match.getSetup().getAwaySquad() 
+	            : match.getSetup().getHomeSquad();
+
+	    for (Event evn : match.getEventFile().getEvents()) {
+	        if (evn.getEventBowlerNo() == Bolwer_num) {
+	            for (Player ply : squad) {
+	                if (ply.getPlayerId() == evn.getEventBatterNo() && ply.getBattingStyle().equalsIgnoreCase(Type.toUpperCase())) {
+	                    run += evn.getEventRuns() + evn.getEventSubExtraRuns() + evn.getEventExtraRuns();
+	                    ball ++;
+	                    if (evn.getEventType().equalsIgnoreCase(CricketUtil.LOG_WICKET) || evn.getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL)) {
+	                        if (evn.getEventHowOut() != null && !evn.getEventHowOut().isEmpty() &&
+	                           (!evn.getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)&&
+								!evn.getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT) &&
+								!evn.getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED))) {
+	                        		wicket ++;
+	                        }
+	                    }
+	                    break; 
+	                }
+	            }
+	        }
+	    }
+	    return run + "," + ball + "," + wicket;
+	}
 	public static String BetterOverRate(int Overs, int OddBalls, double Mins, String RateX, boolean Valid) {
 		double ti = 0,r = 0;
 		int O = 0 ,b = 0;
