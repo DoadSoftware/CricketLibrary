@@ -9045,26 +9045,34 @@ public class CricketFunctions {
 		        	}
 		        	break;
 		        case CricketUtil.LOG_ANY_BALL:
-		        	ball_count = ball_count + 1;
-		        	total_runs += events.get(i).getEventRuns();
-			          if (events.get(i).getEventExtra() != null) {
-			        	 total_runs += events.get(i).getEventExtraRuns();
-			          }
-			          if (events.get(i).getEventSubExtra() != null) {
-			        	 total_runs += events.get(i).getEventSubExtraRuns();
-			          }
-			          if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
-			        	  total_wickets += 1;
-			          }
-			          if (((events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
-		  	        		  && (events.get(i).getEventWasABoundary() != null) &&  (events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
-			        	  if(events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) {
-				        		total_fours = total_fours + 1;
-			        	  }else if(events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX)) {
-				        		total_sixes = total_sixes + 1;
-			        	  }
-		  	          }
-			          break;
+		        	
+		        	if (events.get(i).getEventExtra() != null) {
+		        		if(!events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) && 
+			        			!events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+			        		ball_count = ball_count + 1;
+			        	}
+		        	}
+		        	
+		          total_runs += events.get(i).getEventRuns();
+		          
+		          if (events.get(i).getEventExtra() != null) {
+		        	 total_runs += events.get(i).getEventExtraRuns();
+		          }
+		          if (events.get(i).getEventSubExtra() != null) {
+		        	 total_runs += events.get(i).getEventSubExtraRuns();
+		          }
+		          if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
+		        	  total_wickets += 1;
+		          }
+		          if (((events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
+	  	        		  && (events.get(i).getEventWasABoundary() != null) &&  (events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+		        	  if(events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) {
+			        		total_fours = total_fours + 1;
+		        	  }else if(events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX)) {
+			        		total_sixes = total_sixes + 1;
+		        	  }
+	  	          }
+		          break;
 				}
 				if(ball_count >= number_of_events) {
 		    		break;
