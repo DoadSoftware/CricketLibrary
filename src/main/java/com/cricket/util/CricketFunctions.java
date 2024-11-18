@@ -7334,7 +7334,9 @@ public class CricketFunctions {
 					
 					case CricketUtil.LOG_WICKET:
 						if(!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT) && 
-								!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT)) {
+								!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT) &&
+								!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.TIMED_OUT) &&
+								!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.MANKAD)) {
 							
 							total_balls = total_balls + 1 ;
 							total_runs = total_runs + events.get(i).getEventRuns();
