@@ -8968,12 +8968,25 @@ public class CricketFunctions {
 	    if ((events != null) && (events.size() > 0)) {
 	    	for(int i = events.size()-1; i>=0; i--) {
 	    		if(events.get(i).getEventInningNumber() == inn_number) {
-	    			 if (((whatToProcess.equalsIgnoreCase(CricketUtil.BOUNDARY)) 
-	 	  	        		&& (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX))) 
-	 	  	        		|| (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR))) {
-	 	    			  break;
-	 	  	        	}
+	    			
+	    			if(events.get(i).getEventWasABoundary() != null) {
+	    				if (((whatToProcess.equalsIgnoreCase(CricketUtil.BOUNDARY)) 
+     	  	        		&& (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX)) 
+     	  	        		&& events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) 
+     	  	        		|| (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR))
+     	  	        		&& events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+     	    			  break;
+     	  	        	}
+	    			}
 	    			 switch (events.get(i).getEventType()) {
+	    			 	
+	    			 	case CricketUtil.FOUR: case CricketUtil.SIX:
+	    			 		if(events.get(i).getEventWasABoundary() != null) {
+	    			 		}else {
+	    			 			count_lb += 1;
+	    			 		}
+	    			 		break;
+	    				 
 		 	  	        case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.DOT: case CricketUtil.FIVE: case CricketUtil.BYE: 
 		 	  	        case CricketUtil.LEG_BYE: case CricketUtil.LOG_WICKET:
 		 	  	          count_lb += 1;
@@ -10836,7 +10849,7 @@ public class CricketFunctions {
                 
                 if (runs == 0)
                 {
-                	ahead_behind = "DLS score is level";
+                	ahead_behind = "DLS SCORES are level";
                 }
 			}
 		}
