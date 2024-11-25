@@ -16,14 +16,14 @@ public class PerformanceBug
   @Column(name = "PROMPT")
   private String prompt;
 
-  @Column(name = "TEXT1")
-  private String text1;
+  @Column(name = "PLAYER_NAME")
+  private String playerName;
   
-  @Column(name = "TEXT2")
-  private String text2;
+  @Column(name = "SCORE")
+  private String score;
   
-  @Column(name = "TEXT3")
-  private String text3;
+  @Column(name = "SUBHEADER")
+  private String subheader;
   
   @Column(name = "TEXT4")
   private String text4;
@@ -77,22 +77,6 @@ public void setPrompt(String prompt) {
 	this.prompt = prompt;
 }
 
-public String getText1() {
-	return text1;
-}
-
-public void setText1(String text1) {
-	this.text1 = text1;
-}
-
-public String getText2() {
-	return text2;
-}
-
-public void setText2(String text2) {
-	this.text2 = text2;
-}
-
 public String getHindiText1() {
 	return hindiText1;
 }
@@ -141,12 +125,28 @@ public void setTeluguText2(String teluguText2) {
 	this.teluguText2 = teluguText2;
 }
 
-public String getText3() {
-	return text3;
+public String getPlayerName() {
+	return playerName;
 }
 
-public void setText3(String text3) {
-	this.text3 = text3;
+public void setPlayerName(String playerName) {
+	this.playerName = playerName;
+}
+
+public String getScore() {
+	return score;
+}
+
+public void setScore(String score) {
+	this.score = score;
+}
+
+public String getSubheader() {
+	return subheader;
+}
+
+public void setSubheader(String subheader) {
+	this.subheader = subheader;
 }
 
 public String getText4() {
