@@ -12810,4 +12810,71 @@ public class CricketFunctions {
 		
 	return cricket_data;
 	}
+	
+	public static String getPhaseWiseScore(MatchAllData match, int inn_num, ArrayList<Event> events) 
+	{
+		int total_runs = 0, total_wickets = 0;
+		int oneToSixRuns = 0, oneToSixWkts = 0, sevenToFifteenRuns = 0, sevenToFifteenWkts = 0, sixteenToTwentyRuns = 0, sixteenToTwentyWkts = 0;
+		
+		if ((events != null) && (events.size() > 0)) {
+			  for (int i = 0; i <=events.size()-1; i++) {
+				  if(events.get(i).getEventInningNumber() == inn_num) {
+					  switch (events.get(i).getEventType().toUpperCase()) {
+					    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT: case CricketUtil.FOUR: 
+					    case CricketUtil.SIX: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+					    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL: case CricketUtil.NINE:
+					    	
+					    	if(events.get(i).getEventOverNo() < 6) {
+					    		oneToSixRuns = oneToSixRuns+events.get(i).getEventRuns();
+					    	}else if(events.get(i).getEventOverNo() > 5 && events.get(i).getEventOverNo() < 16) {
+					    		sevenToFifteenRuns = sevenToFifteenRuns+events.get(i).getEventRuns();
+					    	}else if(events.get(i).getEventOverNo() >15 && events.get(i).getEventOverNo() < 20) {
+					    		sixteenToTwentyRuns = sixteenToTwentyRuns+events.get(i).getEventRuns();
+					    	}
+					    	
+					    	switch (events.get(i).getEventType().toUpperCase()) {
+						    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
+						    	if(events.get(i).getEventOverNo() < 6) {
+						    		oneToSixRuns = oneToSixRuns+events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
+						    			if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
+											&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)
+											&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT)
+											&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED)) {
+												oneToSixWkts = oneToSixWkts + 1;
+										}
+						    	}else if(events.get(i).getEventOverNo() > 5 && events.get(i).getEventOverNo() < 16) {
+						    		sevenToFifteenRuns = sevenToFifteenRuns+events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
+						    			if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
+											&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)
+											&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT)
+											&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED)) {
+						    				sevenToFifteenWkts = sevenToFifteenWkts + 1;
+										}
+						    	}else if(events.get(i).getEventOverNo() >15 && events.get(i).getEventOverNo() < 20) {
+						    		sixteenToTwentyRuns = sixteenToTwentyRuns+events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
+						    			if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
+											&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)
+											&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT)
+											&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED)) {
+												sixteenToTwentyWkts = sixteenToTwentyWkts + 1;
+										}
+						    	}
+								break;
+						    }
+			  		        break;
+					    case CricketUtil.LOG_OVERWRITE_BATSMAN_HOWOUT:
+					    	total_runs = total_runs + events.get(i).getEventBattingCard().getRuns();
+					    	
+							if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
+								&& events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_OUT)) {
+									total_wickets = total_wickets + 1;
+							}
+							break;
+					    	
+					    }
+				  }  
+			  }
+		}
+		return oneToSixRuns+","+oneToSixWkts+"_"+sevenToFifteenRuns+","+sevenToFifteenWkts+"_"+sixteenToTwentyRuns+","+sixteenToTwentyWkts;
+	}
 }
