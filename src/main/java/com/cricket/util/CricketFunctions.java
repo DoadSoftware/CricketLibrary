@@ -6246,6 +6246,22 @@ public class CricketFunctions {
 	    }
 	}
 	
+	public static class BestBatsmanStrikeRateComparator implements Comparator<Tournament> {
+	    @Override
+	    public int compare(Tournament bc1, Tournament bc2) {
+	    	return Integer.compare(bc2.getBatsmanStrikeRateSortData(), bc1.getBatsmanStrikeRateSortData());
+	    }
+	}
+	public static class BestBowlerEconomyComparator implements Comparator<Tournament> {
+
+		@Override
+		public int compare(Tournament boc1, Tournament boc2) {
+			return Float.compare(Float.valueOf(CricketFunctions.getEconomy(boc1.getRuns(), boc1.getBallsBowled(), 2, "0")), 
+					Float.valueOf(CricketFunctions.getEconomy(boc2.getRuns(), boc2.getBallsBowled(), 2, "0")));
+		}
+		
+	}
+	
 	public static class BatsmanBestStatsComparator implements Comparator<BestStats> {
 	    @Override
 	    public int compare(BestStats bs1, BestStats bs2) {
@@ -12824,11 +12840,11 @@ public class CricketFunctions {
 					    case CricketUtil.SIX: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
 					    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL: case CricketUtil.NINE:
 					    	
-					    	if(events.get(i).getEventOverNo() < 6) {
+					    	if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 6.0) {
 					    		oneToSixRuns = oneToSixRuns+events.get(i).getEventRuns();
-					    	}else if(events.get(i).getEventOverNo() > 5 && events.get(i).getEventOverNo() < 16) {
+					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) > 6.0 && Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) < 16.0) {
 					    		sevenToFifteenRuns = sevenToFifteenRuns+events.get(i).getEventRuns();
-					    	}else if(events.get(i).getEventOverNo() >15 && events.get(i).getEventOverNo() < 20) {
+					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) >15.0 && Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) < 20) {
 					    		sixteenToTwentyRuns = sixteenToTwentyRuns+events.get(i).getEventRuns();
 					    	}
 					    	
@@ -12862,19 +12878,20 @@ public class CricketFunctions {
 								break;
 						    }
 			  		        break;
-					    case CricketUtil.LOG_OVERWRITE_BATSMAN_HOWOUT:
-					    	total_runs = total_runs + events.get(i).getEventBattingCard().getRuns();
-					    	
-							if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
-								&& events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_OUT)) {
-									total_wickets = total_wickets + 1;
-							}
-							break;
+//					    case CricketUtil.LOG_OVERWRITE_BATSMAN_HOWOUT:
+//					    	total_runs = total_runs + events.get(i).getEventBattingCard().getRuns();
+//					    	
+//							if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
+//								&& events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_OUT)) {
+//									total_wickets = total_wickets + 1;
+//							}
+//							break;
 					    	
 					    }
 				  }  
 			  }
 		}
+		System.out.println(oneToSixRuns+","+oneToSixWkts+"_"+sevenToFifteenRuns+","+sevenToFifteenWkts+"_"+sixteenToTwentyRuns+","+sixteenToTwentyWkts);
 		return oneToSixRuns+","+oneToSixWkts+"_"+sevenToFifteenRuns+","+sevenToFifteenWkts+"_"+sixteenToTwentyRuns+","+sixteenToTwentyWkts;
 	}
 }
