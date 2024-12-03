@@ -9397,9 +9397,15 @@ public class CricketFunctions {
 						  System.out.println(events.get(i).getEventType()+" "+events.get(i).getEventNumber());
 					  }
 					  switch (events.get(i).getEventType().toUpperCase()) {
+//					  	case CricketUtil.WIDE:
+//					  		if(!events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER) &&
+//					  				events.get(i).getEventOverNo() != 0) {
+//					  			total_runs = total_runs + events.get(i).getEventRuns();
+//					  		}
+//					  		break;
 					    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT: case CricketUtil.FOUR: 
-					    case CricketUtil.SIX: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
-					    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL: case CricketUtil.NINE:
+					    case CricketUtil.SIX: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+					    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL: case CricketUtil.NINE: case CricketUtil.WIDE:
 					    	
 					    	total_runs = total_runs + events.get(i).getEventRuns();
 					    	
@@ -9417,11 +9423,11 @@ public class CricketFunctions {
 						    }
 			  		        break;
 					    case CricketUtil.LOG_OVERWRITE_BATSMAN_HOWOUT:
-					    	total_runs = total_runs + events.get(i).getEventBattingCard().getRuns();
 					    	
 							if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
 								&& events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_OUT)) {
 									total_wickets = total_wickets + 1;
+									//total_runs = total_runs + events.get(i).getEventBattingCard().getRuns();
 							}
 							break;
 							
@@ -12836,10 +12842,18 @@ public class CricketFunctions {
         Map<Integer, Integer> batsmanRunsPhase1 = new HashMap<>();
         Map<Integer, Integer> batsmanRunsPhase2 = new HashMap<>();
         Map<Integer, Integer> batsmanRunsPhase3 = new HashMap<>();
+        
+        Map<Integer, Integer> batsmanBallsPhase1 = new HashMap<>();
+        Map<Integer, Integer> batsmanBallsPhase2 = new HashMap<>();
+        Map<Integer, Integer> batsmanBallsPhase3 = new HashMap<>();
 
         Map<Integer, Integer> bowlerWicketsPhase1 = new HashMap<>();
         Map<Integer, Integer> bowlerWicketsPhase2 = new HashMap<>();
         Map<Integer, Integer> bowlerWicketsPhase3 = new HashMap<>();
+        
+        Map<Integer, Integer> bowlerBallsPhase1 = new HashMap<>();
+        Map<Integer, Integer> bowlerBallsPhase2 = new HashMap<>();
+        Map<Integer, Integer> bowlerBallsPhase3 = new HashMap<>();
         
         Map<Integer, Integer> bowlerRunsConcededPhase1 = new HashMap<>();
         Map<Integer, Integer> bowlerRunsConcededPhase2 = new HashMap<>();
@@ -12854,24 +12868,44 @@ public class CricketFunctions {
 					    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL: case CricketUtil.NINE:
 					    	
 					    	if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 6.0) {
-					    		oneToSixRuns = oneToSixRuns+events.get(i).getEventRuns();
+					    		oneToSixRuns = oneToSixRuns + events.get(i).getEventRuns();
 					    		updateMap(batsmanRunsPhase1, events.get(i).getEventBatterNo(), events.get(i).getEventRuns());
+					    		
+					    		if(!events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE)) {
+					    			updateMap(batsmanBallsPhase1, events.get(i).getEventBatterNo(), 1);
+					    		}
+					    		
 					    		updateMap(bowlerRunsConcededPhase1, events.get(i).getEventBowlerNo(), events.get(i).getEventRuns());
-					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) > 6.0 && Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) < 16.0) {
-					    		sevenToFifteenRuns = sevenToFifteenRuns+events.get(i).getEventRuns();
+					    		updateMap(bowlerBallsPhase1, events.get(i).getEventBowlerNo(), 1);
+					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) > 6.0 && 
+					    			Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) < 16.0) {
+					    		sevenToFifteenRuns = sevenToFifteenRuns + events.get(i).getEventRuns();
 					    		updateMap(batsmanRunsPhase2, events.get(i).getEventBatterNo(), events.get(i).getEventRuns());
+					    		
+					    		if(!events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE)) {
+					    			updateMap(batsmanBallsPhase2, events.get(i).getEventBatterNo(), 1);
+					    		}
+					    		
 					    		updateMap(bowlerRunsConcededPhase2, events.get(i).getEventBowlerNo(), events.get(i).getEventRuns());
-					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) >15.0 && Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) < 20) {
-					    		sixteenToTwentyRuns = sixteenToTwentyRuns+events.get(i).getEventRuns();
+					    		updateMap(bowlerBallsPhase2, events.get(i).getEventBowlerNo(), 1);
+					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) >15.0 && 
+					    			Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 20) {
+					    		sixteenToTwentyRuns = sixteenToTwentyRuns + events.get(i).getEventRuns();
 					    		updateMap(batsmanRunsPhase3, events.get(i).getEventBatterNo(), events.get(i).getEventRuns());
+					    		
+					    		if(!events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE)) {
+					    			updateMap(batsmanBallsPhase3, events.get(i).getEventBatterNo(), 1);
+					    		}
+					    		
 					    		updateMap(bowlerRunsConcededPhase3, events.get(i).getEventBowlerNo(), events.get(i).getEventRuns());
+					    		updateMap(bowlerBallsPhase3, events.get(i).getEventBowlerNo(), 1);
 					    	}
 					    	
 					    	switch (events.get(i).getEventType().toUpperCase()) {
 						    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
-						    	if(events.get(i).getEventOverNo() < 6) {
-						    		oneToSixRuns = oneToSixRuns+events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
-						    		updateMap(batsmanRunsPhase1, events.get(i).getEventBatterNo(), events.get(i).getEventRuns());
+						    	if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 6.0) {
+						    		oneToSixRuns = oneToSixRuns + events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
+						    		
 						    		updateMap(bowlerRunsConcededPhase1, events.get(i).getEventBowlerNo(), events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 						    			if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
 											&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)
@@ -12879,10 +12913,15 @@ public class CricketFunctions {
 											&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED)) {
 												oneToSixWkts = oneToSixWkts + 1;
 												updateMap(bowlerWicketsPhase1, events.get(i).getEventBowlerNo(), 1);
+												
+												updateMap(batsmanRunsPhase1, events.get(i).getEventBatterNo(), events.get(i).getEventRuns());
+									    		
+									    		updateMap(batsmanBallsPhase1, events.get(i).getEventBatterNo(), 1);
 										}
-						    	}else if(events.get(i).getEventOverNo() > 5 && events.get(i).getEventOverNo() < 16) {
-						    		sevenToFifteenRuns = sevenToFifteenRuns+events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
-						    		updateMap(batsmanRunsPhase2, events.get(i).getEventBatterNo(), events.get(i).getEventRuns());
+						    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) > 6.0 && 
+						    			Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) < 16.0) {
+						    		sevenToFifteenRuns = sevenToFifteenRuns + events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
+						    		
 						    		updateMap(bowlerRunsConcededPhase2, events.get(i).getEventBowlerNo(), events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 						    			if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
 											&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)
@@ -12890,10 +12929,15 @@ public class CricketFunctions {
 											&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED)) {
 						    				sevenToFifteenWkts = sevenToFifteenWkts + 1;
 						    				updateMap(bowlerWicketsPhase2, events.get(i).getEventBowlerNo(), 1);
+						    				
+						    				updateMap(batsmanRunsPhase2, events.get(i).getEventBatterNo(), events.get(i).getEventRuns());
+								    		
+								    		updateMap(batsmanBallsPhase2, events.get(i).getEventBatterNo(), 1);
 										}
-						    	}else if(events.get(i).getEventOverNo() >15 && events.get(i).getEventOverNo() < 20) {
+						    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) >15.0 && 
+						    			Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 20) {
 						    		sixteenToTwentyRuns = sixteenToTwentyRuns+events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
-						    		updateMap(batsmanRunsPhase3, events.get(i).getEventBatterNo(), events.get(i).getEventRuns());
+						    		
 						    		updateMap(bowlerRunsConcededPhase3, events.get(i).getEventBowlerNo(), events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 						    			if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
 											&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)
@@ -12901,6 +12945,10 @@ public class CricketFunctions {
 											&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED)) {
 												sixteenToTwentyWkts = sixteenToTwentyWkts + 1;
 												updateMap(bowlerWicketsPhase3, events.get(i).getEventBowlerNo(), 1);
+												
+												updateMap(batsmanRunsPhase3, events.get(i).getEventBatterNo(), events.get(i).getEventRuns());
+									    		
+									    		updateMap(batsmanBallsPhase3, events.get(i).getEventBatterNo(), 1);
 										}
 						    	}
 								break;
@@ -12919,23 +12967,15 @@ public class CricketFunctions {
 				  }  
 			  }
 		}
-		System.out.println("TOP BAT : "+batsmanRunsPhase1+" | "+batsmanRunsPhase2+" | "+batsmanRunsPhase3);
-		System.out.println("TOP BOWL : "+bowlerWicketsPhase1+" | "+bowlerWicketsPhase2+" | "+bowlerWicketsPhase3);
-		System.out.println("TOP BOWL : "+bowlerRunsConcededPhase1+" | "+bowlerRunsConcededPhase2+" | "+bowlerRunsConcededPhase3);
 		
-		
-		String topBatsmanPhase1 = getTopTwoPerformers(batsmanRunsPhase1);
-	    String topBatsmanPhase2 = getTopTwoPerformers(batsmanRunsPhase2);
-	    String topBatsmanPhase3 = getTopTwoPerformers(batsmanRunsPhase3);
+		String topBatsmanPhase1 = getTopTwoPerformers(batsmanRunsPhase1,batsmanBallsPhase1);
+	    String topBatsmanPhase2 = getTopTwoPerformers(batsmanRunsPhase2,batsmanBallsPhase2);
+	    String topBatsmanPhase3 = getTopTwoPerformers(batsmanRunsPhase3,batsmanBallsPhase3);
 //
-	    String topBowlerPhase1 = getTopTwoBowlers(bowlerWicketsPhase1, bowlerRunsConcededPhase1);
-	    String topBowlerPhase2 = getTopTwoBowlers(bowlerWicketsPhase2, bowlerRunsConcededPhase2);
-	    String topBowlerPhase3 = getTopTwoBowlers(bowlerWicketsPhase3, bowlerRunsConcededPhase3);
+	    String topBowlerPhase1 = getTopTwoBowlers(bowlerWicketsPhase1, bowlerRunsConcededPhase1,bowlerBallsPhase1);
+	    String topBowlerPhase2 = getTopTwoBowlers(bowlerWicketsPhase2, bowlerRunsConcededPhase2,bowlerBallsPhase2);
+	    String topBowlerPhase3 = getTopTwoBowlers(bowlerWicketsPhase3, bowlerRunsConcededPhase3,bowlerBallsPhase3);
 		
-	    
-//		System.out.println(oneToSixRuns+","+oneToSixWkts+"_"+sevenToFifteenRuns+","+sevenToFifteenWkts+"_"+sixteenToTwentyRuns+","+sixteenToTwentyWkts);
-//		System.out.println("TOP BAT : " + topBatsmanPhase1 + ", " + topBatsmanPhase2 + ", " + topBatsmanPhase3 );
-//		System.out.println("TOP BOWLER : " + topBowlerPhase1 + ", " + topBowlerPhase2 + ", " + topBowlerPhase3 );
 		return oneToSixRuns + "," + oneToSixWkts + "_" + sevenToFifteenRuns + "," + sevenToFifteenWkts + "_" + sixteenToTwentyRuns + "," + sixteenToTwentyWkts 
 				+ "|" + topBatsmanPhase1 + "." + topBatsmanPhase2 + "." + topBatsmanPhase3 
 				+ "|" +topBowlerPhase1 + "." + topBowlerPhase2 + "." + topBowlerPhase3;
@@ -12951,18 +12991,23 @@ public class CricketFunctions {
 	 }
 	 
 	 //USING IN PHASE WISE SCORE
-	 private static String getTopTwoPerformers(Map<Integer, Integer> map) {
+	 private static String getTopTwoPerformers(Map<Integer, Integer> map,Map<Integer, Integer> ballsMap) {
 		    return map.entrySet()
 		              .stream()
 		              .sorted((a, b) -> b.getValue().compareTo(a.getValue()))  // Sort by value in descending order
 		              .limit(2)  // Limit to top two
-		              .map(entry -> entry.getKey() + "_" + entry.getValue())  // Format output
+		              .map(entry -> {
+	                      int player = entry.getKey();
+	                      int runs = entry.getValue();
+	                      int balls = ballsMap.getOrDefault(player, 0);  // Default balls to 0 if not found
+	                      return player + "_" + runs + "_" + balls;  // Include balls in the format
+	                  })  // Format output
 		              .reduce((a, b) -> a + "," + b)  // Join with ","
 		              .orElse("None");
 	}
 	 
 	//USING IN PHASE WISE SCORE
-	 private static String getTopTwoBowlers(Map<Integer, Integer> wicketsMap, Map<Integer, Integer> runsConcededMap) {
+	 private static String getTopTwoBowlers(Map<Integer, Integer> wicketsMap, Map<Integer, Integer> runsConcededMap,Map<Integer, Integer> ballsMap) {
 		    return wicketsMap.entrySet()
 		                     .stream()
 		                     .sorted((a, b) -> {
@@ -12975,8 +13020,13 @@ public class CricketFunctions {
 		                         return wicketComparison;
 		                     })
 		                     .limit(2)  // Limit to top two
-		                     .map(entry -> entry.getKey() + "_" + entry.getValue() + "_" +
-		                                    runsConcededMap.getOrDefault(entry.getKey(), 0))  // Format output
+		                     .map(entry -> {
+		                         int bowler = entry.getKey();
+		                         int wickets = entry.getValue();
+		                         int runsConceded = runsConcededMap.getOrDefault(bowler, 0);
+		                         int balls = ballsMap.getOrDefault(bowler, 0);
+		                         return bowler + "_" + wickets + "_" + runsConceded + "_" + balls; // Include balls in output
+		                     })  // Format output
 		                     .reduce((a, b) -> a + "," + b)  // Join with "|"
 		                     .orElse("None");
 	}
