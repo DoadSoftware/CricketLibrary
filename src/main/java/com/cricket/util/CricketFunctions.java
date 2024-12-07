@@ -12868,6 +12868,7 @@ public class CricketFunctions {
 		if ((events != null) && (events.size() > 0)) {
 			  for (int i = 0; i <=events.size()-1; i++) {
 				  if(events.get(i).getEventInningNumber() == inn_num) {
+					  System.out.println(i+" - "+Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())));
 					  switch (events.get(i).getEventType().toUpperCase()) {
 					    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT: case CricketUtil.FOUR: 
 					    case CricketUtil.SIX: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
@@ -12899,7 +12900,7 @@ public class CricketFunctions {
 					    			}
 					    		}
 					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) > 6.0 && 
-					    			Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) < 16.0) {
+					    			Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 15.0) {
 					    		sevenToFifteenRuns = sevenToFifteenRuns + events.get(i).getEventRuns();
 					    		
 					    		if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE)) {
@@ -12980,7 +12981,7 @@ public class CricketFunctions {
 											updateMap(bowlerWicketsPhase1, events.get(i).getEventBowlerNo(), 1);
 									}
 						    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) > 6.0 && 
-						    			Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) < 16.0) {
+						    			Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 15.0) {
 						    		sevenToFifteenRuns = sevenToFifteenRuns + events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
 						    		
 						    		if(events.get(i).getEventExtra() != null && events.get(i).getEventSubExtra() != null &&
