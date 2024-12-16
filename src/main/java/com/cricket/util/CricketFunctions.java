@@ -12864,25 +12864,60 @@ public class CricketFunctions {
         Map<Integer, Integer> bowlerRunsConcededPhase1 = new HashMap<>();
         Map<Integer, Integer> bowlerRunsConcededPhase2 = new HashMap<>();
         Map<Integer, Integer> bowlerRunsConcededPhase3 = new HashMap<>();
+        
+        boolean isVisited = false;
 		
 		if ((events != null) && (events.size() > 0)) {
 			  for (int i = 0; i <=events.size()-1; i++) {
 				  if(events.get(i).getEventInningNumber() == inn_num) {
 					  System.out.println(i+" - "+Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())));
+					  isVisited = false;
 					  switch (events.get(i).getEventType().toUpperCase()) {
 					    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT: case CricketUtil.FOUR: 
 					    case CricketUtil.SIX: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
 					    case CricketUtil.NINE: case CricketUtil.LOG_WICKET:
 					    	
-//					    	if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) == 0 && events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL) || events.get(i).getEventBallNo())) == 0 && events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL) || || events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
-//					    		
-//					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) == 15.0 && events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
-//					    		
-//					    	}else if() {
-//					    		
-//					    	}
-					    	
-					    	if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 6.0) {
+					    	if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) == 0.0 
+					    		&& (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL) || events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE) 
+					    		|| events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER))) {
+					    		if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+					    			oneToSixRuns = oneToSixRuns + events.get(i).getEventRuns()+events.get(i).getEventExtraRuns()+events.get(i).getEventSubExtraRuns();
+					    			updateMap(batsmanBallsPhase1, events.get(i).getEventBatterNo(), 1);
+					    			updateMap(bowlerRunsConcededPhase1, events.get(i).getEventBowlerNo(), events.get(i).getEventRuns());
+					    			isVisited = true;
+					    		}else if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE)) {
+					    			oneToSixRuns = oneToSixRuns + events.get(i).getEventRuns()+events.get(i).getEventExtraRuns()+events.get(i).getEventSubExtraRuns();
+					    			updateMap(bowlerRunsConcededPhase1, events.get(i).getEventBowlerNo(), events.get(i).getEventRuns());
+					    			isVisited = true;
+					    		}
+					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) == 6.0 
+					    			&& (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL) || events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE) 
+					    			|| events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER))) {
+					    		if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+					    			sevenToFifteenRuns = sevenToFifteenRuns + events.get(i).getEventRuns()+events.get(i).getEventExtraRuns()+events.get(i).getEventSubExtraRuns();
+					    			updateMap(batsmanBallsPhase2, events.get(i).getEventBatterNo(), 1);
+					    			updateMap(bowlerRunsConcededPhase2, events.get(i).getEventBowlerNo(), events.get(i).getEventRuns());
+					    			isVisited = true;
+					    		}else if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE)) {
+					    			sevenToFifteenRuns = sevenToFifteenRuns + events.get(i).getEventRuns()+events.get(i).getEventExtraRuns()+events.get(i).getEventSubExtraRuns();
+					    			updateMap(bowlerRunsConcededPhase2, events.get(i).getEventBowlerNo(), events.get(i).getEventRuns());
+					    			isVisited = true;
+					    		}
+					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) == 15.0 
+					    			&& (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL) || events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE) 
+					    			|| events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER))) {
+					    		if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+					    			sixteenToTwentyRuns = sixteenToTwentyRuns + events.get(i).getEventRuns()+events.get(i).getEventExtraRuns()+events.get(i).getEventSubExtraRuns();
+					    			updateMap(batsmanBallsPhase3, events.get(i).getEventBatterNo(), 1);
+					    			updateMap(bowlerRunsConcededPhase3, events.get(i).getEventBowlerNo(), events.get(i).getEventRuns());
+					    			isVisited = true;
+					    		}else if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE)) {
+					    			sixteenToTwentyRuns = sixteenToTwentyRuns + events.get(i).getEventRuns()+events.get(i).getEventExtraRuns()+events.get(i).getEventSubExtraRuns();
+					    			updateMap(bowlerRunsConcededPhase3, events.get(i).getEventBowlerNo(), events.get(i).getEventRuns());
+					    			isVisited = true;
+					    		}
+					    	}
+					    	if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 6.0 && !isVisited) {
 					    		oneToSixRuns = oneToSixRuns + events.get(i).getEventRuns();
 					    		
 					    		if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE)) {
@@ -12917,7 +12952,7 @@ public class CricketFunctions {
 					    			}
 					    		}
 					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) > 6.0 && 
-					    			Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 15.0) {
+					    			Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 15.0 && !isVisited) {
 					    		sevenToFifteenRuns = sevenToFifteenRuns + events.get(i).getEventRuns();
 					    		
 					    		if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE)) {
@@ -12952,7 +12987,7 @@ public class CricketFunctions {
 					    			}
 					    		}
 					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) >15.0 && 
-					    			Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 20) {
+					    			Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 20 && !isVisited) {
 					    		
 					    		sixteenToTwentyRuns = sixteenToTwentyRuns + events.get(i).getEventRuns();
 					    		
