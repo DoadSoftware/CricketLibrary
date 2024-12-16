@@ -12907,7 +12907,6 @@ public class CricketFunctions {
 												&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)
 												&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.TIMED_OUT)
 												&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.HANDLED_THE_BALL)) {
-													oneToSixWkts = oneToSixWkts + 1;
 													updateMap(bowlerWicketsPhase1, events.get(i).getEventBowlerNo(), 1);
 										}
 					    			}
@@ -12942,7 +12941,6 @@ public class CricketFunctions {
 												&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)
 												&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.TIMED_OUT)
 												&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.HANDLED_THE_BALL)) {
-													oneToSixWkts = oneToSixWkts + 1;
 													updateMap(bowlerWicketsPhase2, events.get(i).getEventBowlerNo(), 1);
 										}
 //					    				updateMap(bowlerWicketsPhase2, events.get(i).getEventBowlerNo(), 1);
@@ -12980,7 +12978,6 @@ public class CricketFunctions {
 												&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)
 												&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.TIMED_OUT)
 												&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.HANDLED_THE_BALL)) {
-													oneToSixWkts = oneToSixWkts + 1;
 													updateMap(bowlerWicketsPhase3, events.get(i).getEventBowlerNo(), 1);
 										}
 //					    				updateMap(bowlerWicketsPhase3, events.get(i).getEventBowlerNo(), 1);
