@@ -12874,11 +12874,16 @@ public class CricketFunctions {
 					    case CricketUtil.SIX: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
 					    case CricketUtil.NINE: case CricketUtil.LOG_WICKET:
 					    	
+//					    	if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) == 0 && events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL) || events.get(i).getEventBallNo())) == 0 && events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL) || || events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
+//					    		
+//					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) == 15.0 && events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
+//					    		
+//					    	}else if() {
+//					    		
+//					    	}
+					    	
 					    	if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 6.0) {
 					    		oneToSixRuns = oneToSixRuns + events.get(i).getEventRuns();
-					    		if(events.get(i).getEventBowlerNo() == 60) {
-					    			System.out.println("EVENT TYPE : "+events.get(i).getEventType()+" : EXTRA : "+events.get(i).getEventExtraRuns()+" SUBEXTRA : "+events.get(i).getEventSubExtraRuns());
-					    		}
 					    		
 					    		if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE)) {
 					    			updateMap(bowlerRunsConcededPhase1, events.get(i).getEventBowlerNo(), events.get(i).getEventRuns());
@@ -12996,17 +13001,22 @@ public class CricketFunctions {
 						    					events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.BYE) || 
 						    					events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.LEG_BYE)) {
 						    				updateMap(batsmanBallsPhase1, events.get(i).getEventBatterNo(), 1);
-						    				updateMap(bowlerRunsConcededPhase1, events.get(i).getEventBowlerNo(), events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
+						    				updateMap(bowlerRunsConcededPhase1, events.get(i).getEventBowlerNo(),events.get(i).getEventRuns()+ events.get(i).getEventExtraRuns());
+						    			}else if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL) && 
+						    					!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.BYE) || 
+						    					!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.LEG_BYE)) {
+						    				updateMap(batsmanBallsPhase1, events.get(i).getEventBatterNo(), 1);
+						    				updateMap(bowlerRunsConcededPhase1, events.get(i).getEventBowlerNo(),events.get(i).getEventRuns()+ events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 						    			}else if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
-						    				updateMap(bowlerRunsConcededPhase1, events.get(i).getEventBowlerNo(), events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
+						    				updateMap(bowlerRunsConcededPhase1, events.get(i).getEventBowlerNo(),events.get(i).getEventRuns()+ events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 						    			}
 						    		}else if(events.get(i).getEventExtra() != null) {
 						    			if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 						    				updateMap(batsmanRunsPhase1, events.get(i).getEventBatterNo(), events.get(i).getEventRuns());
 						    				updateMap(batsmanBallsPhase1, events.get(i).getEventBatterNo(), 1);
-						    				updateMap(bowlerRunsConcededPhase1, events.get(i).getEventBowlerNo(), events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
+						    				updateMap(bowlerRunsConcededPhase1, events.get(i).getEventBowlerNo(), events.get(i).getEventRuns()+events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 						    			}else if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
-						    				updateMap(bowlerRunsConcededPhase1, events.get(i).getEventBowlerNo(), events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
+						    				updateMap(bowlerRunsConcededPhase1, events.get(i).getEventBowlerNo(),events.get(i).getEventRuns()+ events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 						    			}
 						    		}
 						    		
@@ -13030,17 +13040,22 @@ public class CricketFunctions {
 						    					events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.BYE) || 
 						    					events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.LEG_BYE)) {
 						    				updateMap(batsmanBallsPhase2, events.get(i).getEventBatterNo(), 1);
-						    				updateMap(bowlerRunsConcededPhase2, events.get(i).getEventBowlerNo(), events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
+						    				updateMap(bowlerRunsConcededPhase2, events.get(i).getEventBowlerNo(),events.get(i).getEventRuns()+ events.get(i).getEventExtraRuns());
+						    			}else if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL) && 
+						    					!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.BYE) || 
+						    					!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.LEG_BYE)) {
+						    				updateMap(batsmanBallsPhase2, events.get(i).getEventBatterNo(), 1);
+						    				updateMap(bowlerRunsConcededPhase2, events.get(i).getEventBowlerNo(),events.get(i).getEventRuns()+ events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 						    			}else if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
-						    				updateMap(bowlerRunsConcededPhase2, events.get(i).getEventBowlerNo(), events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
+						    				updateMap(bowlerRunsConcededPhase2, events.get(i).getEventBowlerNo(),events.get(i).getEventRuns()+ events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 						    			}
 						    		}else if(events.get(i).getEventExtra() != null) {
 						    			if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 						    				updateMap(batsmanRunsPhase2, events.get(i).getEventBatterNo(), events.get(i).getEventRuns());
 						    				updateMap(batsmanBallsPhase2, events.get(i).getEventBatterNo(), 1);
-						    				updateMap(bowlerRunsConcededPhase2, events.get(i).getEventBowlerNo(), events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
+						    				updateMap(bowlerRunsConcededPhase2, events.get(i).getEventBowlerNo(),events.get(i).getEventRuns()+ events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 						    			}else if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
-						    				updateMap(bowlerRunsConcededPhase2, events.get(i).getEventBowlerNo(), events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
+						    				updateMap(bowlerRunsConcededPhase2, events.get(i).getEventBowlerNo(),events.get(i).getEventRuns()+ events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 						    			}
 						    		}
 						    		
@@ -13064,17 +13079,22 @@ public class CricketFunctions {
 						    					events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.BYE) || 
 						    					events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.LEG_BYE)) {
 						    				updateMap(batsmanBallsPhase3, events.get(i).getEventBatterNo(), 1);
-						    				updateMap(bowlerRunsConcededPhase3, events.get(i).getEventBowlerNo(), events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
+						    				updateMap(bowlerRunsConcededPhase3, events.get(i).getEventBowlerNo(),events.get(i).getEventRuns()+ events.get(i).getEventExtraRuns());
+						    			}else if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL) && 
+						    					!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.BYE) || 
+						    					!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.LEG_BYE)) {
+						    				updateMap(batsmanBallsPhase3, events.get(i).getEventBatterNo(), 1);
+						    				updateMap(bowlerRunsConcededPhase3, events.get(i).getEventBowlerNo(),events.get(i).getEventRuns()+ events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 						    			}else if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
-						    				updateMap(bowlerRunsConcededPhase3, events.get(i).getEventBowlerNo(), events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
+						    				updateMap(bowlerRunsConcededPhase3, events.get(i).getEventBowlerNo(),events.get(i).getEventRuns()+ events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 						    			}
 						    		}else if(events.get(i).getEventExtra() != null) {
 						    			if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 						    				updateMap(batsmanRunsPhase3, events.get(i).getEventBatterNo(), events.get(i).getEventRuns());
 						    				updateMap(batsmanBallsPhase3, events.get(i).getEventBatterNo(), 1);
-						    				updateMap(bowlerRunsConcededPhase3, events.get(i).getEventBowlerNo(), events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
+						    				updateMap(bowlerRunsConcededPhase3, events.get(i).getEventBowlerNo(),events.get(i).getEventRuns()+ events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 						    			}else if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
-						    				updateMap(bowlerRunsConcededPhase3, events.get(i).getEventBowlerNo(), events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
+						    				updateMap(bowlerRunsConcededPhase3, events.get(i).getEventBowlerNo(),events.get(i).getEventRuns()+ events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
 						    			}
 						    		}
 						    		
