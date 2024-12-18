@@ -12855,12 +12855,21 @@ public class CricketFunctions {
 				  if(events.get(i).getEventInningNumber() == inn_num) {
 					  float overBalls = Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo()));
 					  isVisited = false;
+					  System.out.println("DATA : "+overBalls+" : "+events.get(i).getEventType()+" : "+events.get(i).getEventBatterNo());
 					  switch (events.get(i).getEventType().toUpperCase()) {
+					  case CricketUtil.NEW_BATSMAN:
+						  updateMap(batsmanRunsPhase1, events.get(i).getEventBatterNo(), -1);
+						  updateMap(batsmanRunsPhase2, events.get(i).getEventBatterNo(), -1);
+						  updateMap(batsmanRunsPhase3, events.get(i).getEventBatterNo(), -1);
+						  updateMap(batsmanBallsPhase1, events.get(i).getEventBatterNo(), -1);
+						  updateMap(batsmanBallsPhase2, events.get(i).getEventBatterNo(), -1);
+						  updateMap(batsmanBallsPhase3, events.get(i).getEventBatterNo(), -1);
+						  break;
 					    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT: case CricketUtil.FOUR: 
 					    case CricketUtil.SIX: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
 					    case CricketUtil.NINE: case CricketUtil.LOG_WICKET:
 					    	
-					    	if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) == 0.0 
+					    	if(overBalls == 0.0 
 					    		&& (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL) || events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE) 
 					    		|| events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER) || events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL))) {
 					    		
@@ -12869,7 +12878,7 @@ public class CricketFunctions {
 					    		oneToSixWkts = handlePhaseByExtras(events.get(i), overBalls, batsmanRunsPhase1, batsmanBallsPhase1, bowlerRunsConcededPhase1
 					    				, bowlerBallsPhase1, bowlerWicketsPhase1, oneToSixWkts);
 					    		
-					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) == 6.0 
+					    	}else if(overBalls == 6.0 
 					    			&& (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL) || events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE) 
 					    			|| events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER) || events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL))) {
 					    		
@@ -12878,10 +12887,9 @@ public class CricketFunctions {
 					    		sevenToFifteenWkts = handlePhaseByExtras(events.get(i), overBalls, batsmanRunsPhase2, batsmanBallsPhase2, bowlerRunsConcededPhase2
 					    				, bowlerBallsPhase2, bowlerWicketsPhase2, sevenToFifteenWkts);
 					    		
-					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) == 15.0 
+					    	}else if(overBalls == 15.0 
 					    			&& (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL) || events.get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE) 
 					    			|| events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER) || events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL))) {
-					    		
 					    		isVisited = true;
 					    		sixteenToTwentyRuns = sixteenToTwentyRuns + events.get(i).getEventRuns()+events.get(i).getEventExtraRuns()+events.get(i).getEventSubExtraRuns();
 					    		sixteenToTwentyWkts = handlePhaseByExtras(events.get(i), overBalls, batsmanRunsPhase3, batsmanBallsPhase3, bowlerRunsConcededPhase3
@@ -12889,22 +12897,18 @@ public class CricketFunctions {
 					    	}
 					    	
 					    	
-					    	if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 6.0 && !isVisited) {
-					    		
+					    	if(overBalls <= 6.0 && !isVisited) {
 					    		oneToSixRuns = oneToSixRuns + events.get(i).getEventRuns();
 					    		oneToSixWkts = handlePhaseByMainEvents(events.get(i), overBalls, batsmanRunsPhase1, batsmanBallsPhase1, bowlerRunsConcededPhase1
 					    				, bowlerBallsPhase1, bowlerWicketsPhase1, oneToSixWkts);
 					    		
-					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) > 6.0 && 
-					    			Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 15.0 && !isVisited) {
+					    	}else if(overBalls > 6.0 && overBalls <= 15.0 && !isVisited) {
 					    		
 					    		sevenToFifteenRuns = sevenToFifteenRuns + events.get(i).getEventRuns();
 					    		sevenToFifteenWkts = handlePhaseByMainEvents(events.get(i), overBalls, batsmanRunsPhase2, batsmanBallsPhase2, bowlerRunsConcededPhase2
 					    				, bowlerBallsPhase2, bowlerWicketsPhase2, sevenToFifteenWkts);
 					    		
-					    	}else if(Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) >15.0 && 
-					    			Float.valueOf(CricketFunctions.OverBalls(events.get(i).getEventOverNo(), events.get(i).getEventBallNo())) <= 20 && !isVisited) {
-					    		
+					    	}else if(overBalls >15.0 && overBalls <= 20 && !isVisited) {
 					    		sixteenToTwentyRuns = sixteenToTwentyRuns + events.get(i).getEventRuns();
 					    		sixteenToTwentyWkts = handlePhaseByMainEvents(events.get(i), overBalls, batsmanRunsPhase3, batsmanBallsPhase3, bowlerRunsConcededPhase3
 					    				, bowlerBallsPhase3, bowlerWicketsPhase3, sixteenToTwentyWkts);
@@ -13037,7 +13041,11 @@ public class CricketFunctions {
 	
 	//USING THIS METHOD IN PHASE WISE SCORE FUNCTION
 	 private static void updateMap(Map<Integer, Integer> map, int key, int value) {
-	        map.put(key, map.getOrDefault(key, 0) + value);
+		 if(map.get(key) != null && map.get(key) == -1 && value !=0) {
+		 		map.put(key, map.getOrDefault(key, 0) + value+1);
+		 }else {
+		 		map.put(key, map.getOrDefault(key, 0) + value);
+		 }
 	 }
 	 
 	 //USING IN PHASE WISE SCORE
