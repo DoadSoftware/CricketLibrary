@@ -80,6 +80,9 @@ public class Statistics
   @Column(name="WICKETS")
   private Integer wickets;
   
+  @Column(name="CATCHES")
+  private Integer catches;
+  
   @Column(name="BESTFIGURES")
   private String best_figures;
   
@@ -338,6 +341,14 @@ public Integer getBowler_inning() {
 
 public void setBowler_inning(Integer bowler_inning) {
 	this.bowler_inning = bowler_inning;
+}
+
+public Integer getCatches() {
+	return catches;
+}
+
+public void setCatches(Integer catches) {
+	this.catches = catches;
 }
 
 }

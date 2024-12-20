@@ -207,7 +207,7 @@ public class MatchStats{
 		private int totalFives;
 		private int totalSixes;
 		private int totalNines;
-		private String statsType;
+		private String statsType,name,BowlerName;
 		private String thisOverTxt;
 		private int lastBowlerId;
 		private int replacementBowlerId;
@@ -328,6 +328,19 @@ public class MatchStats{
 		}
 		public void setReplacementBowlerId(int replacementBowlerId) {
 			this.replacementBowlerId = replacementBowlerId;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getBowlerName() {
+			return BowlerName;
+		}
+		public void setBowlerName(String bowlerName) {
+			BowlerName = bowlerName;
 		}
 		@Override
 		public String toString() {
