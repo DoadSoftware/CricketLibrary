@@ -12829,7 +12829,7 @@ public class CricketFunctions {
 	{
 		int oneToSixRuns = 0, oneToSixWkts = 0, sevenToFifteenRuns = 0, sevenToFifteenWkts = 0, sixteenToTwentyRuns = 0, sixteenToTwentyWkts = 0;
 		// Track batsmen and bowlers performance
-        Map<Integer, Integer> batsmanRunsPhase1 = new HashMap<>(), batsmanRunsPhase2 = new HashMap<>(), batsmanRunsPhase3 = new HashMap<>();
+        Map<Integer, String> batsmanRunsPhase1 = new HashMap<>(), batsmanRunsPhase2 = new HashMap<>(), batsmanRunsPhase3 = new HashMap<>();
         Map<Integer, Integer> batsmanBallsPhase1 = new HashMap<>(), batsmanBallsPhase2 = new HashMap<>(), batsmanBallsPhase3 = new HashMap<>();
         Map<Integer, Integer> bowlerWicketsPhase1 = new HashMap<>(), bowlerWicketsPhase2 = new HashMap<>(), bowlerWicketsPhase3 = new HashMap<>();
         Map<Integer, Integer> bowlerBallsPhase1 = new HashMap<>(), bowlerBallsPhase2 = new HashMap<>(), bowlerBallsPhase3 = new HashMap<>();
@@ -12844,9 +12844,9 @@ public class CricketFunctions {
 					  System.out.println("DATA : "+overBalls+" : "+events.get(i).getEventType()+" : "+events.get(i).getEventBatterNo());
 					  switch (events.get(i).getEventType().toUpperCase()) {
 					  case CricketUtil.NEW_BATSMAN:
-						  updateMap(batsmanRunsPhase1, events.get(i).getEventBatterNo(), -1);
-						  updateMap(batsmanRunsPhase2, events.get(i).getEventBatterNo(), -1);
-						  updateMap(batsmanRunsPhase3, events.get(i).getEventBatterNo(), -1);
+						  updateMap(batsmanRunsPhase1, events.get(i).getEventBatterNo(), -1,"");
+						  updateMap(batsmanRunsPhase2, events.get(i).getEventBatterNo(), -1 ,"");
+						  updateMap(batsmanRunsPhase3, events.get(i).getEventBatterNo(), -1 ,"");
 						  updateMap(batsmanBallsPhase1, events.get(i).getEventBatterNo(), -1);
 						  updateMap(batsmanBallsPhase2, events.get(i).getEventBatterNo(), -1);
 						  updateMap(batsmanBallsPhase3, events.get(i).getEventBatterNo(), -1);
@@ -12932,9 +12932,14 @@ public class CricketFunctions {
 				  }  
 			  }
 		}
+		
+		
 		String topBatsmanPhase1 = getTopTwoPerformers(batsmanRunsPhase1,batsmanBallsPhase1);
 	    String topBatsmanPhase2 = getTopTwoPerformers(batsmanRunsPhase2,batsmanBallsPhase2);
 	    String topBatsmanPhase3 = getTopTwoPerformers(batsmanRunsPhase3,batsmanBallsPhase3);
+	    System.out.println("topBatsmanPhase1 "+topBatsmanPhase1.toString());
+		System.out.println("topBatsmanPhase2 "+batsmanRunsPhase2.toString());
+		System.out.println("topBatsmanPhase3 "+batsmanRunsPhase3.toString());
 	    String topBowlerPhase1 = getTopTwoBowlers(bowlerWicketsPhase1, bowlerRunsConcededPhase1,bowlerBallsPhase1);
 	    String topBowlerPhase2 = getTopTwoBowlers(bowlerWicketsPhase2, bowlerRunsConcededPhase2,bowlerBallsPhase2);
 	    String topBowlerPhase3 = getTopTwoBowlers(bowlerWicketsPhase3, bowlerRunsConcededPhase3,bowlerBallsPhase3);
@@ -12944,7 +12949,7 @@ public class CricketFunctions {
 	}
 	
 	//USING IN PHASE WISE
-	private static int handlePhaseByMainEvents(Event event, float overBalls, Map<Integer, Integer> batsmanRuns, Map<Integer, Integer> batsmanBalls, Map<Integer,
+	private static int handlePhaseByMainEvents(Event event, float overBalls, Map<Integer, String> batsmanRuns, Map<Integer, Integer> batsmanBalls, Map<Integer,
 			Integer> bowlerRunsConceded, Map<Integer, Integer> bowlerBallsBowled, Map<Integer, Integer> bowlerWickets, int phaseWickets) {
 		
 		if(event.getEventType().equalsIgnoreCase(CricketUtil.WIDE)) {
@@ -12959,7 +12964,7 @@ public class CricketFunctions {
 			updateMap(batsmanBalls, event.getEventBatterNo(), 1);
 			updateMap(bowlerBallsBowled, event.getEventBowlerNo(), 1);
 		}else if(!event.getEventType().equalsIgnoreCase(CricketUtil.PENALTY)) {
-			updateMap(batsmanRuns, event.getEventBatterNo(), event.getEventRuns());
+			updateMap(batsmanRuns, event.getEventBatterNo(), event.getEventRuns(),"");
 			updateMap(batsmanBalls, event.getEventBatterNo(), 1);
 			updateMap(bowlerRunsConceded, event.getEventBowlerNo(), event.getEventRuns());
 			updateMap(bowlerBallsBowled, event.getEventBowlerNo(), 1);
@@ -12973,12 +12978,13 @@ public class CricketFunctions {
 						&& !event.getEventHowOut().equalsIgnoreCase(CricketUtil.TIMED_OUT)
 						&& !event.getEventHowOut().equalsIgnoreCase(CricketUtil.HANDLED_THE_BALL)) {
 							updateMap(bowlerWickets, event.getEventBowlerNo(), 1);
+							updateMap(batsmanRuns, event.getEventHowOutBatterNo(),(event.getEventRuns()+ event.getEventExtraRuns()) ,"out");
 				}
 			}
 		}
 		return phaseWickets;
 	}
-	private static int handlePhaseByExtras(Event event, float overBalls, Map<Integer, Integer> batsmanRuns, Map<Integer, Integer> batsmanBalls, Map<Integer,
+	private static int handlePhaseByExtras(Event event, float overBalls, Map<Integer, String> batsmanRuns, Map<Integer, Integer> batsmanBalls, Map<Integer,
 			Integer> bowlerRunsConceded, Map<Integer, Integer> bowlerBallsBowled, Map<Integer, Integer> bowlerWickets, int phaseWickets) {
 		
 		if(event.getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
@@ -13005,7 +13011,7 @@ public class CricketFunctions {
     			}
     		}else if(event.getEventExtra() != null) {
     			if(event.getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
-    				updateMap(batsmanRuns, event.getEventBatterNo(), event.getEventRuns());
+    				updateMap(batsmanRuns, event.getEventBatterNo(), event.getEventRuns(),"");
     				updateMap(batsmanBalls, event.getEventBatterNo(), 1);
     				updateMap(bowlerRunsConceded, event.getEventBowlerNo(), event.getEventRuns()+event.getEventExtraRuns() + event.getEventSubExtraRuns());
     			}else if(event.getEventExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
@@ -13019,6 +13025,7 @@ public class CricketFunctions {
 					phaseWickets = phaseWickets + 1;
 					if(!event.getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
 						updateMap(bowlerWickets, event.getEventBowlerNo(), 1);
+						updateMap(batsmanRuns, event.getEventHowOutBatterNo(), (event.getEventRuns()+ event.getEventExtraRuns()),"out");
 					}
 			}
 		}
@@ -13034,15 +13041,25 @@ public class CricketFunctions {
 		 }
 	 }
 	 
+	 private static void updateMap(Map<Integer, String> map, int key, int value, String outNot) {
+		    String currentValue = map.getOrDefault(key, "0");
+		    int newValue = (currentValue.equals("-1") && value != 0) 
+		                   ? Integer.parseInt(currentValue) + value + 1 
+		                   : Integer.parseInt(currentValue) + value;
+		    map.put(key, Integer.toString(newValue)+outNot);
+		}
+
 	 //USING IN PHASE WISE SCORE
-	 private static String getTopTwoPerformers(Map<Integer, Integer> map,Map<Integer, Integer> ballsMap) {
+	 private static String getTopTwoPerformers(Map<Integer, String> map,Map<Integer, Integer> ballsMap) {
 		    return map.entrySet()
-		              .stream()
-		              .sorted((a, b) -> b.getValue().compareTo(a.getValue()))  // Sort by value in descending order
+		    		 .stream()
+		             .sorted((a, b) -> Integer.compare(
+		                  Integer.parseInt(b.getValue().replace("out", "").trim()), 
+		                  Integer.parseInt(a.getValue().replace("out", "").trim())))  // Sort by runs in descending order
 		              .limit(2)  // Limit to top two
 		              .map(entry -> {
 	                      int player = entry.getKey();
-	                      int runs = entry.getValue();
+	                      String runs = entry.getValue().contains("out") ? entry.getValue().replace("out", "") : entry.getValue().replace("out", "") + "*";
 	                      int balls = ballsMap.getOrDefault(player, 0);  // Default balls to 0 if not found
 	                      return player + "_" + runs + "_" + balls;  // Include balls in the format
 	                  })  // Format output
