@@ -1,9 +1,11 @@
 package com.cricket.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.cricket.util.CricketUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 public class Tournament implements Cloneable {
 
@@ -196,6 +198,7 @@ public int getBowlerEconomySortData() {
 		return 20000-temp;
 	}
 }
+
 public int getBowlerStrikeRateSortData() {
 	int temp = 0;
 	if(this.getBallsBowled() >= 1 && this.getWickets() >= 1) {
@@ -696,16 +699,34 @@ public String toString() {
 			+ player + ", batsman_best_Stats=" + batsman_best_Stats + ", bowler_best_Stats=" + bowler_best_Stats + "]";
 }
 
+//@Override
+//public Tournament clone() throws CloneNotSupportedException {
+//    Tournament clone = null;
+//    try
+//    {
+//        clone = (Tournament) super.clone();
+//    } 
+//    catch (CloneNotSupportedException e) 
+//    {
+//        throw new RuntimeException(e);
+//    }
+//    return clone;
+//}
+
 @Override
 public Tournament clone() throws CloneNotSupportedException {
-    Tournament clone = null;
-    try
-    {
-        clone = (Tournament) super.clone();
-    } 
-    catch (CloneNotSupportedException e) 
-    {
-        throw new RuntimeException(e);
+    Tournament clone = (Tournament) super.clone();
+    if (this.batsman_best_Stats != null) {
+        clone.batsman_best_Stats = new ArrayList<>(this.batsman_best_Stats.size());
+        for (BestStats stat : this.batsman_best_Stats) {
+            clone.batsman_best_Stats.add(stat.clone()); // Ensure `BestStats` also supports deep copying
+        }
+    }
+    if (this.bowler_best_Stats != null) {
+        clone.bowler_best_Stats = new ArrayList<>(this.bowler_best_Stats.size());
+        for (BestStats stat : this.bowler_best_Stats) {
+            clone.bowler_best_Stats.add(stat.clone());
+        }
     }
     return clone;
 }

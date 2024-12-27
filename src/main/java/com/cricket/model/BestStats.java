@@ -1,8 +1,9 @@
 package com.cricket.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-public class BestStats{
+public class BestStats implements Cloneable{
 
   private int playerId;
   private int bestEquation;
@@ -78,6 +79,7 @@ public int getBatsmanStrikeRateSortData() {
 		return temp;
 	}
 }
+
 public int getBowlerEconomySortData() {
 	int temp = 0;
 	if(this.getBalls()>0) {
