@@ -25,6 +25,14 @@ public class MatchStats{
 	private VariousStats awaySecondPowerPlay;
 	private VariousStats awayThirdPowerPlay;
 	
+    private List<VariousStats> homeFirstPowerPlayBatsman;  
+    private List<VariousStats> homeSecondPowerPlayBatsman; 
+    private List<VariousStats> homeThirdPowerPlayBatsman;  
+    
+    private List<VariousStats> awayFirstPowerPlayBatsman;  
+    private List<VariousStats> awaySecondPowerPlayBatsman; 
+    private List<VariousStats> awayThirdPowerPlayBatsman;  
+    
 	public MatchStats() {
 		super();
 		this.overData = new VariousStats();
@@ -44,6 +52,12 @@ public class MatchStats{
 		this.awayThirdPowerPlay = new VariousStats();
 		this.homeOverByOverData = new ArrayList<OverByOverData>();
 		this.awayOverByOverData = new ArrayList<OverByOverData>();
+		this.homeFirstPowerPlayBatsman = new ArrayList<>();
+        this.homeSecondPowerPlayBatsman = new ArrayList<>();
+        this.homeThirdPowerPlayBatsman = new ArrayList<>();
+        this.awayFirstPowerPlayBatsman = new ArrayList<>();
+        this.awaySecondPowerPlayBatsman = new ArrayList<>();
+        this.awayThirdPowerPlayBatsman = new ArrayList<>();
 	}
 	
 	public List<VariousStats> getPlayerStats() {
@@ -182,17 +196,69 @@ public class MatchStats{
 		this.lastThirtyBalls = lastThirtyBalls;
 	}
 
-@Override
-	public String toString() {
-		return "MatchStats [overData=" + overData + ", playerStats=" + playerStats + ", homeOverByOverData="
-				+ homeOverByOverData + ", awayOverByOverData=" + awayOverByOverData + ", bowlingCard=" + bowlingCard
-				+ ", ballsSinceLastBoundary=" + ballsSinceLastBoundary + ", lastOverData=" + lastOverData
-				+ ", inningCompare=" + inningCompare + ", lastThirtyBalls=" + lastThirtyBalls + ", homeTeamScoreData="
-				+ homeTeamScoreData + ", awayTeamScoreData=" + awayTeamScoreData + ", homeFirstPowerPlay="
-				+ homeFirstPowerPlay + ", homeSecondPowerPlay=" + homeSecondPowerPlay + ", homeThirdPowerPlay="
-				+ homeThirdPowerPlay + ", awayFirstPowerPlay=" + awayFirstPowerPlay + ", awaySecondPowerPlay="
-				+ awaySecondPowerPlay + ", awayThirdPowerPlay=" + awayThirdPowerPlay + "]";
+	public List<VariousStats> getHomeFirstPowerPlayBatsman() {
+		return homeFirstPowerPlayBatsman;
 	}
+
+	public void setHomeFirstPowerPlayBatsman(List<VariousStats> homeFirstPowerPlayBatsman) {
+		this.homeFirstPowerPlayBatsman = homeFirstPowerPlayBatsman;
+	}
+
+	public List<VariousStats> getHomeSecondPowerPlayBatsman() {
+		return homeSecondPowerPlayBatsman;
+	}
+
+	public void setHomeSecondPowerPlayBatsman(List<VariousStats> homeSecondPowerPlayBatsman) {
+		this.homeSecondPowerPlayBatsman = homeSecondPowerPlayBatsman;
+	}
+
+	public List<VariousStats> getHomeThirdPowerPlayBatsman() {
+		return homeThirdPowerPlayBatsman;
+	}
+
+	public void setHomeThirdPowerPlayBatsman(List<VariousStats> homeThirdPowerPlayBatsman) {
+		this.homeThirdPowerPlayBatsman = homeThirdPowerPlayBatsman;
+	}
+
+	public List<VariousStats> getAwayFirstPowerPlayBatsman() {
+		return awayFirstPowerPlayBatsman;
+	}
+
+	public void setAwayFirstPowerPlayBatsman(List<VariousStats> awayFirstPowerPlayBatsman) {
+		this.awayFirstPowerPlayBatsman = awayFirstPowerPlayBatsman;
+	}
+
+	public List<VariousStats> getAwaySecondPowerPlayBatsman() {
+		return awaySecondPowerPlayBatsman;
+	}
+
+	public void setAwaySecondPowerPlayBatsman(List<VariousStats> awaySecondPowerPlayBatsman) {
+		this.awaySecondPowerPlayBatsman = awaySecondPowerPlayBatsman;
+	}
+
+	public List<VariousStats> getAwayThirdPowerPlayBatsman() {
+		return awayThirdPowerPlayBatsman;
+	}
+
+	public void setAwayThirdPowerPlayBatsman(List<VariousStats> awayThirdPowerPlayBatsman) {
+		this.awayThirdPowerPlayBatsman = awayThirdPowerPlayBatsman;
+	}
+
+@Override
+public String toString() {
+	return "MatchStats [overData=" + overData + ", playerStats=" + playerStats + ", homeOverByOverData="
+			+ homeOverByOverData + ", awayOverByOverData=" + awayOverByOverData + ", bowlingCard=" + bowlingCard
+			+ ", ballsSinceLastBoundary=" + ballsSinceLastBoundary + ", lastOverData=" + lastOverData
+			+ ", inningCompare=" + inningCompare + ", lastThirtyBalls=" + lastThirtyBalls + ", homeTeamScoreData="
+			+ homeTeamScoreData + ", awayTeamScoreData=" + awayTeamScoreData + ", homeFirstPowerPlay="
+			+ homeFirstPowerPlay + ", homeSecondPowerPlay=" + homeSecondPowerPlay + ", homeThirdPowerPlay="
+			+ homeThirdPowerPlay + ", awayFirstPowerPlay=" + awayFirstPowerPlay + ", awaySecondPowerPlay="
+			+ awaySecondPowerPlay + ", awayThirdPowerPlay=" + awayThirdPowerPlay + ", homeFirstPowerPlayBatsman="
+			+ homeFirstPowerPlayBatsman + ", homeSecondPowerPlayBatsman=" + homeSecondPowerPlayBatsman
+			+ ", homeThirdPowerPlayBatsman=" + homeThirdPowerPlayBatsman + ", awayFirstPowerPlayBatsman="
+			+ awayFirstPowerPlayBatsman + ", awaySecondPowerPlayBatsman=" + awaySecondPowerPlayBatsman
+			+ ", awayThirdPowerPlayBatsman=" + awayThirdPowerPlayBatsman + "]";
+}
 	public static class VariousStats{
 		
 		private int totalRuns;
@@ -210,8 +276,7 @@ public class MatchStats{
 		private String statsType,name,BowlerName;
 		private String thisOverTxt;
 		private int lastBowlerId;
-		private int replacementBowlerId;
-		
+		private int replacementBowlerId;		
 		public VariousStats(int totalRuns, int totalWickets, int totalFours, int totalSixes, int totalNines) {
 			super();
 			this.totalRuns = totalRuns;
@@ -342,14 +407,16 @@ public class MatchStats{
 		public void setBowlerName(String bowlerName) {
 			BowlerName = bowlerName;
 		}
+		
 		@Override
 		public String toString() {
 			return "VariousStats [totalRuns=" + totalRuns + ", totalBalls=" + totalBalls + ", id=" + id
 					+ ", totalWickets=" + totalWickets + ", totalDots=" + totalDots + ", totalOnes=" + totalOnes
 					+ ", totalTwos=" + totalTwos + ", totalThrees=" + totalThrees + ", totalFours=" + totalFours
 					+ ", totalFives=" + totalFives + ", totalSixes=" + totalSixes + ", totalNines=" + totalNines
-					+ ", statsType=" + statsType + ", thisOverTxt=" + thisOverTxt + ", lastBowlerId=" + lastBowlerId
-					+ ", replacementBowlerId=" + replacementBowlerId + "]";
+					+ ", statsType=" + statsType + ", name=" + name + ", BowlerName=" + BowlerName + ", thisOverTxt="
+					+ thisOverTxt + ", lastBowlerId=" + lastBowlerId + ", replacementBowlerId=" + replacementBowlerId
+					+ "]";
 		}
 
 	}
