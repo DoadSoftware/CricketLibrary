@@ -90,6 +90,9 @@ public class Configuration {
 	@XmlElement(name="preview")
 	private String preview;
 	
+	@XmlElement(name="whichInfobar")
+	private String whichInfobar;
+	
 	public Configuration() {
 		super();
 	}
@@ -169,7 +172,7 @@ public class Configuration {
 	public Configuration(String filename, String broadcaster, String secondaryBroadcaster, 
 			String primaryIpAddress, int primaryPortNumber, String primaryLanguage,
 			String qtIpAddress,int qtPortNumber, String primaryVariousOptions, String secondaryIpAddress, 
-			int secondaryPortNumber,String secondaryLanguage, String preview) {
+			int secondaryPortNumber,String secondaryLanguage, String preview,String whichInfobar) {
 		super();
 		this.filename = filename;
 		this.broadcaster = broadcaster;
@@ -184,6 +187,7 @@ public class Configuration {
 		this.secondaryPortNumber = secondaryPortNumber;
 		this.secondaryLanguage = secondaryLanguage;
 		this.preview = preview;
+		this.whichInfobar = whichInfobar;
 	}
 	public Configuration(String selectedMatch, String select_broadcaster, String select_second_broadcaster,
 			String primaryIpAddress, int primaryPortNumber, String primaryLanguage, String secondaryIpAddress,
@@ -225,6 +229,15 @@ public class Configuration {
 		this.tertiaryScene = tertiaryScene;
 		this.tertiaryLanguage = tertiaryLanguage;
 	}
+	
+	public String getWhichInfobar() {
+		return whichInfobar;
+	}
+
+	public void setWhichInfobar(String whichInfobar) {
+		this.whichInfobar = whichInfobar;
+	}
+
 	public String getPreview() {
 		return preview;
 	}
@@ -445,14 +458,16 @@ public class Configuration {
 	public String toString() {
 		return "Configuration [primaryVariousOptions=" + primaryVariousOptions + ", filename=" + filename
 				+ ", secondaryFilename=" + secondaryFilename + ", broadcaster=" + broadcaster
-				+ ", secondaryBroadcaster=" + secondaryBroadcaster + ", qtIpAddress=" + qtIpAddress + ", qtPortNumber="
-				+ qtPortNumber + ", qtScene=" + qtScene + ", qtLanguage=" + qtLanguage + ", primaryIpAddress="
-				+ primaryIpAddress + ", primaryPortNumber=" + primaryPortNumber + ", primaryScene=" + primaryScene
-				+ ", primaryLanguage=" + primaryLanguage + ", secondaryIpAddress=" + secondaryIpAddress
-				+ ", secondaryPortNumber=" + secondaryPortNumber + ", secondaryScene=" + secondaryScene
-				+ ", secondaryLanguage=" + secondaryLanguage + ", tertiaryIpAddress=" + tertiaryIpAddress
-				+ ", tertiaryPortNumber=" + tertiaryPortNumber + ", tertiaryScene=" + tertiaryScene
+				+ ", secondaryBroadcaster=" + secondaryBroadcaster + ", whichScene=" + whichScene + ", qtIpAddress="
+				+ qtIpAddress + ", qtPortNumber=" + qtPortNumber + ", qtScene=" + qtScene + ", qtLanguage=" + qtLanguage
+				+ ", primaryIpAddress=" + primaryIpAddress + ", primaryPortNumber=" + primaryPortNumber
+				+ ", primaryScene=" + primaryScene + ", primaryLanguage=" + primaryLanguage + ", secondaryIpAddress="
+				+ secondaryIpAddress + ", secondaryPortNumber=" + secondaryPortNumber + ", secondaryScene="
+				+ secondaryScene + ", secondaryLanguage=" + secondaryLanguage + ", tertiaryIpAddress="
+				+ tertiaryIpAddress + ", tertiaryPortNumber=" + tertiaryPortNumber + ", tertiaryScene=" + tertiaryScene
 				+ ", tertiaryLanguage=" + tertiaryLanguage + ", speedUnit=" + speedUnit + ", audio=" + audio
-				+ ", qudich=" + qudich + ", wagon=" + wagon + ", preview=" + preview + "]";
+				+ ", qudich=" + qudich + ", wagon=" + wagon + ", preview=" + preview + ", whichInfobar=" + whichInfobar
+				+ "]";
 	}
+
 }
