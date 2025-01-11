@@ -273,10 +273,10 @@ public String toString() {
 		private int totalFives;
 		private int totalSixes;
 		private int totalNines;
-		private String statsType,name,BowlerName;
+		private String statsType,name,BowlerName,outnotOut;
 		private String thisOverTxt;
 		private int lastBowlerId;
-		private int replacementBowlerId;		
+		private int replacementBowlerId;
 		public VariousStats(int totalRuns, int totalWickets, int totalFours, int totalSixes, int totalNines) {
 			super();
 			this.totalRuns = totalRuns;
@@ -292,6 +292,13 @@ public String toString() {
 		public VariousStats(int id) {
 			super();
 			this.id = id;
+		}
+		
+		public String getOutnotOut() {
+			return outnotOut;
+		}
+		public void setOutnotOut(String outnotOut) {
+			this.outnotOut = outnotOut;
 		}
 		public VariousStats(int id, String statsType) {
 			super();
@@ -420,4 +427,4 @@ public String toString() {
 		}
 
 	}
-}
+	}
