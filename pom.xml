@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.cricket</groupId>
   <artifactId>CricketLibrary</artifactId>
-  <version>1.433</version>
+  <version>1.434</version>
   <name>CricketLibrary</name>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -332,7 +332,7 @@
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-aspects</artifactId>
-    <version>4.1.4.RELEASE</version>
+    <version>6.2.1</version>
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/org.springframework/spring-beans -->
