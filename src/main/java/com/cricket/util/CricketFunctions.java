@@ -2994,7 +2994,6 @@ public class CricketFunctions {
 	{
 		Speed speed_to_return = new Speed();
 		BufferedWriter writer;
-
 		switch (broadcaster.toUpperCase()) {
 		case CricketUtil.HAWKEYE:
 
@@ -3079,6 +3078,29 @@ public class CricketFunctions {
 	        }
 
 	        //return null;
+			break;
+		case "VIRTUAL_EYE":
+			File this_directory = new File(speedSourcePath);
+			
+		    if (this_directory.isDirectory()) {
+		    	
+		        Optional<File> opFile = Arrays.stream(this_directory.listFiles(File::isFile))
+		          .max((f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified()));
+		        
+		        if (opFile.isPresent()){
+		        	if(lastSpeed.getSpeedFileModifiedTime() != opFile.get().lastModified()) {
+			        	for(String str_line : Files.readAllLines(Paths.get(
+			        			speedSourcePath + opFile.get().getName()), StandardCharsets.UTF_8)) {
+								speed_to_return.setSpeedValue(str_line.substring(1));
+								speed_to_return.setSpeedFileModifiedTime(opFile.get().lastModified());
+								writer = new BufferedWriter(new FileWriter(speedDestinationPath));
+							    writer.write(str_line);
+							    writer.close();							
+								return speed_to_return;
+			        	}
+		        	}
+		        }
+		    }
 			break;
 		}
 		return null;
