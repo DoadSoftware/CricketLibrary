@@ -1409,7 +1409,7 @@ public class CricketFunctions {
 	public static void setInteractiveData(MatchAllData match,String line_txt, int i) throws IOException {
 		String this_ball_data = "", Bowler = "", Batsman = "", OtherBatsman = "", 
 		over_number = "", over_ball = "", inning_number = "",batsman_style = "",
-		bowler_handed = "",this_over = "",this_over_run = "",shot = "-",wagonX = "0", wagonY = "0";
+		bowler_handed = "",this_over = "",this_over_run = "",shot = "-",wagonX = "0", wagonY = "0",height = "0",six_distance = "";
 		int j = 0;
 		switch (match.getEventFile().getEvents().get(i).getEventType().toUpperCase()) {
 		  case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
@@ -1641,6 +1641,22 @@ public class CricketFunctions {
 									}else {
 										shot = shot + "A";
 									}
+									
+									if(match.getMatch().getShots().get(k).getBoundaryHeight().contains("along_ground")) {
+										height = "0";
+									}else if(match.getMatch().getShots().get(k).getBoundaryHeight().contains("below_head_height")) {
+										height = "1";
+									}else if(match.getMatch().getShots().get(k).getBoundaryHeight().contains("just_over_head_height")) {
+										height = "2";
+									}else if(match.getMatch().getShots().get(k).getBoundaryHeight().contains("high_in_the_air")) {
+										height = "3";
+									}else if(match.getMatch().getShots().get(k).getBoundaryHeight().contains("very_high_in_the_air")) {
+										height = "4";
+									}
+									System.out.println("height = " + height);
+									if(match.getMatch().getShots().get(k).getRuns() == 6) {
+										six_distance = String.valueOf(match.getMatch().getShots().get(k).getSixDistance());
+									}
 								}
 							}
 						}
@@ -1658,12 +1674,13 @@ public class CricketFunctions {
 			
 			line_txt = addSubString(line_txt,batsman_style,102);
 			line_txt = addSubString(line_txt,shot,109);
-			line_txt = addSubString(line_txt,"0",115);
+			line_txt = addSubString(line_txt,height,115);
 			line_txt = addSubString(line_txt,"0",121);
 			line_txt = addSubString(line_txt,"0",127);
 			line_txt = addSubString(line_txt,bowler_handed,129);
 			line_txt = addSubString(line_txt,OtherBatsman,131);
 			line_txt = addSubString(line_txt,this_over_run,157);
+			line_txt = addSubString(line_txt,six_distance,162);
 			  
 			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT), 
 					Arrays.asList(line_txt), StandardOpenOption.APPEND);
@@ -1689,6 +1706,7 @@ public class CricketFunctions {
 		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
 			max_inn = 4;
 		}
+		
 		switch(type.toUpperCase()){
 		case "FULL_WRITE":
 			
@@ -1723,7 +1741,7 @@ public class CricketFunctions {
 			txt = addSubString(txt,"============================================================================================================================================================" + "\n\n",0);
 
 			if(Files.exists(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT))) {
-				FileOutputStream fs=new FileOutputStream(CricketUtil.CRICKET_SERVER_DIRECTORY 
+				FileOutputStream fs = new FileOutputStream(CricketUtil.CRICKET_SERVER_DIRECTORY 
 					+ CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT);
 				fs.write(new byte[0]);
 				fs.close();
