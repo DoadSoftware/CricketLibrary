@@ -12273,7 +12273,7 @@ public class CricketFunctions {
 							    if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
 							        matchStats.getOverData().setTotalWickets(matchStats.getOverData().getTotalWickets() + 1);
 							        matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + CricketUtil.LOG_WICKET +
-							                (events.get(i).getEventExtra() != null && !events.get(i).getEventExtra().isEmpty() ? "+" : " "));
+							                (events.get(i).getEventExtra() != null && !events.get(i).getEventExtra().isEmpty() ? "+" : ""));
 							    }
 							    if (events.get(i).getEventExtra().equals(CricketUtil.WIDE) || events.get(i).getEventExtra().equals(CricketUtil.NO_BALL)) {
 							        if (events.get(i).getEventSubExtra().equals(CricketUtil.WIDE) || events.get(i).getEventSubExtra().equals(CricketUtil.NO_BALL)) {
@@ -12302,8 +12302,7 @@ public class CricketFunctions {
 							            	(events.get(i).getEventRuns() > 0 ? events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() : events.get(i).getEventExtra()));
 							        }
 							    } else {
-							        matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() +
-							            (events.get(i).getEventRuns() > 0 ? events.get(i).getEventRuns() + "+" : "") +
+							        matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + (events.get(i).getEventRuns() > 0 ? events.get(i).getEventRuns() + "+" : "") +
 							            (events.get(i).getEventSubExtraRuns() > 1 ? events.get(i).getEventSubExtraRuns() : "") +  events.get(i).getEventSubExtra());
 							    }
 							    break;
