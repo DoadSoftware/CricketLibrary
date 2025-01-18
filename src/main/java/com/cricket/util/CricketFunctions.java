@@ -12298,8 +12298,11 @@ public class CricketFunctions {
 							                    events.get(i).getEventSubExtra() + "+" + (events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()) :
 							                    events.get(i).getEventSubExtra()));
 							        } else {
-							            matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventExtra() + "+" + 
-							            	(events.get(i).getEventRuns() > 0 ? events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() : events.get(i).getEventExtra()));
+							        	 matchStats.getOverData().setThisOverTxt(( !events.get(i).getEventSubExtra().isEmpty() && events.get(i).getEventSubExtraRuns() <= 0) ? 
+					        			    (events.get(i).getEventRuns() > 0 ? events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() + events.get(i).getEventSubExtra() : 
+					        			     events.get(i).getEventExtra() + "+" + events.get(i).getEventSubExtra()) : 
+					        			    (events.get(i).getEventRuns() > 0 ? events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() : events.get(i).getEventExtra()));
+
 							        }
 							    } else {
 							        matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + (events.get(i).getEventRuns() > 0 ? events.get(i).getEventRuns() + "+" : "") +
