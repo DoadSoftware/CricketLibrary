@@ -12257,7 +12257,7 @@ public class CricketFunctions {
 							    	}
 							    	matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + 
 							    		    (events.get(i).getEventWasABoundary() != null && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES) 
-							    		    ? events.get(i).getEventRuns()+"BOUNADRY"  : events.get(i).getEventRuns()));
+							    		    ? events.get(i).getEventRuns()+"BOUNDARY"  : events.get(i).getEventRuns()));
 
 						    		
 						    		matchStats.getOverData().setTotalRuns(matchStats.getOverData().getTotalRuns() + events.get(i).getEventRuns());
@@ -12298,11 +12298,24 @@ public class CricketFunctions {
 							                    events.get(i).getEventSubExtra() + "+" + (events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()) :
 							                    events.get(i).getEventSubExtra()));
 							        } else {
-							        	 matchStats.getOverData().setThisOverTxt(( !events.get(i).getEventSubExtra().isEmpty() && events.get(i).getEventSubExtraRuns() <= 0) ? 
-					        			    (events.get(i).getEventRuns() > 0 ? events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() + events.get(i).getEventSubExtra() : 
-					        			     events.get(i).getEventExtra() + "+" + events.get(i).getEventSubExtra()) : 
-					        			    (events.get(i).getEventRuns() > 0 ? events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() : events.get(i).getEventExtra()));
-
+							        	if(events.get(i).getEventSubExtra().isEmpty()) {
+							        		if(events.get(i).getEventRuns() > 0) {
+							        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns());	
+							        		}else {
+							        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventExtra());		
+							        		}
+							        	}else {
+							        		if(events.get(i).getEventRuns() > 0) {
+							        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns());	
+							        		}else {
+							        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventExtra());		
+							        		}
+							        		if(events.get(i).getEventSubExtraRuns() > 0) {
+							        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventSubExtra() + "+" + events.get(i).getEventSubExtraRuns());	
+							        		}else {
+							        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventSubExtra());		
+							        		}
+							        	}
 							        }
 							    } else {
 							        matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + (events.get(i).getEventRuns() > 0 ? events.get(i).getEventRuns() + "+" : "") +
