@@ -9871,7 +9871,7 @@ public class CricketFunctions {
 							}
 							break;
 							
-					    case CricketUtil.CHANGE_BOWLER: 
+					    case CricketUtil.END_OVER:
 					    	
 					    	if(events.get(i).getEventBallNo() <= 0) {
 						    	switch (processPowerPlay(CricketUtil.FULL, match).replace(CricketUtil.POWERPLAY, "").trim()) {
@@ -9919,6 +9919,7 @@ public class CricketFunctions {
 	    		break;
 	    	}
 		}
+		System.out.println("over_by_over_data = " + over_by_over_data);
 		return over_by_over_data;
 	}
 	public static String generateStrikeRate(int runs, int balls, int numberOfDecimals) {
