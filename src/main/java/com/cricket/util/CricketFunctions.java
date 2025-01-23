@@ -9871,7 +9871,7 @@ public class CricketFunctions {
 							}
 							break;
 							
-					    case CricketUtil.END_OVER:
+					    case CricketUtil.CHANGE_BOWLER:
 					    	
 					    	if(events.get(i).getEventBallNo() <= 0) {
 						    	switch (processPowerPlay(CricketUtil.FULL, match).replace(CricketUtil.POWERPLAY, "").trim()) {
@@ -12918,14 +12918,30 @@ public class CricketFunctions {
 	    }
 	    if (Match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10)) {
 	        for (int inning = 0; inning < 2; inning++) {
-	            Match.getMatch().getInning().get(inning).setFirstPowerplayStartOver(1);
-	            Match.getMatch().getInning().get(inning).setFirstPowerplayEndOver(2);
+	        	
+	        	Match.getMatch().getInning().get(inning).setFirstPowerplayStartOver(matchAllData.getMatch().getInning().get(inning).
+	    				getFirstPowerplayStartOver());
+	        	Match.getMatch().getInning().get(inning).setFirstPowerplayEndOver(matchAllData.getMatch().getInning().get(inning).
+	    				getFirstPowerplayEndOver());
 
-	            Match.getMatch().getInning().get(inning).setSecondPowerplayStartOver(3);
-	            Match.getMatch().getInning().get(inning).setSecondPowerplayEndOver(6);
+	        	Match.getMatch().getInning().get(inning).setSecondPowerplayStartOver(matchAllData.getMatch().getInning().get(inning).
+	    				getSecondPowerplayStartOver());
+	        	Match.getMatch().getInning().get(inning).setSecondPowerplayEndOver(matchAllData.getMatch().getInning().get(inning).
+	    				getSecondPowerplayEndOver());
 
-	            Match.getMatch().getInning().get(inning).setThirdPowerplayStartOver(7);
-	            Match.getMatch().getInning().get(inning).setThirdPowerplayEndOver(10);
+	        	Match.getMatch().getInning().get(inning).setThirdPowerplayStartOver(matchAllData.getMatch().getInning().get(inning).
+	    				getThirdPowerplayStartOver());
+	        	Match.getMatch().getInning().get(inning).setThirdPowerplayEndOver(matchAllData.getMatch().getInning().get(inning).
+	    				getThirdPowerplayEndOver());
+	    		
+//	            Match.getMatch().getInning().get(inning).setFirstPowerplayStartOver(1);
+//	            Match.getMatch().getInning().get(inning).setFirstPowerplayEndOver(2);
+//
+//	            Match.getMatch().getInning().get(inning).setSecondPowerplayStartOver(3);
+//	            Match.getMatch().getInning().get(inning).setSecondPowerplayEndOver(6);
+//
+//	            Match.getMatch().getInning().get(inning).setThirdPowerplayStartOver(7);
+//	            Match.getMatch().getInning().get(inning).setThirdPowerplayEndOver(10);
 	        }
 	    } else if (Match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20) || 
 	                Match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)) {
