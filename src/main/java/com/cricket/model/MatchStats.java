@@ -10,7 +10,9 @@ public class MatchStats{
 	private List<OverByOverData> homeOverByOverData; 
 	private List<OverByOverData> awayOverByOverData; 
 	private VariousStats bowlingCard; 
-	private int ballsSinceLastBoundary; 
+	private int ballsSinceLastBoundary,
+		phase1StartOver , phase1EndOver, phase2StartOver , phase2EndOver,
+		phase3StartOver , phase3EndOver; 
 	private VariousStats lastOverData;
 	private VariousStats inningCompare;
 	private VariousStats lastThirtyBalls;
@@ -242,6 +244,54 @@ public class MatchStats{
 
 	public void setAwayThirdPowerPlayBatsman(List<VariousStats> awayThirdPowerPlayBatsman) {
 		this.awayThirdPowerPlayBatsman = awayThirdPowerPlayBatsman;
+	}
+
+	public int getPhase1StartOver() {
+		return phase1StartOver;
+	}
+
+	public void setPhase1StartOver(int phase1StartOver) {
+		this.phase1StartOver = phase1StartOver;
+	}
+
+	public int getPhase1EndOver() {
+		return phase1EndOver;
+	}
+
+	public void setPhase1EndOver(int phase1EndOver) {
+		this.phase1EndOver = phase1EndOver;
+	}
+
+	public int getPhase2StartOver() {
+		return phase2StartOver;
+	}
+
+	public void setPhase2StartOver(int phase2StartOver) {
+		this.phase2StartOver = phase2StartOver;
+	}
+
+	public int getPhase2EndOver() {
+		return phase2EndOver;
+	}
+
+	public void setPhase2EndOver(int phase2EndOver) {
+		this.phase2EndOver = phase2EndOver;
+	}
+
+	public int getPhase3StartOver() {
+		return phase3StartOver;
+	}
+
+	public void setPhase3StartOver(int phase3StartOver) {
+		this.phase3StartOver = phase3StartOver;
+	}
+
+	public int getPhase3EndOver() {
+		return phase3EndOver;
+	}
+
+	public void setPhase3EndOver(int phase3EndOver) {
+		this.phase3EndOver = phase3EndOver;
 	}
 
 @Override
