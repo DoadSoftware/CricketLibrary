@@ -9363,7 +9363,16 @@ public class CricketFunctions {
 				    }else if(BallsBowledInInnings >= ((inn.getThirdPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver())) && BallsBowledInInnings < (inn.getThirdPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver()))) {
 				    	return_pp_txt = CricketUtil.THREE;
 				    }
-			    }else {
+			    }else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10)) {
+			    	
+			    	if(BallsBowledInInnings >= ((inn.getFirstPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver()) ) && BallsBowledInInnings < (inn.getFirstPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver()))) {
+				    	return_pp_txt = CricketUtil.ONE;
+				    }else if(BallsBowledInInnings >= ((inn.getSecondPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver())) && BallsBowledInInnings < (inn.getSecondPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver())) ) {
+				    	return_pp_txt = CricketUtil.TWO;
+				    }else {
+				    	return_pp_txt = "";
+				    }
+			    } else {
 			    	if(BallsBowledInInnings >= ((inn.getFirstPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver()) ) && BallsBowledInInnings < (inn.getFirstPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver()))) {
 				    	return_pp_txt = CricketUtil.ONE;
 				    }else {
