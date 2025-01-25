@@ -12458,17 +12458,19 @@ public class CricketFunctions {
 
 						// Last boundary
 						if(currentInning.getInningNumber() == events.get(i).getEventInningNumber() && !typeOfStats.contains("LAST_BOUNDARY")) {
-							if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX) 
+							if ((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX) 
 					    		|| events.get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR)
 					    		|| events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NINE)
-					    		|| events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL)
-					    		&& events.get(i).getEventWasABoundary() != null
-					    		&& events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+					    		|| events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL))
+					    		&& (events.get(i).getEventWasABoundary() != null && 
+					    		 events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
 								typeOfStats += "LAST_BOUNDARY,";
 							}else {
 								switch(events.get(i).getEventType()) {
 									case CricketUtil.DOT: case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:
-									case CricketUtil.FIVE: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.LOG_WICKET:
+									case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.FIVE: 
+									case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.LOG_WICKET:
+										System.out.println("Hello   " +events.get(i).getEventType());
 										matchStats.setBallsSinceLastBoundary(matchStats.getBallsSinceLastBoundary() + 1);
 										break;
 									case CricketUtil.LOG_ANY_BALL:
@@ -12479,7 +12481,6 @@ public class CricketFunctions {
 											}
 										}
 										break;
-										
 								}
 							}
 						}
