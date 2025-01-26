@@ -9441,13 +9441,15 @@ public class CricketFunctions {
      	  	        		&& (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX)) 
      	  	        		&& events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) 
      	  	        		|| (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR))
+     	  	        		&& events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)
+     	  	        		||(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NINE))
      	  	        		&& events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
      	    			  break;
      	  	        	}
 	    			}
 	    			 switch (events.get(i).getEventType()) {
 	    			 	
-	    			 	case CricketUtil.FOUR: case CricketUtil.SIX:
+	    			 	case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
 	    			 		if(events.get(i).getEventWasABoundary() != null) {
 	    			 		}else {
 	    			 			count_lb += 1;
@@ -9459,8 +9461,9 @@ public class CricketFunctions {
 		 	  	          count_lb += 1;
 		 	  	          break;
 		 	  	        case CricketUtil.LOG_ANY_BALL: 
-		 	  	          if (((events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
-		 	  	        		  && (events.get(i).getEventWasABoundary() != null) &&  (events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+		 	  	          if (((events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX)) 
+		 	  	        		  || (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.NINE))) && (events.get(i).getEventWasABoundary() != null) &&
+		 	  	        		  (events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
 		 	  	            exitLoop = true;
 		 	  	          }
 		 	  	          else {
@@ -9842,9 +9845,6 @@ public class CricketFunctions {
 		if ((events != null) && (events.size() > 0)) {
 			  for (int i = 0; i <=events.size()-1; i++) {
 				  if(events.get(i).getEventInningNumber() == inn_num) {
-					  if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
-						  System.out.println(events.get(i).getEventType()+" "+events.get(i).getEventNumber());
-					  }
 					  switch (events.get(i).getEventType().toUpperCase()) {
 //					  	case CricketUtil.WIDE:
 //					  		if(!events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER) &&
@@ -9885,14 +9885,10 @@ public class CricketFunctions {
 					    	if(events.get(i).getEventBallNo() <= 0) {
 						    	switch (processPowerPlay(CricketUtil.FULL, match).replace(CricketUtil.POWERPLAY, "").trim()) {
 						    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
-						    		System.out.println("INN : " + events.get(i).getEventInningNumber() + " - OVER : " + events.get(i).getEventOverNo() +
-						    				" - RUNS/WICKETS : " + total_runs + "/" + total_wickets);
 						    		over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
 							    			total_runs, total_wickets, true));
 						    		break;
 						    	default:
-						    		System.out.println("INN : " + events.get(i).getEventInningNumber() + " - OVER : " + events.get(i).getEventOverNo() +
-						    				" - RUNS/WICKETS : " + total_runs + "/" + total_wickets);
 							    	over_by_over_data.add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo(), 
 							    			total_runs, total_wickets, false));
 						    		break;
@@ -9916,9 +9912,6 @@ public class CricketFunctions {
 		if(total_runs > 0 || total_wickets > 0) {
 	    	switch (processPowerPlay(CricketUtil.FULL, match).replace(CricketUtil.POWERPLAY, "").trim()) {
 	    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
-	    		System.out.println("INN : " + events.get(events.size()-1).getEventInningNumber() 
-	    			+ " - OVER : " + events.get(events.size()-1).getEventOverNo() +
-	    			" - RUNS/WICKETS : " + total_runs + "/" + total_wickets);
 	    		over_by_over_data.add(new OverByOverData(inn_num, 
 		    			events.get(events.size()-1).getEventOverNo(), total_runs, total_wickets, true));
 	    		break;
@@ -9928,7 +9921,6 @@ public class CricketFunctions {
 	    		break;
 	    	}
 		}
-		System.out.println("over_by_over_data = " + over_by_over_data);
 		return over_by_over_data;
 	}
 	public static String generateStrikeRate(int runs, int balls, int numberOfDecimals) {

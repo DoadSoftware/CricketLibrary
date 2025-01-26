@@ -72,6 +72,9 @@ public class Player implements Comparable<Player>
   @Column(name = "Squad")
   private String squad;
   
+  @Column(name = "Debut")
+  private String debut;
+  
   @Column(name = "BOWLINGSTYLE")
   private String bowlingStyle;
   
@@ -517,7 +520,13 @@ public int getWickets() {
 public void setWickets(int wickets) {
 	this.wickets = wickets;
 }
+public String getDebut() {
+	return debut;
+}
 
+public void setDebut(String debut) {
+	this.debut = debut;
+}
 
 public List<Player> getPlayerPos() {
 	return playerPos;
