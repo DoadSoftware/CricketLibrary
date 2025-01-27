@@ -10467,9 +10467,9 @@ public class CricketFunctions {
 						    	matchSummaryStatus = batTeamNm + " win the super over";
 							} else {
 								if(ballsRemaining) {
-									int ballsRem = (match.getSetup().getMaxOvers()*Integer.valueOf(match.getSetup().getBallsPerOver()))
-											- ((match.getMatch().getInning().get(1).getTotalOvers()*Integer.valueOf(match.getSetup().getBallsPerOver()
-													+ match.getMatch().getInning().get(1).getTotalBalls())));
+									int ballsRem = ((match.getSetup().getMaxOvers()*Integer.valueOf(match.getSetup().getBallsPerOver())))
+											- ((match.getMatch().getInning().get(1).getTotalOvers()*Integer.valueOf(match.getSetup().getBallsPerOver())
+													+ (match.getMatch().getInning().get(1).getTotalBalls())));
 									if(ballsRem > 0) {
 										matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) + 
 									    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning))+ " with "+ballsRem+" ball"+CricketFunctions.Plural(ballsRem)+" remaining";
