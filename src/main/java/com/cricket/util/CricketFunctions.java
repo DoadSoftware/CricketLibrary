@@ -6375,7 +6375,7 @@ public class CricketFunctions {
 //		
 //	}
 	
-	public static String generateMatchResult(MatchAllData match, String teamNameType, String broadcaster, String splitResultTxt)
+	public static String generateMatchResult(MatchAllData match, String teamNameType, String broadcaster, String splitResultTxt, boolean ballsRemaining)
 	{
 		String resultToShow = "", opponentTeamName = "";
 		if(match.getMatch().getMatchResult() != null) {
@@ -6484,8 +6484,22 @@ public class CricketFunctions {
 							}
 							break;
 						default:
-							resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
+							System.out.println("BALLS "+ballsRemaining);
+							if(ballsRemaining) {
+								int ballsRem = ((match.getSetup().getMaxOvers()*Integer.valueOf(match.getSetup().getBallsPerOver())))
+										- ((match.getMatch().getInning().get(1).getTotalOvers()*Integer.valueOf(match.getSetup().getBallsPerOver())
+												+ (match.getMatch().getInning().get(1).getTotalBalls())));
+								if(ballsRem > 0) {
+									resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
+									+ " wicket" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]))+" with "+ballsRem+" ball"+CricketFunctions.Plural(ballsRem)+" remaining";
+								}else {
+									resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
+									+ " wicket" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
+								}
+							}else {
+								resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
 								+ " wicket" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
+							}
 							break;
 						}
 					}
@@ -10362,10 +10376,9 @@ public class CricketFunctions {
 	    return matchSummaryStatus;
 	}
 	public static String generateMatchSummaryStatus(int whichInning, MatchAllData match, String teamNameType, 
-		String SplitSummaryText, String broadcaster) 
+		String SplitSummaryText, String broadcaster, boolean ballsRemaining) 
 	{
-		String matchSummaryStatus = generateMatchResult(match, teamNameType, broadcaster, SplitSummaryText);
-
+		String matchSummaryStatus = generateMatchResult(match, teamNameType, broadcaster, SplitSummaryText, true);
 	    if(matchSummaryStatus.trim().isEmpty()) {
 	    	
 	    	int lead_by = getTeamRunsAhead(whichInning,match);
@@ -10381,7 +10394,6 @@ public class CricketFunctions {
 		    	bowlTeamNm = (match.getMatch().getInning().get(whichInning - 1)).getBowling_team().getTeamName1();
 		    	break;
 		    }
-	    	
 		    switch (whichInning) {
 		    case 1: 
 		    	if (((match.getMatch().getInning().get(whichInning - 1)).getTotalRuns() > 0) || 
@@ -10412,10 +10424,8 @@ public class CricketFunctions {
 		    		}
 			    		
 		    	} else {
-		    		
 				    if ((CricketFunctions.getRequiredRuns(match) > 0) && (CricketFunctions.getRequiredBalls(match) > 0) 
 				    		&& (CricketFunctions.getWicketsLeft(match,whichInning) > 0)) {
-				    	
 				    	if(CricketFunctions.getRequiredRuns(match) == 1) {
 				    		matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
 						        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
@@ -10456,8 +10466,21 @@ public class CricketFunctions {
 							if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
 						    	matchSummaryStatus = batTeamNm + " win the super over";
 							} else {
-						    	matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) + 
-						    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning));
+								if(ballsRemaining) {
+									int ballsRem = (match.getSetup().getMaxOvers()*Integer.valueOf(match.getSetup().getBallsPerOver()))
+											- ((match.getMatch().getInning().get(1).getTotalOvers()*Integer.valueOf(match.getSetup().getBallsPerOver()
+													+ match.getMatch().getInning().get(1).getTotalBalls())));
+									if(ballsRem > 0) {
+										matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) + 
+									    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning))+ " with "+ballsRem+" ball"+CricketFunctions.Plural(ballsRem)+" remaining";
+									}else {
+										matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) + 
+									    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning));
+									}
+								}else {
+									matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) + 
+								    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning));
+								}
 							}
 							break;
 						}
