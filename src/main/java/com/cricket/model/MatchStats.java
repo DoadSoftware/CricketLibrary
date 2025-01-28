@@ -13,6 +13,7 @@ public class MatchStats{
 	private int ballsSinceLastBoundary,
 		phase1StartOver , phase1EndOver, phase2StartOver , phase2EndOver,
 		phase3StartOver , phase3EndOver; 
+	private String timeLine ;
 	private VariousStats lastOverData;
 	private VariousStats inningCompare;
 	private VariousStats lastThirtyBalls;
@@ -60,8 +61,17 @@ public class MatchStats{
         this.awayFirstPowerPlayBatsman = new ArrayList<>();
         this.awaySecondPowerPlayBatsman = new ArrayList<>();
         this.awayThirdPowerPlayBatsman = new ArrayList<>();
+        this.timeLine ="";
 	}
 	
+	public String getTimeLine() {
+		return timeLine;
+	}
+
+	public void setTimeLine(String timeLine) {
+		this.timeLine = timeLine;
+	}
+
 	public List<VariousStats> getPlayerStats() {
 		return playerStats;
 	}
