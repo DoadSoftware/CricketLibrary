@@ -10119,7 +10119,7 @@ public class CricketFunctions {
 	}
 	
 	public static String Plural(int count){
-		if (count == 1 || count == 0){
+		if (count == 1){
 			return "";
 		} else{
 			return "s";
