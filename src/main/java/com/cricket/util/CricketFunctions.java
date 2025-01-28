@@ -1866,8 +1866,8 @@ public class CricketFunctions {
 			        matchDataTxt.insert(109, "-");
 			    }
 			    
-			    matchDataTxt.insert(112, inn.getBatting_team().getTeamName4());
-			    matchDataTxt.insert(116, inn.getBowling_team().getTeamName4());
+			    matchDataTxt.insert(112, "-");
+			    matchDataTxt.insert(116, "-");
 			    
 			    String[] Runs_Count = getScoreTypeData(CricketUtil.BATSMAN, match, inn.getInningNumber(), bc.getPlayerId(), "-", match.getEventFile().getEvents()).split("-");
 			    matchDataTxt.insert(122 - Runs_Count[0].length(), Runs_Count[0]);
@@ -1925,8 +1925,8 @@ public class CricketFunctions {
 			    matchDataTxt.insert(99-String.valueOf(boc.getWickets()).length(), boc.getWickets());
 			    matchDataTxt.insert(102-String.valueOf(boc.getDots()).length(), boc.getDots());
 			    
-			    matchDataTxt.insert(103, inn.getBowling_team().getTeamName4());
-			    matchDataTxt.insert(107, inn.getBatting_team().getTeamName4());
+			    matchDataTxt.insert(103, "-");
+			    matchDataTxt.insert(107, "-");
 			    
 				if(boc.getWickets() > 0) {
 					matchDataTxt.insert(114-String.valueOf(lastWicketBallCount(match.getEventFile().getEvents(), inn.getInningNumber(), boc.getPlayerId())).length(), 
