@@ -14132,4 +14132,22 @@ public class CricketFunctions {
        }
       return TotalRuns +","+TotalWickets+","+TotalFours+","+TotalSixes+","+TotalNines;
   	}
+  public static String AnalyzeSpeeds(List<Speed> speeds) {
+	    double fastest = Double.MIN_VALUE , slowest = Double.MAX_VALUE ,totalSpeed = 0;
+	    int count = 0;
+	    for (Speed speed : speeds) {
+	        double speedValue =Double.valueOf(speed.getSpeedValue().substring(1));
+	        if (speedValue > fastest) {
+	            fastest = speedValue;
+	        }
+	        if (speedValue < slowest) {
+	            slowest = speedValue;
+	        }
+	        totalSpeed += speedValue;
+	        count++;
+	    }
+
+	    double averageSpeed = totalSpeed / count;
+	    return  fastest  + "," + String.format("%.1f", averageSpeed)+ "," + slowest;
+	}
 }
