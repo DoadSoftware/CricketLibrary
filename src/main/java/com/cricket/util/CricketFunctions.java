@@ -9588,6 +9588,7 @@ public class CricketFunctions {
 		if((events != null) && (events.size() > 0)) { 
 			for(int i =0; i <= events.size() - 1 ; i++) {
 				if(events.get(i).getEventInningNumber() == inning_number) {
+					System.out.println("TYPE : " + events.get(i).getEventType());
 					switch (events.get(i).getEventType()) {
 					case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 			        case CricketUtil.FOUR: case CricketUtil.SIX: 
@@ -9621,6 +9622,14 @@ public class CricketFunctions {
 				        	  total_wickets += 1;
 				          }
 				          break;
+				          
+			        case CricketUtil.LOG_50_50:
+			        	if(events.get(i).getEventExtra().trim().equalsIgnoreCase("+")) {
+			        		total_runs += events.get(i).getEventExtraRuns();
+			        	}else if(events.get(i).getEventExtra().trim().equalsIgnoreCase("-")) {
+			        		total_runs -= events.get(i).getEventExtraRuns();
+			        	}
+			        	break;
 					}
 					if(events.get(i).getEventOverNo() == match.getMatch().getInning().get(1).getTotalOvers() && events.get(i).getEventBallNo() == match.getMatch().getInning().get(1).getTotalBalls()) {
 						return total_runs + separator + total_wickets;
@@ -11679,6 +11688,13 @@ public class CricketFunctions {
 	                            total_wickets++;
 	                        }
 	                        break;
+	                    case CricketUtil.LOG_50_50:
+				        	if(events.get(i).getEventExtra().trim().equalsIgnoreCase("+")) {
+				        		total_runs += events.get(i).getEventExtraRuns();
+				        	}else if(events.get(i).getEventExtra().trim().equalsIgnoreCase("-")) {
+				        		total_runs -= events.get(i).getEventExtraRuns();
+				        	}
+				        	break;
 
 	                    case CricketUtil.LOG_ANY_BALL:
 	                        total_runs +=  events.get(i).getEventRuns();
