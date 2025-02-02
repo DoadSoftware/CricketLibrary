@@ -12464,6 +12464,16 @@ public class CricketFunctions {
 	                           		matchStats.getInningCompare().setTotalNines(matchStats.getInningCompare().getTotalNines()+1);		
 	                           	}
 								break;
+							 case CricketUtil.LOG_50_50:
+								 if(events.get(i).getEventExtra().trim().equalsIgnoreCase("+")) {
+									 matchStats.getInningCompare().setTotalRuns(matchStats.getInningCompare().getTotalRuns() +
+											 events.get(i).getEventExtraRuns());
+									 System.out.println("matchStats.getInningCompare().getTotalRuns() "+matchStats.getInningCompare().getTotalRuns());
+						        	}else if(events.get(i).getEventExtra().trim().equalsIgnoreCase("-")) {
+						        		 matchStats.getInningCompare().setTotalRuns(matchStats.getInningCompare().getTotalRuns() -
+						        				 events.get(i).getEventExtraRuns());
+						        	}
+								 break;
 		                    case CricketUtil.DOT:  
 		                    	matchStats.getInningCompare().setTotalDots(matchStats.getInningCompare().getTotalDots()+1);
 		                    	break;
