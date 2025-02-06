@@ -39,6 +39,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -137,6 +138,41 @@ public class CricketFunctions {
 		return "";
 	}
 	
+	public static List<Map<String, String>> readExcelToMap() {
+        List<Map<String, String>> dataList = new ArrayList<>();
+
+        try (FileInputStream file = new FileInputStream(new File("C:\\Sports\\Cricket\\KeyPlayers.xlsx"));
+             Workbook workbook = WorkbookFactory.create(file)) {
+
+            Sheet sheet = workbook.getSheetAt(0); // Read first sheet
+            Iterator<Row> rowIterator = sheet.iterator();
+
+            // Read headers (first row) and ignore the first column (index)
+            Row headerRow = rowIterator.next();
+            List<String> headers = new ArrayList<>();
+            for (int i = 1; i < headerRow.getLastCellNum(); i++) { // Start from 1 to skip index
+                headers.add(headerRow.getCell(i).getStringCellValue());
+            }
+
+            // Read remaining rows as values
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                Map<String, String> rowData = new LinkedHashMap<>();
+
+                for (int i = 1; i < headers.size() + 1; i++) { // Start from 1 to skip index
+                    Cell cell = row.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    rowData.put(headers.get(i - 1), cell.toString()); // Map column name to value
+                }
+                dataList.add(rowData);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return dataList;
+    }
+	
 	public static Map<String, Map<String, Object>> ReadExcel(String Path) {
 
         Map<String, Map<String, Object>> dataMap = new LinkedHashMap<>();
@@ -177,6 +213,7 @@ public class CricketFunctions {
         System.out.println("dataMap = " + dataMap);
 		return dataMap;
     }
+	
 	public static Map<String, Object> Read_Excel(String Path) {
 
         Map<String, Object> rowData = new LinkedHashMap<>();
