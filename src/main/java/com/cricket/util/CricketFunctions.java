@@ -6668,8 +6668,8 @@ public class CricketFunctions {
 	    @Override
 	    public int compare(BowlingCard bc1, BowlingCard bc2) {
 	    	if(bc1.getWickets() == bc2.getWickets()) {
-	    		return Float.compare(Float.valueOf(CricketFunctions.getEconomy(bc1.getRuns(), (bc1.getOvers()*6) + (bc1.getBalls()), 2, "0")), 
-	    				Float.valueOf(CricketFunctions.getEconomy(bc2.getRuns(), (bc2.getOvers()*6) + (bc2.getBalls()), 2, "0")));
+	    		return Float.compare(Float.valueOf(CricketFunctions.getEconomy(bc2.getRuns(), (bc2.getOvers()*6) + (bc2.getBalls()), 2, "0")), 
+	    				Float.valueOf(CricketFunctions.getEconomy(bc1.getRuns(), (bc1.getOvers()*6) + (bc1.getBalls()), 2, "0")));
 			}else {
 				return Integer.compare(bc2.getBowlerFigureSortData(), bc1.getBowlerFigureSortData());
 			}
@@ -6680,8 +6680,8 @@ public class CricketFunctions {
 
 		@Override
 		public int compare(BowlingCard boc1, BowlingCard boc2) {
-			return Float.compare(Float.valueOf(CricketFunctions.getEconomy(boc1.getRuns(), (boc1.getOvers()*6) + (boc1.getBalls()), 2, "0")), 
-					Float.valueOf(CricketFunctions.getEconomy(boc2.getRuns(), (boc2.getOvers()*6) + (boc2.getBalls()), 2, "0")));
+			return Float.compare(Float.valueOf(CricketFunctions.getEconomy(boc2.getRuns(), (boc2.getOvers()*6) + (boc2.getBalls()), 2, "0")), 
+					Float.valueOf(CricketFunctions.getEconomy(boc1.getRuns(), (boc1.getOvers()*6) + (boc1.getBalls()), 2, "0")));
 		}
 		
 	}
@@ -6743,8 +6743,8 @@ public class CricketFunctions {
 
 		@Override
 		public int compare(Tournament boc1, Tournament boc2) {
-			return Float.compare(Float.valueOf(CricketFunctions.getEconomy(boc1.getRunsConceded(), boc1.getBallsBowled(), 2, "0")), 
-					Float.valueOf(CricketFunctions.getEconomy(boc2.getRunsConceded(), boc2.getBallsBowled(), 2, "0")));
+			return Float.compare(Float.valueOf(CricketFunctions.getEconomy(boc2.getRunsConceded(), boc2.getBallsBowled(), 2, "0")), 
+					Float.valueOf(CricketFunctions.getEconomy(boc1.getRunsConceded(), boc1.getBallsBowled(), 2, "0")));
 		}
 		
 	}
