@@ -10233,6 +10233,31 @@ public class CricketFunctions {
 			}
 		}
 	}
+	
+	public static String getTeamScoreAddBonusRuns(List<Event> sessionEvent, Inning inning, int bowlerId, String slashOrDash, boolean wicketsFirst) throws IOException {
+	    String[] isplCr = new String(Files.readAllBytes(Paths.get(CricketUtil.CRICKET_DIRECTORY + "ISPL_CR.txt"))).trim().split(",");
+	    int crOver = Integer.parseInt(isplCr[0]), crTarget = Integer.parseInt(isplCr[1]), bonusRuns = 0;
+	    int thisOverRuns = Integer.parseInt(CricketFunctions.processThisOverRunsCount(bowlerId, sessionEvent).split("-")[0]);
+
+	    boolean isBonusApplicable = sessionEvent.stream()
+	        .noneMatch(event -> event.getEventType().equalsIgnoreCase(CricketUtil.LOG_50_50) &&
+	                            event.getEventInningNumber() == inning.getInningNumber());
+
+	    if (isBonusApplicable && (inning.getTotalOvers() == crOver - 1 || (inning.getTotalOvers() == crOver && inning.getTotalBalls() == 0))) {
+	        if (thisOverRuns >= crTarget) {
+	            bonusRuns = thisOverRuns / 2;
+	        }
+	    }
+
+	    int totalRuns = inning.getTotalRuns() + bonusRuns;
+	    
+	    if (inning.getTotalWickets() >= 10) {
+	        return String.valueOf(totalRuns);
+	    }
+	    
+	    return wicketsFirst ? inning.getTotalWickets() + slashOrDash + totalRuns
+	                        : totalRuns + slashOrDash + inning.getTotalWickets();
+	}
 
 	public static String getTeamScore(Inning inning, String slashOrDash, boolean wicketsFirst){
 		if(inning.getTotalWickets() >= 10) {
