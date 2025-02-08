@@ -9413,6 +9413,71 @@ public class CricketFunctions {
 		}
 	    return null;
 	}
+	public static String processPowerPlay(String powerplay_return_type,MatchAllData match,String broadcaster)
+	{
+		String return_pp_txt = "";
+		int BallsBowledInInnings = 0;
+	    
+		for(Inning inn : match.getMatch().getInning()) {
+			if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
+				BallsBowledInInnings = inn.getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver()) + inn.getTotalBalls();
+			    if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI) || match.getSetup().getMatchType().equalsIgnoreCase("OD")) {
+			    	
+			    	if(BallsBowledInInnings >= ((inn.getFirstPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver()) ) && BallsBowledInInnings < (inn.getFirstPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver()))) {
+				    	return_pp_txt = CricketUtil.ONE;
+				    }else if(BallsBowledInInnings >= ((inn.getSecondPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver())) && BallsBowledInInnings < (inn.getSecondPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver())) ) {
+				    	return_pp_txt = CricketUtil.TWO;
+				    }else if(BallsBowledInInnings >= ((inn.getThirdPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver())) && BallsBowledInInnings < (inn.getThirdPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver()))) {
+				    	return_pp_txt = CricketUtil.THREE;
+				    }
+			    }else if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10)) {
+			    	if(BallsBowledInInnings >= ((inn.getFirstPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver()) ) && BallsBowledInInnings < (inn.getFirstPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver()))) {
+				    	return_pp_txt = CricketUtil.ONE;
+				    }else if(BallsBowledInInnings >= ((inn.getSecondPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver())) && BallsBowledInInnings < (inn.getSecondPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver())) ) {
+				    	return_pp_txt = CricketUtil.TWO;
+				    }else {
+				    	return_pp_txt = "";
+				    }
+			    } else {
+			    	switch (broadcaster) {
+					case "LEGENDS-90":
+						if(BallsBowledInInnings >= ((inn.getFirstPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver()) ) && BallsBowledInInnings < (inn.getFirstPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver()))) {
+					    	return_pp_txt = CricketUtil.ONE;
+					    }else if(BallsBowledInInnings >= ((inn.getSecondPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver())) && BallsBowledInInnings < (inn.getSecondPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver())) ) {
+					    	return_pp_txt = CricketUtil.TWO;
+					    }else {
+					    	return_pp_txt = "";
+					    }
+						break;
+					default:
+						if(BallsBowledInInnings >= ((inn.getFirstPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver()) ) && BallsBowledInInnings < (inn.getFirstPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver()))) {
+					    	return_pp_txt = CricketUtil.ONE;
+					    }else {
+					    	return_pp_txt = "";
+					    }
+						break;
+					}
+			    }
+			    
+			    if(!return_pp_txt.trim().isEmpty()) {
+			    	switch (powerplay_return_type)
+				    {
+				    case CricketUtil.FULL: 
+				      return_pp_txt = CricketUtil.POWERPLAY + " " + return_pp_txt;
+				      break;
+				    case CricketUtil.SHORT: 
+				      return_pp_txt = "PP" + return_pp_txt;
+				      break;
+				    case CricketUtil.MINI: 
+					  return_pp_txt = "P" + return_pp_txt;
+					  break;
+				    }
+			    }
+			}
+		}
+	    
+	    return return_pp_txt;
+	}
 
 	public static String processPowerPlay(String powerplay_return_type,MatchAllData match)
 	{
@@ -13041,11 +13106,18 @@ public class CricketFunctions {
 
 	    } else if (Match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20) || 
 	                Match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)) {
-	    	
-	    	matchStats.setPhase1StartOver(1); matchStats.setPhase1EndOver(6);
-        	matchStats.setPhase2StartOver(7); matchStats.setPhase2EndOver(15);
-        	matchStats.setPhase3StartOver(16); matchStats.setPhase3EndOver(20);
-        	
+	    	switch (Match.getSetup().getTournament().trim()) {
+			case "LEGEND 90":
+				matchStats.setPhase1StartOver(1); matchStats.setPhase1EndOver(4);
+	        	matchStats.setPhase2StartOver(5); matchStats.setPhase2EndOver(10);
+	        	matchStats.setPhase3StartOver(11); matchStats.setPhase3EndOver(15);
+				break;
+			default:
+				matchStats.setPhase1StartOver(1); matchStats.setPhase1EndOver(6);
+	        	matchStats.setPhase2StartOver(7); matchStats.setPhase2EndOver(15);
+	        	matchStats.setPhase3StartOver(16); matchStats.setPhase3EndOver(20);
+				break;
+			}
 	    }
 	   
 	    return getAllEventsStatsMASTER(matchStats ,Match.getMatch(), Match.getEventFile().getEvents());
