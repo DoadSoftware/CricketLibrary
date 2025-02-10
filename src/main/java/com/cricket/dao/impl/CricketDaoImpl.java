@@ -11,6 +11,7 @@ import com.cricket.dao.CricketDao;
 import com.cricket.model.Bugs;
 import com.cricket.model.Commentator;
 import com.cricket.model.Dictionary;
+import com.cricket.model.EverestBugs;
 import com.cricket.model.FantasyImages;
 import com.cricket.model.Fixture;
 import com.cricket.model.Ground;
@@ -116,7 +117,10 @@ public List<FantasyImages> getFantasyImages() {
 public List<Bugs> getBugs() {
 	return sessionFactory.getCurrentSession().createQuery("from Bugs").list();
 }
-
+@Override
+public List<EverestBugs> getEverestBugs() {
+	return sessionFactory.getCurrentSession().createQuery("from EverestBugs").list();
+}
 @Override
 public List<Split> getSplit() {
 	return sessionFactory.getCurrentSession().createQuery("from Split").list();

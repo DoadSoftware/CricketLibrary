@@ -5,6 +5,7 @@ import java.util.List;
 import com.cricket.model.Bugs;
 import com.cricket.model.Commentator;
 import com.cricket.model.Dictionary;
+import com.cricket.model.EverestBugs;
 import com.cricket.model.FantasyImages;
 import com.cricket.model.Fixture;
 import com.cricket.model.Ground;
@@ -57,4 +58,5 @@ public interface CricketDao {
   List<Performer> getPerformer();
   List<Weather> getWeather();
   List<PerformanceBug> getPerformanceBugs();
+  List<EverestBugs> getEverestBugs();
 }

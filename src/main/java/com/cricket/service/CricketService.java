@@ -5,6 +5,7 @@ import java.util.List;
 import com.cricket.model.Bugs;
 import com.cricket.model.Commentator;
 import com.cricket.model.Dictionary;
+import com.cricket.model.EverestBugs;
 import com.cricket.model.Fixture;
 import com.cricket.model.Ground;
 import com.cricket.model.InfobarStats;
@@ -57,4 +58,5 @@ public interface CricketService {
   List<Performer> getPerformer();
   List<Weather> getWeather();
   List<PerformanceBug> getPerformanceBugs();
+  List<EverestBugs> getEverestBugs();
 }

@@ -10,6 +10,7 @@ import com.cricket.dao.CricketDao;
 import com.cricket.model.Bugs;
 import com.cricket.model.Commentator;
 import com.cricket.model.Dictionary;
+import com.cricket.model.EverestBugs;
 import com.cricket.model.FantasyImages;
 import com.cricket.model.Fixture;
 import com.cricket.model.Ground;
@@ -184,6 +185,11 @@ public List<Weather> getWeather(){
 @Override
 public List<PerformanceBug> getPerformanceBugs() {
 	return cricketDao.getPerformanceBugs();
+}
+
+@Override
+public List<EverestBugs> getEverestBugs() {
+	return cricketDao.getEverestBugs();
 }
 
 }
