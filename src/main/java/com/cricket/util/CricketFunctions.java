@@ -6533,6 +6533,22 @@ public class CricketFunctions {
 									+ " wicket" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
 							}
 							break;
+						case "LEGENDS-90":
+							if(ballsRemaining) {
+								int ballsRem = getRequiredBalls(match);
+								if(ballsRem > 0) {
+									resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
+									+ " wicket" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1])) + " with " + ballsRem
+									+ " ball" + CricketFunctions.Plural(ballsRem) + " remaining";
+								}else {
+									resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
+									+ " wicket" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
+								}
+							}else {
+								resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
+								+ " wicket" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
+							}
+							break;
 						default:
 							if(ballsRemaining) {
 								int ballsRem = getRequiredBalls(match);
@@ -9707,7 +9723,6 @@ public class CricketFunctions {
 		if((events != null) && (events.size() > 0)) { 
 			for(int i =0; i <= events.size() - 1 ; i++) {
 				if(events.get(i).getEventInningNumber() == inning_number) {
-					System.out.println("TYPE : " + events.get(i).getEventType());
 					switch (events.get(i).getEventType()) {
 					case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 			        case CricketUtil.FOUR: case CricketUtil.SIX: 
@@ -10612,6 +10627,26 @@ public class CricketFunctions {
 									matchSummaryStatus = batTeamNm + " beat " + bowlTeamNm + SplitSummaryText 
 										+ "by " + CricketFunctions.getWicketsLeft(match,whichInning) + " wicket" 
 										+ CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning));
+								}
+							}
+							break;
+						case "LEGENDS-90":
+							if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
+						    	matchSummaryStatus = batTeamNm + " win the super over";
+							} else {
+								if(ballsRemaining) {
+									int ballsRem = getRequiredBalls(match);
+									if(ballsRem > 0) {
+										matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) + 
+									    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning)) + 
+									    		" with " + ballsRem + " ball" + CricketFunctions.Plural(ballsRem) + " remaining";
+									}else {
+										matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) + 
+									    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning));
+									}
+								}else {
+									matchSummaryStatus = batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) + 
+								    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning));
 								}
 							}
 							break;
