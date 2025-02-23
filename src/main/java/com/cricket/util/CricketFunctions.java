@@ -4317,25 +4317,25 @@ public class CricketFunctions {
 							stat.setBest_score_venue(match.getVenue() + ", " + Year.now());
 						}else {
 							if(stat.getBest_score().contains("*")) {
-								if(Integer.valueOf(stat.getBest_score().replace("*", "")) < match.getRuns()) {
-									if(match.getDismissed().equalsIgnoreCase("N")) {
+								if(Integer.valueOf(stat.getBest_score().replace("*", "")).intValue() < match.getRuns()) {
+									if(match.getDismissed().trim().equalsIgnoreCase("N")) {
 										stat.setBest_score(match.getRuns()+"*");
-									}else if(match.getDismissed().equalsIgnoreCase("Y")) {
+									}else if(match.getDismissed().trim().equalsIgnoreCase("Y")) {
 										stat.setBest_score(String.valueOf(match.getRuns()));
 									}
 									stat.setBest_score_against(match.getOpponentTeam().getTeamName1());
 									stat.setBest_score_venue(match.getVenue() + ", " + Year.now());
 								}
 							}else {
-								if(Integer.valueOf(stat.getBest_score()) == match.getRuns() && match.getDismissed().equalsIgnoreCase("N")) {
+								if(Integer.valueOf(stat.getBest_score()) == match.getRuns() && match.getDismissed().trim().equalsIgnoreCase("N")) {
 									stat.setBest_score(match.getRuns() + "*");
 									stat.setBest_score_against(match.getOpponentTeam().getTeamName1());
 									stat.setBest_score_venue(match.getVenue() + ", " + Year.now());
 								}
 								else if(Integer.valueOf(stat.getBest_score()) < match.getRuns()) {
-									if(match.getDismissed().equalsIgnoreCase("N")) {
+									if(match.getDismissed().trim().equalsIgnoreCase("N")) {
 										stat.setBest_score(match.getRuns() + "*");
-									}else if(match.getDismissed().equalsIgnoreCase("Y")) {
+									}else if(match.getDismissed().trim().equalsIgnoreCase("Y")) {
 										stat.setBest_score(String.valueOf(match.getRuns()));
 									}
 									stat.setBest_score_against(match.getOpponentTeam().getTeamName1());
@@ -4390,7 +4390,7 @@ public class CricketFunctions {
 			}
 		}
 		
-		System.out.println("MATCHES : "+stat.getMatches()+" : "+stat.getRuns());
+		System.out.println("MATCHES : "+stat.getMatches()+" : "+stat.getBest_score());
 		return stat;
 	}
 	
@@ -4441,6 +4441,7 @@ public class CricketFunctions {
 									stat.setBest_score_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
 								}else {
 									if(stat.getBest_score().contains("*")) {
+										System.out.println("HELLO");
 										if(Integer.valueOf(stat.getBest_score().replace("*", "")) < bc.getRuns()) {
 											if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
 												stat.setBest_score(bc.getRuns()+"*");
@@ -10507,12 +10508,15 @@ public class CricketFunctions {
 				    	matchSummaryStatus = bowlTeamNm + " win by " + (CricketFunctions.getRequiredRuns(match) - 1) + 
 				    		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match) - 1);
 				    }
-				    if(match.getSetup().getTargetType() != null) {
-						if(match.getSetup().getTargetType().equalsIgnoreCase(CricketUtil.DLS)) {
-							matchSummaryStatus = matchSummaryStatus + " (" + CricketUtil.DLS + ")";
-						}else if(match.getSetup().getTargetType().equalsIgnoreCase(CricketUtil.VJD)) {
-							matchSummaryStatus = matchSummaryStatus + " (" + CricketUtil.VJD + ")";
-						}
+				    
+				    if(!matchSummaryStatus.contains("Match tied -")) {
+				    	if(match.getSetup().getTargetType() != null) {
+							if(match.getSetup().getTargetType().equalsIgnoreCase(CricketUtil.DLS)) {
+								matchSummaryStatus = matchSummaryStatus + " (" + CricketUtil.DLS + ")";
+							}else if(match.getSetup().getTargetType().equalsIgnoreCase(CricketUtil.VJD)) {
+								matchSummaryStatus = matchSummaryStatus + " (" + CricketUtil.VJD + ")";
+							}
+					    }
 				    }
 		    	}
 		    	break;
