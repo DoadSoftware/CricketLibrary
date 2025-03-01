@@ -1943,36 +1943,38 @@ public class CricketFunctions {
 		
 		for(Inning inn : match.getMatch().getInning()) {
 			matchDataTxt = new StringBuilder();
-			for (BowlingCard boc : inn.getBowlingCard()) {
-			    matchDataTxt.setLength(0); // Clear the StringBuilder for each iteration
-			    
-			    matchDataTxt.append(String.format("%-140s", "")); // Initial padding
-			    
-			    // Add substrings at specific positions using StringBuilder methods
-			    matchDataTxt.insert(0, "BO");
-			    matchDataTxt.insert(3, match.getMatch().getMatchFileName());
-			    matchDataTxt.insert(23, match.getSetup().getGround().getCity());
-			    matchDataTxt.insert(43, inn.getBowling_team().getTeamName4());
-			    matchDataTxt.insert(63, inn.getBatting_team().getTeamName4());
-			    
-			    matchDataTxt.insert(86-String.valueOf(boc.getPlayerId()).length(), boc.getPlayerId());
-			    matchDataTxt.insert(90-String.valueOf((boc.getOvers() * 6) + boc.getBalls()).length(), String.valueOf((boc.getOvers() * 6) + boc.getBalls()));
-			    matchDataTxt.insert(93-String.valueOf(boc.getMaidens()).length(), boc.getMaidens());
-			    matchDataTxt.insert(96-String.valueOf(boc.getRuns()).length(), boc.getRuns());
-			    matchDataTxt.insert(99-String.valueOf(boc.getWickets()).length(), boc.getWickets());
-			    matchDataTxt.insert(102-String.valueOf(boc.getDots()).length(), boc.getDots());
-			    
-			    matchDataTxt.insert(103, "-");
-			    matchDataTxt.insert(107, "-");
-			    
-				if(boc.getWickets() > 0) {
-					matchDataTxt.insert(114-String.valueOf(lastWicketBallCount(match.getEventFile().getEvents(), inn.getInningNumber(), boc.getPlayerId())).length(), 
-							lastWicketBallCount(match.getEventFile().getEvents(), inn.getInningNumber(), boc.getPlayerId()));
-				}else {
-					matchDataTxt.insert(113, "0");
+			if(inn.getBowlingCard() != null) {
+				for (BowlingCard boc : inn.getBowlingCard()) {
+				    matchDataTxt.setLength(0); // Clear the StringBuilder for each iteration
+				    
+				    matchDataTxt.append(String.format("%-140s", "")); // Initial padding
+				    
+				    // Add substrings at specific positions using StringBuilder methods
+				    matchDataTxt.insert(0, "BO");
+				    matchDataTxt.insert(3, match.getMatch().getMatchFileName());
+				    matchDataTxt.insert(23, match.getSetup().getGround().getCity());
+				    matchDataTxt.insert(43, inn.getBowling_team().getTeamName4());
+				    matchDataTxt.insert(63, inn.getBatting_team().getTeamName4());
+				    
+				    matchDataTxt.insert(86-String.valueOf(boc.getPlayerId()).length(), boc.getPlayerId());
+				    matchDataTxt.insert(90-String.valueOf((boc.getOvers() * 6) + boc.getBalls()).length(), String.valueOf((boc.getOvers() * 6) + boc.getBalls()));
+				    matchDataTxt.insert(93-String.valueOf(boc.getMaidens()).length(), boc.getMaidens());
+				    matchDataTxt.insert(96-String.valueOf(boc.getRuns()).length(), boc.getRuns());
+				    matchDataTxt.insert(99-String.valueOf(boc.getWickets()).length(), boc.getWickets());
+				    matchDataTxt.insert(102-String.valueOf(boc.getDots()).length(), boc.getDots());
+				    
+				    matchDataTxt.insert(103, "-");
+				    matchDataTxt.insert(107, "-");
+				    
+					if(boc.getWickets() > 0) {
+						matchDataTxt.insert(114-String.valueOf(lastWicketBallCount(match.getEventFile().getEvents(), inn.getInningNumber(), boc.getPlayerId())).length(), 
+								lastWicketBallCount(match.getEventFile().getEvents(), inn.getInningNumber(), boc.getPlayerId()));
+					}else {
+						matchDataTxt.insert(113, "0");
+					}
+				    
+				    lineByLineData.add(matchDataTxt.toString());
 				}
-			    
-			    lineByLineData.add(matchDataTxt.toString());
 			}
 		}
 		
