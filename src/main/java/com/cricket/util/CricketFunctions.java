@@ -3175,6 +3175,26 @@ public class CricketFunctions {
 		}
 		return null;
 	}
+	public static Review getReviewRemaining(MatchAllData match) throws Exception {
+		int Home_review = Integer.valueOf(match.getSetup().getReviewsPerTeam());
+		int Away_review = Integer.valueOf(match.getSetup().getReviewsPerTeam());
+		for(Inning inn :match.getMatch().getInning()) {
+			if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
+				if(inn.getReviews()!= null) {
+					for(Review rw :inn.getReviews()) {
+						if(rw.getReviewRetained().equalsIgnoreCase("unretained")) {
+							if(rw.getReviewTeamId() == match.getSetup().getHomeTeamId()) {
+								Home_review = Math.max(0, (Home_review-1));
+							}else if(rw.getReviewTeamId() == match.getSetup().getAwayTeamId()) {
+								Away_review = Math.max(0, (Away_review-1));
+							}
+						}
+					}	
+				}
+			}
+		}
+		return new Review(Home_review +","+Away_review,0);
+	}
 	
 	public static int lastWicketBallCount(List<Event> events, int inningNumber, int playerId) {
 		int ball_count = 0;
