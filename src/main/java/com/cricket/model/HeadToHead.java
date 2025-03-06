@@ -25,6 +25,11 @@ public class HeadToHead implements Cloneable {
   
   private String inningStarted;
   private String dismissed;
+  
+  private int tapeBall_balls;
+  private int tapeBall_runs;
+  private int tapeBall_wickets;
+  private int tapeBall_dotsBall;
 
 public HeadToHead(int playerId, int runs, int ballsFaced, int batdots, int ones, int twos, int threes, int fours,
 		int sixes, int wickets, int runsConceded, int ballsBowled, int maidens, int balldots, String matchFileName,
@@ -212,6 +217,38 @@ public void setVenue(String venue) {
 	this.venue = venue;
 }
 
+public int getTapeBall_balls() {
+	return tapeBall_balls;
+}
+
+public void setTapeBall_balls(int tapeBall_balls) {
+	this.tapeBall_balls = tapeBall_balls;
+}
+
+public int getTapeBall_runs() {
+	return tapeBall_runs;
+}
+
+public void setTapeBall_runs(int tapeBall_runs) {
+	this.tapeBall_runs = tapeBall_runs;
+}
+
+public int getTapeBall_wickets() {
+	return tapeBall_wickets;
+}
+
+public void setTapeBall_wickets(int tapeBall_wickets) {
+	this.tapeBall_wickets = tapeBall_wickets;
+}
+
+public int getTapeBall_dotsBall() {
+	return tapeBall_dotsBall;
+}
+
+public void setTapeBall_dotsBall(int tapeBall_dotsBall) {
+	this.tapeBall_dotsBall = tapeBall_dotsBall;
+}
+
 @Override
 public HeadToHead clone() throws CloneNotSupportedException {
     HeadToHead clone = null;
@@ -224,6 +261,12 @@ public HeadToHead clone() throws CloneNotSupportedException {
         throw new RuntimeException(e);
     }
     return clone;
+}
+
+@Override
+public String toString() {
+	return "HeadToHead [playerId=" + playerId + ", tapeBall_balls=" + tapeBall_balls + ", tapeBall_runs=" + tapeBall_runs
+			+ ", tapeBall_wickets=" + tapeBall_wickets + ", tapeBall_dotsBall=" + tapeBall_dotsBall + "]";
 }
 
 }
