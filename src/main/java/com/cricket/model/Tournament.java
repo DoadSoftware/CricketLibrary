@@ -87,6 +87,11 @@ public class Tournament implements Cloneable {
   private int hit_wicket_bowler;
   private int lbw_bowler;
   
+  private int tapeBall_balls;
+  private int tapeBall_runs;
+  private int tapeBall_wickets;
+  private int tapeBall_dotsBall;
+  
   @JsonIgnore
   private Player player;
   
@@ -97,6 +102,8 @@ public class Tournament implements Cloneable {
   private List<BestStats> batsman_best_Stats;
 
   private List<BestStats> bowler_best_Stats;
+  
+  private List<BestStats> tapeBall_best_Stats;
 
 public Tournament() {
 	super();
@@ -105,7 +112,7 @@ public Tournament() {
 public Tournament(int playerId, int runs, int fours, int sixes, int innings, int not_out, int thirty, int fifty, int hundreds, int wickets, int runsConceded,
 		int ballsBowled, int ballsFaced, int dots, int threeWicketHaul, int fiveWicketHaul, String notOut, int runs_against_pace, int balls_against_pace,
 		int runs_against_spin, int balls_against_spin, Player player, List<BestStats> batsman_best_Stats,
-		List<BestStats> bowler_best_Stats) {
+		List<BestStats> bowler_best_Stats, List<BestStats> tapeBall_best_Stats) {
 	super();
 	this.playerId = playerId;
 	this.runs = runs;
@@ -131,6 +138,7 @@ public Tournament(int playerId, int runs, int fours, int sixes, int innings, int
 	this.player = player;
 	this.batsman_best_Stats = batsman_best_Stats;
 	this.bowler_best_Stats = bowler_best_Stats;
+	this.tapeBall_best_Stats = tapeBall_best_Stats;
 }
 
 public Tournament(int playerId, int total_dismissal, int other, int caught, int ctAndBowled, int bowled, int run_out,
@@ -689,6 +697,46 @@ public int getLbw_bowler() {
 
 public void setLbw_bowler(int lbw_bowler) {
 	this.lbw_bowler = lbw_bowler;
+}
+
+public int getTapeBall_balls() {
+	return tapeBall_balls;
+}
+
+public void setTapeBall_balls(int tapeBall_balls) {
+	this.tapeBall_balls = tapeBall_balls;
+}
+
+public int getTapeBall_runs() {
+	return tapeBall_runs;
+}
+
+public void setTapeBall_runs(int tapeBall_runs) {
+	this.tapeBall_runs = tapeBall_runs;
+}
+
+public int getTapeBall_wickets() {
+	return tapeBall_wickets;
+}
+
+public void setTapeBall_wickets(int tapeBall_wickets) {
+	this.tapeBall_wickets = tapeBall_wickets;
+}
+
+public int getTapeBall_dotsBall() {
+	return tapeBall_dotsBall;
+}
+
+public void setTapeBall_dotsBall(int tapeBall_dotsBall) {
+	this.tapeBall_dotsBall = tapeBall_dotsBall;
+}
+
+public List<BestStats> getTapeBall_best_Stats() {
+	return tapeBall_best_Stats;
+}
+
+public void setTapeBall_best_Stats(List<BestStats> tapeBall_best_Stats) {
+	this.tapeBall_best_Stats = tapeBall_best_Stats;
 }
 
 @Override
