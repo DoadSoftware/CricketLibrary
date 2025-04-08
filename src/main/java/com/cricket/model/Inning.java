@@ -70,6 +70,8 @@ public class Inning {
   private int thirdPowerplayEndOver;
 
   private int oversRemaining;
+
+  private String specialRuns;
   
   @JsonIgnore
   private Team batting_team;
@@ -104,6 +106,14 @@ public Inning(int oversRemaining) {
 	super();
 	this.oversRemaining = oversRemaining;
 	this.inningStats = new InningStats();
+}
+
+public String getSpecialRuns() {
+	return specialRuns;
+}
+
+public void setSpecialRuns(String specialRuns) {
+	this.specialRuns = specialRuns;
 }
 
 public InningStats getInningStats() {

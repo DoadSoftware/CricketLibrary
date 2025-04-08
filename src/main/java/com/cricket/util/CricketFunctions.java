@@ -102,19 +102,14 @@ import com.cricket.model.Team;
 import com.cricket.model.PowerPlays;
 import com.cricket.model.Tournament;
 import com.cricket.service.CricketService;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
-
 import net.sf.json.JSONObject;
-
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.InputStream;
@@ -1725,8 +1720,8 @@ public class CricketFunctions {
 	    }
 	}
 	
-	public static String getInteractive(MatchAllData match,String type) throws IOException {
-
+	public static String getInteractive(MatchAllData match,String type) throws IOException 
+	{
 		if(match.getSetup() == null || (match.getSetup().getGenerateInteractiveFile() == null 
 			|| match.getSetup().getGenerateInteractiveFile().equalsIgnoreCase(CricketUtil.NO))) {
 			return "";
@@ -1735,6 +1730,7 @@ public class CricketFunctions {
 			|| match.getEventFile().getEvents().size() <= 0)) {
 			return "";
 		}
+		
 		Inning inning=match.getMatch().getInning().stream().filter(in -> in.getIsCurrentInning()
 				.equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null);
 		int max_inn = 2;
@@ -1807,7 +1803,7 @@ public class CricketFunctions {
 			line_txt = addSubString(line_txt,"Spin  N W T/O-2",173);
 
 			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT), 
-					Arrays.asList(line_txt), StandardOpenOption.APPEND);
+				Arrays.asList(line_txt), StandardOpenOption.APPEND);
 		    for (int i = 0; i <= match.getEventFile().getEvents().size() - 1; i++)
 		    {
 			  if(match.getEventFile().getEvents().get(i).getEventInningNumber() >= 1 && match.getEventFile().getEvents().get(i).getEventInningNumber() <= max_inn) {
@@ -2481,7 +2477,6 @@ public class CricketFunctions {
         
         Map<Integer, List<String>> overBallData = new HashMap<>(); // Stores ball-by-ball data per over
         int lastFullOver = -1; // Stores the number of the last full over (6 balls)
-        String lastFullOverTOvData = null; // To store T/Ov data of the last full over for the specified innings
 
         try (BufferedReader br = new BufferedReader(new FileReader("C:\\Sports\\Cricket\\WT_File.txt"))) {
             String line;
@@ -5925,7 +5920,8 @@ public class CricketFunctions {
         }
     }
     
-    public static <T> T deepCopy(T object) {
+    @SuppressWarnings("unchecked")
+	public static <T> T deepCopy(T object) {
         try {
             ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
             ObjectOutputStream out = new ObjectOutputStream(byteOut);
