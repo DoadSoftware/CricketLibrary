@@ -10496,22 +10496,32 @@ public class CricketFunctions {
 	}
 	
 	public static String getTeamScoreAddBonusRuns(List<Event> sessionEvent, Inning inning, int bowlerId, String slashOrDash, boolean wicketsFirst) throws IOException {
-	    String[] isplCr = new String(Files.readAllBytes(Paths.get(CricketUtil.CRICKET_DIRECTORY + "ISPL_CR.txt"))).trim().split(",");
-	    int crOver = Integer.parseInt(isplCr[0]), crTarget = Integer.parseInt(isplCr[1]), bonusRuns = 0;
+	    //String[] isplCr = new String(Files.readAllBytes(Paths.get(CricketUtil.CRICKET_DIRECTORY + "ISPL_CR.txt"))).trim().split(",");
+		
+		int crTarget=0,totalRuns=inning.getTotalRuns();
+		boolean this_50_50 = false;
+		
+		for(int i=0;i<=sessionEvent.size()-1;i++) {
+			if(sessionEvent.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER) && sessionEvent.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
+				crTarget = Integer.valueOf(sessionEvent.get(i).getEventSubExtra());
+				this_50_50 = true;
+				break;
+			}
+		}
 	    int thisOverRuns = Integer.parseInt(CricketFunctions.processThisOverRunsCount(bowlerId, sessionEvent).split("-")[0]);
+	    
+	    System.out.println("thisOverRuns - " + thisOverRuns);
 
-	    boolean isBonusApplicable = sessionEvent.stream()
-	        .noneMatch(event -> event.getEventType().equalsIgnoreCase(CricketUtil.LOG_50_50) &&
-	                            event.getEventInningNumber() == inning.getInningNumber());
-
-	    if (isBonusApplicable && (inning.getTotalOvers() == crOver - 1 || (inning.getTotalOvers() == crOver && inning.getTotalBalls() == 0))) {
-	        if (thisOverRuns >= crTarget) {
-	            bonusRuns = thisOverRuns / 2;
-	        }
+	    if(this_50_50 && crTarget <= thisOverRuns) {
+	    	totalRuns = inning.getTotalRuns() + (thisOverRuns/2);
+	    }
+	    else if(this_50_50 && crTarget > thisOverRuns) {
+	    	if(sessionEvent.get(sessionEvent.size()-1).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+	    		totalRuns = inning.getTotalRuns() - (thisOverRuns/2);
+	    		this_50_50 = false;
+	    	}
 	    }
 
-	    int totalRuns = inning.getTotalRuns() + bonusRuns;
-	    
 	    if (inning.getTotalWickets() >= 10) {
 	        return String.valueOf(totalRuns);
 	    }
