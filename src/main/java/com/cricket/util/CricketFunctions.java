@@ -12953,10 +12953,10 @@ public class CricketFunctions {
 							                }
 							            }
 							        } else if (events.get(i).getEventSubExtra().equals(CricketUtil.LEG_BYE) || events.get(i).getEventSubExtra().equals(CricketUtil.BYE)) {
-							            matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() +
-							                events.get(i).getEventExtra() + "+" + (events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns() > 0 ?
-							                    events.get(i).getEventSubExtra() + "+" + (events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns()) :
-							                    events.get(i).getEventSubExtra()));
+							            	matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventExtra() + "+" +
+							            		    (events.get(i).getEventSubExtraRuns() > 0 ? events.get(i).getEventSubExtraRuns() + events.get(i).getEventSubExtra() 
+							            		     : events.get(i).getEventSubExtra()) + (events.get(i).getEventRuns() > 0 ? "+" + events.get(i).getEventRuns() : ""));
+
 							        } else {
 							        	if(events.get(i).getEventSubExtra().isEmpty()) {
 							        		if(events.get(i).getEventRuns() > 0) {
