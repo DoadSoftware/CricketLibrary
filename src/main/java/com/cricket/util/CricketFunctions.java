@@ -2249,6 +2249,14 @@ public class CricketFunctions {
 			}
 		}
 		
+		if(!new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY 
+			+ match.getMatch().getMatchFileName().replace(".json", ".h2h")).exists()) {
+			
+			File h2hFile = new File(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + match.getMatch().getMatchFileName().replace(".json", ".h2h"));
+			h2hFile.getParentFile().mkdirs(); 
+			h2hFile.createNewFile();
+
+		}
 		FileWriter fileWriter = new FileWriter(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY 
 			+ match.getMatch().getMatchFileName().replace(".json", ".h2h"));
 		
@@ -6352,7 +6360,9 @@ public class CricketFunctions {
 											currentMatch.getMatch().getMatchFileName().replace(".json", ""),boc.getPlayer(),""));
 								}
 							}
-							Collections.sort(past_tournament_stat_clone.get(playerId).getTapeBall_best_Stats(),new CricketFunctions.BowlerBestStatsComparator());
+							if(playerId > 0) {
+								Collections.sort(past_tournament_stat_clone.get(playerId).getTapeBall_best_Stats(),new CricketFunctions.BowlerBestStatsComparator());
+							}
 						}
 					}
 				}
@@ -11588,7 +11598,7 @@ public class CricketFunctions {
 					        break;
 				        case CricketUtil.BYE: case CricketUtil.LEG_BYE: 
 				        	switch (whatToProcess) {
-				        	case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
+				        	case CricketUtil.BATSMAN: case CricketUtil.BOWLER:case "TEAM":
 								dots++;
 								break;
 							}
@@ -11635,6 +11645,10 @@ public class CricketFunctions {
 										break;
 									}
 						        }
+					            if ((evnt.getEventSubExtra().equalsIgnoreCase(CricketUtil.BYE)|| evnt.getEventSubExtra().equalsIgnoreCase(CricketUtil.LEG_BYE))&& 
+					            		evnt.getEventHowOut()!= null && evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
+					            	  dots++;
+					            }
 							}
 				        	break;
 						}
@@ -12833,7 +12847,6 @@ public class CricketFunctions {
 			    	
 			    	//Last 30 balls
 					if(matchStats.getLastThirtyBalls().getTotalBalls() > 0) {
-						System.out.println(events.get(i).getEventInningNumber());
 						if(matchStats.getLastThirtyBalls().getTotalBalls()>12) {
 							if(matchStats.getTimeLine().isEmpty()) {
 								matchStats.setTimeLine(updateOverStats(events.get(i)));
@@ -12874,11 +12887,21 @@ public class CricketFunctions {
 			    	//This over
 					if(!typeOfStats.contains("THIS_OVER")) {
 						
-						if(currentBowlerBC == null) {
-							currentBowlerBC = match.getInning().stream().filter(in -> in.getIsCurrentInning()
-								.equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null).getBowlingCard().stream()
-							    .filter(bc -> bc.getStatus().equalsIgnoreCase(CricketUtil.CURRENT + CricketUtil.BOWLER) 
-							    || bc.getStatus().equalsIgnoreCase(CricketUtil.LAST + CricketUtil.BOWLER)).findAny().orElse(null);
+						if (currentBowlerBC == null) {
+						    currentBowlerBC = match.getInning().stream()
+						        .filter(in -> CricketUtil.YES.equalsIgnoreCase(in.getIsCurrentInning()))
+						        .findAny()
+						        .map(in -> {
+						            if (in.getBowlingCard() != null) {
+						                return in.getBowlingCard().stream()
+						                    .filter(bc -> (bc.getStatus().equalsIgnoreCase(CricketUtil.CURRENT + CricketUtil.BOWLER)
+						                                || bc.getStatus().equalsIgnoreCase(CricketUtil.LAST + CricketUtil.BOWLER)))
+						                    .findAny()
+						                    .orElse(null);
+						            }
+						            return null;
+						        })
+						        .orElse(null);
 						}
 						
 						if(currentBowlerBC != null && currentBowlerBC.getPlayerId() == events.get(i).getEventBowlerNo()) {
@@ -12942,17 +12965,25 @@ public class CricketFunctions {
 							        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventExtra());		
 							        		}
 							        	}else {
-							        		if(events.get(i).getEventRuns() > 0) {
-							        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns());	
-							        		}else {
-							        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventExtra());		
-							        		}
-							        		if(events.get(i).getEventSubExtraRuns() > 0) {
-							        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventSubExtra() + "+" + events.get(i).getEventSubExtraRuns());	
-							        		}else {
-							        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventSubExtra());		
-							        		}
-							        	}
+							        		
+							        		if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY)) {
+							        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + CricketUtil.PENALTY);
+					    	    				if(events.get(i).getEventRuns() > 0) {
+					    	    					matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() +  "+" +  events.get(i).getEventRuns()); 
+					    			    		}
+					    	    			}else {
+					    	    				if(events.get(i).getEventRuns() > 0) {
+								        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns());	
+								        		}else {
+								        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventExtra());		
+								        		}
+								        		if(events.get(i).getEventSubExtraRuns() > 0) {
+								        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + "+" + events.get(i).getEventSubExtra() + "+" + events.get(i).getEventSubExtraRuns());	
+								        		}else {
+								        			 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + "+" + events.get(i).getEventSubExtra());		
+								        		}
+	
+					    	    			}							        	}
 							        }
 							    } else {
 							        matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + (events.get(i).getEventRuns() > 0 ? events.get(i).getEventRuns() + "+" : "") +
@@ -13051,7 +13082,6 @@ public class CricketFunctions {
 								 if(events.get(i).getEventExtra().trim().equalsIgnoreCase("+")) {
 									 matchStats.getInningCompare().setTotalRuns(matchStats.getInningCompare().getTotalRuns() +
 											 events.get(i).getEventExtraRuns());
-									 System.out.println("matchStats.getInningCompare().getTotalRuns() "+matchStats.getInningCompare().getTotalRuns());
 						        	}else if(events.get(i).getEventExtra().trim().equalsIgnoreCase("-")) {
 						        		 matchStats.getInningCompare().setTotalRuns(matchStats.getInningCompare().getTotalRuns() -
 						        				 events.get(i).getEventExtraRuns());
@@ -13181,6 +13211,18 @@ public class CricketFunctions {
 								matchStats.getAwayTeamScoreData().setTotalDots(matchStats.getAwayTeamScoreData().getTotalDots()+1);
 							}
 							break;
+						  case CricketUtil.LOG_ANY_BALL:
+					            if (events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.BYE)||
+					            		events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.LEG_BYE)) {
+					                if (events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
+					                	if(events.get(i).getEventInningNumber() == 1) {
+											matchStats.getHomeTeamScoreData().setTotalDots(matchStats.getHomeTeamScoreData().getTotalDots()+1);
+										} else if(events.get(i).getEventInningNumber() == 2) {
+											matchStats.getAwayTeamScoreData().setTotalDots(matchStats.getAwayTeamScoreData().getTotalDots()+1);
+										}
+					                }
+					            }
+					            break;
 						case CricketUtil.LOG_WICKET:
 							switch (String.valueOf(events.get(i).getEventRuns())) {
 							case CricketUtil.DOT:
@@ -13629,16 +13671,23 @@ public class CricketFunctions {
 	                            ThisOverTxt = ThisOverTxt + events.getEventExtra();
 	                        }
 	                    } else {
-	                        if (events.getEventRuns() > 0) {
-	                            ThisOverTxt = ThisOverTxt + events.getEventExtra() + "+" + events.getEventRuns();
-	                        } else {
-	                            ThisOverTxt = ThisOverTxt + events.getEventExtra();
-	                        }
-	                        if (events.getEventSubExtraRuns() > 0) {
-	                            ThisOverTxt = ThisOverTxt + events.getEventSubExtra() + "+" + events.getEventSubExtraRuns();
-	                        } else {
-	                            ThisOverTxt = ThisOverTxt + events.getEventSubExtra();
-	                        }
+	                    	if(events.getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY)) {
+	                    		ThisOverTxt = ThisOverTxt + CricketUtil.PENALTY;
+	    	    				if(events.getEventRuns() > 0) {
+	    	    					ThisOverTxt = ThisOverTxt + "+" + events.getEventRuns(); 
+	    			    		}
+	    	    			}else {
+	    	    				if (events.getEventRuns() > 0) {
+		                            ThisOverTxt = ThisOverTxt + events.getEventExtra() + "+" + events.getEventRuns();
+		                        } else {
+		                            ThisOverTxt = ThisOverTxt + events.getEventExtra();
+		                        }
+		                        if (events.getEventSubExtraRuns() > 0) {
+		                            ThisOverTxt = ThisOverTxt + "+" + events.getEventSubExtra() + "+" + events.getEventSubExtraRuns();
+		                        } else {
+		                            ThisOverTxt = ThisOverTxt + "+" + events.getEventSubExtra();
+		                        }	
+	    	    			}
 	                    }
 	                }
 	            } else {
