@@ -105,6 +105,7 @@ import com.cricket.service.CricketService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -133,6 +134,31 @@ public class CricketFunctions {
 		return "";
 	}
 	
+	public static List<Partnership>ConcussedPartnership(List<Partnership> part,Match match ,int inn_num) throws Exception{
+		
+		List<Partnership> Partnership = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(
+				match.getInning().get(inn_num - 1).getPartnerships()), new TypeReference<List<Partnership>>() {});
+		
+		List<BattingCard> BattingCard = match.getInning().get(inn_num - 1).getBattingCard().stream().filter(b->
+				b.getHowOut()!=null && (b.getHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED) ||
+				b.getHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)||
+				b.getHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT)))
+				.collect(Collectors.toList());
+		
+		int i=1;
+		for(Partnership pship :Partnership) {
+			
+			if(BattingCard.stream().anyMatch(obj ->obj.getPlayerId() == pship.getFirstBatterNo() || 
+					obj.getPlayerId() == pship.getSecondBatterNo())) {
+				pship.setPartnershipNumber(pship.getPartnershipNumber());
+			}else {
+				pship.setPartnershipNumber(i);
+				i++;
+			}
+
+		}
+		return Partnership;
+	}
 	public static List<Map<String, String>> readExcelToMap() {
         List<Map<String, String>> dataList = new ArrayList<>();
 
@@ -12792,8 +12818,11 @@ public class CricketFunctions {
 		String typeOfStats = "", statsData = "";
 		BowlingCard currentBowlerBC = null;
 		Inning currentInning = null;
+		int run =0;
 		int overbyRun=0, overbyWkts=0, overbyRun1=0, overbyWkts1=0;
 		typeOfStats = "INNING_COMPARE,";
+		
+		List<Event> Event = new ArrayList<Event>();
 		
 		for (Inning inn : match.getInning()) {
 			if(inn.getInningNumber() == 2 && (inn.getTotalOvers() > 0 || inn.getTotalBalls() > 0 
@@ -12841,10 +12870,12 @@ public class CricketFunctions {
 						}
 					}
 					break;	
+				case CricketUtil.LOG_OVERWRITE_BATSMAN_HOWOUT :
+					Event.add(events.get(i));
+				 break;
 				case CricketUtil.DOT: case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR: 
 			    case CricketUtil.FIVE: case CricketUtil.SIX: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: 
 			    case CricketUtil.WIDE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL: case CricketUtil.NINE:
-			    	
 			    	//Last 30 balls
 					if(matchStats.getLastThirtyBalls().getTotalBalls() > 0) {
 						if(matchStats.getLastThirtyBalls().getTotalBalls()>12) {
@@ -12863,6 +12894,7 @@ public class CricketFunctions {
 					    	
 					    	if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
 						    	matchStats.getLastThirtyBalls().setTotalWickets(matchStats.getLastThirtyBalls().getTotalWickets()+ 1);
+						    	
 					    	}
 					    	break;
 					    case CricketUtil.NO_BALL:case CricketUtil.WIDE: case CricketUtil.PENALTY:case CricketUtil.LOG_ANY_BALL:
@@ -12996,7 +13028,7 @@ public class CricketFunctions {
 					    			events.get(i).getEventRuns() + events.get(i).getEventExtraRuns()+ events.get(i).getEventSubExtraRuns());
 					    		
 								switch (events.get(i).getEventHowOut().toUpperCase()) {
-								case CricketUtil.ABSENT_HURT: case CricketUtil.RETIRED_HURT: 
+								case CricketUtil.ABSENT_HURT: case CricketUtil.RETIRED_HURT: case CricketUtil.CONCUSSED:
 									break;
 								default:
 						    		if(!matchStats.getOverData().getThisOverTxt().isEmpty()) {
@@ -13053,20 +13085,26 @@ public class CricketFunctions {
 					//Innings comparision
 					if(!typeOfStats.contains("INNING_COMPARE")) {
 
-						if (currentInning != null && events.get(i).getEventInningNumber() == 1 
-							&& (events.get(i).getEventOverNo() <= currentInning.getTotalOvers() 
-							|| events.get(i).getEventBallNo() <= currentInning.getTotalBalls())) {
-								
-							matchStats.getInningCompare().setTotalRuns(matchStats.getInningCompare().getTotalRuns()+ 
-								events.get(i).getEventRuns() + events.get(i).getEventExtraRuns()+ events.get(i).getEventSubExtraRuns());
-					        
+						if (currentInning != null && events.get(i).getEventInningNumber() == 1  && (events.get(i).getEventOverNo() < currentInning.getTotalOvers() || 
+							(events.get(i).getEventOverNo() == currentInning.getTotalOvers() && events.get(i).getEventBallNo() <= currentInning.getTotalBalls()))) {
+							
 							switch (events.get(i).getEventType()) {
-							case CricketUtil.LOG_WICKET:case CricketUtil.LOG_ANY_BALL:
+							case CricketUtil.LOG_ANY_BALL: case CricketUtil.LOG_WICKET:
+								
+								matchStats.getInningCompare().setTotalRuns(matchStats.getInningCompare().getTotalRuns()+ 
+										events.get(i).getEventRuns() + events.get(i).getEventExtraRuns()+ events.get(i).getEventSubExtraRuns());
+
 								if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() && 
-								(!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)&&
-									!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT)&&
-									!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED))) {
-						    		matchStats.getInningCompare().setTotalWickets(matchStats.getInningCompare().getTotalWickets()+1);
+									(!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)&&
+										!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT)&&
+										!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED))) {
+									 matchStats.getInningCompare().setTotalWickets(matchStats.getInningCompare().getTotalWickets()+1);
+									 
+									 if(matchStats.getInningCompare().getOutBatsman().isEmpty()) {
+										 matchStats.getInningCompare().setOutBatsman(matchStats.getInningCompare().getOutBatsman() + events.get(i).getEventHowOutBatterNo());
+									 }else {
+										 matchStats.getInningCompare().setOutBatsman(matchStats.getInningCompare().getOutBatsman() + "," + events.get(i).getEventHowOutBatterNo());
+									 }
 								}
 								if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
 									matchStats.getInningCompare().setTotalSixes(matchStats.getInningCompare().getTotalSixes()+1);		
@@ -13087,18 +13125,26 @@ public class CricketFunctions {
 						        				 events.get(i).getEventExtraRuns());
 						        	}
 								 break;
-		                    case CricketUtil.DOT:  
-		                    	matchStats.getInningCompare().setTotalDots(matchStats.getInningCompare().getTotalDots()+1);
-		                    	break;
-		                    case CricketUtil.FOUR:
-		                    	matchStats.getInningCompare().setTotalFours(matchStats.getInningCompare().getTotalFours()+1);
-		                    	break;
-		                    case CricketUtil.SIX: 
-		                    	matchStats.getInningCompare().setTotalSixes(matchStats.getInningCompare().getTotalSixes()+1);
-		                    	break;
-		                    case CricketUtil.NINE:
-		                    	matchStats.getInningCompare().setTotalNines(matchStats.getInningCompare().getTotalNines()+1);
-		                    	break;
+								 
+							 case CricketUtil.BYE:case CricketUtil.LEG_BYE:case CricketUtil.WIDE:case CricketUtil.NO_BALL:
+							 case CricketUtil.DOT: case CricketUtil.FOUR: case CricketUtil.SIX:  case CricketUtil.NINE:
+							 case CricketUtil.ONE: case CricketUtil.TWO:case CricketUtil.THREE: case CricketUtil.FIVE:
+								 
+								 matchStats.getInningCompare().setTotalRuns(matchStats.getInningCompare().getTotalRuns()+ 
+											events.get(i).getEventRuns());
+								 
+								 if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+										matchStats.getInningCompare().setTotalSixes(matchStats.getInningCompare().getTotalSixes()+1);		
+	                           	 } 
+	                           	 if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+	                           		matchStats.getInningCompare().setTotalFours(matchStats.getInningCompare().getTotalFours()+1);		
+	                           	 } 
+	                           	 if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NINE) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+	                           		matchStats.getInningCompare().setTotalNines(matchStats.getInningCompare().getTotalNines()+1);		
+	                           	 }
+	                           	 if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.DOT)) {  	
+				                    	matchStats.getInningCompare().setTotalDots(matchStats.getInningCompare().getTotalDots()+1); 
+	                           	 }
 		                    }
 						}
 					} 
@@ -13380,7 +13426,8 @@ public class CricketFunctions {
 															matchStats.getHomeFirstPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
 															matchStats.getHomeFirstPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
 															matchStats.getHomeFirstPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
-															matchStats.getHomeFirstPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5])));
+															matchStats.getHomeFirstPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+															matchStats.getHomeFirstPowerPlay().getOutBatsman()));
 													
 												}else if(events.get(i).getEventInningNumber()==2) {
 													//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 1 AWAY
@@ -13391,7 +13438,8 @@ public class CricketFunctions {
 															matchStats.getAwayFirstPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
 															matchStats.getAwayFirstPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
 															matchStats.getAwayFirstPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
-															matchStats.getAwayFirstPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5])));
+															matchStats.getAwayFirstPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+															matchStats.getAwayFirstPowerPlay().getOutBatsman()));
 												 
 													}
 												
@@ -13401,7 +13449,6 @@ public class CricketFunctions {
 								                    events.get(i).getEventOverNo() < matchStats.getPhase2EndOver())) {
 
 												statsData = getpowerplay(events.get(i));
-												
 												if(statsData.contains(",") && statsData.split(",").length >= 7) {
 													if(events.get(i).getEventInningNumber()==1) {
 														//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 2 HOME
@@ -13412,8 +13459,8 @@ public class CricketFunctions {
 																matchStats.getHomeSecondPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
 																matchStats.getHomeSecondPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
 																matchStats.getHomeSecondPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
-																matchStats.getHomeSecondPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5])));
-													
+																matchStats.getHomeSecondPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+																matchStats.getHomeSecondPowerPlay().getOutBatsman()));
 													}else if(events.get(i).getEventInningNumber()==2) {
 														//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 2 AWAY
 														updateMatchStats(matchStats.getAwaySecondPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
@@ -13423,7 +13470,8 @@ public class CricketFunctions {
 																matchStats.getAwaySecondPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
 																matchStats.getAwaySecondPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
 																matchStats.getAwaySecondPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
-																matchStats.getAwaySecondPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5])));
+																matchStats.getAwaySecondPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+																matchStats.getAwaySecondPowerPlay().getOutBatsman()));
 													 }
 												}
 											}
@@ -13442,7 +13490,8 @@ public class CricketFunctions {
 																	matchStats.getHomeThirdPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
 																	matchStats.getHomeThirdPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
 																	matchStats.getHomeThirdPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
-																	matchStats.getHomeThirdPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5])));
+																	matchStats.getHomeThirdPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+																	matchStats.getHomeThirdPowerPlay().getOutBatsman()));
 														
 														}else if(events.get(i).getEventInningNumber()==2) {
 															//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 3 AWAY
@@ -13453,7 +13502,8 @@ public class CricketFunctions {
 																	matchStats.getAwayThirdPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
 																	matchStats.getAwayThirdPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
 																	matchStats.getAwayThirdPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
-																	matchStats.getAwayThirdPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5])));
+																	matchStats.getAwayThirdPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+																	matchStats.getAwayThirdPowerPlay().getOutBatsman()));
 														 }
 													}
 											}
@@ -13464,10 +13514,9 @@ public class CricketFunctions {
 							    case CricketUtil.LOG_WICKET:case CricketUtil.NINE:
 							    	
 							    	if( events.get(i).getEventBowlerNo() > 0) {
-							    		
 										if ((((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) >= (matchStats.getPhase1StartOver() - 1) * 6 &&
 									                    ((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) <= matchStats.getPhase1EndOver() * 6)) {
-									             
+											
 											statsData = getpowerplay(events.get(i));
 											if(statsData.contains(",") && statsData.split(",").length >= 7) {
 												if(events.get(i).getEventInningNumber()==1) {
@@ -13479,8 +13528,13 @@ public class CricketFunctions {
 															matchStats.getHomeFirstPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
 															matchStats.getHomeFirstPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
 															matchStats.getHomeFirstPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
-															matchStats.getHomeFirstPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5])));
-													
+															matchStats.getHomeFirstPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+															events.get(i).getEventHowOutBatterNo() > 0
+														    ? (matchStats.getHomeFirstPowerPlay().getOutBatsman().isEmpty()
+														        ? String.valueOf(events.get(i).getEventHowOutBatterNo())
+														        : matchStats.getHomeFirstPowerPlay().getOutBatsman() + "," + events.get(i).getEventHowOutBatterNo())
+														    : matchStats.getHomeFirstPowerPlay().getOutBatsman()
+															));													
 												}else if(events.get(i).getEventInningNumber()==2) {
 													//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 1 AWAY
 													updateMatchStats(matchStats.getAwayFirstPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
@@ -13490,8 +13544,14 @@ public class CricketFunctions {
 															matchStats.getAwayFirstPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
 															matchStats.getAwayFirstPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
 															matchStats.getAwayFirstPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
-															matchStats.getAwayFirstPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5])));
-												 
+															matchStats.getAwayFirstPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+															events.get(i).getEventHowOutBatterNo() > 0
+														    ? (matchStats.getAwayFirstPowerPlay().getOutBatsman().isEmpty()
+														        ? String.valueOf(events.get(i).getEventHowOutBatterNo())
+														        : matchStats.getAwayFirstPowerPlay().getOutBatsman() + "," + events.get(i).getEventHowOutBatterNo())
+														    : matchStats.getAwayFirstPowerPlay().getOutBatsman()
+															));
+														
 													}
 												
 												}
@@ -13512,8 +13572,14 @@ public class CricketFunctions {
 																matchStats.getHomeSecondPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
 																matchStats.getHomeSecondPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
 																matchStats.getHomeSecondPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
-																matchStats.getHomeSecondPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5])));
-													
+																matchStats.getHomeSecondPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+																events.get(i).getEventHowOutBatterNo() > 0
+															    ? (matchStats.getHomeSecondPowerPlay().getOutBatsman().isEmpty()
+															        ? String.valueOf(events.get(i).getEventHowOutBatterNo())
+															        : matchStats.getHomeSecondPowerPlay().getOutBatsman() + "," + events.get(i).getEventHowOutBatterNo())
+															    : matchStats.getHomeSecondPowerPlay().getOutBatsman()
+																));
+														
 													}else if(events.get(i).getEventInningNumber()==2) {
 														//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 2 AWAY
 														updateMatchStats(matchStats.getAwaySecondPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
@@ -13523,7 +13589,14 @@ public class CricketFunctions {
 																matchStats.getAwaySecondPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
 																matchStats.getAwaySecondPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
 																matchStats.getAwaySecondPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
-																matchStats.getAwaySecondPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5])));
+																matchStats.getAwaySecondPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+																events.get(i).getEventHowOutBatterNo() > 0
+															    ? (matchStats.getAwaySecondPowerPlay().getOutBatsman().isEmpty()
+															        ? String.valueOf(events.get(i).getEventHowOutBatterNo())
+															        : matchStats.getAwaySecondPowerPlay().getOutBatsman() + "," + events.get(i).getEventHowOutBatterNo())
+															    : matchStats.getAwaySecondPowerPlay().getOutBatsman()
+																));
+														
 													 }
 												}
 											}
@@ -13542,8 +13615,14 @@ public class CricketFunctions {
 																	matchStats.getHomeThirdPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
 																	matchStats.getHomeThirdPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
 																	matchStats.getHomeThirdPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
-																	matchStats.getHomeThirdPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5])));
-														
+																	matchStats.getHomeThirdPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+																	events.get(i).getEventHowOutBatterNo() > 0
+																    ? (matchStats.getHomeThirdPowerPlay().getOutBatsman().isEmpty()
+																        ? String.valueOf(events.get(i).getEventHowOutBatterNo())
+																        : matchStats.getHomeThirdPowerPlay().getOutBatsman() + "," + events.get(i).getEventHowOutBatterNo())
+																    : matchStats.getHomeThirdPowerPlay().getOutBatsman()
+																	));
+					
 														}else if(events.get(i).getEventInningNumber()==2) {
 															//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 3 AWAY
 															updateMatchStats(matchStats.getAwayThirdPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
@@ -13553,7 +13632,14 @@ public class CricketFunctions {
 																	matchStats.getAwayThirdPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
 																	matchStats.getAwayThirdPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
 																	matchStats.getAwayThirdPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
-																	matchStats.getAwayThirdPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5])));
+																	matchStats.getAwayThirdPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+																	events.get(i).getEventHowOutBatterNo() > 0
+																    ? (matchStats.getAwayThirdPowerPlay().getOutBatsman().isEmpty()
+																        ? String.valueOf(events.get(i).getEventHowOutBatterNo())
+																        : matchStats.getAwayThirdPowerPlay().getOutBatsman() + "," + events.get(i).getEventHowOutBatterNo())
+																    : matchStats.getAwayThirdPowerPlay().getOutBatsman()
+																	));
+		
 														 }
 													}
 											}
@@ -13592,12 +13678,46 @@ public class CricketFunctions {
 					} 
 				}
 			}
+
+		for (Event even : Event) {
+		    int Batter_id = even.getEventBattingCard().getPlayerId();
+		    boolean isRetired = even.getEventHowOut() != null && !even.getEventHowOut().isEmpty() && 
+                    (even.getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT) ||
+                     even.getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT) ||
+                     even.getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED));
+
+		    // First PP
+		    updateWickets(matchStats.getHomeFirstPowerPlay(), Batter_id, isRetired);
+		    updateWickets(matchStats.getAwayFirstPowerPlay(), Batter_id, isRetired);
+
+		    // Second PP
+		    updateWickets(matchStats.getHomeSecondPowerPlay(), Batter_id, isRetired);
+		    updateWickets(matchStats.getAwaySecondPowerPlay(), Batter_id, isRetired);
+
+		    // Third PP
+		    updateWickets(matchStats.getHomeThirdPowerPlay(), Batter_id, isRetired);
+		    updateWickets(matchStats.getAwayThirdPowerPlay(), Batter_id, isRetired);
+
+		    // Inning Compare
+		    updateWickets(matchStats.getInningCompare(), Batter_id, isRetired);
+		}
 		Collections.reverse(matchStats.getHomeOverByOverData());
 		Collections.reverse(matchStats.getAwayOverByOverData());		
 		return matchStats;
 	}
 
-	public static MatchStats getAllEvents(MatchAllData Match, List<Event> events) {
+	public static void updateWickets(VariousStats powerPlayStats, int batterId, boolean isRetired) {
+	    boolean isBatterOut = Arrays.stream(powerPlayStats.getOutBatsman().split(","))
+	            .map(String::trim)
+	            .filter(s -> !s.isEmpty())
+	            .mapToInt(Integer::parseInt)
+	            .anyMatch(id -> id == batterId);
+
+	    if (isBatterOut && isRetired) {
+            powerPlayStats.setTotalWickets(powerPlayStats.getTotalWickets() - 1);
+	    }
+	}
+	public static MatchStats getAllEvents(MatchAllData Match, String Broadcaster, List<Event> events) {
 		 MatchStats matchStats = new MatchStats();
 	    if (Match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.D10)) {
 	    	
@@ -13607,8 +13727,8 @@ public class CricketFunctions {
 
 	    } else if (Match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20) || 
 	                Match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)) {
-	    	switch (Match.getSetup().getTournament().trim()) {
-			case "LEGEND 90":
+	    	switch (Broadcaster) {
+			case "LEGENDS-90":
 				matchStats.setPhase1StartOver(1); matchStats.setPhase1EndOver(4);
 	        	matchStats.setPhase2StartOver(5); matchStats.setPhase2EndOver(10);
 	        	matchStats.setPhase3StartOver(11); matchStats.setPhase3EndOver(15);

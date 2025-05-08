@@ -36,6 +36,8 @@ public class MatchStats{
     private List<VariousStats> awaySecondPowerPlayBatsman; 
     private List<VariousStats> awayThirdPowerPlayBatsman;  
     
+    private List<BatterOut> outBatsman;
+    
 	public MatchStats() {
 		super();
 		this.overData = new VariousStats();
@@ -62,6 +64,7 @@ public class MatchStats{
         this.awaySecondPowerPlayBatsman = new ArrayList<>();
         this.awayThirdPowerPlayBatsman = new ArrayList<>();
         this.timeLine ="";
+        this.outBatsman = new ArrayList<>();
 	}
 	
 	public String getTimeLine() {
@@ -304,6 +307,14 @@ public class MatchStats{
 		this.phase3EndOver = phase3EndOver;
 	}
 
+	public List<BatterOut> getOutBatsman() {
+		return outBatsman;
+	}
+
+	public void setOutBatsman(List<BatterOut> outBatsman) {
+		this.outBatsman = outBatsman;
+	}
+
 @Override
 public String toString() {
 	return "MatchStats [overData=" + overData + ", playerStats=" + playerStats + ", homeOverByOverData="
@@ -318,7 +329,53 @@ public String toString() {
 			+ ", homeThirdPowerPlayBatsman=" + homeThirdPowerPlayBatsman + ", awayFirstPowerPlayBatsman="
 			+ awayFirstPowerPlayBatsman + ", awaySecondPowerPlayBatsman=" + awaySecondPowerPlayBatsman
 			+ ", awayThirdPowerPlayBatsman=" + awayThirdPowerPlayBatsman + "]";
-}
+}	
+	public static class BatterOut{
+		private int Batter_id;
+		private int over ;
+		private int ball;
+		private int inning;
+		public int getBatter_id() {
+			return Batter_id;
+		}
+		public void setBatter_id(int batter_id) {
+			Batter_id = batter_id;
+		}
+		public int getOver() {
+			return over;
+		}
+		public void setOver(int over) {
+			this.over = over;
+		}
+		public int getBall() {
+			return ball;
+		}
+		public void setBall(int ball) {
+			this.ball = ball;
+		}
+		public int getInning() {
+			return inning;
+		}
+		public void setInning(int inning) {
+			this.inning = inning;
+		}
+		@Override
+		public String toString() {
+			return "BatterOut [Batter_id=" + Batter_id + ", over=" + over + ", ball=" + ball + ", inning=" + inning
+					+ "]";
+		}
+		public BatterOut(int batter_id, int over, int ball, int inning) {
+			super();
+			Batter_id = batter_id;
+			this.over = over;
+			this.ball = ball;
+			this.inning = inning;
+		}
+		public BatterOut() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
+	}
 	public static class VariousStats{
 		
 		private int totalRuns;
@@ -334,26 +391,36 @@ public String toString() {
 		private int totalSixes;
 		private int totalNines;
 		private String statsType,name,BowlerName,outnotOut;
-		private String thisOverTxt;
+		private String thisOverTxt,outBatsman;
 		private int lastBowlerId;
 		private int replacementBowlerId;
-		public VariousStats(int totalRuns, int totalWickets, int totalFours, int totalSixes, int totalNines) {
+		
+		public VariousStats(int totalRuns, int totalWickets, int totalFours, int totalSixes, int totalNines,String OutBatsman) {
+			
 			super();
 			this.totalRuns = totalRuns;
 			this.totalWickets = totalWickets;
 			this.totalFours = totalFours;
 			this.totalSixes = totalSixes;
 			this.totalNines = totalNines;
+			this.outBatsman = OutBatsman;
 		}
 		public VariousStats() {
 			super();
 			this.thisOverTxt = "";
+			this.outBatsman = "";
 		}
 		public VariousStats(int id) {
 			super();
 			this.id = id;
 		}
 		
+		public String getOutBatsman() {
+			return outBatsman;
+		}
+		public void setOutBatsman(String outBatsman) {
+			this.outBatsman = outBatsman;
+		}
 		public String getOutnotOut() {
 			return outnotOut;
 		}
