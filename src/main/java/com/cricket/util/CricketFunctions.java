@@ -13721,7 +13721,7 @@ public class CricketFunctions {
 	            .anyMatch(id -> id == batterId);
 
 	    if (isBatterOut && isRetired) {
-            powerPlayStats.setTotalWickets(powerPlayStats.getTotalWickets() - 1);
+	    	powerPlayStats.setTotalWickets(Math.max(0, powerPlayStats.getTotalWickets() - 1));
 	    }
 	}
 	public static MatchStats getAllEvents(MatchAllData Match, String Broadcaster, List<Event> events) {
