@@ -13098,7 +13098,7 @@ public class CricketFunctions {
 									(!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)&&
 										!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT)&&
 										!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED))) {
-									 matchStats.getInningCompare().setTotalWickets(matchStats.getInningCompare().getTotalWickets()+1);
+									 	matchStats.getInningCompare().setTotalWickets(matchStats.getInningCompare().getTotalWickets()+1);
 									 
 									 if(matchStats.getInningCompare().getOutBatsman().isEmpty()) {
 										 matchStats.getInningCompare().setOutBatsman(matchStats.getInningCompare().getOutBatsman() + events.get(i).getEventHowOutBatterNo());
@@ -13129,6 +13129,7 @@ public class CricketFunctions {
 							 case CricketUtil.BYE:case CricketUtil.LEG_BYE:case CricketUtil.WIDE:case CricketUtil.NO_BALL:
 							 case CricketUtil.DOT: case CricketUtil.FOUR: case CricketUtil.SIX:  case CricketUtil.NINE:
 							 case CricketUtil.ONE: case CricketUtil.TWO:case CricketUtil.THREE: case CricketUtil.FIVE:
+							 case CricketUtil.PENALTY:
 								 
 								 matchStats.getInningCompare().setTotalRuns(matchStats.getInningCompare().getTotalRuns()+ 
 											events.get(i).getEventRuns());
@@ -13997,9 +13998,16 @@ public class CricketFunctions {
                 }else {
                 	dot ++;
                 }
-                wicket += 1;
+                switch (event.getEventHowOut()) {
+				case CricketUtil.RETIRED_HURT : case CricketUtil.ABSENT_HURT :
+				case CricketUtil.CONCUSSED:
+					break;
+				default:
+					wicket += 1;
+	                out_batsman = event.getEventHowOutBatterNo();
+					break;
+				}
                 ball++;
-                out_batsman = event.getEventHowOutBatterNo();
                 break;
 
         	case CricketUtil.LOG_ANY_BALL:
