@@ -13650,6 +13650,12 @@ public class CricketFunctions {
 						    }
 						//OverByOverData
 						switch(events.get(i).getEventType()) {
+						case CricketUtil.LOG_OVERWRITE_BATSMAN_HOWOUT:
+							if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
+								&& events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_OUT)) {
+								overbyWkts ++;
+							}
+							break;
 						case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
 							if(events.get(i).getEventInningNumber()==1) {
 								overbyRun += events.get(i).getEventRuns()+ events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();

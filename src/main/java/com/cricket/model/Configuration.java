@@ -83,6 +83,9 @@ public class Configuration {
 
 	@XmlElement(name="qudich")
 	private String qudich;
+	
+	@XmlElement(name="Category")
+	private String category;
 
 	@XmlElement(name="wagon")
 	private String wagon;
@@ -452,6 +455,14 @@ public class Configuration {
 
 	public void setWagon(String wagon) {
 		this.wagon = wagon;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 	@Override
