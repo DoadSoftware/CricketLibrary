@@ -134,7 +134,7 @@ public class CricketFunctions {
 		return "";
 	}
 	
-	public static List<Partnership>ConcussedPartnership(List<Partnership> part,Match match ,int inn_num) throws Exception{
+	public static List<Partnership>ConcussedPartnership(Match match ,int inn_num) throws Exception{
 		
 		List<Partnership> Partnership = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(
 				match.getInning().get(inn_num - 1).getPartnerships()), new TypeReference<List<Partnership>>() {});
@@ -150,7 +150,7 @@ public class CricketFunctions {
 			
 			if(BattingCard.stream().anyMatch(obj ->obj.getPlayerId() == pship.getFirstBatterNo() || 
 					obj.getPlayerId() == pship.getSecondBatterNo())) {
-				pship.setPartnershipNumber(pship.getPartnershipNumber());
+				pship.setPartnershipNumber(0);
 			}else {
 				pship.setPartnershipNumber(i);
 				i++;
