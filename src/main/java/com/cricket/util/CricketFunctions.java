@@ -14949,4 +14949,18 @@ public class CricketFunctions {
 	    double averageSpeed = totalSpeed / count;
 	    return  fastest  + "," + String.format("%.1f", averageSpeed)+ "," + slowest;
 	}
+  
+  public static List<Speed> getThisOverSpeeds(BowlingCard bowlingCard) {
+	    return bowlingCard.getSpeeds().stream()
+	            .filter(s -> s.getOverNumber() == bowlingCard.getOvers() || 
+	                        (s.getOverNumber() == bowlingCard.getOvers() - 1 && s.getBallNumber() >= 0))
+	            .collect(Collectors.toList());
+  }
+  public static List<Double> ThisOverSpeed(BowlingCard bowlingCard){
+	  return bowlingCard.getSpeeds().stream()
+			    .filter(s -> s.getOverNumber() == bowlingCard.getOvers() || 
+                  (s.getOverNumber() == bowlingCard.getOvers() - 1 && s.getBallNumber() >= 0))
+			    .map(s -> Double.parseDouble(s.getSpeedValue()))
+			    .collect(Collectors.toList());
+  }
 }
