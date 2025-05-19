@@ -3374,30 +3374,67 @@ public class CricketFunctions {
 		switch (broadcaster.toUpperCase()) {
 		case CricketUtil.HAWKEYE:
 
-			File this_dir = new File(speedSourcePath);
-			
+//			File this_dir = new File(speedSourcePath);
+//			
+//		    if (this_dir.isDirectory()) {
+//		    	
+//		        Optional<File> opFile = Arrays.stream(this_dir.listFiles(File::isFile))
+//		          .max((f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified()));
+//		        
+//		        if (opFile.isPresent()){
+//		        	if(lastSpeed.getSpeedFileModifiedTime() != opFile.get().lastModified()) {
+//			        	for(String str_line : Files.readAllLines(Paths.get(
+//			        			speedSourcePath + opFile.get().getName()), StandardCharsets.UTF_8)) {
+//			        		if(str_line.contains(",")) {
+//			        			System.out.println("str_line = " + str_line);
+//								speed_to_return.setSpeedValue(str_line.split(",")[1]);
+//								speed_to_return.setSpeedFileModifiedTime(opFile.get().lastModified());
+//								writer = new BufferedWriter(new FileWriter(speedDestinationPath));
+//							    writer.write(str_line.split(",")[1].trim());
+//							    writer.close();							
+//								return speed_to_return;
+//			        		}
+//			        	}
+//		        	}
+//		        }
+//		    }
+		    
+		    File this_dir = new File(speedSourcePath);
+
 		    if (this_dir.isDirectory()) {
-		    	
+
 		        Optional<File> opFile = Arrays.stream(this_dir.listFiles(File::isFile))
-		          .max((f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified()));
-		        
-		        if (opFile.isPresent()){
-		        	if(lastSpeed.getSpeedFileModifiedTime() != opFile.get().lastModified()) {
-			        	for(String str_line : Files.readAllLines(Paths.get(
-			        			speedSourcePath + opFile.get().getName()), StandardCharsets.UTF_8)) {
-			        		if(str_line.contains(",")) {
-			        			System.out.println("str_line = " + str_line);
-								speed_to_return.setSpeedValue(str_line.split(",")[1]);
-								speed_to_return.setSpeedFileModifiedTime(opFile.get().lastModified());
-								writer = new BufferedWriter(new FileWriter(speedDestinationPath));
-							    writer.write(str_line.split(",")[1].trim());
-							    writer.close();							
-								return speed_to_return;
-			        		}
-			        	}
-		        	}
+		            .max((f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified()));
+
+		        if (opFile.isPresent()) {
+		            File latestFile = opFile.get();
+
+		            if (lastSpeed.getSpeedFileModifiedTime() != latestFile.lastModified()) {
+
+		                List<String> allLines = Files.readAllLines(Paths.get(speedSourcePath + latestFile.getName()), StandardCharsets.UTF_8);
+
+		                if (allLines.size() >= 2) {
+		                    String secondLine = allLines.get(1);  // Index 1 = second line
+
+		                    if (secondLine.contains(",")) {
+		                        System.out.println("Second line = " + secondLine);
+
+		                        String speedValue = secondLine.split(",")[1].trim();
+
+		                        speed_to_return.setSpeedValue(speedValue);
+		                        speed_to_return.setSpeedFileModifiedTime(latestFile.lastModified());
+
+		                        writer = new BufferedWriter(new FileWriter(speedDestinationPath));
+		                        writer.write(speedValue);
+		                        writer.close();
+
+		                        return speed_to_return;
+		                    }
+		                }
+		            }
 		        }
 		    }
+
 			break;
 		case CricketUtil.KHELAI:
 
