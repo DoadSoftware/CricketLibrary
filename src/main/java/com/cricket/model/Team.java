@@ -43,6 +43,9 @@ public class Team implements Comparable<Team> {
   
   @Column(name = "TeamColor")
   private String teamColor;
+  
+  @Column(name = "Gender")
+  private String gender;
 
   @Column(name = "FullHindiTeamName")
   private String FullHindiTeamName;
@@ -212,6 +215,14 @@ public void setTwo(int two) {
 	this.two = two;
 }
 
+public String getGender() {
+	return gender;
+}
+
+public void setGender(String gender) {
+	this.gender = gender;
+}
+
 public int getThree() {
 	return three;
 }
@@ -241,11 +252,11 @@ public void setPlayer(List<Player> player) {
 public String toString() {
 	return "Team [teamId=" + teamId + ", teamName1=" + teamName1 + ", teamName2=" + teamName2 + ", teamName3="
 			+ teamName3 + ", teamName4=" + teamName4 + ", teamGroup=" + teamGroup + ", teamBadge=" + teamBadge
-			+ ", captains=" + captains + ", teamColor=" + teamColor + ", FullHindiTeamName=" + FullHindiTeamName
-			+ ", FullTamilTeamName=" + FullTamilTeamName + ", FullTeluguTeamName=" + FullTeluguTeamName
-			+ ", ShortHindiTeamName=" + ShortHindiTeamName + ", ShortTamilTeamName=" + ShortTamilTeamName
-			+ ", ShortTeluguTeamName=" + ShortTeluguTeamName + ", one=" + one + ", two=" + two + ", three=" + three
-			+ ", five=" + five + ", player=" + player + "]";
+			+ ", captains=" + captains + ", teamColor=" + teamColor + ", gender=" + gender + ", FullHindiTeamName="
+			+ FullHindiTeamName + ", FullTamilTeamName=" + FullTamilTeamName + ", FullTeluguTeamName="
+			+ FullTeluguTeamName + ", ShortHindiTeamName=" + ShortHindiTeamName + ", ShortTamilTeamName="
+			+ ShortTamilTeamName + ", ShortTeluguTeamName=" + ShortTeluguTeamName + ", one=" + one + ", two=" + two
+			+ ", three=" + three + ", five=" + five + ", player=" + player + "]";
 }
 
 public String getTeamBadge() {
