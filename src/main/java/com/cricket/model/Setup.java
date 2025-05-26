@@ -40,7 +40,7 @@ public class Setup {
   private String matchType;
   
   private String readPhotoColumn;
-  
+
   private String tossResult;
 
   private String tossWinningDecision;
@@ -520,12 +520,12 @@ public String toString() {
 			+ ", wagonYOffSet=" + wagonYOffSet + ", followOn=" + followOn + ", followOnThreshold=" + followOnThreshold
 			+ ", homeSubstitutesNumber=" + homeSubstitutesNumber + ", awaySubstitutesNumber=" + awaySubstitutesNumber
 			+ ", reviewsPerTeam=" + reviewsPerTeam + ", matchFileTimeStamp=" + matchFileTimeStamp + ", speedFilePath="
-			+ speedFilePath + ", matchType=" + matchType + ", readPhotoColumn=" + readPhotoColumn + ", tossResult="
-			+ tossResult + ", tossWinningDecision=" + tossWinningDecision + ", tournament=" + tournament
-			+ ", matchIdent=" + matchIdent + ", tossWinningTeam=" + tossWinningTeam + ", numberOfPowerplays="
-			+ numberOfPowerplays + ", maxOvers=" + maxOvers + ", reducedOvers=" + reducedOvers + ", homeTeamId="
-			+ homeTeamId + ", awayTeamId=" + awayTeamId + ", groundId=" + groundId + ", seasonId=" + seasonId
-			+ ", targetRuns=" + targetRuns + ", targetType=" + targetType + ", targetOvers=" + targetOvers
+			+ speedFilePath + ", matchType=" + matchType + ", readPhotoColumn=" + readPhotoColumn
+			+ ", tossResult=" + tossResult + ", tossWinningDecision=" + tossWinningDecision
+			+ ", tournament=" + tournament + ", matchIdent=" + matchIdent + ", tossWinningTeam=" + tossWinningTeam
+			+ ", numberOfPowerplays=" + numberOfPowerplays + ", maxOvers=" + maxOvers + ", reducedOvers=" + reducedOvers
+			+ ", homeTeamId=" + homeTeamId + ", awayTeamId=" + awayTeamId + ", groundId=" + groundId + ", seasonId="
+			+ seasonId + ", targetRuns=" + targetRuns + ", targetType=" + targetType + ", targetOvers=" + targetOvers
 			+ ", secondaryTargetRuns=" + secondaryTargetRuns + ", secondaryTargetOvers=" + secondaryTargetOvers
 			+ ", venueName=" + venueName + ", homeTeam=" + homeTeam + ", awayTeam=" + awayTeam + ", setupHomeTeam="
 			+ setupHomeTeam + ", setupAwayTeam=" + setupAwayTeam + ", homeSquad=" + homeSquad + ", homeSubstitutes="
