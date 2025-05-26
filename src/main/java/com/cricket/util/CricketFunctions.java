@@ -15000,4 +15000,52 @@ public class CricketFunctions {
 			    .map(s -> Double.parseDouble(s.getSpeedValue()))
 			    .collect(Collectors.toList());
   }
+  public static String playerRoleIcons(Player hs) {
+	  String role = "";
+	  if(hs.getCaptainWicketKeeper().equalsIgnoreCase(CricketUtil.WICKET_KEEPER)||hs.getCaptainWicketKeeper().equalsIgnoreCase("CAPTAIN_WICKET_KEEPER")) {
+			role = "WicketKeeper";
+		}else if (hs.getRole().equalsIgnoreCase("BATSMAN") || hs.getRole().equalsIgnoreCase("BATTER") || hs.getRole().equalsIgnoreCase("BAT/KEEPER")) {
+		    role = hs.getBattingStyle().equalsIgnoreCase("RHB") ? "Batsman_RightHand" : "Batsman_Lefthand";
+		} else if (hs.getRole().equalsIgnoreCase("BOWLER")) {
+			if(hs.getBowlingStyle() == null) {
+				role = "Pace_Bowler";
+			}else {
+				switch(hs.getBowlingStyle()) {
+				case "RF": case "RFM": case "RMF": case "RM": case "RSM": case "LF": case "LFM": case "LMF": case "LM":
+					role = "Pace_Bowler";
+					break;
+				case "ROB": case "RLB": case "LSL": case "WSL": case "LCH": case "RLG": case "WSR": case "LSO":
+					role = "Off_Spinner";
+					break;
+				}
+			}
+		} else if (hs.getRole().equalsIgnoreCase("ALL-ROUNDER")) {
+			if(hs.getBowlingStyle() == null) {
+				if(hs.getBattingStyle().equalsIgnoreCase("RHB")) {
+					role = "Pace_BowlerAllrounerRightHand";
+				}else if(hs.getBattingStyle().equalsIgnoreCase("LHB")) {
+					role = "Pace_BowlerAllrounerLeftHand";
+				}
+			}else {
+				switch(hs.getBowlingStyle()) {
+				case "RF": case "RFM": case "RMF": case "RM": case "RSM": case "LF": case "LFM": case "LMF": case "LM":
+					if(hs.getBattingStyle().equalsIgnoreCase("RHB")) {
+						role = "Pace_BowlerAllrounerRightHand";
+					}else if(hs.getBattingStyle().equalsIgnoreCase("LHB")) {
+						role = "Pace_BowlerAllrounerLeftHand";
+					}
+					break;
+				case "ROB": case "RLB": case "LSL": case "WSL": case "LCH": case "RLG": case "WSR": case "LSO":
+					if(hs.getBattingStyle().equalsIgnoreCase("RHB")) {
+						role = "Off_SpinnerAllrounderRightHand";
+					}else if(hs.getBattingStyle().equalsIgnoreCase("LHB")) {
+						role = "Off_SpinnerAllrounderLeftHand";
+					}
+					break;
+				}
+			}
+		}
+	return role;
+		
+  }
 }
