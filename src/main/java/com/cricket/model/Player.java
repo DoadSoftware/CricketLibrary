@@ -36,6 +36,9 @@ public class Player implements Comparable<Player>
   @Column(name = "TICKERNAME")
   private String ticker_name;
   
+  @Column(name = "AbbrvName")
+  private String abbrv_Name;
+  
   @Column(name = "TwitterHandle")
   private String twitterHandle;
   
@@ -602,6 +605,14 @@ public Integer getAe_Id() {
 
 public void setAe_Id(Integer ae_Id) {
 	this.ae_Id = ae_Id;
+}
+
+public String getAbbrv_Name() {
+	return abbrv_Name;
+}
+
+public void setAbbrv_Name(String abbrv_Name) {
+	this.abbrv_Name = abbrv_Name;
 }
 
 @Override

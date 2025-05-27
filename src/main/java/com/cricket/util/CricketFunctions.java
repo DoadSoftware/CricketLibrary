@@ -11074,7 +11074,7 @@ public class CricketFunctions {
 						        	" more run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
 				    	}
 
-				    	if (CricketFunctions.getRequiredBalls(match) > 120) {
+				    	if (CricketFunctions.getRequiredBalls(match) > 100) {
 				    		matchSummaryStatus = matchSummaryStatus + CricketFunctions.OverBalls(0,CricketFunctions.getRequiredBalls(match)) + " overs";
 						} else {
 							matchSummaryStatus = matchSummaryStatus + CricketFunctions.getRequiredBalls(match) + 
