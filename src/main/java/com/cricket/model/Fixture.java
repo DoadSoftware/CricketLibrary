@@ -44,6 +44,9 @@ public class Fixture {
   @Column(name = "Venue")
   private String venue;
   
+  @Column(name = "Category")
+  private String category;
+  
   @Transient
   private Team home_Team;
 
@@ -162,6 +165,14 @@ public String getMargin() {
 
 public void setMargin(String margin) {
 	this.margin = margin;
+}
+
+public String getCategory() {
+	return category;
+}
+
+public void setCategory(String category) {
+	this.category = category;
 }
 
 }

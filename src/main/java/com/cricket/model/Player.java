@@ -111,6 +111,9 @@ public class Player implements Comparable<Player>
   @Column(name = "Question3")
   private String question3;
   
+  @Column(name = "Gender")
+  private String gender;
+  
   @Transient
   private Integer playerPosition;
 
@@ -494,6 +497,14 @@ public void setCatches(int catches) {
 	this.catches = catches;
 }
 
+public String getGender() {
+	return gender;
+}
+
+public void setGender(String gender) {
+	this.gender = gender;
+}
+
 @Override
 public int compareTo(Player pm) {
 	return (int) (this.getPlayerPosition()-pm.getPlayerPosition());
@@ -595,18 +606,20 @@ public void setAe_Id(Integer ae_Id) {
 
 @Override
 public String toString() {
-	return "Player [playerId=" + playerId + ", full_name=" + full_name + ", firstname=" + firstname + ", surname="
-			+ surname + ", ticker_name=" + ticker_name + ", twitterHandle=" + twitterHandle + ", instagramHandle="
-			+ instagramHandle + ", age=" + age + ", hindifull_name=" + hindifull_name + ", tamilfull_name="
-			+ tamilfull_name + ", telugufull_name=" + telugufull_name + ", hindi_surname=" + hindi_surname
-			+ ", tamil_surname=" + tamil_surname + ", telugu_surname=" + telugu_surname + ", role=" + role + ", zone="
-			+ zone + ", squad=" + squad + ", bowlingStyle=" + bowlingStyle + ", battingStyle=" + battingStyle
-			+ ", teamId=" + teamId + ", overseasPlayer=" + overseasPlayer + ", Photo=" + Photo + ", Nationality="
-			+ Nationality + ", text1=" + text1 + ", text2=" + text2 + ", text3=" + text3 + ", question1=" + question1
-			+ ", question2=" + question2 + ", question3=" + question3 + ", playerPosition=" + playerPosition
-			+ ", captainWicketKeeper=" + captainWicketKeeper + ", one=" + one + ", two=" + two + ", three=" + three
-			+ ", five=" + five + ", six=" + six + ", four=" + four + ", nine=" + nine + ", dot=" + dot + ", catches="
-			+ catches + ", runs=" + runs + ", balls=" + balls + ", wickets=" + wickets + "]";
-
+	return "Player [playerId=" + playerId + ", full_name=" + full_name + ", ae_Id=" + ae_Id + ", firstname=" + firstname
+			+ ", surname=" + surname + ", ticker_name=" + ticker_name + ", twitterHandle=" + twitterHandle
+			+ ", instagramHandle=" + instagramHandle + ", age=" + age + ", hindifull_name=" + hindifull_name
+			+ ", tamilfull_name=" + tamilfull_name + ", telugufull_name=" + telugufull_name + ", hindi_surname="
+			+ hindi_surname + ", tamil_surname=" + tamil_surname + ", telugu_surname=" + telugu_surname + ", role="
+			+ role + ", zone=" + zone + ", squad=" + squad + ", debut=" + debut + ", bowlingStyle=" + bowlingStyle
+			+ ", battingStyle=" + battingStyle + ", teamId=" + teamId + ", overseasPlayer=" + overseasPlayer
+			+ ", Photo=" + Photo + ", Nationality=" + Nationality + ", text1=" + text1 + ", text2=" + text2 + ", text3="
+			+ text3 + ", question1=" + question1 + ", question2=" + question2 + ", question3=" + question3 + ", gender="
+			+ gender + ", playerPosition=" + playerPosition + ", captainWicketKeeper=" + captainWicketKeeper
+			+ ", BatBall=" + BatBall + ", playerPos=" + playerPos + ", substitutionType=" + substitutionType + ", one="
+			+ one + ", two=" + two + ", three=" + three + ", five=" + five + ", six=" + six + ", four=" + four
+			+ ", nine=" + nine + ", dot=" + dot + ", catches=" + catches + ", runs=" + runs + ", balls=" + balls
+			+ ", wickets=" + wickets + "]";
 }
+
 }
