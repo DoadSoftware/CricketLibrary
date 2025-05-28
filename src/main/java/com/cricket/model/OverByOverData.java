@@ -7,9 +7,12 @@ public class OverByOverData
   private int OverTotalRuns;
   private int OverTotalWickets;
   private boolean WasOverPowerplay;
+  private String outBatsman,notWicketCount;
   
 public OverByOverData() {
 	super();
+	this.outBatsman = "";
+	this.notWicketCount = "";
 }
 public int getOverNumber() {
 	return OverNumber;
@@ -44,16 +47,40 @@ public int getOverTotalWickets() {
 public void setOverTotalWickets(int overTotalWickets) {
 	OverTotalWickets = overTotalWickets;
 }
+public OverByOverData(int inningNumber, int overNumber, int overTotalRuns, int overTotalWickets,
+		boolean wasOverPowerplay, String outBatsman, String notWicketCount) {
+	super();
+	InningNumber = inningNumber;
+	OverNumber = overNumber;
+	OverTotalRuns = overTotalRuns;
+	OverTotalWickets = overTotalWickets;
+	WasOverPowerplay = wasOverPowerplay;
+	this.outBatsman = outBatsman;
+	this.notWicketCount = notWicketCount;
+}
 public boolean getWasOverPowerplay() {
 	return WasOverPowerplay;
 }
 public void setWasOverPowerplay(boolean wasOverPowerplay) {
 	WasOverPowerplay = wasOverPowerplay;
 }
+public String getOutBatsman() {
+	return outBatsman;
+}
+public void setOutBatsman(String outBatsman) {
+	this.outBatsman = outBatsman;
+}
+public String getNotWicketCount() {
+	return notWicketCount;
+}
+public void setNotWicketCount(String notWicketCount) {
+	this.notWicketCount = notWicketCount;
+}
 @Override
 public String toString() {
 	return "OverByOverData [InningNumber=" + InningNumber + ", OverNumber=" + OverNumber + ", OverTotalRuns="
-			+ OverTotalRuns + ", OverTotalWickets=" + OverTotalWickets + ", WasOverPowerplay=" + WasOverPowerplay + "]";
+			+ OverTotalRuns + ", OverTotalWickets=" + OverTotalWickets + ", WasOverPowerplay=" + WasOverPowerplay
+			+ ", outBatsman=" + outBatsman + ", notWicketCount=" + notWicketCount + "]";
 }
 
 }

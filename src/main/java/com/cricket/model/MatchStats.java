@@ -391,11 +391,11 @@ public String toString() {
 		private int totalSixes;
 		private int totalNines;
 		private String statsType,name,BowlerName,outnotOut;
-		private String thisOverTxt,outBatsman;
+		private String thisOverTxt,outBatsman,notWicketCount;
 		private int lastBowlerId;
 		private int replacementBowlerId;
 		
-		public VariousStats(int totalRuns, int totalWickets, int totalFours, int totalSixes, int totalNines,String OutBatsman) {
+		public VariousStats(int totalRuns, int totalWickets, int totalFours, int totalSixes, int totalNines,String OutBatsman,String notWicketCount) {
 			
 			super();
 			this.totalRuns = totalRuns;
@@ -404,11 +404,20 @@ public String toString() {
 			this.totalSixes = totalSixes;
 			this.totalNines = totalNines;
 			this.outBatsman = OutBatsman;
+			this.notWicketCount = notWicketCount;
 		}
 		public VariousStats() {
 			super();
 			this.thisOverTxt = "";
 			this.outBatsman = "";
+			this.notWicketCount = "";
+		}
+		
+		public String getNotWicketCount() {
+			return notWicketCount;
+		}
+		public void setNotWicketCount(String notWicketCount) {
+			this.notWicketCount = notWicketCount;
 		}
 		public VariousStats(int id) {
 			super();
