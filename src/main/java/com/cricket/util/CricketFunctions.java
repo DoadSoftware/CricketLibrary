@@ -1299,6 +1299,19 @@ public class CricketFunctions {
 		return "";
 	}
 	
+	public static String checkBatAndBallImpactInOutPlayer(List<Event> events, int player_id) {
+		if ((events != null) && (events.size() > 0)) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+				if((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_IMPACT) && events.get(i).getEventBatterNo() == player_id)) {
+					return "IN";
+				}else if((player_id == events.get(i).getEventOtherBatterNo() && events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_IMPACT))) {
+					return "OUT";
+				}
+			}
+		}
+		return "";
+	}
+	
 	public static String checkImpactInOutPlayer(List<Event> events,int player_id,String type) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
@@ -1343,6 +1356,20 @@ public class CricketFunctions {
 			}
 		}
 		return "";
+	}
+	
+	public static String whichLogo(String whatToProcess, String Logo) {
+		switch (Logo) {
+		case "KNIGHTS":
+			switch (whatToProcess) {
+			case "Control_F7":
+				return "KNIGHTS_DARK";
+			default:
+				return "KNIGHTS_LIGHT";
+			}
+		default:
+			return Logo;
+		}
 	}
 	
 	public static String checkConcussedPlayer(List<Event> events,int inning_number,int player_id) {
@@ -15133,41 +15160,41 @@ public class CricketFunctions {
 	  if(hs.getCaptainWicketKeeper().equalsIgnoreCase(CricketUtil.WICKET_KEEPER)||hs.getCaptainWicketKeeper().equalsIgnoreCase("CAPTAIN_WICKET_KEEPER")) {
 			role = "WicketKeeper";
 		}else if (hs.getRole().equalsIgnoreCase("BATSMAN") || hs.getRole().equalsIgnoreCase("BATTER") || hs.getRole().equalsIgnoreCase("BAT/KEEPER")) {
-		    role = hs.getBattingStyle().equalsIgnoreCase("RHB") ? "Batsman_RightHand" : "Batsman_Lefthand";
+		    role = hs.getBattingStyle().equalsIgnoreCase("RHB") ? "Batsman" : "Batsman_Lefthand";
 		} else if (hs.getRole().equalsIgnoreCase("BOWLER")) {
 			if(hs.getBowlingStyle() == null) {
-				role = "Pace_Bowler";
+				role = "FastBowler";
 			}else {
 				switch(hs.getBowlingStyle()) {
 				case "RF": case "RFM": case "RMF": case "RM": case "RSM": case "LF": case "LFM": case "LMF": case "LM":
-					role = "Pace_Bowler";
+					role = "FastBowler";
 					break;
 				case "ROB": case "RLB": case "LSL": case "WSL": case "LCH": case "RLG": case "WSR": case "LSO":
-					role = "Off_Spinner";
+					role = "SpinBowlerIcon";
 					break;
 				}
 			}
 		} else if (hs.getRole().equalsIgnoreCase("ALL-ROUNDER")) {
 			if(hs.getBowlingStyle() == null) {
 				if(hs.getBattingStyle().equalsIgnoreCase("RHB")) {
-					role = "Pace_BowlerAllrounerRightHand";
+					role = "FastBowlerAllrounder";
 				}else if(hs.getBattingStyle().equalsIgnoreCase("LHB")) {
-					role = "Pace_BowlerAllrounerLeftHand";
+					role = "FastBowlerAllrounderLeft";
 				}
 			}else {
 				switch(hs.getBowlingStyle()) {
 				case "RF": case "RFM": case "RMF": case "RM": case "RSM": case "LF": case "LFM": case "LMF": case "LM":
 					if(hs.getBattingStyle().equalsIgnoreCase("RHB")) {
-						role = "Pace_BowlerAllrounerRightHand";
+						role = "FastBowlerAllrounder";
 					}else if(hs.getBattingStyle().equalsIgnoreCase("LHB")) {
-						role = "Pace_BowlerAllrounerLeftHand";
+						role = "FastBowlerAllrounderLeft";
 					}
 					break;
 				case "ROB": case "RLB": case "LSL": case "WSL": case "LCH": case "RLG": case "WSR": case "LSO":
 					if(hs.getBattingStyle().equalsIgnoreCase("RHB")) {
-						role = "Off_SpinnerAllrounderRightHand";
+						role = "SpinBowlerAllrounder";
 					}else if(hs.getBattingStyle().equalsIgnoreCase("LHB")) {
-						role = "Off_SpinnerAllrounderLeftHand";
+						role = "SpinBowlerAllrounderLeft";
 					}
 					break;
 				}
