@@ -1469,6 +1469,7 @@ public class CricketFunctions {
 		over_number = "", over_ball = "", inning_number = "",batsman_style = "",
 		bowler_handed = "",this_over = "",this_over_run = "",shot = "-",wagonX = "0", wagonY = "0",height = "0",six_distance = "";
 		int j = 0;
+		double ThisX = 0,ThisY = 0;
 		switch (match.getEventFile().getEvents().get(i).getEventType().toUpperCase()) {
 		  case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 		  case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: 
@@ -1667,14 +1668,29 @@ public class CricketFunctions {
 					  if(match.getEventFile().getEvents().get(i).getEventInningNumber() == match.getMatch().getWagons().get(k).getInningNumber()) {
 							if(match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getWagons().get(k).getOverNumber()) {
 								if(match.getEventFile().getEvents().get(i).getEventBallNo() == match.getMatch().getWagons().get(k).getBallNumber()) {
-									wagonX = String.valueOf(match.getMatch().getWagons().get(k).getWagonXCord());
-									wagonY = String.valueOf(match.getMatch().getWagons().get(k).getWagonYCord());
+									
+//									wagonX = String.valueOf(match.getMatch().getWagons().get(k).getWagonXCord());
+//									wagonY = String.valueOf(match.getMatch().getWagons().get(k).getWagonYCord());
+									
+									double clickX = match.getMatch().getWagons().get(k).getWagonXCord();
+							        double clickY = match.getMatch().getWagons().get(k).getWagonYCord();
+
+							        // Transform using double
+							        double thisX = 110 + ((clickX - 41.0) / 98.0) * (-140.0);
+							        double thisY = 29 + ((clickY - 85.0) / 57.0) * 81.0;
+
+							        // Round to nearest integer
+							        int roundedX = (int) Math.round(thisX);
+							        int roundedY = (int) Math.round(thisY);
+							        
+							        wagonX = String.valueOf(roundedX);
+							        wagonY = String.valueOf(roundedY);
+							        
 								}
 							}
 						}
 				  }
 			  }
-			  
 			  if(match.getMatch().getShots() != null) {
 				  for(int k = 0; k < match.getMatch().getShots().size(); k++){
 					  if(match.getEventFile().getEvents().get(i).getEventInningNumber() == match.getMatch().getShots().get(k).getInningNumber()) {
