@@ -13793,9 +13793,9 @@ public class CricketFunctions {
 						    		break;
 						    }
 						//OverByOverData
+						statsData = getpowerplay(events.get(i));
 						switch(events.get(i).getEventType()) {
 						case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
-							statsData = getpowerplay(events.get(i));
 							if(Integer.valueOf(statsData.split(",")[7]) > 0) {
 								outBatsman = outBatsman.isEmpty()? String.valueOf(Integer.valueOf(statsData.split(",")[7])): outBatsman + "," + Integer.valueOf(statsData.split(",")[7]);
 							}
