@@ -113,6 +113,7 @@ public class CricketUtil {
 	public final static String INCOMING = "INCOMING";
 	public final static String OUTGOING = "OUTGOING";
 	public final static String LOG_IMPACT = "LOG_IMPACT";
+	public final static String GENDER_SPECIFIC_TEAM = "GENDER_SPECIFIC_TEAM";
 
 	public final static String OUT = "OUT";
 	public final static String NOT_OUT = "NOT OUT";

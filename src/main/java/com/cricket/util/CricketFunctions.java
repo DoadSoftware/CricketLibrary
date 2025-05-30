@@ -7343,9 +7343,9 @@ public class CricketFunctions {
 			this_plyr.setPlayerPosition(player.getPlayerPosition()); 
 			this_plyr.setCaptainWicketKeeper(player.getCaptainWicketKeeper());
 //			this_plyr.setImpactPlayer(player.getImpactPlayer()); 
-			if(match.getSetup().getReadPhotoColumn() != null && match.getSetup().getReadPhotoColumn().equalsIgnoreCase(CricketUtil.NO)) {
-				this_plyr.setPhoto("");
-			}
+//			if(match.getSetup().getReadPhotoColumn() != null && match.getSetup().getReadPhotoColumn().equalsIgnoreCase(CricketUtil.NO)) {
+//				this_plyr.setPhoto("");
+//			}
 		}
 		return this_plyr;
 	}

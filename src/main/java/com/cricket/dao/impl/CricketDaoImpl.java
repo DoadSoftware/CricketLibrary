@@ -73,6 +73,13 @@ public List<Player> getPlayers(String whatToProcess, String valueToProcess) {
 	switch (whatToProcess) {
 	case CricketUtil.TEAM:
 		return sessionFactory.getCurrentSession().createQuery("from Player WHERE TeamId=" + valueToProcess).list();  
+	case CricketUtil.GENDER_SPECIFIC_TEAM:
+		if(valueToProcess.contains(",")) {
+			return sessionFactory.getCurrentSession().createQuery("from Player WHERE TeamId=" + valueToProcess.split(",")[0] 
+				+ " AND Gender='" + valueToProcess.split(",")[1] + "'").list();
+		} else {
+			return null;  
+		}
 	default:
 		return null;  
 	}

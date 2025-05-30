@@ -39,7 +39,8 @@ public class Setup {
 
   private String matchType;
   
-  private String readPhotoColumn;
+  //private String readPhotoColumn;
+  private String playerGender;
 
   private String tossResult;
 
@@ -112,6 +113,14 @@ public class Setup {
   @JsonIgnore
   private int which_key_press;
   
+public String getPlayerGender() {
+	return playerGender;
+}
+
+public void setPlayerGender(String playerGender) {
+	this.playerGender = playerGender;
+}
+
 public String getSpecialMatchRules() {
 	return specialMatchRules;
 }
@@ -254,14 +263,6 @@ public String getMatchType() {
 
 public void setMatchType(String matchType) {
 	this.matchType = matchType;
-}
-
-public String getReadPhotoColumn() {
-	return readPhotoColumn;
-}
-
-public void setReadPhotoColumn(String readPhotoColumn) {
-	this.readPhotoColumn = readPhotoColumn;
 }
 
 public String getTossResult() {
@@ -520,7 +521,7 @@ public String toString() {
 			+ ", wagonYOffSet=" + wagonYOffSet + ", followOn=" + followOn + ", followOnThreshold=" + followOnThreshold
 			+ ", homeSubstitutesNumber=" + homeSubstitutesNumber + ", awaySubstitutesNumber=" + awaySubstitutesNumber
 			+ ", reviewsPerTeam=" + reviewsPerTeam + ", matchFileTimeStamp=" + matchFileTimeStamp + ", speedFilePath="
-			+ speedFilePath + ", matchType=" + matchType + ", readPhotoColumn=" + readPhotoColumn
+			+ speedFilePath + ", matchType=" + matchType + ", playerGender=" + playerGender
 			+ ", tossResult=" + tossResult + ", tossWinningDecision=" + tossWinningDecision
 			+ ", tournament=" + tournament + ", matchIdent=" + matchIdent + ", tossWinningTeam=" + tossWinningTeam
 			+ ", numberOfPowerplays=" + numberOfPowerplays + ", maxOvers=" + maxOvers + ", reducedOvers=" + reducedOvers
