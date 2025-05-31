@@ -11138,14 +11138,23 @@ public class CricketFunctions {
 		    	} else {
 				    if ((CricketFunctions.getRequiredRuns(match) > 0) && (CricketFunctions.getRequiredBalls(match) > 0) 
 				    		&& (CricketFunctions.getWicketsLeft(match,whichInning) > 0)) {
-				    	if(CricketFunctions.getRequiredRuns(match) == 1) {
+				    	
+				    	switch (broadcaster) {
+				    	case "ICC-U19-2023":
+				    		if(CricketFunctions.getRequiredRuns(match) == 1) {
+					    		matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
+							        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
+					    	}else {
+					    		matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
+							        	" more run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
+					    	}
+				    		break;
+				    	default:
 				    		matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
-						        	" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
-				    	}else {
-				    		matchSummaryStatus = batTeamNm + " need " + CricketFunctions.getRequiredRuns(match) + 
-						        	" more run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
+				        		" run" + CricketFunctions.Plural(CricketFunctions.getRequiredRuns(match)) + " to win from ";
+				    		break;
 				    	}
-
+				    	
 				    	if (CricketFunctions.getRequiredBalls(match) > 100) {
 				    		matchSummaryStatus = matchSummaryStatus + CricketFunctions.OverBalls(0,CricketFunctions.getRequiredBalls(match)) + " overs";
 						} else {
@@ -11819,18 +11828,14 @@ public class CricketFunctions {
 		String  PS_Curr="", PS_1 = "",PS_2 = "",PS_3 = "",RR_1 = "",RR_2 = "",RR_3 = "",CRR = "";
 		int Balls_val = 0;
 
-		if(!match.getSetup().getTargetOvers().isEmpty() && Double.valueOf(match.getSetup().getTargetOvers()) > 0) {
-			if(match.getSetup().getTargetOvers().contains(".")) {
-				Balls_val = (Integer.valueOf(match.getSetup().getTargetOvers().split("\\.")[0]) * Integer.valueOf(match.getSetup().getBallsPerOver())) 
-					+ Integer.valueOf(match.getSetup().getTargetOvers().split("\\.")[1]);
-			}else {
-				Balls_val = Integer.valueOf(match.getSetup().getTargetOvers()) * Integer.valueOf(match.getSetup().getBallsPerOver());
-			}
+		if(match.getSetup().getReducedOvers() > 0) {
+			Balls_val = Integer.valueOf(match.getSetup().getReducedOvers()) * Integer.valueOf(match.getSetup().getBallsPerOver());
 		}else {
 			Balls_val = match.getSetup().getMaxOvers()* Integer.valueOf(match.getSetup().getBallsPerOver());
 		}
 		
-		int remaining_balls = (Balls_val - (match.getMatch().getInning().get(0).getTotalOvers()* Integer.valueOf(match.getSetup().getBallsPerOver()) + match.getMatch().getInning().get(0).getTotalBalls()));
+		int remaining_balls = (Balls_val - (match.getMatch().getInning().get(0).getTotalOvers()* Integer.valueOf(match.getSetup().getBallsPerOver()) 
+				+ match.getMatch().getInning().get(0).getTotalBalls()));
 		double value = (remaining_balls * Double.valueOf(match.getMatch().getInning().get(0).getRunRate()));
 		value  = value/6;
 		
