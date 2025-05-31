@@ -146,16 +146,36 @@ public class CricketFunctions {
 				.collect(Collectors.toList());
 		
 		int i=1;
-		for(Partnership pship :Partnership) {
+		for(int j=0; j< Partnership.size(); j++) {
 			
-			if(BattingCard.stream().anyMatch(obj ->obj.getPlayerId() == pship.getFirstBatterNo() || 
-					obj.getPlayerId() == pship.getSecondBatterNo())) {
-				pship.setPartnershipNumber(0);
-			}else {
-				pship.setPartnershipNumber(i);
-				i++;
-			}
+			final Partnership current = Partnership.get(j);
+		    
+		    final int firstBatterNo = current.getFirstBatterNo();
+		    final int secondBatterNo = current.getSecondBatterNo();
+		    
+			if(j < Partnership.size()-1) {
+				final Partnership next = Partnership.get(j + 1);
+			    
+			    boolean firstMatch = BattingCard.stream()
+			            .anyMatch(bc -> bc.getPlayerId() == firstBatterNo);
 
+		        boolean secondMatch = BattingCard.stream()
+		            .anyMatch(bc -> bc.getPlayerId() == secondBatterNo);
+		        
+		        if (firstMatch && (next.getFirstBatterNo() != firstBatterNo)) {
+		            System.out.println(current.getPartnershipNumber());
+		            current.setPartnershipNumber(0);
+		        } else if (secondMatch && (next.getSecondBatterNo() != secondBatterNo)) {
+		            System.out.println(current.getPartnershipNumber());
+		            current.setPartnershipNumber(0);
+		        } else {
+		            current.setPartnershipNumber(i);
+		            i++;
+		        }
+			}else {
+				current.setPartnershipNumber(i);
+	            i++;
+			}
 		}
 		return Partnership;
 	}

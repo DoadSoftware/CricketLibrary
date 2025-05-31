@@ -180,5 +180,15 @@ public void setTotalSixes(int totalSixes) {
 public int compareTo(Partnership part) {
 	return (int) (this.getPartnershipNumber()-part.getPartnershipNumber());
 }
+
+@Override
+public String toString() {
+	return "Partnership [partnershipNumber=" + partnershipNumber + ", firstBatterNo=" + firstBatterNo
+			+ ", secondBatterNo=" + secondBatterNo + ", firstBatterRuns=" + firstBatterRuns + ", secondBatterRuns="
+			+ secondBatterRuns + ", firstBatterBalls=" + firstBatterBalls + ", secondBatterBalls=" + secondBatterBalls
+			+ ", totalRuns=" + totalRuns + ", totalBalls=" + totalBalls + ", totalFours=" + totalFours + ", totalSixes="
+			+ totalSixes + ", totalNines=" + totalNines + ", firstPlayer=" + firstPlayer + ", secondPlayer="
+			+ secondPlayer + "]";
+}
   
 }
