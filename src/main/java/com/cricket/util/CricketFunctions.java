@@ -1372,6 +1372,15 @@ public class CricketFunctions {
 		}
 	}
 	
+	public static String whichTextColor(String Logo) {
+		switch (Logo) {
+		case "ARCS": case "STRIKERS":
+			return "DarkGrey";
+		default:
+			return "LightGrey";
+		}
+	}
+	
 	public static String checkConcussedPlayer(List<Event> events,int inning_number,int player_id) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {

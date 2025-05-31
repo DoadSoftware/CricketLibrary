@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.cricket</groupId>
   <artifactId>CricketLibrary</artifactId>
-  <version>1.470</version>
+  <version>1.471</version>
   <name>CricketLibrary</name>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
