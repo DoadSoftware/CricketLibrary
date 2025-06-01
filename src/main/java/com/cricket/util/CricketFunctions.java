@@ -1382,7 +1382,8 @@ public class CricketFunctions {
 		switch (Logo) {
 		case "KNIGHTS":
 			switch (whatToProcess) {
-			case "Control_F7": case "Control_F11": case "Shift_F11":
+			case "Control_F7": case "Control_F11": case "Shift_F11": 
+			case "p_light": //Not Current Match Team Part
 				return "KNIGHTS_DARK";
 			default:
 				return "KNIGHTS_LIGHT";
