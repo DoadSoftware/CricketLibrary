@@ -1733,9 +1733,9 @@ public class CricketFunctions {
 							        double clickY = match.getMatch().getWagons().get(k).getWagonYCord();
 
 							        // Transform using double
-							        double thisX = 110 + ((clickX - 41.0) / 98.0) * (-140.0);
-							        double thisY = 29 + ((clickY - 85.0) / 57.0) * 81.0;
-
+							        double thisX = Math.round(((clickX - 41) / 98.0) * 79 + 1);
+							        double thisY = Math.round(0.0205 * clickY * clickY - 2.661 * clickY + 93.73);
+							        
 							        // Round to nearest integer
 							        int roundedX = (int) Math.round(thisX);
 							        int roundedY = (int) Math.round(thisY);
