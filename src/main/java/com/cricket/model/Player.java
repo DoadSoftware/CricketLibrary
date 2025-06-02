@@ -117,6 +117,9 @@ public class Player implements Comparable<Player>
   @Column(name = "Gender")
   private String gender;
   
+  @Column(name = "Category")
+  private String category;
+  
   @Transient
   private Integer playerPosition;
 
