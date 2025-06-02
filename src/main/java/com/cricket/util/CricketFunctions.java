@@ -11237,10 +11237,18 @@ public class CricketFunctions {
 				    {
 				    	switch (broadcaster) {
 						case "ICC-U19-2023": case "T20_MUMBAI":
-							if(SplitSummaryText.isEmpty()) {
-						    	matchSummaryStatus = "Match tied - winner will be decided by super over";
-							} else {
-						    	matchSummaryStatus = "Match tied" + SplitSummaryText + "winner will be decided by super over";
+							if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
+								if(SplitSummaryText.isEmpty()) {
+							    	matchSummaryStatus = "Super Over tied - another super over to follow";
+								} else {
+							    	matchSummaryStatus = "Super Over tied" + SplitSummaryText + "another super over to follow";
+								}
+							}else {
+								if(SplitSummaryText.isEmpty()) {
+							    	matchSummaryStatus = "Match tied - winner will be decided by super over";
+								} else {
+							    	matchSummaryStatus = "Match tied" + SplitSummaryText + "winner will be decided by super over";
+								}
 							}
 							break;
 						default:
@@ -13846,7 +13854,6 @@ public class CricketFunctions {
 							  (!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)&&
 							  !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT) &&
 							  !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED))) {
-								overbyWkts ++;
 								if(events.get(i).getEventInningNumber()==1) {
 									overbyWkts ++;
 								}else if(events.get(i).getEventInningNumber()==2) {
