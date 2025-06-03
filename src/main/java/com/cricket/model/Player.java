@@ -618,6 +618,14 @@ public void setAbbrv_Name(String abbrv_Name) {
 	this.abbrv_Name = abbrv_Name;
 }
 
+public String getCategory() {
+	return category;
+}
+
+public void setCategory(String category) {
+	this.category = category;
+}
+
 @Override
 public String toString() {
 	return "Player [playerId=" + playerId + ", full_name=" + full_name + ", ae_Id=" + ae_Id + ", firstname=" + firstname
