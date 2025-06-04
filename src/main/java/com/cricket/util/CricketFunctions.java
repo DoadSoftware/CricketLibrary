@@ -1818,8 +1818,8 @@ public class CricketFunctions {
 			line_txt = addSubString(line_txt,batsman_style,102);
 			line_txt = addSubString(line_txt,shot,109);
 			line_txt = addSubString(line_txt,height,115);
-			line_txt = addSubString(line_txt,"0",121);
-			line_txt = addSubString(line_txt,"0",127);
+			line_txt = addSubString(line_txt,wagonX,120);
+			line_txt = addSubString(line_txt,wagonY,126);
 			line_txt = addSubString(line_txt,bowler_handed,129);
 			line_txt = addSubString(line_txt,OtherBatsman,131);
 			line_txt = addSubString(line_txt,this_over_run,157);
@@ -1893,7 +1893,6 @@ public class CricketFunctions {
 			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT), 
 				Arrays.asList(txt), StandardOpenOption.CREATE);
 			
-		
 			line_txt = addSubString(line_txt,"Inns",2);
 			line_txt = addSubString(line_txt,"Batsman",8);
 			line_txt = addSubString(line_txt,"Bowler",34);
