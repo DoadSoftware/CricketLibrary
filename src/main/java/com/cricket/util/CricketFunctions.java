@@ -1589,8 +1589,20 @@ public class CricketFunctions {
 					over_number = String.valueOf(match.getEventFile().getEvents().get(i).getEventOverNo() + 1);
 					over_ball = String.valueOf(match.getEventFile().getEvents().get(i).getEventBallNo());
 				}else {
-					over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
-					over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
+					if(match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE)) {
+						if(match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
+							over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), 1);
+							over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), 1);
+						}else {
+							over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
+							over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
+						}
+					}else {
+						over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
+						over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
+					}
+//					over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
+//					over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
 				}
 				
 				
@@ -1880,6 +1892,7 @@ public class CricketFunctions {
 			}
 			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT), 
 				Arrays.asList(txt), StandardOpenOption.CREATE);
+			
 		
 			line_txt = addSubString(line_txt,"Inns",2);
 			line_txt = addSubString(line_txt,"Batsman",8);
@@ -1903,6 +1916,7 @@ public class CricketFunctions {
 
 			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT), 
 				Arrays.asList(line_txt), StandardOpenOption.APPEND);
+			
 		    for (int i = 0; i <= match.getEventFile().getEvents().size() - 1; i++)
 		    {
 			  if(match.getEventFile().getEvents().get(i).getEventInningNumber() >= 1 && match.getEventFile().getEvents().get(i).getEventInningNumber() <= max_inn) {
