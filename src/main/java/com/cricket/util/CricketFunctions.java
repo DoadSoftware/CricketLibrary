@@ -1588,10 +1588,17 @@ public class CricketFunctions {
 				this_ball_data = "";
 				inning_number = String.valueOf(match.getEventFile().getEvents().get(i).getEventInningNumber());
 				if(match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL)) {
-					over_number = String.valueOf(match.getEventFile().getEvents().get(i).getEventOverNo() + 1);
-					over_ball = String.valueOf(match.getEventFile().getEvents().get(i).getEventBallNo());
+					
+					if(match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
+						over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), 1);
+						over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), 1);
+					}else {
+						over_number = String.valueOf(match.getEventFile().getEvents().get(i).getEventOverNo() + 1);
+						over_ball = String.valueOf(match.getEventFile().getEvents().get(i).getEventBallNo());
+					}
 				}else {
-					if(match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE)) {
+					if(match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE) || 
+							match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 						if(match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
 							over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), 1);
 							over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), 1);
