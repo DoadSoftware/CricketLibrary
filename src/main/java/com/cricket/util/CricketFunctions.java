@@ -27,7 +27,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -3451,7 +3453,50 @@ public class CricketFunctions {
 		}
 		return null;
 	}
+	public static Speed saveCurrentSpeeds(String broadcaster, String speedSourcePath,String speedDestinationPath, Speed lastSpeed) throws IOException {
+
+		File dir = new File(speedSourcePath);
 	
+		if (dir.isDirectory()) {
+			Optional<File> opFile = Arrays.stream(dir.listFiles(File::isFile)).max(Comparator.comparingLong(File::lastModified));
+			
+			if (opFile.isPresent()) {
+				File latestFile = opFile.get();
+				String latestFileName = latestFile.getName();
+				long latestModifiedTime = latestFile.lastModified();
+				
+				boolean shouldUpdate = 
+				!latestFileName.equals(lastSpeed.getSpeedExtra()) ||
+				latestModifiedTime != lastSpeed.getSpeedFileModifiedTime();
+				
+				if (shouldUpdate) {
+					List<String> allLines = Files.readAllLines(latestFile.toPath(), StandardCharsets.UTF_8);
+					
+					if (allLines.size() >= 2) {
+						String secondLine = allLines.get(1); // second line
+					
+						if (secondLine.contains(",")) {
+							System.out.println("Second line = " + secondLine);
+							
+							String speedValue = secondLine.split(",")[1].trim();
+							
+							lastSpeed.setSpeedValue(speedValue);
+							lastSpeed.setSpeedFileModifiedTime(latestModifiedTime);
+							lastSpeed.setSpeedExtra(latestFileName);
+							
+							try (BufferedWriter writer = new BufferedWriter(new FileWriter(speedDestinationPath))) {
+							   writer.write(speedValue);
+							}
+							
+						return lastSpeed;
+						}
+					}
+				}
+			}
+		}	
+	  return lastSpeed;
+	}
+
 	public static Speed saveCurrentSpeed(String broadcaster, String speedSourcePath, 
 			String speedDestinationPath, Speed lastSpeed) throws IOException 
 	{
@@ -13393,7 +13438,7 @@ public class CricketFunctions {
 								matchStats.getAwayTeamScoreData().setTotalFives(matchStats.getAwayTeamScoreData().getTotalFives()+1);
 							}
 							break;
-						case CricketUtil.DOT:
+						case CricketUtil.DOT:case CricketUtil.BYE: case CricketUtil.LEG_BYE: 
 							if(events.get(i).getEventInningNumber() == 1) {
 								matchStats.getHomeTeamScoreData().setTotalDots(matchStats.getHomeTeamScoreData().getTotalDots()+1);
 							} else if(events.get(i).getEventInningNumber() == 2) {
@@ -13413,14 +13458,27 @@ public class CricketFunctions {
 					            }
 					            break;
 						case CricketUtil.LOG_WICKET:
-							switch (String.valueOf(events.get(i).getEventRuns())) {
-							case CricketUtil.DOT:
+							if(events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.CAUGHT) || events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.CAUGHT_AND_BOWLED)
+	                        		|| events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.BOWLED) || events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.STUMPED)
+	                        		|| events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.LBW) || events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.HIT_WICKET)
+	                        		|| events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.HIT_BALL_TWICE)) 
+                        		{
+                        		
 								if(events.get(i).getEventInningNumber() == 1) {
 									matchStats.getHomeTeamScoreData().setTotalDots(matchStats.getHomeTeamScoreData().getTotalDots()+1);
 								} else if(events.get(i).getEventInningNumber() == 2) {
 									matchStats.getAwayTeamScoreData().setTotalDots(matchStats.getAwayTeamScoreData().getTotalDots()+1);
 								}
-								break;
+                        	}else if(events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
+                        		if(events.get(i).getEventRuns() == 0) {
+                        			if(events.get(i).getEventInningNumber() == 1) {
+    									matchStats.getHomeTeamScoreData().setTotalDots(matchStats.getHomeTeamScoreData().getTotalDots()+1);
+    								} else if(events.get(i).getEventInningNumber() == 2) {
+    									matchStats.getAwayTeamScoreData().setTotalDots(matchStats.getAwayTeamScoreData().getTotalDots()+1);
+    								}
+                        		}
+                        	}
+							switch (String.valueOf(events.get(i).getEventRuns())) {
 							case CricketUtil.ONE:
 								if(events.get(i).getEventInningNumber() == 1) {
 									matchStats.getHomeTeamScoreData().setTotalOnes(matchStats.getHomeTeamScoreData().getTotalOnes()+1);
