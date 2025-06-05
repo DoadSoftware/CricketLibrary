@@ -1553,6 +1553,24 @@ public class CricketFunctions {
 							}
 	    				}
 					}
+					
+					for(Player hsub : match.getSetup().getHomeSubstitutes()) {
+						if(match.getEventFile().getEvents().get(i).getEventBatterNo() == hsub.getPlayerId()) {
+							if(hsub.getBattingStyle() == null) {
+								batsman_style = "";
+							}else {
+								batsman_style = hsub.getBattingStyle().toUpperCase().charAt(0) + "";
+							}
+	    				}
+						if(match.getEventFile().getEvents().get(i).getEventBowlerNo() == hsub.getPlayerId()) {
+							if(hsub.getBowlingStyle() == null) {
+								bowler_handed = "";
+							}else {
+								bowler_handed = hsub.getBowlingStyle().toUpperCase().charAt(0) + "";
+							}
+	    				}
+					}
+					
 					for(Player as : match.getSetup().getAwaySquad()) {
 						if(match.getEventFile().getEvents().get(i).getEventBatterNo() == as.getPlayerId()) {
 							if(as.getBattingStyle() == null) {
@@ -1569,6 +1587,24 @@ public class CricketFunctions {
 							}
 	    				}
 					}
+					
+					for(Player asub : match.getSetup().getAwaySubstitutes()) {
+						if(match.getEventFile().getEvents().get(i).getEventBatterNo() == asub.getPlayerId()) {
+							if(asub.getBattingStyle() == null) {
+								batsman_style = "";
+							}else {
+								batsman_style = asub.getBattingStyle().toUpperCase().charAt(0) + "";
+							}
+	    				}
+						if(match.getEventFile().getEvents().get(i).getEventBowlerNo() == asub.getPlayerId()) {
+							if(asub.getBowlingStyle() == null) {
+								bowler_handed = "";
+							}else {
+								bowler_handed = asub.getBowlingStyle().toUpperCase().charAt(0) + "";
+							}
+	    				}
+					}
+					
 	    			for(BattingCard bc : inn.getBattingCard()) {
 	    				if(match.getEventFile().getEvents().get(i).getEventBatterNo() == bc.getPlayerId()) {
 	    					Batsman = bc.getPlayer().getTicker_name();
@@ -1754,8 +1790,11 @@ public class CricketFunctions {
 							        double clickY = match.getMatch().getWagons().get(k).getWagonYCord();
 
 							        // Transform using double
-							        double thisX = Math.round(((clickX - 41) / 98.0) * 79 + 1);
-							        double thisY = Math.round(0.0205 * clickY * clickY - 2.661 * clickY + 93.73);
+//							        double thisX = Math.round(((clickX - 41) / 98.0) * 79 + 1);
+//							        double thisY = Math.round(0.0205 * clickY * clickY - 2.661 * clickY + 93.73);
+							        
+							        double thisX = Math.round(((clickX - 42) / 98.0) * 79 + 1);
+							        double thisY = Math.round(0.00263 * clickY * clickY + 0.317 * clickY - 16.95);
 							        
 							        // Round to nearest integer
 							        int roundedX = (int) Math.round(thisX);
