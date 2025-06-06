@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -13339,13 +13340,13 @@ public class CricketFunctions {
 						 	            ? String.valueOf(Integer.parseInt(getpowerplay(events.get(i)).split(",")[8]))
 						 	            : matchStats.getInningCompare().getNotWicketCount() + "," + Integer.parseInt(getpowerplay(events.get(i)).split(",")[8]));
 								}
-								if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+								if (events.get(i).getEventWasABoundary()!=null && events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
 									matchStats.getInningCompare().setTotalSixes(matchStats.getInningCompare().getTotalSixes()+1);		
 	                           	} 
-	                           	if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+	                           	if (events.get(i).getEventWasABoundary()!=null && events.get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
 	                           		matchStats.getInningCompare().setTotalFours(matchStats.getInningCompare().getTotalFours()+1);		
 	                           	} 
-	                           	if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NINE) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+	                           	if (events.get(i).getEventWasABoundary()!=null && events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NINE) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
 	                           		matchStats.getInningCompare().setTotalNines(matchStats.getInningCompare().getTotalNines()+1);		
 	                           	}
 								break;
@@ -13367,13 +13368,13 @@ public class CricketFunctions {
 								 matchStats.getInningCompare().setTotalRuns(matchStats.getInningCompare().getTotalRuns()+ 
 											events.get(i).getEventRuns());
 								 
-								 if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+								 if (events.get(i).getEventWasABoundary()!=null && events.get(i).getEventType().equalsIgnoreCase(CricketUtil.SIX) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
 										matchStats.getInningCompare().setTotalSixes(matchStats.getInningCompare().getTotalSixes()+1);		
 	                           	 } 
-	                           	 if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+	                           	 if (events.get(i).getEventWasABoundary()!=null && events.get(i).getEventType().equalsIgnoreCase(CricketUtil.FOUR) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
 	                           		matchStats.getInningCompare().setTotalFours(matchStats.getInningCompare().getTotalFours()+1);		
 	                           	 } 
-	                           	 if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NINE) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+	                           	 if (events.get(i).getEventWasABoundary()!=null && events.get(i).getEventType().equalsIgnoreCase(CricketUtil.NINE) && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
 	                           		matchStats.getInningCompare().setTotalNines(matchStats.getInningCompare().getTotalNines()+1);		
 	                           	 }
 	                           	 if (events.get(i).getEventType().equalsIgnoreCase(CricketUtil.DOT)) {  	
@@ -14255,6 +14256,78 @@ public class CricketFunctions {
 	        batter.setOutnotOut("");
 	    }
 	}
+	public static List<VariousStats> BowlerDataPerOver(List<Event> events, int player_number, int inn_num) {
+		List<VariousStats> bcard = new ArrayList<>();
+		int currentOver = -1;
+		int run = 0, wicket = 0, eventOver = 0;
+		boolean bowlerActive = false;
+
+		for (int i = 0; i < events.size(); i++) {
+			Event event = events.get(i);
+
+			if (event.getEventInningNumber() == inn_num) {
+				// Bowler change event
+				if (event.getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
+					if (bowlerActive && event.getEventBowlerNo() != player_number) {
+						// End of bowler's spell
+						VariousStats vs = new VariousStats();
+						vs.setOver(currentOver);
+						vs.setTotalRuns(run);
+						vs.setTotalWickets(wicket);
+						bcard.add(vs);
+
+						// Reset state
+						currentOver = -1;
+						run = 0;
+						wicket = 0;
+						bowlerActive = false;
+					}
+				}
+				if (event.getEventBowlerNo() == player_number) {
+					bowlerActive = true;
+					eventOver = event.getEventOverNo();
+					if (currentOver == -1) currentOver = eventOver;
+					switch (event.getEventType()) {
+						case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
+						case CricketUtil.FOUR: case CricketUtil.FIVE: case CricketUtil.SIX:
+						case CricketUtil.DOT: case CricketUtil.NINE:case CricketUtil.WIDE:case CricketUtil.NO_BALL:
+							run += event.getEventRuns();
+							break;
+
+						case CricketUtil.LOG_WICKET:
+							run += event.getEventRuns();
+							String howOut = event.getEventHowOut();
+							if (howOut != null && !howOut.equalsIgnoreCase(CricketUtil.RETIRED_HURT)
+									&& !howOut.equalsIgnoreCase(CricketUtil.ABSENT_HURT)
+									&& !howOut.equalsIgnoreCase(CricketUtil.CONCUSSED)) {
+								wicket++;
+							}
+							break;
+
+						case CricketUtil.LOG_ANY_BALL:
+							run += event.getEventRuns();
+							if (event.getEventExtra() != null) run += event.getEventExtraRuns();
+							if (event.getEventSubExtra() != null) run += event.getEventSubExtraRuns();
+							if (event.getEventHowOut() != null && !event.getEventHowOut().isEmpty()) {
+								wicket++;
+							}
+							break;
+					}
+				}
+			}
+		}
+
+		// Add last over stats if bowler was still active
+		if (bowlerActive) {
+			VariousStats vs = new VariousStats();
+			vs.setOver(eventOver);
+			vs.setTotalRuns(run);
+			vs.setTotalWickets(wicket);
+			bcard.add(vs);
+		}
+		return bcard;
+	}
+
 
 	public static String getPhaseBatter(List<VariousStats> player) {
 	    List<VariousStats> batter = player.stream()

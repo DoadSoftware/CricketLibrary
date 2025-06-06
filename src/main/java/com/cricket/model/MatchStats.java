@@ -390,6 +390,7 @@ public String toString() {
 		private int totalFives;
 		private int totalSixes;
 		private int totalNines;
+		private int over;
 		private String statsType,name,BowlerName,outnotOut;
 		private String thisOverTxt,outBatsman,notWicketCount;
 		private int lastBowlerId;
@@ -538,6 +539,12 @@ public String toString() {
 			this.replacementBowlerId = replacementBowlerId;
 		}
 		
+		public int getOver() {
+			return over;
+		}
+		public void setOver(int over) {
+			this.over = over;
+		}
 		public String getName() {
 			return name;
 		}
