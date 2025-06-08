@@ -13092,7 +13092,7 @@ public class CricketFunctions {
 	                            overbyRun1, overbyWkts1, false, outBatsman , notWicketCount));
 						overbyRun1=0; overbyWkts1=0;outBatsman = "";notWicketCount= "";
 					}
-					if(matchStats.getLastThirtyBalls().getTotalBalls()>12) {
+					if(currentInning != null && currentInning.getInningNumber()== events.get(i).getEventInningNumber()) {
 						if(!matchStats.getTimeLine().isEmpty()) {
 							matchStats.setTimeLine(matchStats.getTimeLine()+",|");
 						}
@@ -13105,14 +13105,14 @@ public class CricketFunctions {
 			    case CricketUtil.FIVE: case CricketUtil.SIX: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: 
 			    case CricketUtil.WIDE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL: case CricketUtil.NINE:
 			    	//Last 30 balls
+			    	if(currentInning != null && currentInning.getInningNumber()== events.get(i).getEventInningNumber()) {
+			    		if(matchStats.getTimeLine().isEmpty()) {
+							matchStats.setTimeLine(updateOverStats(events.get(i)));
+						}else {
+							matchStats.setTimeLine(matchStats.getTimeLine()+","+updateOverStats(events.get(i)));
+						}	
+			    	}
 					if(matchStats.getLastThirtyBalls().getTotalBalls() > 0) {
-						if(matchStats.getLastThirtyBalls().getTotalBalls()>12) {
-							if(matchStats.getTimeLine().isEmpty()) {
-								matchStats.setTimeLine(updateOverStats(events.get(i)));
-							}else {
-								matchStats.setTimeLine(matchStats.getTimeLine()+","+updateOverStats(events.get(i)));
-							}
-						}
 				    	switch (events.get(i).getEventType()) {
 						case CricketUtil.DOT: case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR: 
 					    case CricketUtil.FIVE: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.LOG_WICKET: case CricketUtil.BYE: 
