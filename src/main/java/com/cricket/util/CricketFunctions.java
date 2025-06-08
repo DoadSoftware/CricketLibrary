@@ -8304,6 +8304,21 @@ public class CricketFunctions {
 	        return i + "th";
 	    }
 	}
+	public static String getOrdinalSuffix(int number) {
+        int lastTwoDigits = number % 100;
+        int lastDigit = number % 10;
+
+        if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
+            return "th";
+        }
+
+        switch (lastDigit) {
+            case 1: return "st";
+            case 2: return "nd";
+            case 3: return "rd";
+            default: return "th";
+        }
+    }
 	
 	public static List<Tournament> extractSeasonStats(String typeOfExtraction, List<MatchAllData> tournament_matches, 
 			CricketService cricketService,MatchAllData currentMatch, List<Tournament> past_tournament_stats,List<Season> ses) 
