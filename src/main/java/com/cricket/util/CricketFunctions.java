@@ -13262,6 +13262,8 @@ public class CricketFunctions {
 		BowlingCard currentBowlerBC = null;
 		Inning currentInning = null;
 		int overbyRun=0, overbyWkts=0, overbyRun1=0, overbyWkts1=0;
+		String thisOverTxt = "";
+		int thisOverRun=0, thisOverWkts=0;
 		String outBatsman = "",notWicketCount= "";
 		typeOfStats = "INNING_COMPARE,";
 		
@@ -13302,6 +13304,7 @@ public class CricketFunctions {
 						matchStats.getHomeOverByOverData().add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo()+1,
 	                            overbyRun, overbyWkts, false , outBatsman , notWicketCount));
 						overbyRun=0; overbyWkts=0;outBatsman = "";notWicketCount= "";
+						
 					}else if(events.get(i).getEventInningNumber()==2) {
 						matchStats.getAwayOverByOverData().add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo()+1,
 	                            overbyRun1, overbyWkts1, false, outBatsman , notWicketCount));
@@ -13311,6 +13314,17 @@ public class CricketFunctions {
 						if(!matchStats.getTimeLine().isEmpty()) {
 							matchStats.setTimeLine(matchStats.getTimeLine()+",|");
 						}
+					}
+					if ((((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) >= (matchStats.getPhase1StartOver() - 1) * 6 &&
+		                    ((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) <= matchStats.getPhase1EndOver() * 6)) {
+						if(events.get(i).getEventInningNumber()==1) {
+							matchStats.getPowerPlay1ThisOver().add(new VariousStats(events.get(i).getEventOverNo() , thisOverTxt, thisOverRun,thisOverWkts));
+
+						}else if(events.get(i).getEventInningNumber()==2) {
+							matchStats.getPowerPlay2ThisOver().add(new VariousStats(events.get(i).getEventOverNo() , thisOverTxt, thisOverRun,thisOverWkts));
+
+						}
+						thisOverTxt = ""; thisOverRun=0; thisOverWkts=0;
 					}
 					break;	
 				case CricketUtil.LOG_OVERWRITE_BATSMAN_HOWOUT :
@@ -13322,9 +13336,9 @@ public class CricketFunctions {
 			    	//Last 30 balls
 			    	if(currentInning != null && currentInning.getInningNumber()== events.get(i).getEventInningNumber()) {
 			    		if(matchStats.getTimeLine().isEmpty()) {
-							matchStats.setTimeLine(updateOverStats(events.get(i)));
+							matchStats.setTimeLine(updateOverStats(events.get(i)).split(",")[0]);
 						}else {
-							matchStats.setTimeLine(matchStats.getTimeLine()+","+updateOverStats(events.get(i)));
+							matchStats.setTimeLine(matchStats.getTimeLine()+","+updateOverStats(events.get(i)).split(",")[0]);
 						}	
 			    	}
 					if(matchStats.getLastThirtyBalls().getTotalBalls() > 0) {
@@ -13877,7 +13891,15 @@ public class CricketFunctions {
 						    	case CricketUtil.LOG_ANY_BALL:case CricketUtil.WIDE:case CricketUtil.NO_BALL:
 							    	if( events.get(i).getEventBowlerNo() > 0) {
 								         if (events.get(i).getEventOverNo() < matchStats.getPhase1EndOver()) {
-
+								        	String thisOver = updateOverStats(events.get(i));
+								        	if(thisOverTxt.isEmpty()) {
+								        		thisOverTxt = thisOver.split(",")[0];
+								        	}else {
+								        		thisOverTxt += ","+thisOver.split(",")[0];
+								        	}
+								        	thisOverRun +=Integer.valueOf(thisOver.split(",")[1]);
+								        	thisOverWkts +=Integer.valueOf(thisOver.split(",")[2]);
+								        	
 											statsData = getpowerplay(events.get(i));
 											if(statsData.contains(",") && statsData.split(",").length >= 7) {
 												if(events.get(i).getEventInningNumber()==1) {
@@ -14025,6 +14047,15 @@ public class CricketFunctions {
 										if ((((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) >= (matchStats.getPhase1StartOver() - 1) * 6 &&
 									                    ((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) <= matchStats.getPhase1EndOver() * 6)) {
 											
+											String thisOver = updateOverStats(events.get(i));
+											if(thisOverTxt.isEmpty()) {
+								        		thisOverTxt = thisOver.split(",")[0];
+								        	}else {
+								        		thisOverTxt += ","+thisOver.split(",")[0];
+								        	}
+								        	thisOverRun +=Integer.valueOf(thisOver.split(",")[1]);
+								        	thisOverWkts +=Integer.valueOf(thisOver.split(",")[2]);
+								        	
 											statsData = getpowerplay(events.get(i));
 											if(statsData.contains(",") && statsData.split(",").length >= 7) {
 												if(events.get(i).getEventInningNumber()==1) {
@@ -14319,6 +14350,7 @@ public class CricketFunctions {
 	}
 	public static String updateOverStats(Event events) {
 	    String ThisOverTxt = "";
+	    int ThisOverRun = 0; int ThisOverwkts = 0;
 	    switch (events.getEventType()) {
 
 	        case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: 
@@ -14327,14 +14359,17 @@ public class CricketFunctions {
 	            ThisOverTxt = 
 	                (events.getEventWasABoundary() != null && events.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES) 
 	                ? events.getEventRuns() + "BOUNDARY" : events.getEventRuns()+"");
+	            ThisOverRun += events.getEventRuns();
 
 	            break;
 
 	        case CricketUtil.LOG_ANY_BALL:
-	          
+	        	
+	        	ThisOverRun += events.getEventRuns()+events.getEventExtraRuns() + events.getEventSubExtraRuns();
 	            if (events.getEventHowOut() != null && !events.getEventHowOut().isEmpty()) {
 	                ThisOverTxt = ThisOverTxt + CricketUtil.LOG_WICKET +
 	                    (events.getEventExtra() != null && !events.getEventExtra().isEmpty() ? "+" : "");
+	                ThisOverwkts++;
 	            }
 
 	            if (events.getEventExtra().equals(CricketUtil.WIDE) || events.getEventExtra().equals(CricketUtil.NO_BALL)) {
@@ -14403,6 +14438,8 @@ public class CricketFunctions {
 	                    } else {
 	                        ThisOverTxt = events.getEventType();
 	                    }
+	                    ThisOverRun += events.getEventRuns();
+	                    ThisOverwkts++;
 	                    break;
 	            }
 	            break;
@@ -14415,15 +14452,17 @@ public class CricketFunctions {
 	                    } else {
 	                       ThisOverTxt =  events.getEventType();
 	                    }
+	    	        	ThisOverRun += events.getEventRuns()+ events.getEventSubExtraRuns();
 	                    break;
 	                case CricketUtil.PENALTY:
 	                    ThisOverTxt = String.valueOf((events.getEventRuns() + events.getEventExtraRuns() +
 	                        events.getEventSubExtraRuns())) + "+" + events.getEventType();
+	    	        	ThisOverRun += events.getEventRuns()+events.getEventExtraRuns() + events.getEventSubExtraRuns();
 	                    break;
 	            }
 	            break;
 	    }
-		return ThisOverTxt;
+		return ThisOverTxt+","+ThisOverRun+","+ThisOverwkts;
 	}
 
 
@@ -15595,14 +15634,12 @@ public class CricketFunctions {
   
   public static List<Speed> getThisOverSpeeds(BowlingCard bowlingCard) {
 	    return bowlingCard.getSpeeds().stream()
-	            .filter(s -> s.getOverNumber() == bowlingCard.getOvers() || 
-	                        (s.getOverNumber() == bowlingCard.getOvers() - 1 && s.getBallNumber() >= 0))
+	            .filter(s ->(s.getOverNumber() == bowlingCard.getOvers()&& s.getBallNumber() >= 0))
 	            .collect(Collectors.toList());
   }
   public static List<Double> ThisOverSpeed(BowlingCard bowlingCard){
 	  return bowlingCard.getSpeeds().stream()
-			    .filter(s -> s.getOverNumber() == bowlingCard.getOvers() || 
-                  (s.getOverNumber() == bowlingCard.getOvers() - 1 && s.getBallNumber() >= 0))
+			    .filter(s ->(s.getOverNumber() == bowlingCard.getOvers() && s.getBallNumber() >= 0))
 			    .map(s -> Double.parseDouble(s.getSpeedValue()))
 			    .collect(Collectors.toList());
   }

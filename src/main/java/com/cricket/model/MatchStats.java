@@ -1,7 +1,9 @@
 package com.cricket.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MatchStats{
 	
@@ -14,6 +16,8 @@ public class MatchStats{
 		phase1StartOver , phase1EndOver, phase2StartOver , phase2EndOver,
 		phase3StartOver , phase3EndOver; 
 	private String timeLine ;
+	List<VariousStats> powerPlay1ThisOver;
+	List<VariousStats> powerPlay2ThisOver;
 	private VariousStats lastOverData;
 	private VariousStats inningCompare;
 	private VariousStats lastThirtyBalls;
@@ -65,6 +69,8 @@ public class MatchStats{
         this.awayThirdPowerPlayBatsman = new ArrayList<>();
         this.timeLine ="";
         this.outBatsman = new ArrayList<>();
+        this.powerPlay1ThisOver = new ArrayList<>();
+        this.powerPlay2ThisOver = new ArrayList<>();
 	}
 	
 	public String getTimeLine() {
@@ -315,6 +321,22 @@ public class MatchStats{
 		this.outBatsman = outBatsman;
 	}
 
+	public List<VariousStats> getPowerPlay1ThisOver() {
+		return powerPlay1ThisOver;
+	}
+
+	public void setPowerPlay1ThisOver(List<VariousStats> powerPlay1ThisOver) {
+		this.powerPlay1ThisOver = powerPlay1ThisOver;
+	}
+
+	public List<VariousStats> getPowerPlay2ThisOver() {
+		return powerPlay2ThisOver;
+	}
+
+	public void setPowerPlay2ThisOver(List<VariousStats> powerPlay2ThisOver) {
+		this.powerPlay2ThisOver = powerPlay2ThisOver;
+	}
+
 @Override
 public String toString() {
 	return "MatchStats [overData=" + overData + ", playerStats=" + playerStats + ", homeOverByOverData="
@@ -441,6 +463,14 @@ public String toString() {
 			super();
 			this.id = id;
 			this.statsType = statsType;
+		}
+		
+		public VariousStats(int over, String thisOverTxt ,int totalRuns, int totalWickets) {
+			super();
+			this.over = over;
+			this.thisOverTxt = thisOverTxt;
+			this.totalRuns = totalRuns;
+			this.totalWickets = totalWickets;
 		}
 		public String getStatsType() {
 			return statsType;
