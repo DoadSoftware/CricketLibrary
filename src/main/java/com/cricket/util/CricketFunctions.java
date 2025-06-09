@@ -3956,6 +3956,19 @@ public class CricketFunctions {
 		return "";
 	}
 	
+	public static String RoleType(String Role) {
+		switch (Role) {
+		case CricketUtil.BATSMAN: case CricketUtil.BAT: case "BAT/KEEPER":
+			return "BATTER";
+		case CricketUtil.ALL_ROUNDER: case CricketUtil.BOWLER:
+			return Role;
+		case CricketUtil.WICKET_KEEPER: case "CAPTAIN_WICKET_KEEPER": 
+			return CricketUtil.WICKET_KEEPER.replace("_", "-");
+		default:
+			return Role;
+		}
+	}
+	
 	public static void getBatsmanSRAgainstPaceAndSpin(int PlayerId,int Value,CricketService cricketService,List<Tournament> tournament_stats,MatchAllData match) {
 		for (int i = 0; i <= match.getEventFile().getEvents().size() - 1; i++) {
 			if(PlayerId == match.getEventFile().getEvents().get(i).getEventBatterNo()) {
@@ -15639,7 +15652,8 @@ public class CricketFunctions {
   }
   public static List<Double> ThisOverSpeed(BowlingCard bowlingCard){
 	  return bowlingCard.getSpeeds().stream()
-			    .filter(s ->(s.getOverNumber() == bowlingCard.getOvers() && s.getBallNumber() >= 0))
+			    .filter(s -> s.getOverNumber() == bowlingCard.getOvers() || 
+                  (s.getOverNumber() == bowlingCard.getOvers() && s.getBallNumber() >= 0))
 			    .map(s -> Double.parseDouble(s.getSpeedValue()))
 			    .collect(Collectors.toList());
   }
