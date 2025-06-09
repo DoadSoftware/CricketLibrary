@@ -12605,32 +12605,166 @@ public class CricketFunctions {
 	public static Player getHomeAwayPlayer(int plyr_id, MatchAllData match)
 	{
 		for(Player plyr : match.getSetup().getHomeSquad()) {
-			if(plyr_id == plyr.getPlayerId()) { 
-				return plyr;
-			}
+			if(plyr!=null)
+				if(plyr_id == plyr.getPlayerId()) { 
+					return plyr;
+				}
 		}
 		for(Player plyr : match.getSetup().getAwaySquad()) {
-			if(plyr_id == plyr.getPlayerId()) { 
-				return plyr;
-			}
+			if(plyr!=null)
+				if(plyr_id == plyr.getPlayerId()) { 
+					return plyr;
+				}
 		}
 		for(Player plyr : match.getSetup().getHomeOtherSquad()) {
-			if(plyr_id == plyr.getPlayerId()) { 
-				if(plyr.getTeamId() == match.getSetup().getHomeTeamId()) {
-					return plyr;
+			if(plyr!=null)
+				if(plyr_id == plyr.getPlayerId()) { 
+					if(plyr.getTeamId() == match.getSetup().getHomeTeamId()) {
+						return plyr;
+					}
 				}
-			}
 		}
 		for(Player plyr : match.getSetup().getAwayOtherSquad()) {
-			if(plyr_id == plyr.getPlayerId()) {
-				if(plyr.getTeamId() == match.getSetup().getAwayTeamId()) {
-					return plyr;
+			if(plyr!=null)
+				if(plyr_id == plyr.getPlayerId()) {
+					if(plyr.getTeamId() == match.getSetup().getAwayTeamId()) {
+						return plyr;
+					}
 				}
-			}
 		}
 		return null;
 	}
-	
+	public static List<BatBallGriff> getBatBallGriff(Player player , String dataType,int PlayerId,Team team,List<HeadToHead> headToHead, MatchAllData match)
+	{
+		List<BatBallGriff> griffBatBall = new ArrayList<BatBallGriff>();
+		String matchname = "",runs="",balls="",status= "";
+		boolean player_check = false;
+		Team teams = null;
+		switch (dataType.toUpperCase()) {
+		case CricketUtil.BATSMAN:
+			for (HeadToHead h2h : headToHead) {
+			    if (!h2h.getTeam().getTeamName4().equalsIgnoreCase(team.getTeamName4())) {
+			        continue;
+			    }
+			    if(!matchname.equalsIgnoreCase(h2h.getMatchFileName())) {
+			    	// Always add a default "DNP"
+				    matchname = h2h.getMatchFileName();
+				    griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0", null, player, matchname.replace(".json", "")));	
+			    }
+			    // Check if this h2h is for the same player and team
+			    if (h2h.getPlayerId() == PlayerId) {
+			        status = "DNB"; runs = "0";  balls = "0";
+
+			        if ("Y".equalsIgnoreCase(h2h.getInningStarted())) {
+			            status = "Y".equalsIgnoreCase(h2h.getDismissed()) ? "OUT" : "NOT OUT";
+			            runs = String.valueOf(h2h.getRuns());
+			            balls = String.valueOf(h2h.getBallsFaced());
+			        }
+			        griffBatBall.set(griffBatBall.size() - 1, new BatBallGriff(PlayerId, Integer.parseInt(runs), Integer.parseInt(balls), status, "", 0, 0, "0",
+		                    h2h.getOpponentTeam(), player, matchname.replace(".json", "")));
+			    }
+			}
+			if(player != null) {
+				for(Inning inn : match.getMatch().getInning())
+				{
+					if(team.getTeamId()==inn.getBatting_team().getTeamId()) {
+						teams = inn.getBatting_team();
+					}
+					if(inn.getBattingCard() != null && inn.getBattingCard().size() > 0) {
+						for(BattingCard bc : inn.getBattingCard())
+						{
+							if(bc.getPlayerId() == PlayerId) {
+								player_check = true;
+								griffBatBall.add(new BatBallGriff(bc.getPlayerId(), bc.getRuns(), bc.getBalls(), bc.getStatus(), bc.getHowOut(), 0, 0, "0",
+										inn.getBowling_team(), bc.getPlayer(),match.getMatch().getMatchFileName().replace(".json", "")));
+								break;
+							}
+						}
+					}
+				}	
+				if(player_check != true) {
+					griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0", teams, player,
+							match.getMatch().getMatchFileName().replace(".json", "")));
+				}
+			}
+			break;
+		case CricketUtil.BOWLER:
+				for (HeadToHead h2h : headToHead) {
+					if (!h2h.getTeam().getTeamName4().equalsIgnoreCase(team.getTeamName4())) {
+				        continue;
+				    }
+					if(!matchname.equalsIgnoreCase(h2h.getMatchFileName())) {
+				    	// Always add a default "DNP"
+					    matchname = h2h.getMatchFileName();
+					    griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0", null, player, matchname.replace(".json", "")));	
+				    }	
+				    // Check if this h2h is for the same player and team
+				    if (h2h.getPlayerId() == PlayerId) {
+				        status = "DNB"; runs = "0";  balls = "0";
+		
+				        if(h2h.getBallsBowled() > 0) {
+				        	status = "BALL";
+				            runs = h2h.getWickets() +"-"+h2h.getRunsConceded();
+				            if(h2h.getBallsBowled()%6 == 0) {
+				            	 balls = String.valueOf((h2h.getBallsBowled()/6)) ;
+							}else {
+								 balls = String.valueOf((h2h.getBallsBowled()/6)+"."+h2h.getBallsBowled()%6) ;
+							}
+				        }
+				        griffBatBall.set(griffBatBall.size() - 1, new BatBallGriff(PlayerId, Integer.parseInt(runs), Integer.parseInt(balls), status, "", 0, 0, "0",
+			                    h2h.getOpponentTeam(), player, matchname.replace(".json", "")));
+				    }
+				}
+				if(player != null) {
+					for(Inning inn : match.getMatch().getInning())
+					{
+						if(inn.getBowlingCard() != null && inn.getBowlingCard().size() > 0) {
+							for(BowlingCard boc : inn.getBowlingCard())
+							{
+								if(boc.getPlayerId() == PlayerId) {
+									player_check = true;
+									
+									griffBatBall.add(new BatBallGriff(boc.getPlayerId(), 0, 0, "BALL", "", boc.getRuns(), boc.getWickets(), 
+											CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()),inn.getBatting_team(), boc.getPlayer(),
+											match.getMatch().getMatchFileName().replace(".json", "")));
+									break;
+								}
+							}
+						}
+					}
+					for(Inning inn : match.getMatch().getInning())
+					{
+						
+						if(player_check != true) {
+							for(BattingCard bc : inn.getBattingCard())
+							{
+								if(team.getTeamId()==inn.getBatting_team().getTeamId()) {
+									teams = inn.getBatting_team();
+								}
+								if(bc.getPlayerId() == PlayerId) {
+									player_check = true;
+									
+									griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNB", "", 0, 0,"0",inn.getBowling_team(),
+											bc.getPlayer(),match.getMatch().getMatchFileName().replace(".json", "")));
+								}
+							}
+						}
+					}
+					
+					if(player_check != true) {
+						
+						griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0",teams, player,
+								match.getMatch().getMatchFileName().replace(".json", "")));
+					}
+				}
+			break;
+		}
+		for( BatBallGriff gf :griffBatBall) {
+			System.out.println(gf.toString());
+		}
+		return griffBatBall;
+		
+	}
 	public static List<BatBallGriff> getBatBallGriffData(String dataType,int PlayerId,List<Team> team,List<MatchAllData> all_matches, MatchAllData match)
 	{
 		boolean player_check = false;
