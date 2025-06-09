@@ -4684,6 +4684,74 @@ public class CricketFunctions {
 		return 0;
 	}
 	
+	public static int PreviousBowler(MatchAllData matchData,int currentBowlerId) {
+		int over_c=0;
+		for (int i = matchData.getEventFile().getEvents().size() - 1; i >= 0; i--) {
+			if (matchData.getEventFile().getEvents().get(i).getEventInningNumber() 
+					== matchData.getMatch().getInning().stream().filter(in -> in.getIsCurrentInning()
+							.equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null).getInningNumber()) {
+
+				if (matchData.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+					over_c++;
+					if(over_c == 1) {
+						if(matchData.getEventFile().getEvents().get(i).getEventBowlerNo() != currentBowlerId) {
+							return matchData.getEventFile().getEvents().get(i).getEventBowlerNo();
+						}
+					}
+				}
+			}
+		}
+		return 0;
+	}
+	public static int PreviousBowlerRuns(MatchAllData matchData,int currentBowlerId) {
+		int over_c=0,total_runs=0;
+		for (int i = matchData.getEventFile().getEvents().size() - 1; i >= 0; i--) {
+			if (matchData.getEventFile().getEvents().get(i).getEventInningNumber() 
+					== matchData.getMatch().getInning().stream().filter(in -> in.getIsCurrentInning()
+							.equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null).getInningNumber()) {
+
+				if (matchData.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
+					over_c++;
+					if(over_c == 2) {
+						return total_runs;
+					}
+				}else {
+					if(over_c == 1) {
+						switch(matchData.getEventFile().getEvents().get(i).getEventType()) {
+						case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
+				        case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
+				        	total_runs += matchData.getEventFile().getEvents().get(i).getEventRuns();
+				          break;
+				          
+				        case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
+				        	total_runs += matchData.getEventFile().getEvents().get(i).getEventRuns();
+				        	break;
+				        case CricketUtil.LOG_WICKET:
+				        	total_runs += matchData.getEventFile().getEvents().get(i).getEventRuns();
+					          if (matchData.getEventFile().getEvents().get(i).getEventExtra() != null) {
+					        	 total_runs += matchData.getEventFile().getEvents().get(i).getEventExtraRuns();
+					          }
+					          if (matchData.getEventFile().getEvents().get(i).getEventSubExtra() != null) {
+					        	 total_runs += matchData.getEventFile().getEvents().get(i).getEventSubExtraRuns();
+					          }
+					          break;
+				        case CricketUtil.LOG_ANY_BALL:
+				        	total_runs += matchData.getEventFile().getEvents().get(i).getEventRuns();
+					          if (matchData.getEventFile().getEvents().get(i).getEventExtra() != null) {
+					        	 total_runs += matchData.getEventFile().getEvents().get(i).getEventExtraRuns();
+					          }
+					          if (matchData.getEventFile().getEvents().get(i).getEventSubExtra() != null) {
+					        	 total_runs += matchData.getEventFile().getEvents().get(i).getEventSubExtraRuns();
+					          }
+					          break;
+						}
+					}
+				}
+			}
+		}
+		return 0;
+	}
+	
 	public static Event batsmanSubstitution(MatchAllData matchData,int Inning_Number) {
 		Event event = matchData.getEventFile().getEvents().stream().filter(ent->ent.getEventType().equalsIgnoreCase(CricketUtil.LOG_OVERWRITE_SUBSTITUTION) 
 				&& ent.getEventInningNumber() == Inning_Number).findAny().orElse(null);
@@ -12656,11 +12724,9 @@ public class CricketFunctions {
 			        status = "DNB"; runs = "0";  balls = "0";
 
 			        if ("Y".equalsIgnoreCase(h2h.getInningStarted().trim())) {
-			        	System.out.println(player.getFull_name());
 			            status = "Y".equalsIgnoreCase(h2h.getDismissed().trim()) ? "OUT" : "NOT OUT";
 			            runs = String.valueOf(h2h.getRuns());
 			            balls = String.valueOf(h2h.getBallsFaced());
-			            System.out.println(matchname +" "+ runs +" "+balls+" "+status);
 			        }
 			        griffBatBall.set(griffBatBall.size() - 1, new BatBallGriff(PlayerId, Integer.parseInt(runs), Integer.parseInt(balls), status, "", 0, 0, "0",
 		                    h2h.getOpponentTeam(), player, matchname.replace(".json", "")));
@@ -12761,9 +12827,6 @@ public class CricketFunctions {
 					}
 				}
 			break;
-		}
-		for( BatBallGriff gf :griffBatBall) {
-			System.out.println(gf.toString());
 		}
 		return griffBatBall;
 		
