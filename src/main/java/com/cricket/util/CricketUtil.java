@@ -176,6 +176,7 @@ public class CricketUtil {
 	public final static String TEAM_BADGE = "TEAM_BADGE";
 	public final static String FULL = "FULL";
 	public final static String SHORT = "SHORT";
+	public final static String MIDDLE = "MIDDLE";
 	public final static String MINI = "MINI";
 	public final static String BATSMAN = "BATSMAN";
 	public final static String STATS = "STATS";

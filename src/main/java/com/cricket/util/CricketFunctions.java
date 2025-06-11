@@ -10955,6 +10955,13 @@ public class CricketFunctions {
 				TeamNameToUse = match.getSetup().getAwayTeam().getTeamName4();
 			}
 		    break;
+		case CricketUtil.MIDDLE:
+			if(match.getSetup().getTossWinningTeam() == match.getSetup().getHomeTeamId()) {
+				TeamNameToUse = match.getSetup().getHomeTeam().getTeamName3();
+			} else {
+				TeamNameToUse = match.getSetup().getAwayTeam().getTeamName3();
+			}
+		    break;
 		default:
 			if(match.getSetup().getTossWinningTeam() == match.getSetup().getHomeTeamId()) {
 				TeamNameToUse = match.getSetup().getHomeTeam().getTeamName1();
