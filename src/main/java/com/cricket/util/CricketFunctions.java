@@ -11310,6 +11310,10 @@ public class CricketFunctions {
 		    	batTeamNm = match.getMatch().getInning().get(whichInning - 1).getBatting_team().getTeamName4();
 		    	bowlTeamNm = match.getMatch().getInning().get(whichInning - 1).getBowling_team().getTeamName4();
 		    	break;
+		    case CricketUtil.MIDDLE: 
+		    	batTeamNm = match.getMatch().getInning().get(whichInning - 1).getBatting_team().getTeamName3();
+		    	bowlTeamNm = match.getMatch().getInning().get(whichInning - 1).getBowling_team().getTeamName3();
+		    	break;
 		    default: 
 		    	batTeamNm = (match.getMatch().getInning().get(whichInning - 1)).getBatting_team().getTeamName1();
 		    	bowlTeamNm = (match.getMatch().getInning().get(whichInning - 1)).getBowling_team().getTeamName1();
@@ -12275,6 +12279,14 @@ public class CricketFunctions {
 					}
 					if(inn.getBattingTeamId() == match.getSetup().getAwayTeamId()) {
 						team = match.getSetup().getAwayTeam().getTeamName4();
+					}
+					break;
+				case CricketUtil.MIDDLE:
+					if(inn.getBattingTeamId() == match.getSetup().getHomeTeamId()) {
+						team = match.getSetup().getHomeTeam().getTeamName3();
+					}
+					if(inn.getBattingTeamId() == match.getSetup().getAwayTeamId()) {
+						team = match.getSetup().getAwayTeam().getTeamName3();
 					}
 					break;
 				default:
