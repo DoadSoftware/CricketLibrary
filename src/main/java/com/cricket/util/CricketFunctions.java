@@ -84,6 +84,7 @@ import com.cricket.model.HeadToHead;
 import com.cricket.model.ImpactData;
 import com.cricket.model.Inning;
 import com.cricket.model.InningStats;
+import com.cricket.model.LeaderBoard;
 import com.cricket.model.Match;
 import com.cricket.model.MatchAllData;
 import com.cricket.model.MatchClock;
@@ -113,6 +114,7 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+
 import net.sf.json.JSONObject;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -124,7 +126,30 @@ public class CricketFunctions {
 	private static long lastModifiedTime = -1;
 	private static ObjectMapper objectMapper = new ObjectMapper(); 
 	
-	
+	public static void processLeaderBoard(CricketService CricketService ,LeaderBoard leader) {
+			leader.setPlayer1(CricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(leader.getPlayer1Id())));
+			leader.setPlayer2(CricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(leader.getPlayer2Id())));
+			leader.setPlayer3(CricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(leader.getPlayer3Id())));
+			leader.setPlayer4(CricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(leader.getPlayer4Id())));
+			leader.setPlayer5(CricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(leader.getPlayer5Id())));
+			for(Team tm:CricketService.getTeams()) {
+				if(tm.getTeamId()==leader.getPlayer1().getTeamId()) {
+					leader.setTeam1(tm);
+				}
+				if(tm.getTeamId()==leader.getPlayer2().getTeamId()) {
+					leader.setTeam2(tm);
+				}
+				if(tm.getTeamId()==leader.getPlayer3().getTeamId()) {
+					leader.setTeam3(tm);
+				}
+				if(tm.getTeamId()==leader.getPlayer4().getTeamId()) {
+					leader.setTeam4(tm);
+				}
+				if(tm.getTeamId()==leader.getPlayer5().getTeamId()) {
+					leader.setTeam5(tm);
+				}
+			}
+	}
 	public static String findConsecutiveDupicateEvents(List<Event> allEvents, Event currentEvent)
 	{
 		if(allEvents.size() > 0) {
