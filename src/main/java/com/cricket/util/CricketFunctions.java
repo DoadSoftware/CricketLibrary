@@ -12774,7 +12774,7 @@ public class CricketFunctions {
 			    if(!matchname.equalsIgnoreCase(h2h.getMatchFileName())) {
 			    	// Always add a default "DNP"
 				    matchname = h2h.getMatchFileName();
-				    griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0", null, player, matchname.replace(".json", "")));	
+				    griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0", h2h.getOpponentTeam(), player, matchname.replace(".json", "")));	
 			    }
 			    // Check if this h2h is for the same player and team
 			    if (h2h.getPlayerId() == PlayerId) {
@@ -12792,9 +12792,7 @@ public class CricketFunctions {
 			if(player != null) {
 				for(Inning inn : match.getMatch().getInning())
 				{
-					if(team.getTeamId()==inn.getBatting_team().getTeamId()) {
-						teams = inn.getBatting_team();
-					}
+					teams = inn.getBowling_team();
 					if(inn.getBattingCard() != null && inn.getBattingCard().size() > 0) {
 						for(BattingCard bc : inn.getBattingCard())
 						{
@@ -12849,7 +12847,6 @@ public class CricketFunctions {
 							{
 								if(boc.getPlayerId() == PlayerId) {
 									player_check = true;
-									
 									griffBatBall.add(new BatBallGriff(boc.getPlayerId(), 0, 0, "BALL", "", boc.getRuns(), boc.getWickets(), 
 											CricketFunctions.OverBalls(boc.getOvers(), boc.getBalls()),inn.getBatting_team(), boc.getPlayer(),
 											match.getMatch().getMatchFileName().replace(".json", "")));
@@ -12860,16 +12857,12 @@ public class CricketFunctions {
 					}
 					for(Inning inn : match.getMatch().getInning())
 					{
-						
 						if(player_check != true) {
 							for(BattingCard bc : inn.getBattingCard())
 							{
-								if(team.getTeamId()==inn.getBatting_team().getTeamId()) {
-									teams = inn.getBatting_team();
-								}
+								teams = inn.getBatting_team();
 								if(bc.getPlayerId() == PlayerId) {
 									player_check = true;
-									
 									griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNB", "", 0, 0,"0",inn.getBowling_team(),
 											bc.getPlayer(),match.getMatch().getMatchFileName().replace(".json", "")));
 								}
@@ -12878,7 +12871,6 @@ public class CricketFunctions {
 					}
 					
 					if(player_check != true) {
-						
 						griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0",teams, player,
 								match.getMatch().getMatchFileName().replace(".json", "")));
 					}
@@ -14390,11 +14382,11 @@ public class CricketFunctions {
 	    } else if (Match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.DT20) || 
 	                Match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.IT20)) {
 	    	switch (Broadcaster) {
-			case "LEGENDS-90":
-				matchStats.setPhase1StartOver(1); matchStats.setPhase1EndOver(4);
-	        	matchStats.setPhase2StartOver(5); matchStats.setPhase2EndOver(10);
-	        	matchStats.setPhase3StartOver(11); matchStats.setPhase3EndOver(15);
-				break;
+//			case "LEGENDS-90":
+//				matchStats.setPhase1StartOver(1); matchStats.setPhase1EndOver(4);
+//	        	matchStats.setPhase2StartOver(5); matchStats.setPhase2EndOver(10);
+//	        	matchStats.setPhase3StartOver(11); matchStats.setPhase3EndOver(15);
+//				break;
 			default:
 				matchStats.setPhase1StartOver(1); matchStats.setPhase1EndOver(6);
 	        	matchStats.setPhase2StartOver(7); matchStats.setPhase2EndOver(15);
