@@ -19,6 +19,12 @@ public class Pointers
   @Column(name = "HEADER")
   private String header;
 
+  @Column(name = "SUBHEADER")
+  private String subheader;
+  
+  @Column(name = "ROWS")
+  private int rows;
+  
   @Column(name = "TEXT1")
   private String text1;
   
@@ -27,6 +33,9 @@ public class Pointers
   
   @Column(name = "TEXT3")
   private String text3;
+  
+  @Column(name = "TEXT4")
+  private String text4;
   
   @Column(name = "TEAM")
   private String team;
@@ -117,6 +126,36 @@ public String getHeader() {
 
 public void setHeader(String header) {
 	this.header = header;
+}
+
+
+public String getSubheader() {
+	return subheader;
+}
+
+
+public void setSubheader(String subheader) {
+	this.subheader = subheader;
+}
+
+
+public int getRows() {
+	return rows;
+}
+
+
+public void setRows(int rows) {
+	this.rows = rows;
+}
+
+
+public String getText4() {
+	return text4;
+}
+
+
+public void setText4(String text4) {
+	this.text4 = text4;
 }
 
 }
