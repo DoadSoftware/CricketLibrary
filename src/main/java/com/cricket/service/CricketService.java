@@ -9,6 +9,7 @@ import com.cricket.model.EverestBugs;
 import com.cricket.model.Fixture;
 import com.cricket.model.Ground;
 import com.cricket.model.InfobarStats;
+import com.cricket.model.LeaderBoard;
 import com.cricket.model.NameSuper;
 import com.cricket.model.POTT;
 import com.cricket.model.PerformanceBug;
@@ -50,6 +51,7 @@ public interface CricketService {
   List<VariousText> getVariousTexts();
   List<Playoff> getPlayOff();
   List<Season> getSeasons();
+  List<LeaderBoard> getLeaderBoards();
   List<Commentator> getCommentator();
   List<Staff> getStaff();
   List<POTT> getPott();
