@@ -27,9 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -1528,7 +1526,6 @@ public class CricketFunctions {
 		over_number = "", over_ball = "", inning_number = "",batsman_style = "",
 		bowler_handed = "",this_over = "",this_over_run = "",shot = "-",wagonX = "0", wagonY = "0",height = "0",six_distance = "";
 		int j = 0;
-		double ThisX = 0,ThisY = 0;
 		switch (match.getEventFile().getEvents().get(i).getEventType().toUpperCase()) {
 		  case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 		  case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: 
@@ -10987,19 +10984,19 @@ public class CricketFunctions {
 		int requiredBalls;
 		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
 			if(getTargetOvers(match).contains(".")) {
-				requiredBalls = ((Integer.valueOf(getTargetOvers(match).split(".")[0]) * Integer.valueOf(match.getSetup().getBallsPerOver())) + Integer.valueOf(getTargetOvers(match).split(".")[1])) 
-						- (match.getMatch().getInning().get(3).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(3).getTotalBalls();
+				requiredBalls = ((Integer.valueOf(getTargetOvers(match).split("\\.")[0]) * Integer.valueOf(match.getSetup().getBallsPerOver())) + Integer.valueOf(getTargetOvers(match).split("\\.")[1])) 
+					- (match.getMatch().getInning().get(3).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(3).getTotalBalls();
 			} else {
 				requiredBalls = ((Integer.valueOf(getTargetOvers(match)) * Integer.valueOf(match.getSetup().getBallsPerOver()))) 
-						- (match.getMatch().getInning().get(3).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(3).getTotalBalls();
+					- (match.getMatch().getInning().get(3).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(3).getTotalBalls();
 			}
 		}else {
 			if(getTargetOvers(match).contains(".")) {
-				requiredBalls = ((Integer.valueOf(getTargetOvers(match).split(".")[0]) * Integer.valueOf(match.getSetup().getBallsPerOver())) + Integer.valueOf(getTargetOvers(match).split(".")[1])) 
-						- (match.getMatch().getInning().get(1).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(1).getTotalBalls();
+				requiredBalls = ((Integer.valueOf(getTargetOvers(match).split("\\.")[0]) * Integer.valueOf(match.getSetup().getBallsPerOver())) + Integer.valueOf(getTargetOvers(match).split("\\.")[1])) 
+					- (match.getMatch().getInning().get(1).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(1).getTotalBalls();
 			} else {
 				requiredBalls = ((Integer.valueOf(getTargetOvers(match)) * Integer.valueOf(match.getSetup().getBallsPerOver()))) 
-						- (match.getMatch().getInning().get(1).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(1).getTotalBalls();
+					- (match.getMatch().getInning().get(1).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(1).getTotalBalls();
 			}
 		}
 		
