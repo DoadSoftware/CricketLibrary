@@ -1277,12 +1277,12 @@ public class CricketFunctions {
 				readValue(new File(filePathName), FieldersData.class);
           return fielderFormationData;
     }
-	 public static String readFileAsString(String fileName) throws Exception {
+	public static String readFileAsString(String fileName) throws Exception {
         String data = new String(Files.readAllBytes(Paths.get(fileName)));
         return data;
     }
 	 
-	 public static ImpactData[] getImpactPlayerList(MatchAllData match, CricketService cricketService) {
+	public static ImpactData[] getImpactPlayerList(MatchAllData match, CricketService cricketService) {
 		ImpactData[] impactData = new ImpactData[2];
 		int count = 0;
 		for (int i = match.getEventFile().getEvents().size() - 1; i >= 0; i--) {
@@ -1343,6 +1343,17 @@ public class CricketFunctions {
 			}
 		}
 		return "";
+	}
+	
+	public static int getImpactPlayerId(List<Event> events, int player_id) {
+		if ((events != null) && (events.size() > 0)) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+				if((player_id == events.get(i).getEventOtherBatterNo() && events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_IMPACT))) {
+					return events.get(i).getEventBatterNo();
+				}
+			}
+		}
+		return 0;
 	}
 	
 	public static String checkBatAndBallImpactInOutPlayer(List<Event> events, int player_id) {
@@ -15275,7 +15286,7 @@ public class CricketFunctions {
 	}
 	
 	//USING THIS METHOD IN PHASE WISE SCORE FUNCTION
-	 private static void updateMap(Map<Integer, Integer> map, int key, int value) {
+	private static void updateMap(Map<Integer, Integer> map, int key, int value) {
 		 if(map.get(key) != null && map.get(key) == -1 && value !=0) {
 		 		map.put(key, map.getOrDefault(key, 0) + value+1);
 		 }else {
@@ -15283,7 +15294,7 @@ public class CricketFunctions {
 		 }
 	 }
 	 
-	 private static void updateMap(Map<Integer, String> map, int key, int value, String outNot) {
+	private static void updateMap(Map<Integer, String> map, int key, int value, String outNot) {
 		    String currentValue = map.getOrDefault(key, "0");
 		    int newValue = (currentValue.equals("-1") && value != 0) 
 		                   ? Integer.parseInt(currentValue) + value + 1 
@@ -15292,7 +15303,7 @@ public class CricketFunctions {
 		}
 
 	 //USING IN PHASE WISE SCORE
-	 private static String getTopTwoPerformers(Map<Integer, String> map,Map<Integer, Integer> ballsMap) {
+	private static String getTopTwoPerformers(Map<Integer, String> map,Map<Integer, Integer> ballsMap) {
 		    return map.entrySet()
 		    		 .stream()
 		             .sorted((a, b) -> Integer.compare(
@@ -15310,7 +15321,7 @@ public class CricketFunctions {
 	}
 	 
 	//USING IN PHASE WISE SCORE
-	 private static String getTopTwoBowlers(Map<Integer, Integer> wicketsMap, Map<Integer, Integer> runsConcededMap,Map<Integer, Integer> ballsMap) {
+	private static String getTopTwoBowlers(Map<Integer, Integer> wicketsMap, Map<Integer, Integer> runsConcededMap,Map<Integer, Integer> ballsMap) {
 		    return wicketsMap.entrySet()
 		                     .stream()
 		                     .sorted((a, b) -> {
@@ -15335,7 +15346,7 @@ public class CricketFunctions {
 	}
 	 
 
-	 public static List<VariousStats> BowlerVsBatsman(int bowlerNum, int innNum, List<Event> events, MatchAllData matchAllData) {
+   public static List<VariousStats> BowlerVsBatsman(int bowlerNum, int innNum, List<Event> events, MatchAllData matchAllData) {
 		    List<VariousStats> playerStatsList = new ArrayList<>();	    
 		    Event previousEvent = null;
 
@@ -15612,7 +15623,7 @@ public class CricketFunctions {
 	 
 	 return top_ten_beststats;
 	}
-  public static String LastFewOvers(int over, Match match, List<Event> events) {
+   public static String LastFewOvers(int over, Match match, List<Event> events) {
     int TotalBalls = (over * 6);
     int TotalRuns = 0 ,TotalFours = 0 ,TotalSixes = 0,TotalNines = 0,TotalWickets = 0;
 
@@ -15659,7 +15670,7 @@ public class CricketFunctions {
        }
       return TotalRuns +","+TotalWickets+","+TotalFours+","+TotalSixes+","+TotalNines;
   	}
-  public static String AnalyzeSpeeds(List<Speed> speeds) {
+   public static String AnalyzeSpeeds(List<Speed> speeds) {
 	    double fastest = Double.MIN_VALUE , slowest = Double.MAX_VALUE ,totalSpeed = 0;
 	    int count = 0;
 	    for (Speed speed : speeds) {
@@ -15678,19 +15689,19 @@ public class CricketFunctions {
 	    return  fastest  + "," + String.format("%.1f", averageSpeed)+ "," + slowest;
 	}
   
-  public static List<Speed> getThisOverSpeeds(BowlingCard bowlingCard) {
+   public static List<Speed> getThisOverSpeeds(BowlingCard bowlingCard) {
 	    return bowlingCard.getSpeeds().stream()
 	            .filter(s ->(s.getOverNumber() == bowlingCard.getOvers()&& s.getBallNumber() >= 0))
 	            .collect(Collectors.toList());
   }
-  public static List<Double> ThisOverSpeed(BowlingCard bowlingCard){
+   public static List<Double> ThisOverSpeed(BowlingCard bowlingCard){
 	  return bowlingCard.getSpeeds().stream()
 			    .filter(s -> s.getOverNumber() == bowlingCard.getOvers() || 
                   (s.getOverNumber() == bowlingCard.getOvers() && s.getBallNumber() >= 0))
 			    .map(s -> Double.parseDouble(s.getSpeedValue()))
 			    .collect(Collectors.toList());
   }
-  public static String playerRoleIcons(Player hs) {
+   public static String playerRoleIcons(Player hs) {
 	  String role = "";
 	  if(hs.getCaptainWicketKeeper().equalsIgnoreCase(CricketUtil.WICKET_KEEPER)||hs.getCaptainWicketKeeper().equalsIgnoreCase("CAPTAIN_WICKET_KEEPER")) {
 			role = "WicketKeeper";
