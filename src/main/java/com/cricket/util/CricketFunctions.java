@@ -1286,7 +1286,6 @@ public class CricketFunctions {
 		ImpactData[] impactData = new ImpactData[2];
 		int count = 0;
 		for (int i = match.getEventFile().getEvents().size() - 1; i >= 0; i--) {
-			
 			if(match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_IMPACT)){
 				if(count>=2) {
 					break;
@@ -1309,7 +1308,7 @@ public class CricketFunctions {
 			}
 		}
 		return impactData;
-	} 
+	}
 	public static String isImpactPlayer(List<Event> events,int inning_number,int player_id) {
 			if ((events != null) && (events.size() > 0)) {
 				for (int i = events.size() - 1; i >= 0; i--) {
@@ -11123,7 +11122,7 @@ public class CricketFunctions {
 	public static int getRequiredBalls(MatchAllData match) {
 		int requiredBalls;
 		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
-			if(getTargetOvers(match).contains(".")) {
+			if(getTargetOvers(match).contains("\\.")) {
 				requiredBalls = ((Integer.valueOf(getTargetOvers(match).split("\\.")[0]) * Integer.valueOf(match.getSetup().getBallsPerOver())) + Integer.valueOf(getTargetOvers(match).split("\\.")[1])) 
 					- (match.getMatch().getInning().get(3).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(3).getTotalBalls();
 			} else {
@@ -11131,7 +11130,7 @@ public class CricketFunctions {
 					- (match.getMatch().getInning().get(3).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(3).getTotalBalls();
 			}
 		}else {
-			if(getTargetOvers(match).contains(".")) {
+			if(getTargetOvers(match).contains("\\.")) {
 				requiredBalls = ((Integer.valueOf(getTargetOvers(match).split("\\.")[0]) * Integer.valueOf(match.getSetup().getBallsPerOver())) + Integer.valueOf(getTargetOvers(match).split("\\.")[1])) 
 					- (match.getMatch().getInning().get(1).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(1).getTotalBalls();
 			} else {
