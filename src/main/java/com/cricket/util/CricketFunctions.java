@@ -11130,7 +11130,7 @@ public class CricketFunctions {
 					- (match.getMatch().getInning().get(3).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(3).getTotalBalls();
 			}
 		}else {
-			if(getTargetOvers(match).contains("\\.")) {
+			if(getTargetOvers(match).contains("\\.")||getTargetOvers(match).contains(".")) {
 				requiredBalls = ((Integer.valueOf(getTargetOvers(match).split("\\.")[0]) * Integer.valueOf(match.getSetup().getBallsPerOver())) + Integer.valueOf(getTargetOvers(match).split("\\.")[1])) 
 					- (match.getMatch().getInning().get(1).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(1).getTotalBalls();
 			} else {
@@ -15542,21 +15542,17 @@ public class CricketFunctions {
 	    return playerStatsList;
 	}
    
-   public static List<String> BowlerVsBatsmanLHS_RHS(int Bolwer_num, int BowlerTeam, String Type, MatchAllData match) {
+   public static List<String> BowlerVsBatsmanLHB_RHB(int Bolwer_num, int BowlerTeam, String Type, MatchAllData match) {
 	    int run = 0, ball = 0, wicket = 0;
 	    int run1 = 0, ball1 = 0, wicket1 = 0;
 	    Event previousEvent = null;
 	    List<String> results = new ArrayList<>();	    
-	    List<Player> squad = (BowlerTeam == match.getSetup().getHomeTeam().getTeamId()) 
-	            ? match.getSetup().getAwaySquad() 
-	            : match.getSetup().getHomeSquad();
-
 	    for (Event evn : match.getEventFile().getEvents()) {
 	        if (evn.getEventBowlerNo() == Bolwer_num) {
-	            for (Player ply : squad) {
+	            for (BattingCard ply : match.getMatch().getInning().get(evn.getEventInningNumber()-1).getBattingCard()) {
 	                if (ply.getPlayerId() == evn.getEventBatterNo()) {
 	                    // for RHS players
-	                    if (ply.getBattingStyle().equalsIgnoreCase("LHB")) {
+	                    if (ply.getPlayer().getBattingStyle().equalsIgnoreCase("LHB")) {
 	                        run += evn.getEventRuns() + evn.getEventSubExtraRuns() + evn.getEventExtraRuns();
 	                        if (previousEvent != null && evn.getEventBallNo() != previousEvent.getEventBallNo()) {
 	    	                   ball++;
@@ -15571,7 +15567,7 @@ public class CricketFunctions {
 	                        }
 	                    }
 	                    // for LHS players
-	                    else if (ply.getBattingStyle().equalsIgnoreCase("RHB")) {
+	                    else if (ply.getPlayer().getBattingStyle().equalsIgnoreCase("RHB")) {
 	                        run1 += evn.getEventRuns() + evn.getEventSubExtraRuns() + evn.getEventExtraRuns();
 	                        if (previousEvent != null && evn.getEventBallNo() != previousEvent.getEventBallNo()) {
 		    	                   ball1++;
