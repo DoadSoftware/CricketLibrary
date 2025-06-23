@@ -45,7 +45,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -122,7 +121,10 @@ public class CricketFunctions {
 	
 	public static ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 	private static long lastModifiedTime = -1;
-	private static ObjectMapper objectMapper = new ObjectMapper(); 
+	private static ObjectMapper objectMapper = new ObjectMapper();
+	
+	public static int ball_number = 0;
+	public static boolean isLeagleBall = false;
 	
 	public static void processLeaderBoard(CricketService CricketService ,LeaderBoard leader) {
 			leader.setPlayer1(CricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(leader.getPlayer1Id())));
@@ -1368,6 +1370,17 @@ public class CricketFunctions {
 		return "";
 	}
 	
+	public static String getListOfImpact(List<Event> events,int whichInning) {
+		if ((events != null) && (events.size() > 0)) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+				if((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_IMPACT) && events.get(i).getEventInningNumber() == whichInning)) {
+					return events.get(i).getEventBatterNo() + "," + events.get(i).getEventOtherBatterNo();
+				}
+			}
+		}
+		return "";
+	}
+	
 	public static String checkImpactInOutPlayer(List<Event> events,int player_id,String type) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
@@ -1562,7 +1575,20 @@ public class CricketFunctions {
 		over_number = "", over_ball = "", inning_number = "",batsman_style = "",
 		bowler_handed = "",this_over = "",this_over_run = "",shot = "-",wagonX = "0", wagonY = "0",height = "0",six_distance = "";
 		int j = 0;
+		
 		switch (match.getEventFile().getEvents().get(i).getEventType().toUpperCase()) {
+		
+		  case CricketUtil.END_OVER:
+			  ball_number = 0;
+			  break;
+			  
+		  case CricketUtil.NEW_BATSMAN:
+			  if(match.getEventFile().getEvents().get(i).getEventNumber() > 2 && 
+					  match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.NEW_BATSMAN)) {
+				  ball_number = 0;
+			  }
+			  break;  
+			  
 		  case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 		  case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: 
 		  case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
@@ -1655,29 +1681,40 @@ public class CricketFunctions {
 	    			}
 			    }
 				this_ball_data = "";
+				
 				inning_number = String.valueOf(match.getEventFile().getEvents().get(i).getEventInningNumber());
 				if(match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL)) {
-					
+					isLeagleBall = true;
 					if(match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
 						over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), 1);
 						over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), 1);
+						ball_number = ball_number + 1;
 					}else {
+						ball_number = ball_number + 1;
 						over_number = String.valueOf(match.getEventFile().getEvents().get(i).getEventOverNo() + 1);
-						over_ball = String.valueOf(match.getEventFile().getEvents().get(i).getEventBallNo());
+						over_ball = String.valueOf(match.getEventFile().getEvents().get(i).getEventBallNo() + ball_number);
 					}
 				}else {
 					if(match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.WIDE) || 
 							match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+						
+						isLeagleBall = true;
+						
 						if(match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
 							over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), 1);
 							over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), 1);
+							ball_number = ball_number + 1;
 						}else {
+							ball_number = ball_number + 1;
 							over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
-							over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
+							over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo() + ball_number);
 						}
+						
 					}else {
 						over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
 						over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
+						
+						over_ball = String.valueOf(Integer.valueOf(over_ball) + ball_number);
 					}
 //					over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
 //					over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
@@ -1905,9 +1942,10 @@ public class CricketFunctions {
 			line_txt = addSubString(line_txt,OtherBatsman,131);
 			line_txt = addSubString(line_txt,this_over_run,157);
 			line_txt = addSubString(line_txt,six_distance,162);
-			  
+			
 			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT), 
 					Arrays.asList(line_txt), StandardOpenOption.APPEND);
+			
 			break;
 	    }
 	}
@@ -1999,9 +2037,10 @@ public class CricketFunctions {
 			
 		    for (int i = 0; i <= match.getEventFile().getEvents().size() - 1; i++)
 		    {
-			  if(match.getEventFile().getEvents().get(i).getEventInningNumber() >= 1 && match.getEventFile().getEvents().get(i).getEventInningNumber() <= max_inn) {
+			  if(match.getEventFile().getEvents().get(i).getEventInningNumber() >= 1 && 
+					  match.getEventFile().getEvents().get(i).getEventInningNumber() <= max_inn) {
 				  setInteractiveData(match,line_txt,i);
-		    }
+			  }
 		    }
 		    break;
 		case"OVERWRITE":
