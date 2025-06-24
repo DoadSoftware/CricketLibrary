@@ -92,7 +92,6 @@ import com.cricket.model.OverByOverData;
 import com.cricket.model.POTT;
 import com.cricket.model.Partnership;
 import com.cricket.model.Player;
-import com.cricket.model.PlayerStats;
 import com.cricket.model.Review;
 import com.cricket.model.Season;
 import com.cricket.model.Setup;
