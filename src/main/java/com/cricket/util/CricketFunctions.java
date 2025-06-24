@@ -15,6 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
@@ -15622,7 +15623,46 @@ public class CricketFunctions {
 
 	    return playerStatsList;
 	}
-   
+   public static Map<Integer, List<String>> PowerPlayTeamThisSeries(MatchAllData currentMatch, List<MatchAllData> match) {
+	    Map<Integer, List<String>> thisSeries = new HashMap<>();
+	    
+	    // Initialize map for both teams
+	    thisSeries.put(currentMatch.getSetup().getHomeTeamId(), new ArrayList<>());
+	    thisSeries.put(currentMatch.getSetup().getAwayTeamId(), new ArrayList<>());
+
+	    for (MatchAllData mtch : match) {
+
+	        if (!mtch.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName()) &&
+	        		(mtch.getSetup().getHomeTeamId() == currentMatch.getSetup().getHomeTeamId() || mtch.getSetup().getHomeTeamId() == currentMatch.getSetup().getAwayTeamId()||
+	        		mtch.getSetup().getAwayTeamId() == currentMatch.getSetup().getHomeTeamId() || 
+	        		mtch.getSetup().getAwayTeamId() == currentMatch.getSetup().getAwayTeamId())) {
+	            // Inning 1
+	            if (mtch.getMatch().getInning().get(0).getBattingTeamId() == currentMatch.getSetup().getHomeTeamId() || mtch.getMatch().getInning().get(0).getBattingTeamId() == currentMatch.getSetup().getAwayTeamId()) {
+	            	if(mtch.getMatch().getInning().get(0).getTotalOvers()==0) {
+		                thisSeries.get(mtch.getMatch().getInning().get(0).getBattingTeamId()).add("-,"+ mtch.getMatch().getInning().get(0).getFirstPowerplayEndOver()
+		                		+", v " + mtch.getMatch().getInning().get(0).getBowlingTeamId());	
+	            	}else {
+	            		String data = getFirstPowerPlayScore(mtch, 1, mtch.getEventFile().getEvents());
+		                thisSeries.get(mtch.getMatch().getInning().get(0).getBattingTeamId()).add(data.split(",")[0] +","+ mtch.getMatch().getInning().get(0).getFirstPowerplayEndOver()
+		                		+", v " + mtch.getMatch().getInning().get(0).getBowlingTeamId());	
+	            	}
+	            }
+	            // Inning 2
+	            if (mtch.getMatch().getInning().get(1).getBattingTeamId() == currentMatch.getSetup().getHomeTeamId() || mtch.getMatch().getInning().get(1).getBattingTeamId() == currentMatch.getSetup().getAwayTeamId()) {
+	            	if(mtch.getMatch().getInning().get(0).getTotalOvers()==0) {
+	 	                thisSeries.get(mtch.getMatch().getInning().get(1).getBattingTeamId()).add("-,"+ mtch.getMatch().getInning().get(1).getFirstPowerplayEndOver()
+	 	                		+ ", v " + mtch.getMatch().getInning().get(1).getBowlingTeamId());
+	            	}else {
+	            		 String data = getFirstPowerPlayScore(mtch, 2, mtch.getEventFile().getEvents());
+	 	                thisSeries.get(mtch.getMatch().getInning().get(1).getBattingTeamId()).add(data.split(",")[0] +","+ mtch.getMatch().getInning().get(1).getFirstPowerplayEndOver()
+	 	                		+ ", v " + mtch.getMatch().getInning().get(1).getBowlingTeamId());	
+	            	}
+	            }
+	        }
+	    }
+	    return thisSeries;
+	}
+
    public static List<String> BowlerVsBatsmanLHB_RHB(int Bolwer_num, int BowlerTeam, String Type, MatchAllData match) {
 	    int run = 0, ball = 0, wicket = 0;
 	    int run1 = 0, ball1 = 0, wicket1 = 0;
