@@ -10326,11 +10326,15 @@ public class CricketFunctions {
 				    	return_pp_txt = "";
 				    }
 			    } else {
-			    	if(BallsBowledInInnings >= ((inn.getFirstPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver()) ) && BallsBowledInInnings < (inn.getFirstPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver()))) {
-				    	return_pp_txt = CricketUtil.ONE;
-				    }else {
-				    	return_pp_txt = "";
-				    }
+			    	if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST) || match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.FC)) {
+			    		return_pp_txt = "";
+			    	}else {
+			    		if(BallsBowledInInnings >= ((inn.getFirstPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver()) ) && BallsBowledInInnings < (inn.getFirstPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver()))) {
+					    	return_pp_txt = CricketUtil.ONE;
+					    }else {
+					    	
+					    }
+			    	}
 			    }
 			    
 			    if(!return_pp_txt.trim().isEmpty()) {
