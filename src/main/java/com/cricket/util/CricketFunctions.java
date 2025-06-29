@@ -15,6 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
@@ -3647,42 +3648,80 @@ public class CricketFunctions {
 //		        	}
 //		        }
 //		    }
-		    
-		    File this_dir = new File(speedSourcePath);
-
-		    if (this_dir.isDirectory()) {
-
-		        Optional<File> opFile = Arrays.stream(this_dir.listFiles(File::isFile))
-		            .max((f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified()));
-
-		        if (opFile.isPresent()) {
-		            File latestFile = opFile.get();
-
-		            if (lastSpeed.getSpeedFileModifiedTime() != latestFile.lastModified()) {
-
-		                List<String> allLines = Files.readAllLines(Paths.get(speedSourcePath + latestFile.getName()), StandardCharsets.UTF_8);
-
-		                if (allLines.size() >= 2) {
-		                    String secondLine = allLines.get(1);  // Index 1 = second line
-
-		                    if (secondLine.contains(",")) {
-		                        System.out.println("Second line = " + secondLine);
-
-		                        String speedValue = secondLine.split(",")[1].trim();
-
-		                        speed_to_return.setSpeedValue(speedValue);
-		                        speed_to_return.setSpeedFileModifiedTime(latestFile.lastModified());
-
-		                        writer = new BufferedWriter(new FileWriter(speedDestinationPath));
-		                        writer.write(speedValue);
-		                        writer.close();
-
-		                        return speed_to_return;
-		                    }
-		                }
-		            }
-		        }
-		    }
+			File dir = new File(speedSourcePath);
+			
+			if (dir.isDirectory()) {
+				Optional<File> opFile = Arrays.stream(dir.listFiles(File::isFile)).max(Comparator.comparingLong(File::lastModified));
+				
+				if (opFile.isPresent()) {
+					File latestFile = opFile.get();
+					String latestFileName = latestFile.getName();
+					long latestModifiedTime = latestFile.lastModified();
+					
+					boolean shouldUpdate = 
+					!latestFileName.equals(lastSpeed.getSpeedExtra()) ||
+					latestModifiedTime != lastSpeed.getSpeedFileModifiedTime();
+					
+					if (shouldUpdate) {
+						List<String> allLines = Files.readAllLines(latestFile.toPath(), StandardCharsets.UTF_8);
+						
+						if (allLines.size() >= 2) {
+							String secondLine = allLines.get(1); // second line
+						
+							if (secondLine.contains(",")) {
+								System.out.println("Second line = " + secondLine);
+								
+								String speedValue = secondLine.split(",")[1].trim();
+								
+								lastSpeed.setSpeedValue(speedValue);
+								lastSpeed.setSpeedFileModifiedTime(latestModifiedTime);
+								lastSpeed.setSpeedExtra(latestFileName);
+								
+								try (BufferedWriter writers = new BufferedWriter(new FileWriter(speedDestinationPath))) {
+									writers.write(speedValue);
+								}
+								
+							return lastSpeed;
+							}
+						}
+					}
+				}
+			}
+//		    File this_dir = new File(speedSourcePath);
+//
+//		    if (this_dir.isDirectory()) {
+//
+//		        Optional<File> opFile = Arrays.stream(this_dir.listFiles(File::isFile))
+//		            .max((f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified()));
+//
+//		        if (opFile.isPresent()) {
+//		            File latestFile = opFile.get();
+//
+//		            if (lastSpeed.getSpeedFileModifiedTime() != latestFile.lastModified()) {
+//
+//		                List<String> allLines = Files.readAllLines(Paths.get(speedSourcePath + latestFile.getName()), StandardCharsets.UTF_8);
+//
+//		                if (allLines.size() >= 2) {
+//		                    String secondLine = allLines.get(1);  // Index 1 = second line
+//
+//		                    if (secondLine.contains(",")) {
+//		                        System.out.println("Second line = " + secondLine);
+//
+//		                        String speedValue = secondLine.split(",")[1].trim();
+//
+//		                        speed_to_return.setSpeedValue(speedValue);
+//		                        speed_to_return.setSpeedFileModifiedTime(latestFile.lastModified());
+//
+//		                        writer = new BufferedWriter(new FileWriter(speedDestinationPath));
+//		                        writer.write(speedValue);
+//		                        writer.close();
+//
+//		                        return speed_to_return;
+//		                    }
+//		                }
+//		            }
+//		        }
+//		    }
 
 			break;
 		case CricketUtil.KHELAI:
@@ -10328,11 +10367,15 @@ public class CricketFunctions {
 				    	return_pp_txt = "";
 				    }
 			    } else {
-			    	if(BallsBowledInInnings >= ((inn.getFirstPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver()) ) && BallsBowledInInnings < (inn.getFirstPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver()))) {
-				    	return_pp_txt = CricketUtil.ONE;
-				    }else {
-				    	return_pp_txt = "";
-				    }
+			    	if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST) || match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.FC)) {
+			    		return_pp_txt = "";
+			    	}else {
+			    		if(BallsBowledInInnings >= ((inn.getFirstPowerplayStartOver() - 1) * Integer.valueOf(match.getSetup().getBallsPerOver()) ) && BallsBowledInInnings < (inn.getFirstPowerplayEndOver()* Integer.valueOf(match.getSetup().getBallsPerOver()))) {
+					    	return_pp_txt = CricketUtil.ONE;
+					    }else {
+					    	
+					    }
+			    	}
 			    }
 			    
 			    if(!return_pp_txt.trim().isEmpty()) {
@@ -15582,7 +15625,46 @@ public class CricketFunctions {
 
 	    return playerStatsList;
 	}
-   
+   public static Map<Integer, List<String>> PowerPlayTeamThisSeries(MatchAllData currentMatch, List<MatchAllData> match) {
+	    Map<Integer, List<String>> thisSeries = new HashMap<>();
+	    
+	    // Initialize map for both teams
+	    thisSeries.put(currentMatch.getSetup().getHomeTeamId(), new ArrayList<>());
+	    thisSeries.put(currentMatch.getSetup().getAwayTeamId(), new ArrayList<>());
+
+	    for (MatchAllData mtch : match) {
+
+	        if (!mtch.getMatch().getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName()) &&
+	        		(mtch.getSetup().getHomeTeamId() == currentMatch.getSetup().getHomeTeamId() || mtch.getSetup().getHomeTeamId() == currentMatch.getSetup().getAwayTeamId()||
+	        		mtch.getSetup().getAwayTeamId() == currentMatch.getSetup().getHomeTeamId() || 
+	        		mtch.getSetup().getAwayTeamId() == currentMatch.getSetup().getAwayTeamId())) {
+	            // Inning 1
+	            if (mtch.getMatch().getInning().get(0).getBattingTeamId() == currentMatch.getSetup().getHomeTeamId() || mtch.getMatch().getInning().get(0).getBattingTeamId() == currentMatch.getSetup().getAwayTeamId()) {
+	            	if(mtch.getMatch().getInning().get(0).getTotalOvers()==0) {
+		                thisSeries.get(mtch.getMatch().getInning().get(0).getBattingTeamId()).add("-,"+ mtch.getMatch().getInning().get(0).getFirstPowerplayEndOver()
+		                		+", v " + mtch.getMatch().getInning().get(0).getBowlingTeamId());	
+	            	}else {
+	            		String data = getFirstPowerPlayScore(mtch, 1, mtch.getEventFile().getEvents());
+		                thisSeries.get(mtch.getMatch().getInning().get(0).getBattingTeamId()).add(data.split(",")[0] +","+ mtch.getMatch().getInning().get(0).getFirstPowerplayEndOver()
+		                		+", v " + mtch.getMatch().getInning().get(0).getBowlingTeamId());	
+	            	}
+	            }
+	            // Inning 2
+	            if (mtch.getMatch().getInning().get(1).getBattingTeamId() == currentMatch.getSetup().getHomeTeamId() || mtch.getMatch().getInning().get(1).getBattingTeamId() == currentMatch.getSetup().getAwayTeamId()) {
+	            	if(mtch.getMatch().getInning().get(0).getTotalOvers()==0) {
+	 	                thisSeries.get(mtch.getMatch().getInning().get(1).getBattingTeamId()).add("-,"+ mtch.getMatch().getInning().get(1).getFirstPowerplayEndOver()
+	 	                		+ ", v " + mtch.getMatch().getInning().get(1).getBowlingTeamId());
+	            	}else {
+	            		 String data = getFirstPowerPlayScore(mtch, 2, mtch.getEventFile().getEvents());
+	 	                thisSeries.get(mtch.getMatch().getInning().get(1).getBattingTeamId()).add(data.split(",")[0] +","+ mtch.getMatch().getInning().get(1).getFirstPowerplayEndOver()
+	 	                		+ ", v " + mtch.getMatch().getInning().get(1).getBowlingTeamId());	
+	            	}
+	            }
+	        }
+	    }
+	    return thisSeries;
+	}
+
    public static List<String> BowlerVsBatsmanLHB_RHB(int Bolwer_num, int BowlerTeam, String Type, MatchAllData match) {
 	    int run = 0, ball = 0, wicket = 0;
 	    int run1 = 0, ball1 = 0, wicket1 = 0;
@@ -15594,14 +15676,25 @@ public class CricketFunctions {
 	                if (ply.getPlayerId() == evn.getEventBatterNo()) {
 	                    // for RHS players
 	                    if (ply.getPlayer().getBattingStyle().equalsIgnoreCase("LHB")) {
-	                        run += evn.getEventRuns() + evn.getEventSubExtraRuns() + evn.getEventExtraRuns();
-	                        if (previousEvent != null && evn.getEventBallNo() != previousEvent.getEventBallNo()) {
-	    	                   ball++;
-	    	                }
+	                    	if (evn.getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)
+	                                || evn.getEventType().equalsIgnoreCase(CricketUtil.WIDE)
+	                                || evn.getEventType().equalsIgnoreCase(CricketUtil.BYE)
+	                                || evn.getEventType().equalsIgnoreCase(CricketUtil.LEG_BYE)) {
+                            } else {
+    	                        run += evn.getEventRuns() + evn.getEventSubExtraRuns() + evn.getEventExtraRuns();
+    	                        if (previousEvent != null && evn.getEventBallNo() != previousEvent.getEventBallNo()) {
+ 		    	                   ball++;
+ 		    	             }
+                            }
 	                        if (evn.getEventType().equalsIgnoreCase(CricketUtil.LOG_WICKET) || evn.getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL)) {
 	                            if (evn.getEventHowOut() != null && !evn.getEventHowOut().isEmpty() &&
 	                               (!evn.getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT) &&
 	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT) &&
+	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.HIT_WICKET) &&
+	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.OBSTRUCTING_FIELDER) &&
+	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.HANDLED_THE_BALL) &&
+	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.TIMED_OUT) &&
+	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_OUT) &&
 	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED))) {
 	                                wicket++;
 	                            }
@@ -15609,15 +15702,26 @@ public class CricketFunctions {
 	                    }
 	                    // for LHS players
 	                    else if (ply.getPlayer().getBattingStyle().equalsIgnoreCase("RHB")) {
-	                        run1 += evn.getEventRuns() + evn.getEventSubExtraRuns() + evn.getEventExtraRuns();
-	                        if (previousEvent != null && evn.getEventBallNo() != previousEvent.getEventBallNo()) {
-		    	                   ball1++;
-		    	                }
+	                    	if (evn.getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)
+	                                || evn.getEventType().equalsIgnoreCase(CricketUtil.WIDE)
+	                                || evn.getEventType().equalsIgnoreCase(CricketUtil.BYE)
+	                                || evn.getEventType().equalsIgnoreCase(CricketUtil.LEG_BYE)) {
+                            } else {
+    	                        run1 += evn.getEventRuns() + evn.getEventSubExtraRuns() + evn.getEventExtraRuns();
+    	                        if (previousEvent != null && evn.getEventBallNo() != previousEvent.getEventBallNo()) {
+ 		    	                   ball1++;
+ 		    	             }
+                            }
 	                        if (evn.getEventType().equalsIgnoreCase(CricketUtil.LOG_WICKET) || evn.getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL)) {
 	                            if (evn.getEventHowOut() != null && !evn.getEventHowOut().isEmpty() &&
-	                               (!evn.getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT) &&
-	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT) &&
-	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED))) {
+	                            	(!evn.getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT) &&
+    	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT) &&
+    	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.HIT_WICKET) &&
+    	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.OBSTRUCTING_FIELDER) &&
+    	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.HANDLED_THE_BALL) &&
+    	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.TIMED_OUT) &&
+    	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_OUT) &&
+    	                                !evn.getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED))) {
 	                                wicket1++;
 	                            }
 	                        }
