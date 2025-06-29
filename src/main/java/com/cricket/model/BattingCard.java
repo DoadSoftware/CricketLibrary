@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BattingCard implements Comparable<BattingCard>{
-
+public class BattingCard implements Comparable<BattingCard>
+{
   private int playerId;
   
   private int batterPosition;
