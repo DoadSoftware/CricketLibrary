@@ -1575,7 +1575,8 @@ public class CricketFunctions {
 		String this_ball_data = "", Bowler = "", Batsman = "", OtherBatsman = "", 
 		over_number = "", over_ball = "", inning_number = "",batsman_style = "",
 		bowler_handed = "",this_over = "",this_over_run = "",shot = "-",wagonX = "0", wagonY = "0",height = "0",six_distance = "";
-		int j = 0;
+		int j = 0,roundedX = 0,roundedY = 0;
+		double clickX = 0,clickY = 0,thisX = 0,thisY = 0;
 		
 		switch (match.getEventFile().getEvents().get(i).getEventType().toUpperCase()) {
 		
@@ -1857,19 +1858,19 @@ public class CricketFunctions {
 //									wagonX = String.valueOf(match.getMatch().getWagons().get(k).getWagonXCord());
 //									wagonY = String.valueOf(match.getMatch().getWagons().get(k).getWagonYCord());
 									
-									double clickX = match.getMatch().getWagons().get(k).getWagonXCord();
-							        double clickY = match.getMatch().getWagons().get(k).getWagonYCord();
+									clickX = match.getMatch().getWagons().get(k).getWagonXCord();
+							        clickY = match.getMatch().getWagons().get(k).getWagonYCord();
 
 							        // Transform using double
 //							        double thisX = Math.round(((clickX - 41) / 98.0) * 79 + 1);
 //							        double thisY = Math.round(0.0205 * clickY * clickY - 2.661 * clickY + 93.73);
 							        
-							        double thisX = Math.round(((clickX - 42) / 98.0) * 79 + 1);
-							        double thisY = Math.round(0.00263 * clickY * clickY + 0.317 * clickY - 16.95);
+							        thisX = Math.round(((clickX - 42) / 98.0) * 79 + 1);
+							        thisY = Math.round(0.00263 * clickY * clickY + 0.317 * clickY - 16.95);
 							        
 							        // Round to nearest integer
-							        int roundedX = (int) Math.round(thisX);
-							        int roundedY = (int) Math.round(thisY);
+							        roundedX = (int) Math.round(thisX);
+							        roundedY = (int) Math.round(thisY);
 							        
 							        wagonX = String.valueOf(roundedX);
 							        wagonY = String.valueOf(roundedY);
@@ -5057,9 +5058,9 @@ public class CricketFunctions {
 						}
 						
 						if(stat.getBest_score().equalsIgnoreCase("0")) {
-							if(match.getDismissed().equalsIgnoreCase("N")) {
+							if(match.getDismissed().trim().equalsIgnoreCase("N")) {
 								stat.setBest_score(match.getRuns() + "*");
-							}else if(match.getDismissed().equalsIgnoreCase("Y")) {
+							}else if(match.getDismissed().trim().equalsIgnoreCase("Y")) {
 								stat.setBest_score(String.valueOf(match.getRuns()));
 							}
 							stat.setBest_score_against(match.getOpponentTeam().getTeamName1());
@@ -5139,7 +5140,7 @@ public class CricketFunctions {
 			}
 		}
 		
-		System.out.println("MATCHES : "+stat.getMatches()+" : "+stat.getBest_score());
+//		System.out.println("MATCHES : "+stat.getMatches()+" : "+stat.getBest_score());
 		return stat;
 	}
 	
@@ -5319,7 +5320,6 @@ public class CricketFunctions {
 						}else if(bc.getRuns() >= 100){
 							stat.setHundreds(stat.getHundreds() + 1);
 						}
-						
 						if(stat.getBest_score().equalsIgnoreCase("0")) {
 							if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
 								stat.setBest_score(bc.getRuns()+"*");
@@ -5416,7 +5416,6 @@ public class CricketFunctions {
 				impact_player_found = false;
 				stat.setMatches(stat.getMatches() + 1);
 			}
-			System.out.println("Matchh = " + stat.getMatches());
 //		}
 		return stat;
 	}
