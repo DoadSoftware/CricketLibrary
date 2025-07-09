@@ -13430,8 +13430,10 @@ public class CricketFunctions {
 						if(matchStats.getBowlingCard().getLastBowlerId()<=0) {
 							   matchStats.getBowlingCard().setLastBowlerId(events.get(i).getEventBowlerNo());
 						}else if(matchStats.getBowlingCard().getLastBowlerId()> 0 && matchStats.getBowlingCard().getReplacementBowlerId()<=0) {
+							typeOfStats += "LAST_OVER,";
 							matchStats.getBowlingCard().setReplacementBowlerId(events.get(i).getEventBowlerNo());							
 						}  	
+						System.out.println("" + matchStats.getLastOverData().getTotalRuns());
 					}
 				}
 				switch (events.get(i).getEventType()) {
@@ -13778,8 +13780,9 @@ public class CricketFunctions {
 								break;
 							}
 							
-						} else 
-							typeOfStats += "LAST_OVER,";
+						} 
+//						else 
+//							typeOfStats += "LAST_OVER,";
 						}
 
 						// Last boundary
