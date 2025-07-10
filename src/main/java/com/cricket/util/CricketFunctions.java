@@ -124,7 +124,8 @@ public class CricketFunctions {
 	private static long lastModifiedTime = -1;
 	private static ObjectMapper objectMapper = new ObjectMapper();
 	
-	public static int ball_number = 0;
+	public static int ball_number = 0, c = 0;
+	
 	public static boolean isLeagleBall = false;
 	
 	public static void processLeaderBoard(CricketService CricketService ,LeaderBoard leader) {
@@ -1575,19 +1576,29 @@ public class CricketFunctions {
 		String this_ball_data = "", Bowler = "", Batsman = "", OtherBatsman = "", 
 		over_number = "", over_ball = "", inning_number = "",batsman_style = "",
 		bowler_handed = "",this_over = "",this_over_run = "",shot = "-",wagonX = "0", wagonY = "0",height = "0",six_distance = "";
-		int j = 0,roundedX = 0,roundedY = 0;
-		double clickX = 0,clickY = 0,thisX = 0,thisY = 0;
+		int j = 0,roundedX=0,roundedY = 0;
+		double clickX = 0,clickY = 0,thisX= 0,thisY= 0;
 		
 		switch (match.getEventFile().getEvents().get(i).getEventType().toUpperCase()) {
 		
 		  case CricketUtil.END_OVER:
-			  ball_number = 0;
+			  if((match.getEventFile().getEvents().get(i-1).getEventBallNo() != 0) && (match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.WIDE)) ||
+							  (match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.NO_BALL)) ||  
+							  (match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL))){ 
+			  }else {
+				  ball_number = 0;
+				  c = 0;
+			  }
+			  
+			 
 			  break;
 			  
 		  case CricketUtil.NEW_BATSMAN:
 			  if(match.getEventFile().getEvents().get(i).getEventNumber() > 2 && 
 					  match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.NEW_BATSMAN)) {
 				  ball_number = 0;
+				  c = 0;
+				  
 			  }
 			  break;  
 			  
@@ -1703,20 +1714,26 @@ public class CricketFunctions {
 						isLeagleBall = true;
 						
 						if(match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
-							over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), 1);
-							over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), 1);
 							ball_number = ball_number + 1;
+							over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), 1);
+							if(c == 0) {
+								over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), 1);
+							}else {
+								over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo() + ball_number);
+								
+							}
 						}else {
 							ball_number = ball_number + 1;
-							over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
+							over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo() + ball_number);
 							over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo() + ball_number);
 						}
 						
 					}else {
 						over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
 						over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
-						
+						System.out.println(ball_number);
 						over_ball = String.valueOf(Integer.valueOf(over_ball) + ball_number);
+						c=c+1;
 					}
 //					over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
 //					over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
@@ -1849,37 +1866,90 @@ public class CricketFunctions {
 			  //-----------WAGON AND SHOTS------------------//
 			  
 			  wagonX = "0";wagonY = "0";shot = "-";
-			  if(match.getMatch().getWagons() != null) {
-				  for(int k = 0; k < match.getMatch().getWagons().size(); k++){
-					  if(match.getEventFile().getEvents().get(i).getEventInningNumber() == match.getMatch().getWagons().get(k).getInningNumber()) {
-							if(match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getWagons().get(k).getOverNumber()) {
-								if(match.getEventFile().getEvents().get(i).getEventBallNo() == match.getMatch().getWagons().get(k).getBallNumber()) {
-									
-//									wagonX = String.valueOf(match.getMatch().getWagons().get(k).getWagonXCord());
-//									wagonY = String.valueOf(match.getMatch().getWagons().get(k).getWagonYCord());
-									
-									clickX = match.getMatch().getWagons().get(k).getWagonXCord();
-							        clickY = match.getMatch().getWagons().get(k).getWagonYCord();
+			  switch(match.getEventFile().getEvents().get(i).getEventType()) {
+			   
+			  case CricketUtil.DOT: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: 
+			  case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET:
+				  System.out.println("DOT/WIDE/NO_BALL");
+				    wagonX = String.valueOf(0);
+			        wagonY = String.valueOf(0);
+			        
+				  break;
+			  case CricketUtil.LOG_ANY_BALL:
+				  System.out.println("LOG_ANY_BALL");
+				  if(match.getMatch().getWagons() != null) {
+					  for(int k = 0; k < match.getMatch().getWagons().size(); k++){
+						  if(match.getEventFile().getEvents().get(i).getEventInningNumber() == match.getMatch().getWagons().get(k).getInningNumber()) {
+								if(match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getWagons().get(k).getOverNumber()) {
+									if(match.getEventFile().getEvents().get(i).getEventBallNo() == match.getMatch().getWagons().get(k).getBallNumber()) {
+										if(match.getMatch().getWagons().get(k).getRuns() == (match.getEventFile().getEvents().get(i).getEventExtraRuns() + 
+												match.getEventFile().getEvents().get(i).getEventRuns() + match.getEventFile().getEvents().get(i).getEventSubExtraRuns())) {
+//										
+//										wagonX = String.valueOf(match.getMatch().getWagons().get(k).getWagonXCord());
+//										wagonY = String.valueOf(match.getMatch().getWagons().get(k).getWagonYCord());
+										
+									    clickX = match.getMatch().getWagons().get(k).getWagonXCord();
+								        clickY = match.getMatch().getWagons().get(k).getWagonYCord();
 
-							        // Transform using double
-//							        double thisX = Math.round(((clickX - 41) / 98.0) * 79 + 1);
-//							        double thisY = Math.round(0.0205 * clickY * clickY - 2.661 * clickY + 93.73);
-							        
-							        thisX = Math.round(((clickX - 42) / 98.0) * 79 + 1);
-							        thisY = Math.round(0.00263 * clickY * clickY + 0.317 * clickY - 16.95);
-							        
-							        // Round to nearest integer
-							        roundedX = (int) Math.round(thisX);
-							        roundedY = (int) Math.round(thisY);
-							        
-							        wagonX = String.valueOf(roundedX);
-							        wagonY = String.valueOf(roundedY);
-							        
+								        // Transform using double
+//								        double thisX = Math.round(((clickX - 41) / 98.0) * 79 + 1);
+//								        double thisY = Math.round(0.0205 * clickY * clickY - 2.661 * clickY + 93.73);
+								        
+								        thisX = Math.round(((clickX - 42) / 98.0) * 79 + 1);
+								        thisY = Math.round(0.00263 * clickY * clickY + 0.317 * clickY - 16.95);
+								        
+								        // Round to nearest integer
+								        roundedX = (int) Math.round(thisX);
+								        roundedY = (int) Math.round(thisY);
+								        
+								        wagonX = String.valueOf(roundedX);
+								        wagonY = String.valueOf(roundedY);
+										}
+								        
+									}
 								}
 							}
-						}
+					  }
 				  }
+				  break;
+			default:
+				   System.out.println("Default");
+				  if(match.getMatch().getWagons() != null) {
+					  for(int k = 0; k < match.getMatch().getWagons().size(); k++){
+						  if(match.getEventFile().getEvents().get(i).getEventInningNumber() == match.getMatch().getWagons().get(k).getInningNumber()) {
+								if(match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getWagons().get(k).getOverNumber()) {
+									if(match.getEventFile().getEvents().get(i).getEventBallNo() == match.getMatch().getWagons().get(k).getBallNumber()) {
+										
+//										wagonX = String.valueOf(match.getMatch().getWagons().get(k).getWagonXCord());
+//										wagonY = String.valueOf(match.getMatch().getWagons().get(k).getWagonYCord());
+										
+									    clickX = match.getMatch().getWagons().get(k).getWagonXCord();
+								        clickY = match.getMatch().getWagons().get(k).getWagonYCord();
+
+								        // Transform using double
+//								        double thisX = Math.round(((clickX - 41) / 98.0) * 79 + 1);
+//								        double thisY = Math.round(0.0205 * clickY * clickY - 2.661 * clickY + 93.73);
+								        
+								        thisX = Math.round(((clickX - 42) / 98.0) * 79 + 1);
+								        thisY = Math.round(0.00263 * clickY * clickY + 0.317 * clickY - 16.95);
+								        
+								        // Round to nearest integer
+								        roundedX = (int) Math.round(thisX);
+								        roundedY = (int) Math.round(thisY);
+								        
+								        wagonX = String.valueOf(roundedX);
+								        wagonY = String.valueOf(roundedY);
+								        
+									}
+								}
+							}
+					  }
+				  }
+			  break;
+				  
 			  }
+			 
+			
 			  if(match.getMatch().getShots() != null) {
 				  for(int k = 0; k < match.getMatch().getShots().size(); k++){
 					  if(match.getEventFile().getEvents().get(i).getEventInningNumber() == match.getMatch().getShots().get(k).getInningNumber()) {
@@ -1962,13 +2032,12 @@ public class CricketFunctions {
 			|| match.getEventFile().getEvents().size() <= 0)) {
 			return "";
 		}
-		
 		Inning inning=match.getMatch().getInning().stream().filter(in -> in.getIsCurrentInning()
 				.equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null);
 		int max_inn = 2;
 		String line_txt = String.format("%-140s", "");
 		String txt = String.format("%-140s", "");
-		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
+		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST) || match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.FC)) {
 			max_inn = 4;
 		}
 		
@@ -11340,8 +11409,13 @@ public class CricketFunctions {
 				    	if (CricketFunctions.getRequiredBalls(match) > 120) {
 				    		matchSummaryStatus = matchSummaryStatus + CricketFunctions.OverBalls(0,CricketFunctions.getRequiredBalls(match)) + " overs";
 						} else {
-							matchSummaryStatus = matchSummaryStatus + CricketFunctions.getRequiredBalls(match) + 
-								" ball" + CricketFunctions.Plural(CricketFunctions.getRequiredBalls(match));
+							if(match.getSetup().getReducedOvers() != 0) {
+								matchSummaryStatus = matchSummaryStatus + (match.getSetup().getReducedOvers()*6) + 
+										" ball" + CricketFunctions.Plural((match.getSetup().getReducedOvers()*6));
+							}else {
+								matchSummaryStatus = matchSummaryStatus + CricketFunctions.getRequiredBalls(match) + 
+										" ball" + CricketFunctions.Plural(CricketFunctions.getRequiredBalls(match));
+							}
 						}
 				    } else if (CricketFunctions.getRequiredRuns(match) <= 0)
 				    {
@@ -11409,6 +11483,7 @@ public class CricketFunctions {
 		    	break;
 		    }
 	    }
+	    System.out.println(matchSummaryStatus);
 	    return matchSummaryStatus;
 	}
 	public static String generateMatchSummaryStatus(int whichInning, MatchAllData match, String teamNameType, 
