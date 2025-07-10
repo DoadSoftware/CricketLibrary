@@ -1870,45 +1870,42 @@ public class CricketFunctions {
 			   
 			  case CricketUtil.DOT: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: 
 			  case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET:
-				  System.out.println("DOT/WIDE/NO_BALL");
 				    wagonX = String.valueOf(0);
 			        wagonY = String.valueOf(0);
-			        
 				  break;
 			  case CricketUtil.LOG_ANY_BALL:
 				  System.out.println("LOG_ANY_BALL");
 				  if(match.getMatch().getWagons() != null) {
 					  for(int k = 0; k < match.getMatch().getWagons().size(); k++){
 						  if(match.getEventFile().getEvents().get(i).getEventInningNumber() == match.getMatch().getWagons().get(k).getInningNumber()) {
-								if(match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getWagons().get(k).getOverNumber()) {
-									if(match.getEventFile().getEvents().get(i).getEventBallNo() == match.getMatch().getWagons().get(k).getBallNumber()) {
-										if(match.getMatch().getWagons().get(k).getRuns() == (match.getEventFile().getEvents().get(i).getEventExtraRuns() + 
+							  if(match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getWagons().get(k).getOverNumber()) {
+								  if(match.getEventFile().getEvents().get(i).getEventBallNo() == match.getMatch().getWagons().get(k).getBallNumber()) {
+									  if(match.getMatch().getWagons().get(k).getRuns() == (match.getEventFile().getEvents().get(i).getEventExtraRuns() + 
 												match.getEventFile().getEvents().get(i).getEventRuns() + match.getEventFile().getEvents().get(i).getEventSubExtraRuns())) {
 //										
 //										wagonX = String.valueOf(match.getMatch().getWagons().get(k).getWagonXCord());
 //										wagonY = String.valueOf(match.getMatch().getWagons().get(k).getWagonYCord());
-										
-									    clickX = match.getMatch().getWagons().get(k).getWagonXCord();
-								        clickY = match.getMatch().getWagons().get(k).getWagonYCord();
+									
+										  clickX = match.getMatch().getWagons().get(k).getWagonXCord();
+										  clickY = match.getMatch().getWagons().get(k).getWagonYCord();
 
 								        // Transform using double
-//								        double thisX = Math.round(((clickX - 41) / 98.0) * 79 + 1);
-//								        double thisY = Math.round(0.0205 * clickY * clickY - 2.661 * clickY + 93.73);
+	//								        double thisX = Math.round(((clickX - 41) / 98.0) * 79 + 1);
+	//								        double thisY = Math.round(0.0205 * clickY * clickY - 2.661 * clickY + 93.73);
 								        
-								        thisX = Math.round(((clickX - 42) / 98.0) * 79 + 1);
-								        thisY = Math.round(0.00263 * clickY * clickY + 0.317 * clickY - 16.95);
-								        
-								        // Round to nearest integer
-								        roundedX = (int) Math.round(thisX);
-								        roundedY = (int) Math.round(thisY);
-								        
-								        wagonX = String.valueOf(roundedX);
-								        wagonY = String.valueOf(roundedY);
-										}
-								        
-									}
-								}
-							}
+										  thisX = Math.round(((clickX - 42) / 98.0) * 79 + 1);
+										  thisY = Math.round(0.00263 * clickY * clickY + 0.317 * clickY - 16.95);
+							        
+										  // Round to nearest integer
+										  roundedX = (int) Math.round(thisX);
+										  roundedY = (int) Math.round(thisY);
+							        
+										  wagonX = String.valueOf(roundedX);
+										  wagonY = String.valueOf(roundedY);
+									  }
+								  }
+							  }
+						  }
 					  }
 				  }
 				  break;
@@ -1917,18 +1914,18 @@ public class CricketFunctions {
 				  if(match.getMatch().getWagons() != null) {
 					  for(int k = 0; k < match.getMatch().getWagons().size(); k++){
 						  if(match.getEventFile().getEvents().get(i).getEventInningNumber() == match.getMatch().getWagons().get(k).getInningNumber()) {
-								if(match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getWagons().get(k).getOverNumber()) {
-									if(match.getEventFile().getEvents().get(i).getEventBallNo() == match.getMatch().getWagons().get(k).getBallNumber()) {
+							  if(match.getEventFile().getEvents().get(i).getEventOverNo() == match.getMatch().getWagons().get(k).getOverNumber()) {
+								  if(match.getEventFile().getEvents().get(i).getEventBallNo() == match.getMatch().getWagons().get(k).getBallNumber()) {
 										
-//										wagonX = String.valueOf(match.getMatch().getWagons().get(k).getWagonXCord());
-//										wagonY = String.valueOf(match.getMatch().getWagons().get(k).getWagonYCord());
+	//										wagonX = String.valueOf(match.getMatch().getWagons().get(k).getWagonXCord());
+	//										wagonY = String.valueOf(match.getMatch().getWagons().get(k).getWagonYCord());
 										
 									    clickX = match.getMatch().getWagons().get(k).getWagonXCord();
 								        clickY = match.getMatch().getWagons().get(k).getWagonYCord();
-
+	
 								        // Transform using double
-//								        double thisX = Math.round(((clickX - 41) / 98.0) * 79 + 1);
-//								        double thisY = Math.round(0.0205 * clickY * clickY - 2.661 * clickY + 93.73);
+	//								        double thisX = Math.round(((clickX - 41) / 98.0) * 79 + 1);
+	//								        double thisY = Math.round(0.0205 * clickY * clickY - 2.661 * clickY + 93.73);
 								        
 								        thisX = Math.round(((clickX - 42) / 98.0) * 79 + 1);
 								        thisY = Math.round(0.00263 * clickY * clickY + 0.317 * clickY - 16.95);
@@ -1940,16 +1937,15 @@ public class CricketFunctions {
 								        wagonX = String.valueOf(roundedX);
 								        wagonY = String.valueOf(roundedY);
 								        
-									}
-								}
-							}
+								        break;
+								  }
+							  }
+						  }
 					  }
 				  }
-			  break;
-				  
+				  break; 
 			  }
 			 
-			
 			  if(match.getMatch().getShots() != null) {
 				  for(int k = 0; k < match.getMatch().getShots().size(); k++){
 					  if(match.getEventFile().getEvents().get(i).getEventInningNumber() == match.getMatch().getShots().get(k).getInningNumber()) {
@@ -2037,7 +2033,8 @@ public class CricketFunctions {
 		int max_inn = 2;
 		String line_txt = String.format("%-140s", "");
 		String txt = String.format("%-140s", "");
-		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST) || match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.FC)) {
+		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST) || 
+				match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.FC)) {
 			max_inn = 4;
 		}
 		
