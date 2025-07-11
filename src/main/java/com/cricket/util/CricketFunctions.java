@@ -163,7 +163,11 @@ public class CricketFunctions {
 		}
 		return "";
 	}
-	
+	public static String isDeclared(Inning inn)
+	{
+	    return inn.getIsCurrentInning() != null && inn.getIsDeclared()
+	    		 .equalsIgnoreCase(CricketUtil.YES) ? " dec" : "";
+	}
 	public static List<Partnership> ConcussedPartnership(Match match ,int inn_num) throws Exception{
 		
 		List<Partnership> Partnership = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(
