@@ -165,7 +165,7 @@ public class CricketFunctions {
 	}
 	public static String isDeclared(Inning inn)
 	{
-	    return inn.getIsCurrentInning() != null && inn.getIsDeclared()
+	    return inn.getIsCurrentInning() != null && inn.getIsDeclared() != null && inn.getIsDeclared()
 	    		 .equalsIgnoreCase(CricketUtil.YES) ? " dec" : "";
 	}
 	public static List<Partnership> ConcussedPartnership(Match match ,int inn_num) throws Exception{
