@@ -9,7 +9,7 @@ public class CricketUtil {
 	public final static String DOAD_TRIO = "DOAD_TRIO";
 	public final static String ISPL_FRUIT = "ISPL_FRUIT";
 	public final static String ICC_U19_WorldCup_2024 = "ICC_U19_WORLDCUP_2024";
-	public final static String Doad_Fruit_scene = "D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_FRUIT/Scenes/Fruit.sum";
+	public final static String Doad_Fruit_scene = "C:/EVEREST_FRUIT/Scenes/Fruit.sum";
 	public final static String ISPL_FRUIT_SCENE = "D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_ISPL_FRUIT/Scenes/Fruit.sum";
 	public final static String ISPL_SCENE_NEW_FRUIT = "D:/DOAD_In_House_Everest/Everest_Cricket/ICC_U19_WprldCup_2024/Scenes/ISPL_Fruit.sum";
 	public final static String ICC_U19_WorldCup_2024_scene = "D:/DOAD_In_House_Everest/Everest_Cricket/ICC_U19_WprldCup_2024/Scenes/Fruit.sum";

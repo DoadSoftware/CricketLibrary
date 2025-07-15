@@ -13506,10 +13506,9 @@ public class CricketFunctions {
 						if(matchStats.getBowlingCard().getLastBowlerId()<=0) {
 							   matchStats.getBowlingCard().setLastBowlerId(events.get(i).getEventBowlerNo());
 						}else if(matchStats.getBowlingCard().getLastBowlerId()> 0 && matchStats.getBowlingCard().getReplacementBowlerId()<=0) {
+							matchStats.getBowlingCard().setReplacementBowlerId(events.get(i).getEventBowlerNo());
 							typeOfStats += "LAST_OVER,";
-							matchStats.getBowlingCard().setReplacementBowlerId(events.get(i).getEventBowlerNo());							
 						}  	
-						System.out.println("" + matchStats.getLastOverData().getTotalRuns());
 					}
 				}
 				switch (events.get(i).getEventType()) {
@@ -14313,7 +14312,6 @@ public class CricketFunctions {
 															        ? String.valueOf(Integer.valueOf(statsData.split(",")[8]))
 															        : matchStats.getAwayFirstPowerPlay().getNotWicketCount() + "," + Integer.valueOf(statsData.split(",")[8]))
 															    : matchStats.getAwayFirstPowerPlay().getNotWicketCount()));
-														
 													}
 												
 												}
@@ -14562,6 +14560,10 @@ public class CricketFunctions {
 	        	matchStats.setPhase3StartOver(16); matchStats.setPhase3EndOver(20);
 				break;
 			}
+	    }else if (Match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
+	    	matchStats.setPhase1StartOver(1); matchStats.setPhase1EndOver(10);
+        	matchStats.setPhase2StartOver(11); matchStats.setPhase2EndOver(40);
+        	matchStats.setPhase3StartOver(41); matchStats.setPhase3EndOver(50);
 	    }
 	   
 	    return getAllEventsStatsMASTER(matchStats ,Match.getMatch(), Match.getEventFile().getEvents());
