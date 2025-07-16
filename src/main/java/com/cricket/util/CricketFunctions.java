@@ -11230,7 +11230,7 @@ public class CricketFunctions {
 	}
 
 	public static int getTargetRuns(MatchAllData match) {
-		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
+		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST) || match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.FC)) {
 			int targetRuns = ((match.getMatch().getInning().get(0).getTotalRuns() + 
 				match.getMatch().getInning().get(2).getTotalRuns()) - (match.getMatch().getInning().get(1).getTotalRuns() 
 				+ match.getMatch().getInning().get(3).getTotalRuns())) + 1;
@@ -11250,17 +11250,22 @@ public class CricketFunctions {
 	public static String getTargetOvers(MatchAllData match) {
 		
 		String targetOvers = "";
-		if(match.getSetup().getTargetOvers() == null || match.getSetup().getTargetOvers().trim().isEmpty()) {
-			targetOvers = String.valueOf(match.getSetup().getMaxOvers());
-		} else {
-			targetOvers = match.getSetup().getTargetOvers();
+		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST) || match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.FC)) {
+			targetOvers = String.valueOf(match.getMatch().getInning().get(3).getOversRemaining());
+		}else {
+			if(match.getSetup().getTargetOvers() == null || match.getSetup().getTargetOvers().trim().isEmpty()) {
+				targetOvers = String.valueOf(match.getSetup().getMaxOvers());
+			} else {
+				targetOvers = match.getSetup().getTargetOvers();
+			}
 		}
+		
 		return targetOvers;
 	}
 
 	public static int getRequiredRuns(MatchAllData match) {
 		int requiredRuns = 0;
-		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
+		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST) || match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.FC)) {
 			 requiredRuns = getTargetRuns(match);	
 		}else {
 			 requiredRuns = getTargetRuns(match) - match.getMatch().getInning().get(1).getTotalRuns();
@@ -11274,7 +11279,7 @@ public class CricketFunctions {
 
 	public static int getRequiredBalls(MatchAllData match) {
 		int requiredBalls;
-		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
+		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST) || match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.FC)) {
 			if(getTargetOvers(match).contains("\\.")) {
 				requiredBalls = ((Integer.valueOf(getTargetOvers(match).split("\\.")[0]) * Integer.valueOf(match.getSetup().getBallsPerOver())) + Integer.valueOf(getTargetOvers(match).split("\\.")[1])) 
 					- (match.getMatch().getInning().get(3).getTotalOvers() * Integer.valueOf(match.getSetup().getBallsPerOver())) - match.getMatch().getInning().get(3).getTotalBalls();
