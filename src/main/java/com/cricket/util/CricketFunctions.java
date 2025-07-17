@@ -13486,7 +13486,7 @@ public class CricketFunctions {
 		int thisOverRun=0, thisOverWkts=0;
 		String outBatsman = "",notWicketCount= "";
 		typeOfStats = "INNING_COMPARE,";
-		
+		matchStats.getOverData().setConsecutiveW(0);
 		List<Event> Event = new ArrayList<Event>();
 		
 		for (Inning inn : match.getInning()) {
@@ -13627,9 +13627,7 @@ public class CricketFunctions {
 							    	}
 							    	matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + 
 							    		    (events.get(i).getEventWasABoundary() != null && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES) 
-							    		    ? events.get(i).getEventRuns()+"BOUNDARY"  : events.get(i).getEventRuns()));
-
-						    		
+							    		    ? events.get(i).getEventRuns()+"BOUNDARY"  : events.get(i).getEventRuns()));							    	
 						    		matchStats.getOverData().setTotalRuns(matchStats.getOverData().getTotalRuns() + events.get(i).getEventRuns());
 								}
 						        break;
@@ -13641,9 +13639,26 @@ public class CricketFunctions {
 							    }
 
 							    if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
-							        matchStats.getOverData().setTotalWickets(matchStats.getOverData().getTotalWickets() + 1);
-							        matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + CricketUtil.LOG_WICKET +
+							        switch (events.get(i).getEventHowOut().toUpperCase()) {
+									case CricketUtil.ABSENT_HURT: case CricketUtil.RETIRED_HURT: case CricketUtil.CONCUSSED:
+										break;
+									default:
+										 if(matchStats.getOverData().getThisOverTxt().split(",").length <= 3) {
+								        	if(!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.OBSTRUCTING_FIELDER)&&
+								        			!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)&&
+								        			!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.TIMED_OUT)&&
+								        			!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.HANDLED_THE_BALL)&&
+								        			!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_OUT)&&
+								        			!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.MANKAD)&&
+								        			!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.HIT_BALL_TWICE)) {
+									    		matchStats.getOverData().setConsecutiveW(matchStats.getOverData().getConsecutiveW()+1);
+								        	}
+									   }
+									  matchStats.getOverData().setTotalWickets(matchStats.getOverData().getTotalWickets() + 1);
+							          matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + CricketUtil.LOG_WICKET +
 							                (events.get(i).getEventExtra() != null && !events.get(i).getEventExtra().isEmpty() ? "+" : ""));
+									   break;
+							        }
 							    }
 							    if (events.get(i).getEventExtra().equals(CricketUtil.WIDE) || events.get(i).getEventExtra().equals(CricketUtil.NO_BALL)) {
 							        if (events.get(i).getEventSubExtra().equals(CricketUtil.WIDE) || events.get(i).getEventSubExtra().equals(CricketUtil.NO_BALL)) {
@@ -13709,6 +13724,16 @@ public class CricketFunctions {
 								case CricketUtil.ABSENT_HURT: case CricketUtil.RETIRED_HURT: case CricketUtil.CONCUSSED:
 									break;
 								default:
+									 if(matchStats.getOverData().getThisOverTxt().split(",").length <= 3) {
+								        	if(!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.OBSTRUCTING_FIELDER)&&
+								        			!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)&&
+								        			!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.TIMED_OUT)&&
+								        			!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.HANDLED_THE_BALL)&&
+								        			!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_OUT)&&
+								        			!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.MANKAD)&&
+								        			!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.HIT_BALL_TWICE))
+								    		matchStats.getOverData().setConsecutiveW(matchStats.getOverData().getConsecutiveW()+1);
+								    }
 						    		if(!matchStats.getOverData().getThisOverTxt().isEmpty()) {
 							    		matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + ",");
 							    	}
