@@ -470,6 +470,7 @@ public String toString() {
 			super();
 			this.id = id;
 			this.statsType = statsType;
+			this.thisOverTxt = "";
 		}
 		
 		public VariousStats(int over, String thisOverTxt ,int totalRuns, int totalWickets) {
