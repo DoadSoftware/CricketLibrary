@@ -15,7 +15,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
@@ -79,6 +78,8 @@ import com.cricket.model.FieldersData;
 import com.cricket.model.Fixture;
 import com.cricket.model.ForeignLanguageData;
 import com.cricket.model.HeadToHead;
+import com.cricket.model.HeadToHeadPlayer;
+import com.cricket.model.HeadToHeadTeam;
 import com.cricket.model.ImpactData;
 import com.cricket.model.Inning;
 import com.cricket.model.InningStats;
@@ -2321,6 +2322,7 @@ public class CricketFunctions {
 		StringBuilder matchDataTxt = new StringBuilder();
 		
 		lineByLineData.add("|");
+		lineByLineData.add("|============================================================================================================================================================");
 		lineByLineData.add("|    (B) - 'BO' - Bowling details");
 		lineByLineData.add("|    (A) - 'IS' - Batting details");
 		lineByLineData.add("|");
@@ -2465,6 +2467,112 @@ public class CricketFunctions {
 			}
 		}
 		
+		// Teams Total
+		
+		lineByLineData.add("|");
+		lineByLineData.add("|============================================================================================================================================================");
+		lineByLineData.add("|	1 - 2       Line Ident ('TT')");
+		lineByLineData.add("|   4 - 23      Match file name");
+		lineByLineData.add("|  25 - 44      Venue name");
+		lineByLineData.add("|  46 - 65      Team name");
+		lineByLineData.add("|  67 - 83      Opponent name");
+		lineByLineData.add("|  84 - 86      Balls");
+		lineByLineData.add("|  87 - 89      Runs");
+		lineByLineData.add("|  90 - 92      Wickets");
+		lineByLineData.add("|");
+		lineByLineData.add("| <Match File Name   >< Venue Name       >< Team name        >< Opponent Name    ><BALLS><RUNS><WKTS>");
+		
+		for(Inning inn : match.getMatch().getInning()) {
+			matchDataTxt = new StringBuilder();
+		    matchDataTxt.setLength(0); // Clear the StringBuilder for each iteration
+		    
+		    matchDataTxt.append(String.format("%-140s", "")); // Initial padding
+		    
+		    // Add substrings at specific positions using StringBuilder methods
+		    matchDataTxt.insert(0, "TT");
+		    matchDataTxt.insert(3, match.getMatch().getMatchFileName());
+		    matchDataTxt.insert(23, match.getSetup().getGround().getCity());
+		    matchDataTxt.insert(43, inn.getBatting_team().getTeamName4());
+		    matchDataTxt.insert(63, inn.getBowling_team().getTeamName4());
+		    
+		    matchDataTxt.insert(86-String.valueOf((inn.getTotalOvers()*6) + inn.getTotalBalls()).length(), String.valueOf((inn.getTotalOvers()*6) + inn.getTotalBalls()));
+		    matchDataTxt.insert(93-String.valueOf(inn.getTotalRuns()).length(), inn.getTotalRuns());
+		    matchDataTxt.insert(99-String.valueOf(inn.getTotalWickets()).length(), inn.getTotalWickets());
+		    
+		    lineByLineData.add(matchDataTxt.toString());
+		}
+//		// POWERPLAY
+		
+		if(!match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.FC) || 
+				!match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST)) {
+			
+			MatchStats matchStats = CricketFunctions.getpowerPlay(match);
+			
+			lineByLineData.add("|");
+			lineByLineData.add("|============================================================================================================================================================");
+			lineByLineData.add("|	1 - 2       Line Ident ('PP')");
+			lineByLineData.add("|   4 - 23      Match file name");
+			lineByLineData.add("|  25 - 44      Venue name");
+			lineByLineData.add("|  46 - 65      Team name");
+			lineByLineData.add("|  67 - 83      Opponent name");
+			lineByLineData.add("|  84 - 89      P1_R");
+			lineByLineData.add("|  90 - 95      P2_R");
+			lineByLineData.add("|  96 - 101     P3_R");
+			lineByLineData.add("|  102 - 107    P1_W");
+			lineByLineData.add("|  108 - 113    P2_W");
+			lineByLineData.add("|  114 - 119    P3_W");
+			lineByLineData.add("|");
+			lineByLineData.add("| <Match File Name   >< Venue Name       >< Team name        >< Opponent Name    ><P1_R><P2_R><P3_R><P1_W><P2_W><P3_W>");
+			
+			for(int i = 0; i < 2;i++) {
+				matchDataTxt = new StringBuilder();
+			    matchDataTxt.setLength(0); // Clear the StringBuilder for each iteration
+			    
+			    matchDataTxt.append(String.format("%-140s", "")); // Initial padding
+			    
+			    // Add substrings at specific positions using StringBuilder methods
+			    matchDataTxt.insert(0, "PP");
+			    matchDataTxt.insert(3, match.getMatch().getMatchFileName());
+			    matchDataTxt.insert(23, match.getSetup().getGround().getCity());
+			    matchDataTxt.insert(43, match.getMatch().getInning().get(i).getBatting_team().getTeamName4());
+			    matchDataTxt.insert(63, match.getMatch().getInning().get(i).getBowling_team().getTeamName4());
+			    
+			    VariousStats pp1 ,pp2,pp3 ;
+			    if(i==0) {
+			    	pp1 = matchStats.getHomeFirstPowerPlay();
+			    	pp2 = matchStats.getHomeSecondPowerPlay();
+			    	pp3 = matchStats.getHomeThirdPowerPlay();
+			    }else {
+			    	pp1 = matchStats.getAwayFirstPowerPlay();
+			    	pp2 = matchStats.getAwaySecondPowerPlay();
+			    	pp3 = matchStats.getAwayThirdPowerPlay();
+			    }
+			    if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
+			    	matchDataTxt.insert(86-String.valueOf(pp1.getTotalRuns()).length(), 
+				    		String.valueOf(pp1.getTotalRuns()));
+				    matchDataTxt.insert(93-String.valueOf(pp2.getTotalRuns()).length(), pp2.getTotalRuns());
+				    matchDataTxt.insert(99-String.valueOf(pp3.getTotalRuns()).length(), pp3.getTotalRuns());
+				    
+				    matchDataTxt.insert(105-String.valueOf(pp1.getTotalWickets()).length(),pp1.getTotalWickets());
+				    matchDataTxt.insert(111-String.valueOf(pp2.getTotalWickets()).length(),pp2.getTotalWickets());
+				    matchDataTxt.insert(117-String.valueOf(pp3.getTotalWickets()).length(), pp3.getTotalWickets());
+				    
+			    }else {
+			    	matchDataTxt.insert(86-String.valueOf(pp1.getTotalRuns()).length(), 
+				    		String.valueOf(pp1.getTotalRuns()));
+				    matchDataTxt.insert(93-String.valueOf(pp2.getTotalRuns()).length(), "-");
+				    matchDataTxt.insert(99-String.valueOf(pp2.getTotalRuns()).length(), "-");
+				    
+				    matchDataTxt.insert(105-String.valueOf(pp1.getTotalWickets()).length(), pp1.getTotalWickets());
+				    matchDataTxt.insert(111-String.valueOf(pp2.getTotalWickets()).length(), "-");
+				    matchDataTxt.insert(117-String.valueOf(pp3.getTotalWickets()).length(), "-");
+				    
+			    }
+			    
+			    lineByLineData.add(matchDataTxt.toString());
+			}
+		}
+			
 		if(match.getSetup().getSpecialMatchRules().equalsIgnoreCase(CricketUtil.ISPL)) {
 			lineByLineData.add("|");
 			lineByLineData.add("|============================================================================================================================================================");
@@ -2815,12 +2923,13 @@ public class CricketFunctions {
 	    }
 	}
 	
-	public static List<HeadToHead> extractHeadToHead(MatchAllData match, CricketService cricketService) throws IOException {
+	public static HeadToHead extractHeadToHead(MatchAllData match, CricketService cricketService) throws IOException {
 		//Read Head To Head text file and store Data in Array List
 		int playerId = -1;
 		List<String> TeamName = new ArrayList<String>();
 		List<String> headToHead = new ArrayList<String>();
-		List<HeadToHead> headToHead_stats = new ArrayList<HeadToHead>();
+		HeadToHead headToHead_master = new HeadToHead();
+		int index = 2;
 		
 		if(new File (CricketUtil.CRICKET_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + match.getMatch().getMatchFileName().replace(".json", ".h2h")).exists()) {
 			String text_to_return = "";
@@ -2830,7 +2939,8 @@ public class CricketFunctions {
 					if(text_to_return.contains("|")) {
 						
 					}else {
-						if(text_to_return.contains("IS") || text_to_return.contains("BO") || text_to_return.contains("TB")) {
+						if(text_to_return.contains("IS") || text_to_return.contains("BO") || text_to_return.contains("TT") || 
+								text_to_return.contains("PP") || text_to_return.contains("TB")) {
 							headToHead.add(text_to_return);
 						}
 					}
@@ -2840,79 +2950,102 @@ public class CricketFunctions {
 		
 		for(int i=0;i<=headToHead.size()-1;i++) {
 			if(headToHead.get(i).substring(0,3).trim().contains("IS")) {
-//				for(int w=0;w<1;w++) {
-//					System.out.println(headToHead.get(i));
-//					System.out.println("PLAYER ID : " + Integer.valueOf(headToHead.get(i).substring(83,86).trim()));
-//				}
-				
+				index = 2;
 				TeamName.add(headToHead.get(i).substring(43,63).trim());	
 				TeamName.add(headToHead.get(i).substring(63,82).trim());
+				
 				try {
-					headToHead_stats.add(new HeadToHead(Integer.valueOf(headToHead.get(i).substring(83,86).trim()),Integer.valueOf(headToHead.get(i).substring(87,90).trim()), 
+					
+					headToHead_master.getH2hPlayer().add(new HeadToHeadPlayer(Integer.valueOf(headToHead.get(i).substring(83,86).trim()),Integer.valueOf(headToHead.get(i).substring(87,90).trim()), 
 							Integer.valueOf(headToHead.get(i).substring(90,93).trim()), Integer.valueOf(headToHead.get(i).substring(119,122).trim()), 
 							Integer.valueOf(headToHead.get(i).substring(122,125).trim()), Integer.valueOf(headToHead.get(i).substring(125,128).trim()), 
 							Integer.valueOf(headToHead.get(i).substring(128,131).trim()), Integer.valueOf(headToHead.get(i).substring(93,96).trim()), 
 							Integer.valueOf(headToHead.get(i).substring(96,99).trim()), 0, 0, 0, 0, 0, headToHead.get(i).substring(2,22).trim(),
 							cricketService.getTeams().stream().filter(team -> team.getTeamName4().equalsIgnoreCase(TeamName.get(0))).findAny().orElse(null),
 							cricketService.getTeams().stream().filter(team -> team.getTeamName4().equalsIgnoreCase(TeamName.get(1))).findAny().orElse(null),
-							headToHead.get(i).substring(106,108),headToHead.get(i).substring(109,111),headToHead.get(i).substring(23,42)));
-				} catch (Exception e) {
+							headToHead.get(i).substring(106,108).trim(),headToHead.get(i).substring(109,111).trim(),headToHead.get(i).substring(23,42).trim()));
+					} catch (Exception e) {
 					
 				}
 				TeamName.clear();
 				
 			}
 			else if(headToHead.get(i).substring(0,3).trim().contains("BO")) {
-				
+				index = 2;
 				playerId = -1;
-				for(int j=0;j<=headToHead_stats.size()-1;j++)
+				for(int j=0;j<=headToHead_master.getH2hPlayer().size()-1;j++)
 				{
 					
-					if(headToHead_stats.get(j).getPlayerId() == Integer.valueOf(headToHead.get(i).substring(83,86).trim()) &&
-							headToHead_stats.get(j).getMatchFileName().equalsIgnoreCase(headToHead.get(i).substring(2,22).trim())) {
+					if(headToHead_master.getH2hPlayer().get(j).getPlayerId() == Integer.valueOf(headToHead.get(i).substring(83,86).trim()) &&
+							headToHead_master.getH2hPlayer().get(j).getMatchFileName().equalsIgnoreCase(headToHead.get(i).substring(2,22).trim())) {
 						playerId = j;
 						break;
 					}
 				}
 				if(playerId >= 0) {
-					headToHead_stats.get(playerId).setWickets(Integer.valueOf(headToHead.get(i).substring(96,99).trim()));
-					headToHead_stats.get(playerId).setRunsConceded(Integer.valueOf(headToHead.get(i).substring(93,96).trim()));
-					headToHead_stats.get(playerId).setBallsBowled(Integer.valueOf(headToHead.get(i).substring(87,90).trim()));
-					headToHead_stats.get(playerId).setMaidens(Integer.valueOf(headToHead.get(i).substring(90,93).trim()));
-					headToHead_stats.get(playerId).setBalldots(Integer.valueOf(headToHead.get(i).substring(99,102).trim()));
+					headToHead_master.getH2hPlayer().get(playerId).setWickets(Integer.valueOf(headToHead.get(i).substring(96,99).trim()));
+					headToHead_master.getH2hPlayer().get(playerId).setRunsConceded(Integer.valueOf(headToHead.get(i).substring(93,96).trim()));
+					headToHead_master.getH2hPlayer().get(playerId).setBallsBowled(Integer.valueOf(headToHead.get(i).substring(87,90).trim()));
+					headToHead_master.getH2hPlayer().get(playerId).setMaidens(Integer.valueOf(headToHead.get(i).substring(90,93).trim()));
+					headToHead_master.getH2hPlayer().get(playerId).setBalldots(Integer.valueOf(headToHead.get(i).substring(99,102).trim()));
 					
 				}else {
 					TeamName.add(headToHead.get(i).substring(43,63).trim());	
 					TeamName.add(headToHead.get(i).substring(63,82).trim());
-					headToHead_stats.add(new HeadToHead(Integer.valueOf(headToHead.get(i).substring(83,86).trim()), 0, 0, 0, 0, 0, 0, 0, 0, 
+					
+					headToHead_master.getH2hPlayer().add(new HeadToHeadPlayer(Integer.valueOf(headToHead.get(i).substring(83,86).trim()), 0, 0, 0, 0, 0, 0, 0, 0, 
 							Integer.valueOf(headToHead.get(i).substring(96,99).trim()), Integer.valueOf(headToHead.get(i).substring(93,96).trim()), 
 							Integer.valueOf(headToHead.get(i).substring(87,90).trim()), Integer.valueOf(headToHead.get(i).substring(90,93).trim()), 
 							Integer.valueOf(headToHead.get(i).substring(99,102).trim()), headToHead.get(i).substring(2,22).trim(), 
 							cricketService.getTeams().stream().filter(team -> team.getTeamName4().equalsIgnoreCase(TeamName.get(0))).findAny().orElse(null),
 							cricketService.getTeams().stream().filter(team -> team.getTeamName4().equalsIgnoreCase(TeamName.get(1))).findAny().orElse(null),
 							"Y", "-", headToHead.get(i).substring(23,42)));
+					
 					TeamName.clear();
 				}
+			}else if(headToHead.get(i).substring(0,3).trim().contains("TT")) {
+				
+				TeamName.add(headToHead.get(i).substring(43,63).trim());	
+				TeamName.add(headToHead.get(i).substring(63,82).trim());
+				
+				headToHead_master.getH2hTeam().add(new HeadToHeadTeam(Integer.valueOf(headToHead.get(i).substring(90,95).trim()),Integer.valueOf(headToHead.get(i).substring(96,102).trim()),
+						Integer.valueOf(headToHead.get(i).substring(83,89).trim()),headToHead.get(i).substring(2,22).trim(),
+								cricketService.getTeams().stream().filter(team -> team.getTeamName4().equalsIgnoreCase(TeamName.get(0))).findAny().orElse(null),
+								cricketService.getTeams().stream().filter(team -> team.getTeamName4().equalsIgnoreCase(TeamName.get(1))).findAny().orElse(null),headToHead.get(i).substring(23,42).trim()));
+				TeamName.clear();
+			}else if(headToHead.get(i).substring(0,3).trim().contains("PP")) {
+				
+				TeamName.add(headToHead.get(i).substring(43,63).trim());	
+				TeamName.add(headToHead.get(i).substring(63,82).trim());
+				headToHead_master.getH2hTeam().get(headToHead_master.getH2hTeam().size() - index).setP1_Run(headToHead.get(i).substring(83,88).trim());
+				headToHead_master.getH2hTeam().get(headToHead_master.getH2hTeam().size() - index).setP2_Run(headToHead.get(i).substring(89,94).trim());
+				headToHead_master.getH2hTeam().get(headToHead_master.getH2hTeam().size() - index).setP3_Run(headToHead.get(i).substring(95,100).trim());
+				headToHead_master.getH2hTeam().get(headToHead_master.getH2hTeam().size() - index).setP1_Wicket(headToHead.get(i).substring(101,106).trim());
+				headToHead_master.getH2hTeam().get(headToHead_master.getH2hTeam().size() - index).setP2_Wicket(headToHead.get(i).substring(107,112).trim());
+				headToHead_master.getH2hTeam().get(headToHead_master.getH2hTeam().size() - index).setP3_Wicket(headToHead.get(i).substring(113,118).trim());
+				index--;
+				TeamName.clear();
 			}else if(headToHead.get(i).substring(0,3).trim().contains("TB")) {
 				playerId = -1;
-				for(int j=0;j<=headToHead_stats.size()-1;j++)
+				index = 2;
+				for(int j=0;j<=headToHead_master.getH2hPlayer().size()-1;j++)
 				{
-					if(headToHead_stats.get(j).getPlayerId() == Integer.valueOf(headToHead.get(i).substring(83,86).trim()) &&
-							headToHead_stats.get(j).getMatchFileName().equalsIgnoreCase(headToHead.get(i).substring(2,22).trim())) {
+					if(headToHead_master.getH2hPlayer().get(j).getPlayerId() == Integer.valueOf(headToHead.get(i).substring(83,86).trim()) &&
+							headToHead_master.getH2hPlayer().get(j).getMatchFileName().equalsIgnoreCase(headToHead.get(i).substring(2,22).trim())) {
 						playerId = j;
 						break;
 					}
 				}
 				if(playerId >= 0) {
-					headToHead_stats.get(playerId).setTapeBall_wickets(Integer.valueOf(headToHead.get(i).substring(94,96).trim()));
-					headToHead_stats.get(playerId).setTapeBall_runs(Integer.valueOf(headToHead.get(i).substring(91,93).trim()));
-					headToHead_stats.get(playerId).setTapeBall_balls(Integer.valueOf(headToHead.get(i).substring(88,90).trim()));
-					headToHead_stats.get(playerId).setTapeBall_dotsBall(Integer.valueOf(headToHead.get(i).substring(97,99).trim()));
+					headToHead_master.getH2hPlayer().get(playerId).setTapeBall_wickets(Integer.valueOf(headToHead.get(i).substring(94,96).trim()));
+					headToHead_master.getH2hPlayer().get(playerId).setTapeBall_runs(Integer.valueOf(headToHead.get(i).substring(91,93).trim()));
+					headToHead_master.getH2hPlayer().get(playerId).setTapeBall_balls(Integer.valueOf(headToHead.get(i).substring(88,90).trim()));
+					headToHead_master.getH2hPlayer().get(playerId).setTapeBall_dotsBall(Integer.valueOf(headToHead.get(i).substring(97,99).trim()));
 				}
 			}
 		}
 		
-		return headToHead_stats;
+		return headToHead_master;
 	}
 
 	public static String addSubString(String main_string,String sub_string, int position) {
@@ -4273,7 +4406,7 @@ public class CricketFunctions {
 		return null;
 	}
 	
-	public static Tournament extracttournamentFoursAndSixesData(String typeOfExtraction, List<HeadToHead> tournament_matches, 
+	public static Tournament extracttournamentFoursAndSixesData(String typeOfExtraction, List<HeadToHeadPlayer> tournament_matches, 
 			MatchAllData currentMatch, Tournament past_tournament_stat) throws CloneNotSupportedException 
 	{
 		Tournament tournament_stats = new Tournament();	
@@ -4282,12 +4415,13 @@ public class CricketFunctions {
 			 return extracttournamentFoursAndSixesData("CURRENT_MATCH_DATA", tournament_matches, currentMatch, 
 					 extracttournamentFoursAndSixesData("PAST_MATCHES_DATA", tournament_matches, currentMatch, null));
 		case "PAST_MATCHES_DATA":
-			for(HeadToHead mtch : tournament_matches) {
+			for (HeadToHeadPlayer mtch : tournament_matches) {
 				if(!mtch.getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
 					tournament_stats.setTournament_fours(tournament_stats.getTournament_fours() + mtch.getFours());
 					tournament_stats.setTournament_sixes(tournament_stats.getTournament_sixes() + mtch.getSixes());
 				}
 			}
+			
 			return tournament_stats;
 		case "CURRENT_MATCH_DATA":
 			Tournament past_tournament_stat_clone = new Tournament();
@@ -4973,14 +5107,14 @@ public class CricketFunctions {
 		return hundReds + "," + tens + "," + units;
 	}
 
-	public static Statistics updateTournamentWithH2h(Statistics stats,List<HeadToHead> headToHead_matches,MatchAllData currentMatch) throws JsonMappingException, JsonProcessingException, InterruptedException 
+	public static Statistics updateTournamentWithH2h(Statistics stats,List<HeadToHeadPlayer> headToHead_matches,MatchAllData currentMatch) throws JsonMappingException, JsonProcessingException, InterruptedException 
 	{
 		boolean player_found = false,impact_player_found=false;
 		
 		Statistics statsdata = stats;
 		Statistics stat = objectMapper.readValue(objectMapper.writeValueAsString(statsdata), Statistics.class);
 		
-		for(HeadToHead match : headToHead_matches) {
+		for(HeadToHeadPlayer match : headToHead_matches) {
 			//System.out.println(match.getMatch().getMatchFileName());
 			if(!match.getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
 				if(stat.getStats_type().getStats_short_name().contains(currentMatch.getSetup().getMatchType())) {
@@ -5092,7 +5226,7 @@ public class CricketFunctions {
 		return stat;
 	}
 	
-	public static Statistics updateH2h(Statistics stats,List<HeadToHead> headToHead_matches,MatchAllData currentMatch) throws JsonMappingException, JsonProcessingException, InterruptedException 
+	public static Statistics updateH2h(Statistics stats,List<HeadToHeadPlayer> headToHead_matches,MatchAllData currentMatch) throws JsonMappingException, JsonProcessingException, InterruptedException 
 	{
 		boolean player_found = false,impact_player_found=false;
 		
@@ -5100,7 +5234,7 @@ public class CricketFunctions {
 		ObjectMapper objectMapper = new ObjectMapper();    
 		Statistics stat = objectMapper.readValue(objectMapper.writeValueAsString(statsdata), Statistics.class);
 		
-		for(HeadToHead match : headToHead_matches) {
+		for(HeadToHeadPlayer match : headToHead_matches) {
 			//System.out.println(match.getMatch().getMatchFileName());
 			if(!match.getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
 //				if(stat.getStats_type().getStats_short_name().contains(currentMatch.getSetup().getMatchType())) {
@@ -6588,7 +6722,7 @@ public class CricketFunctions {
         }
     }
     
-    public static List<Tournament> extractTournamentData(String typeOfExtraction,boolean ShowStrikeRate, List<HeadToHead> headToHead_matches, 
+    public static List<Tournament> extractTournamentData(String typeOfExtraction,boolean ShowStrikeRate, List<HeadToHeadPlayer> headToHead_matches, 
 			CricketService cricketService,MatchAllData currentMatch, List<Tournament> past_tournament_stat){
 		
 		int playerId = -1;
@@ -6601,7 +6735,7 @@ public class CricketFunctions {
 			 
 		case "PAST_MATCHES_DATA":
 			
-			for(HeadToHead mtch : headToHead_matches) {
+			for(HeadToHeadPlayer mtch : headToHead_matches) {
 				
 				if(!mtch.getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
 					
@@ -6631,16 +6765,16 @@ public class CricketFunctions {
 							tournament_stats.get(playerId).setHundreds(tournament_stats.get(playerId).getHundreds() + 1);
 						}
 						
-						if(mtch.getInningStarted().trim().contains("Y")) {
+						if(mtch.getInningStarted() != null && mtch.getInningStarted().trim().contains("Y")) {
 							tournament_stats.get(playerId).setInnings(tournament_stats.get(playerId).getInnings()+1);
 						}
 						
-						if(mtch.getDismissed().trim().contains("N")) {
+						if(mtch.getDismissed() != null && mtch.getDismissed().trim().contains("N")) {
 							tournament_stats.get(playerId).setNot_out(tournament_stats.get(playerId).getNot_out() + 1);
 							tournament_stats.get(playerId).getBatsman_best_Stats().add(new BestStats(mtch.getPlayerId(), ((mtch.getRuns() * 2) + 1), 
 									mtch.getBallsFaced(),mtch.getOpponentTeam(), null,mtch.getMatchFileName().replace(".json", ""), 
 									cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(mtch.getPlayerId())),CricketUtil.NOT_OUT));
-						}else if(mtch.getDismissed().trim().contains("Y")) {
+						}else if(mtch.getDismissed() != null && mtch.getDismissed().trim().contains("Y")) {
 							tournament_stats.get(playerId).getBatsman_best_Stats().add(new BestStats(mtch.getPlayerId(), (mtch.getRuns() * 2), 
 									mtch.getBallsFaced(), mtch.getOpponentTeam(), null, mtch.getMatchFileName().replace(".json", ""),
 									cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(mtch.getPlayerId())),CricketUtil.OUT));
@@ -6692,17 +6826,17 @@ public class CricketFunctions {
 							tournament_stats.get(tournament_stats.size() - 1).setHundreds(tournament_stats.get(tournament_stats.size() - 1).getHundreds() + 1);
 						}
 						
-						if(mtch.getInningStarted().trim().contains("Y")) {
+						if(mtch.getInningStarted() != null && mtch.getInningStarted().trim().contains("Y")) {
 							tournament_stats.get(tournament_stats.size() - 1).setInnings(tournament_stats.get(tournament_stats.size() - 1).getInnings()+1);
 						}
 						
-						if(mtch.getDismissed().trim().contains("N")) {
+						if(mtch.getDismissed() != null && mtch.getDismissed().trim().contains("N")) {
 							tournament_stats.get(tournament_stats.size() - 1).setNot_out(tournament_stats.get(tournament_stats.size() - 1).getNot_out() + 1);
 							tournament_stats.get(tournament_stats.size() - 1).getBatsman_best_Stats().add(new BestStats(mtch.getPlayerId(), ((mtch.getRuns() * 2) + 1), 
 									mtch.getBallsFaced(),mtch.getOpponentTeam(), null,mtch.getMatchFileName().replace(".json", ""), 
 									cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(mtch.getPlayerId())),CricketUtil.NOT_OUT));
 						}
-						else if(mtch.getDismissed().trim().contains("Y")) {
+						else if(mtch.getDismissed() != null && mtch.getDismissed().trim().contains("Y")) {
 							tournament_stats.get(tournament_stats.size() - 1).getBatsman_best_Stats().add(new BestStats(mtch.getPlayerId(), (mtch.getRuns() * 2), 
 									mtch.getBallsFaced(), mtch.getOpponentTeam(), null, mtch.getMatchFileName().replace(".json", ""),
 									cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(mtch.getPlayerId())),CricketUtil.OUT));
@@ -12930,7 +13064,103 @@ public class CricketFunctions {
 		}
 		return null;
 	}
-	public static List<BatBallGriff> getBatBallGriff(Player player , String dataType,int PlayerId,Team team,List<HeadToHead> headToHead, MatchAllData match)
+	
+	public static List<String> getTeamScore(List<Team> team, List<HeadToHeadTeam> headToHead, MatchAllData match) {
+	    List<String> teamSortedData = new ArrayList<>();
+
+	    for (Team tm : team) {
+	        String teamName = tm.getTeamName4();
+	        int highestScore = Integer.MIN_VALUE;
+	        int lowestScore = Integer.MAX_VALUE;
+	        boolean matchPlayed = false;
+
+	        // Step 1: From HeadToHead data
+	        for (HeadToHeadTeam h2h : headToHead) {
+	        	
+	            if (h2h.getTeam().getTeamName4().equalsIgnoreCase(teamName) && h2h.getTeamRuns() > 0) {
+	                int currentScore = h2h.getTeamRuns();
+	                
+	                highestScore = Math.max(highestScore, currentScore);
+	                lowestScore = Math.min(lowestScore, currentScore);
+	                matchPlayed = true;
+	            }
+	        }
+
+	        // Step 2: Check current match innings
+	        List<Inning> innings = match.getMatch().getInning();
+	        for (Inning in : innings) {
+	            if (in.getBatting_team().getTeamName4().equalsIgnoreCase(teamName) && in.getTotalRuns() > 0) {
+	                int matchScore = in.getTotalRuns(); // Assuming getRuns() gives total runs
+	                highestScore = Math.max(highestScore, matchScore);
+	                lowestScore = Math.min(lowestScore, matchScore);
+	                matchPlayed = true;
+	            }
+	        }
+
+	        // Step 3: If no match played in any data, set to 0
+	        if (!matchPlayed) {
+	            highestScore = 0;
+	            lowestScore = 0;
+	        }
+
+	        teamSortedData.add(teamName + " - " + highestScore + " - " + lowestScore);
+	    }
+	    return teamSortedData;
+	}
+	
+//	public static List<String> getTeamLowestScore(List<Team> team, List<HeadToHead> headToHead, MatchAllData match) {
+//	    List<String> teamSortedData = new ArrayList<>();
+//
+//	    for (Team tm : team) {
+//	        String teamName = tm.getTeamName4().trim();
+//	        int lowestScore = Integer.MAX_VALUE;
+//	        boolean matchPlayed = false;
+//
+//	        // HeadToHead scores
+//	        for (HeadToHead h2h : headToHead) {
+//	            if (h2h.getTeam() != null && h2h.getTeam().getTeamName4() != null) {
+//	                String h2hName = h2h.getTeam().getTeamName4().trim();
+//	                int score = h2h.getTeamRuns();
+//	                if (h2hName.equalsIgnoreCase(teamName) && score > 0) {
+//	                    lowestScore = Math.min(lowestScore, score);
+//	                    matchPlayed = true;
+//	                }
+//	            }
+//	        }
+//
+//	        // Match innings scores
+//	        for (Inning in : match.getMatch().getInning()) {
+//	            if (in.getBatting_team() != null && in.getBatting_team().getTeamName4() != null) {
+//	                String inningName = in.getBatting_team().getTeamName4().trim();
+//	                int score = in.getTotalRuns();
+//	                if (inningName.equalsIgnoreCase(teamName) && score > 0) {
+//	                    lowestScore = Math.min(lowestScore, score);
+//	                    matchPlayed = true;
+//	                }
+//	            }
+//	        }
+//
+//	        if (!matchPlayed || lowestScore == Integer.MAX_VALUE) {
+//	            lowestScore = 0; // No valid scores found
+//	        }
+//
+//	        teamSortedData.add(teamName + " - " + lowestScore);
+//	    }
+//
+//	    // Sort: lowest scores first, but push 0 to the bottom
+//	    teamSortedData.sort((a, b) -> {
+//	        int scoreA = Integer.parseInt(a.split(" - ")[1]);
+//	        int scoreB = Integer.parseInt(b.split(" - ")[1]);
+//	        if (scoreA == 0) return 1;
+//	        if (scoreB == 0) return -1;
+//	        return Integer.compare(scoreA, scoreB);
+//	    });
+//
+//	    return teamSortedData;
+//	}
+
+
+	public static List<BatBallGriff> getBatBallGriff(Player player , String dataType,int PlayerId,Team team,List<HeadToHeadPlayer> headToHead, MatchAllData match)
 	{
 		List<BatBallGriff> griffBatBall = new ArrayList<BatBallGriff>();
 		String matchname = "",runs="",balls="",status= "";
@@ -12938,7 +13168,7 @@ public class CricketFunctions {
 		Team teams = null;
 		switch (dataType.toUpperCase()) {
 		case CricketUtil.BATSMAN:
-			for (HeadToHead h2h : headToHead) {
+			for (HeadToHeadPlayer h2h : headToHead) {
 			    if (!h2h.getTeam().getTeamName4().equalsIgnoreCase(team.getTeamName4())) {
 			        continue;
 			    }
@@ -12983,7 +13213,7 @@ public class CricketFunctions {
 			}
 			break;
 		case CricketUtil.BOWLER:
-				for (HeadToHead h2h : headToHead) {
+				for (HeadToHeadPlayer h2h : headToHead) {
 					if (!h2h.getTeam().getTeamName4().equalsIgnoreCase(team.getTeamName4())) {
 				        continue;
 				    }
@@ -15975,7 +16205,7 @@ public class CricketFunctions {
 	    
 	    return results;
 	}	
-   public static List<BestStats> getBatterIndividual(MatchAllData session_match, List<HeadToHead> headToHead, 
+   public static List<BestStats> getBatterIndividual(MatchAllData session_match, List<HeadToHeadPlayer> headToHead, 
 			CricketService cricketService, List<Tournament> past_tournament_stats) throws JsonMappingException, JsonProcessingException 
 	{
 	 
@@ -16081,7 +16311,8 @@ public class CricketFunctions {
   }
    public static String playerRoleIcons(Player hs) {
 	  String role = "";
-	  if(hs.getCaptainWicketKeeper().equalsIgnoreCase(CricketUtil.WICKET_KEEPER)||hs.getCaptainWicketKeeper().equalsIgnoreCase("CAPTAIN_WICKET_KEEPER")) {
+	  if(hs.getCaptainWicketKeeper() != null && (hs.getCaptainWicketKeeper().equalsIgnoreCase(CricketUtil.WICKET_KEEPER)|| 
+			  hs.getCaptainWicketKeeper().equalsIgnoreCase("CAPTAIN_WICKET_KEEPER"))) {
 			role = "WicketKeeper";
 		}else if (hs.getRole().equalsIgnoreCase("BATSMAN") || hs.getRole().equalsIgnoreCase("BATTER") || hs.getRole().equalsIgnoreCase("BAT/KEEPER")) {
 		    role = hs.getBattingStyle().equalsIgnoreCase("RHB") ? "Batsman" : "Batsman_Lefthand";
@@ -16127,4 +16358,325 @@ public class CricketFunctions {
 	return role;
 		
   }
+   public static MatchStats getpowerPlay(MatchAllData session_match) {
+	   
+	   MatchStats matchStats = new MatchStats();
+	   
+	   List<Event> events = session_match.getEventFile().getEvents();
+	   List<Event> Event = new ArrayList<Event>();
+	   boolean setInning1 = false, setInning2 = false;
+	   if(events != null && events.size() > 0) {
+			for (int i = events.size() - 1; i >= 0; i--) {
+				if(events.get(i).getEventInningNumber()==1 && !setInning1) {
+					Inning inn = session_match.getMatch().getInning().get(0);
+					matchStats.setPhase1StartOver(inn.getFirstPowerplayStartOver()); matchStats.setPhase1EndOver(inn.getFirstPowerplayEndOver());
+		        	matchStats.setPhase2StartOver(inn.getSecondPowerplayStartOver()); matchStats.setPhase2EndOver(inn.getSecondPowerplayEndOver());
+		        	matchStats.setPhase3StartOver(inn.getThirdPowerplayStartOver()); matchStats.setPhase3EndOver(inn.getThirdPowerplayEndOver());
+		        	setInning1 = true;
+				}else if(events.get(i).getEventInningNumber()==2 && !setInning2) {
+					Inning inn = session_match.getMatch().getInning().get(1);
+					matchStats.setPhase1StartOver(inn.getFirstPowerplayStartOver()); matchStats.setPhase1EndOver(inn.getFirstPowerplayEndOver());
+		        	matchStats.setPhase2StartOver(inn.getSecondPowerplayStartOver()); matchStats.setPhase2EndOver(inn.getSecondPowerplayEndOver());
+		        	matchStats.setPhase3StartOver(inn.getThirdPowerplayStartOver()); matchStats.setPhase3EndOver(inn.getThirdPowerplayEndOver());
+		        	setInning2 = true;
+				}
+				//Powerplay
+			    switch(session_match.getEventFile().getEvents().get(i).getEventType()) {
+				    case CricketUtil.LOG_OVERWRITE_BATSMAN_HOWOUT :
+						Event.add(events.get(i));
+					 break;
+			    	case CricketUtil.LOG_ANY_BALL:case CricketUtil.WIDE:case CricketUtil.NO_BALL:
+				    	if( events.get(i).getEventBowlerNo() > 0) {
+					         if (events.get(i).getEventOverNo() < matchStats.getPhase1EndOver()) {
+								String statsData = getpowerplay(events.get(i));
+								if(statsData.contains(",") && statsData.split(",").length >= 7) {
+									if(events.get(i).getEventInningNumber()==1) {
+										//PHASE_SCORE PHASE 1 HOME
+										matchStats.setHomeFirstPowerPlay(new VariousStats(
+												matchStats.getHomeFirstPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
+												matchStats.getHomeFirstPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
+												matchStats.getHomeFirstPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
+												matchStats.getHomeFirstPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
+												matchStats.getHomeFirstPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+												Integer.valueOf(statsData.split(",")[7]) > 0 ? (matchStats.getHomeFirstPowerPlay().getOutBatsman().isEmpty()
+											        ? String.valueOf(Integer.valueOf(statsData.split(",")[7]))
+											        : matchStats.getHomeFirstPowerPlay().getOutBatsman() + "," + Integer.valueOf(statsData.split(",")[7]))
+											    : matchStats.getHomeFirstPowerPlay().getOutBatsman(),
+											    Integer.valueOf(statsData.split(",")[8]) > 0 ? (matchStats.getHomeFirstPowerPlay().getNotWicketCount().isEmpty()
+												        ? String.valueOf(Integer.valueOf(statsData.split(",")[8]))
+												        : matchStats.getHomeFirstPowerPlay().getNotWicketCount() + "," + Integer.valueOf(statsData.split(",")[8]))
+												    : matchStats.getHomeFirstPowerPlay().getNotWicketCount()));		
+										
+									}else if(events.get(i).getEventInningNumber()==2) {
+										//PHASE_SCORE PHASE 1 AWAY
+										matchStats.setAwayFirstPowerPlay(new VariousStats(
+												matchStats.getAwayFirstPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
+												matchStats.getAwayFirstPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
+												matchStats.getAwayFirstPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
+												matchStats.getAwayFirstPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
+												matchStats.getAwayFirstPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+												Integer.valueOf(statsData.split(",")[7]) > 0 ? (matchStats.getAwayFirstPowerPlay().getOutBatsman().isEmpty()
+											        ? String.valueOf(Integer.valueOf(statsData.split(",")[7]))
+											        : matchStats.getAwayFirstPowerPlay().getOutBatsman() + "," + Integer.valueOf(statsData.split(",")[7]))
+											    : matchStats.getAwayFirstPowerPlay().getOutBatsman(),
+											    Integer.valueOf(statsData.split(",")[8]) > 0 ? (matchStats.getAwayFirstPowerPlay().getNotWicketCount().isEmpty()
+												        ? String.valueOf(Integer.valueOf(statsData.split(",")[8]))
+												        : matchStats.getAwayFirstPowerPlay().getNotWicketCount() + "," + Integer.valueOf(statsData.split(",")[8]))
+												    : matchStats.getAwayFirstPowerPlay().getNotWicketCount()));
+									 
+										}
+									
+									}
+								}
+							if (events.get(i).getEventOverNo() == (matchStats.getPhase2StartOver() - 1) || (events.get(i).getEventOverNo() > (matchStats.getPhase2StartOver() - 1) && 
+					                    events.get(i).getEventOverNo() < matchStats.getPhase2EndOver())) {
+
+									String statsData = getpowerplay(events.get(i));
+									if(statsData.contains(",") && statsData.split(",").length >= 7) {
+										if(events.get(i).getEventInningNumber()==1) {
+											//PHASE_SCORE PHASE 2 HOME
+											matchStats.setHomeSecondPowerPlay(new VariousStats(
+													matchStats.getHomeSecondPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
+													matchStats.getHomeSecondPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
+													matchStats.getHomeSecondPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
+													matchStats.getHomeSecondPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
+													matchStats.getHomeSecondPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+													Integer.valueOf(statsData.split(",")[7]) > 0 ? (matchStats.getHomeSecondPowerPlay().getOutBatsman().isEmpty()
+												        ? String.valueOf(Integer.valueOf(statsData.split(",")[7]))
+												        : matchStats.getHomeSecondPowerPlay().getOutBatsman() + "," + Integer.valueOf(statsData.split(",")[7]))
+												    : matchStats.getHomeSecondPowerPlay().getOutBatsman(),
+												    Integer.valueOf(statsData.split(",")[8]) > 0 ? (matchStats.getHomeSecondPowerPlay().getNotWicketCount().isEmpty()
+													        ? String.valueOf(Integer.valueOf(statsData.split(",")[8]))
+													        : matchStats.getHomeSecondPowerPlay().getNotWicketCount() + "," + Integer.valueOf(statsData.split(",")[8]))
+													    : matchStats.getHomeSecondPowerPlay().getNotWicketCount()));
+											
+										}else if(events.get(i).getEventInningNumber()==2) {
+											//PHASE_SCORE PHASE 2 AWAY
+											matchStats.setAwaySecondPowerPlay(new VariousStats(
+													matchStats.getAwaySecondPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
+													matchStats.getAwaySecondPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
+													matchStats.getAwaySecondPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
+													matchStats.getAwaySecondPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
+													matchStats.getAwaySecondPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+													Integer.valueOf(statsData.split(",")[7]) > 0 ? (matchStats.getAwaySecondPowerPlay().getOutBatsman().isEmpty()? 
+														String.valueOf(Integer.valueOf(statsData.split(",")[7]))
+												        : matchStats.getAwaySecondPowerPlay().getOutBatsman() + "," + Integer.valueOf(statsData.split(",")[7]))
+												    : matchStats.getAwaySecondPowerPlay().getOutBatsman(),
+												    Integer.valueOf(statsData.split(",")[8]) > 0 ? (matchStats.getAwaySecondPowerPlay().getNotWicketCount().isEmpty()? 
+															String.valueOf(Integer.valueOf(statsData.split(",")[8]))
+													        : matchStats.getAwaySecondPowerPlay().getNotWicketCount() + "," + Integer.valueOf(statsData.split(",")[8]))
+													    : matchStats.getAwaySecondPowerPlay().getNotWicketCount()
+													));
+										 }
+									}
+								}
+								if (events.get(i).getEventOverNo() == (matchStats.getPhase3StartOver() - 1) || (events.get(i).getEventOverNo() > (matchStats.getPhase3StartOver() - 1) && 
+					                    events.get(i).getEventOverNo() <= matchStats.getPhase3EndOver())) {
+
+									   String statsData = getpowerplay(events.get(i));
+										
+										if(statsData.contains(",") && statsData.split(",").length >= 7) {
+											if(events.get(i).getEventInningNumber()==1) {
+												//PHASE_SCORE PHASE 3 HOME
+												matchStats.setHomeThirdPowerPlay(new VariousStats(
+														matchStats.getHomeThirdPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
+														matchStats.getHomeThirdPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
+														matchStats.getHomeThirdPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
+														matchStats.getHomeThirdPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
+														matchStats.getHomeThirdPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+														Integer.valueOf(statsData.split(",")[7]) > 0 ? (matchStats.getHomeThirdPowerPlay().getOutBatsman().isEmpty()
+														        ? String.valueOf(Integer.valueOf(statsData.split(",")[7]))
+														        : matchStats.getHomeThirdPowerPlay().getOutBatsman() + "," + Integer.valueOf(statsData.split(",")[7]))
+														    : matchStats.getHomeThirdPowerPlay().getOutBatsman(),
+														    Integer.valueOf(statsData.split(",")[8]) > 0 ? (matchStats.getHomeThirdPowerPlay().getNotWicketCount().isEmpty()
+															        ? String.valueOf(Integer.valueOf(statsData.split(",")[8]))
+															        : matchStats.getHomeThirdPowerPlay().getNotWicketCount() + "," + Integer.valueOf(statsData.split(",")[8]))
+															    : matchStats.getHomeThirdPowerPlay().getNotWicketCount()));
+											
+											}else if(events.get(i).getEventInningNumber()==2) {
+												//PHASE_SCORE PHASE 3 AWAY
+												matchStats.setAwayThirdPowerPlay(new VariousStats(
+														matchStats.getAwayThirdPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
+														matchStats.getAwayThirdPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
+														matchStats.getAwayThirdPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
+														matchStats.getAwayThirdPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
+														matchStats.getAwayThirdPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+														Integer.valueOf(statsData.split(",")[7]) > 0 ? (matchStats.getAwayThirdPowerPlay().getOutBatsman().isEmpty()
+													        ? String.valueOf(Integer.valueOf(statsData.split(",")[7]))
+													        : matchStats.getAwayThirdPowerPlay().getOutBatsman() + "," + Integer.valueOf(statsData.split(",")[7]))
+													    : matchStats.getAwayThirdPowerPlay().getOutBatsman(),
+													    Integer.valueOf(statsData.split(",")[8]) > 0 ? (matchStats.getAwayThirdPowerPlay().getNotWicketCount().isEmpty()
+														        ? String.valueOf(Integer.valueOf(statsData.split(",")[8]))
+														        : matchStats.getAwayThirdPowerPlay().getNotWicketCount() + "," + Integer.valueOf(statsData.split(",")[8]))
+														    : matchStats.getAwayThirdPowerPlay().getNotWicketCount()
+														));
+											 }
+										}
+								}
+						} 
+			    		break;
+			    	case CricketUtil.DOT: case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE: case CricketUtil.FOUR: 
+				    case CricketUtil.FIVE: case CricketUtil.SIX: case CricketUtil.BYE: case CricketUtil.LEG_BYE: 
+				    case CricketUtil.LOG_WICKET:case CricketUtil.NINE:
+				    	
+				    	if( events.get(i).getEventBowlerNo() > 0) {
+							if ((((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) >= (matchStats.getPhase1StartOver() - 1) * 6 &&
+						                    ((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) <= matchStats.getPhase1EndOver() * 6)) {
+								
+								String statsData = getpowerplay(events.get(i));
+								if(statsData.contains(",") && statsData.split(",").length >= 7) {
+									if(events.get(i).getEventInningNumber()==1) {
+										//PHASE_SCORE PHASE 1 HOME
+										matchStats.setHomeFirstPowerPlay(new VariousStats(
+												matchStats.getHomeFirstPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
+												matchStats.getHomeFirstPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
+												matchStats.getHomeFirstPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
+												matchStats.getHomeFirstPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
+												matchStats.getHomeFirstPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+												Integer.valueOf(statsData.split(",")[7]) > 0 ? (matchStats.getHomeFirstPowerPlay().getOutBatsman().isEmpty()
+											        ? String.valueOf(Integer.valueOf(statsData.split(",")[7]))
+											        : matchStats.getHomeFirstPowerPlay().getOutBatsman() + "," + Integer.valueOf(statsData.split(",")[7]))
+											    : matchStats.getHomeFirstPowerPlay().getOutBatsman(),
+											    Integer.valueOf(statsData.split(",")[8]) > 0 ? (matchStats.getHomeFirstPowerPlay().getNotWicketCount().isEmpty()
+												        ? String.valueOf(Integer.valueOf(statsData.split(",")[8]))
+												        : matchStats.getHomeFirstPowerPlay().getNotWicketCount() + "," + Integer.valueOf(statsData.split(",")[8]))
+												    : matchStats.getHomeFirstPowerPlay().getNotWicketCount()));	
+										
+									}else if(events.get(i).getEventInningNumber()==2) {
+										//PHASE_SCORE PHASE 1 AWAY
+										matchStats.setAwayFirstPowerPlay(new VariousStats(
+												matchStats.getAwayFirstPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
+												matchStats.getAwayFirstPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
+												matchStats.getAwayFirstPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
+												matchStats.getAwayFirstPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
+												matchStats.getAwayFirstPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+												Integer.valueOf(statsData.split(",")[7]) > 0 ? (matchStats.getAwayFirstPowerPlay().getOutBatsman().isEmpty()
+											        ? String.valueOf(Integer.valueOf(statsData.split(",")[7]))
+											        : matchStats.getAwayFirstPowerPlay().getOutBatsman() + "," + Integer.valueOf(statsData.split(",")[7]))
+											    : matchStats.getAwayFirstPowerPlay().getOutBatsman(),
+											    Integer.valueOf(statsData.split(",")[8]) > 0 ? (matchStats.getAwayFirstPowerPlay().getNotWicketCount().isEmpty()
+												        ? String.valueOf(Integer.valueOf(statsData.split(",")[8]))
+												        : matchStats.getAwayFirstPowerPlay().getNotWicketCount() + "," + Integer.valueOf(statsData.split(",")[8]))
+												    : matchStats.getAwayFirstPowerPlay().getNotWicketCount()));
+										}
+									
+									}
+								}
+							
+							 if ((((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) >= ((matchStats.getPhase2StartOver() - 1) * 6) + 1) &&
+					                    (((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) <= ((matchStats.getPhase2EndOver()) * 6))) {
+
+									String statsData = getpowerplay(events.get(i));
+									
+									if(statsData.contains(",") && statsData.split(",").length >= 7) {
+										if(events.get(i).getEventInningNumber()==1) {
+											//PHASE_SCORE PHASE 2 HOME
+											matchStats.setHomeSecondPowerPlay(new VariousStats(
+													matchStats.getHomeSecondPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
+													matchStats.getHomeSecondPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
+													matchStats.getHomeSecondPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
+													matchStats.getHomeSecondPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
+													matchStats.getHomeSecondPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+													Integer.valueOf(statsData.split(",")[7]) > 0 ? (matchStats.getHomeSecondPowerPlay().getOutBatsman().isEmpty()
+												        ? String.valueOf(Integer.valueOf(statsData.split(",")[7]))
+												        : matchStats.getHomeSecondPowerPlay().getOutBatsman() + "," + Integer.valueOf(statsData.split(",")[7]))
+												    : matchStats.getHomeSecondPowerPlay().getOutBatsman(),
+												    Integer.valueOf(statsData.split(",")[8]) > 0 ? (matchStats.getHomeSecondPowerPlay().getNotWicketCount().isEmpty()
+													        ? String.valueOf(Integer.valueOf(statsData.split(",")[8]))
+													        : matchStats.getHomeSecondPowerPlay().getNotWicketCount() + "," + Integer.valueOf(statsData.split(",")[8]))
+													    : matchStats.getHomeSecondPowerPlay().getNotWicketCount()));
+											
+										}else if(events.get(i).getEventInningNumber()==2) {
+											//PHASE_SCORE PHASE 2 AWAY
+											matchStats.setAwaySecondPowerPlay(new VariousStats(
+													matchStats.getAwaySecondPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
+													matchStats.getAwaySecondPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
+													matchStats.getAwaySecondPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
+													matchStats.getAwaySecondPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
+													matchStats.getAwaySecondPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+													Integer.valueOf(statsData.split(",")[7]) > 0 ? (matchStats.getAwaySecondPowerPlay().getOutBatsman().isEmpty()
+												        ? String.valueOf(Integer.valueOf(statsData.split(",")[7]))
+												        : matchStats.getAwaySecondPowerPlay().getOutBatsman() + "," + Integer.valueOf(statsData.split(",")[7]))
+												    : matchStats.getAwaySecondPowerPlay().getOutBatsman(),
+												    Integer.valueOf(statsData.split(",")[8]) > 0 ? (matchStats.getAwaySecondPowerPlay().getNotWicketCount().isEmpty()
+													        ? String.valueOf(Integer.valueOf(statsData.split(",")[8]))
+													        : matchStats.getAwaySecondPowerPlay().getNotWicketCount() + "," + Integer.valueOf(statsData.split(",")[8]))
+													    : matchStats.getAwaySecondPowerPlay().getNotWicketCount()));
+											
+										 }
+									}
+								}
+							if ((((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) >= ((matchStats.getPhase3StartOver() - 1) * 6) + 1) &&
+				                    (((events.get(i).getEventOverNo() * 6) + events.get(i).getEventBallNo()) <= ((matchStats.getPhase3EndOver()) * 6))) {
+
+										String statsData = getpowerplay(events.get(i));
+										
+										if(statsData.contains(",") && statsData.split(",").length >= 7) {
+											if(events.get(i).getEventInningNumber()==1) {
+												//PHASE_SCORE PHASE 3 HOME
+												matchStats.setHomeThirdPowerPlay(new VariousStats(
+														matchStats.getHomeThirdPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
+														matchStats.getHomeThirdPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
+														matchStats.getHomeThirdPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
+														matchStats.getHomeThirdPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
+														matchStats.getHomeThirdPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+														Integer.valueOf(statsData.split(",")[7]) > 0 ? (matchStats.getHomeThirdPowerPlay().getOutBatsman().isEmpty()
+													        ? String.valueOf(Integer.valueOf(statsData.split(",")[7]))
+													        : matchStats.getHomeThirdPowerPlay().getOutBatsman() + "," + Integer.valueOf(statsData.split(",")[7]))
+													    : matchStats.getHomeThirdPowerPlay().getOutBatsman(),
+													    Integer.valueOf(statsData.split(",")[8]) > 0 ? (matchStats.getHomeThirdPowerPlay().getNotWicketCount().isEmpty()
+														        ? String.valueOf(Integer.valueOf(statsData.split(",")[8]))
+														        : matchStats.getHomeThirdPowerPlay().getNotWicketCount() + "," + Integer.valueOf(statsData.split(",")[8]))
+														    : matchStats.getHomeThirdPowerPlay().getNotWicketCount()));
+
+											}else if(events.get(i).getEventInningNumber()==2) {
+												//PHASE_SCORE PHASE 3 AWAY
+												matchStats.setAwayThirdPowerPlay(new VariousStats(
+														matchStats.getAwayThirdPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
+														matchStats.getAwayThirdPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
+														matchStats.getAwayThirdPowerPlay().getTotalFours() + Integer.valueOf(statsData.split(",")[3]), 
+														matchStats.getAwayThirdPowerPlay().getTotalSixes() + Integer.valueOf(statsData.split(",")[4]), 
+														matchStats.getAwayThirdPowerPlay().getTotalNines() + Integer.valueOf(statsData.split(",")[5]),
+														Integer.valueOf(statsData.split(",")[7]) > 0 ? (matchStats.getAwayThirdPowerPlay().getOutBatsman().isEmpty()
+													        ? String.valueOf(Integer.valueOf(statsData.split(",")[7]))
+													        : matchStats.getAwayThirdPowerPlay().getOutBatsman() + "," + Integer.valueOf(statsData.split(",")[7]))
+													    : matchStats.getAwayThirdPowerPlay().getOutBatsman(),
+													    Integer.valueOf(statsData.split(",")[8]) > 0 ? (matchStats.getAwayThirdPowerPlay().getNotWicketCount().isEmpty()
+														        ? String.valueOf(Integer.valueOf(statsData.split(",")[8]))
+														        : matchStats.getAwayThirdPowerPlay().getNotWicketCount() + "," + Integer.valueOf(statsData.split(",")[8]))
+														    : matchStats.getAwayThirdPowerPlay().getNotWicketCount()));
+
+											 }
+										}
+								}
+						} 
+			    		
+			    		break;
+			    }
+			}
+	   }
+	   for (Event even : Event) {
+		    int Batter_id = even.getEventBattingCard().getPlayerId();
+		    boolean isRetired = even.getEventHowOut() != null && !even.getEventHowOut().isEmpty() && 
+                   (even.getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT) ||
+                    even.getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT) ||
+                    even.getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED));
+			
+		    // First PP
+		    updateWickets(matchStats.getHomeFirstPowerPlay(), Batter_id, isRetired);
+		    updateWickets(matchStats.getAwayFirstPowerPlay(), Batter_id, isRetired);
+
+		    // Second PP
+		    updateWickets(matchStats.getHomeSecondPowerPlay(), Batter_id, isRetired);
+		    updateWickets(matchStats.getAwaySecondPowerPlay(), Batter_id, isRetired);
+
+		    // Third PP
+		    updateWickets(matchStats.getHomeThirdPowerPlay(), Batter_id, isRetired);
+		    updateWickets(matchStats.getAwayThirdPowerPlay(), Batter_id, isRetired);
+		}
+		
+	 
+	return matchStats;
+	   
+   }
 }
