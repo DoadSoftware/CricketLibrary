@@ -22,7 +22,7 @@ public class Setup {
   private int wagonXOffSet;
 
   private int wagonYOffSet;
-  
+
   private String followOn;
 
   private int followOnThreshold;
@@ -39,7 +39,6 @@ public class Setup {
 
   private String matchType;
   
-  //private String readPhotoColumn;
   private String playerGender;
 
   private String tossResult;
@@ -521,18 +520,18 @@ public String toString() {
 			+ ", wagonYOffSet=" + wagonYOffSet + ", followOn=" + followOn + ", followOnThreshold=" + followOnThreshold
 			+ ", homeSubstitutesNumber=" + homeSubstitutesNumber + ", awaySubstitutesNumber=" + awaySubstitutesNumber
 			+ ", reviewsPerTeam=" + reviewsPerTeam + ", matchFileTimeStamp=" + matchFileTimeStamp + ", speedFilePath="
-			+ speedFilePath + ", matchType=" + matchType + ", playerGender=" + playerGender
-			+ ", tossResult=" + tossResult + ", tossWinningDecision=" + tossWinningDecision
-			+ ", tournament=" + tournament + ", matchIdent=" + matchIdent + ", tossWinningTeam=" + tossWinningTeam
-			+ ", numberOfPowerplays=" + numberOfPowerplays + ", maxOvers=" + maxOvers + ", reducedOvers=" + reducedOvers
-			+ ", homeTeamId=" + homeTeamId + ", awayTeamId=" + awayTeamId + ", groundId=" + groundId + ", seasonId="
-			+ seasonId + ", targetRuns=" + targetRuns + ", targetType=" + targetType + ", targetOvers=" + targetOvers
+			+ speedFilePath + ", matchType=" + matchType + ", playerGender=" + playerGender + ", tossResult="
+			+ tossResult + ", tossWinningDecision=" + tossWinningDecision + ", tournament=" + tournament
+			+ ", matchIdent=" + matchIdent + ", tossWinningTeam=" + tossWinningTeam + ", numberOfPowerplays="
+			+ numberOfPowerplays + ", maxOvers=" + maxOvers + ", reducedOvers=" + reducedOvers + ", homeTeamId="
+			+ homeTeamId + ", awayTeamId=" + awayTeamId + ", groundId=" + groundId + ", seasonId=" + seasonId
+			+ ", targetRuns=" + targetRuns + ", targetType=" + targetType + ", targetOvers=" + targetOvers
 			+ ", secondaryTargetRuns=" + secondaryTargetRuns + ", secondaryTargetOvers=" + secondaryTargetOvers
 			+ ", venueName=" + venueName + ", homeTeam=" + homeTeam + ", awayTeam=" + awayTeam + ", setupHomeTeam="
 			+ setupHomeTeam + ", setupAwayTeam=" + setupAwayTeam + ", homeSquad=" + homeSquad + ", homeSubstitutes="
 			+ homeSubstitutes + ", awaySquad=" + awaySquad + ", awaySubstitutes=" + awaySubstitutes
-			+ ", homeOtherSquad=" + homeOtherSquad + ", awayOtherSquad=" + awayOtherSquad + ", ground=" + ground
-			+ ", nameSuper=" + nameSuper + ", LastXball=" + LastXball + ", selected_inning=" + selected_inning
+			+ ", homeOtherSquad=" + homeOtherSquad + ", awayOtherSquad=" + awayOtherSquad + ", ground=" + ground 
+			+ ", nameSuper=" + nameSuper + ", LastXball=" + LastXball + ", selected_inning=" + selected_inning 
 			+ ", which_key_press=" + which_key_press + "]";
 }
 

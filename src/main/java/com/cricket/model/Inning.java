@@ -57,19 +57,19 @@ public class Inning {
 
   private String inningStatus;
 
-  private int firstPowerplayStartOver;
+  private String firstPowerplayStartOver;
 
-  private int firstPowerplayEndOver;
+  private String firstPowerplayEndOver;
 
-  private int secondPowerplayStartOver;
+  private String secondPowerplayStartOver;
 
-  private int secondPowerplayEndOver;
+  private String secondPowerplayEndOver;
 
-  private int thirdPowerplayStartOver;
+  private String thirdPowerplayStartOver;
 
-  private int thirdPowerplayEndOver;
+  private String thirdPowerplayEndOver;
 
-  private int oversRemaining;
+  private String newBallOver;
 
   private String specialRuns;
   
@@ -100,12 +100,15 @@ public class Inning {
   
 public Inning() {
 	super();
+	this.inningStats = new InningStats();
 }
 
-public Inning(int oversRemaining) {
-	super();
-	this.oversRemaining = oversRemaining;
-	this.inningStats = new InningStats();
+public String getNewBallOver() {
+	return newBallOver;
+}
+
+public void setNewBallOver(String newBallOver) {
+	this.newBallOver = newBallOver;
 }
 
 public String getSpecialRuns() {
@@ -156,14 +159,6 @@ public void setIsDeclared(String isDeclared) {
 	this.isDeclared = isDeclared;
 }
 
-public int getOversRemaining() {
-	return oversRemaining;
-}
-
-public void setOversRemaining(int oversRemaining) {
-	this.oversRemaining = oversRemaining;
-}
-
 public List<Spell> getSpells() {
 	return spells;
 }
@@ -204,22 +199,6 @@ public void setReview(List<Review> reviews) {
 	this.reviews = reviews;
 }
 
-public int getFirstPowerplayStartOver() {
-	return firstPowerplayStartOver;
-}
-
-public void setFirstPowerplayStartOver(int firstPowerplayStartOver) {
-	this.firstPowerplayStartOver = firstPowerplayStartOver;
-}
-
-public int getFirstPowerplayEndOver() {
-	return firstPowerplayEndOver;
-}
-
-public void setFirstPowerplayEndOver(int firstPowerplayEndOver) {
-	this.firstPowerplayEndOver = firstPowerplayEndOver;
-}
-
 public List<Partnership> getPartnerships() {
 	return partnerships;
 }
@@ -232,35 +211,51 @@ public void setReviews(List<Review> reviews) {
 	this.reviews = reviews;
 }
 
-public int getSecondPowerplayStartOver() {
+public String getFirstPowerplayStartOver() {
+	return firstPowerplayStartOver;
+}
+
+public void setFirstPowerplayStartOver(String firstPowerplayStartOver) {
+	this.firstPowerplayStartOver = firstPowerplayStartOver;
+}
+
+public String getFirstPowerplayEndOver() {
+	return firstPowerplayEndOver;
+}
+
+public void setFirstPowerplayEndOver(String firstPowerplayEndOver) {
+	this.firstPowerplayEndOver = firstPowerplayEndOver;
+}
+
+public String getSecondPowerplayStartOver() {
 	return secondPowerplayStartOver;
 }
 
-public void setSecondPowerplayStartOver(int secondPowerplayStartOver) {
+public void setSecondPowerplayStartOver(String secondPowerplayStartOver) {
 	this.secondPowerplayStartOver = secondPowerplayStartOver;
 }
 
-public int getSecondPowerplayEndOver() {
+public String getSecondPowerplayEndOver() {
 	return secondPowerplayEndOver;
 }
 
-public void setSecondPowerplayEndOver(int secondPowerplayEndOver) {
+public void setSecondPowerplayEndOver(String secondPowerplayEndOver) {
 	this.secondPowerplayEndOver = secondPowerplayEndOver;
 }
 
-public int getThirdPowerplayStartOver() {
+public String getThirdPowerplayStartOver() {
 	return thirdPowerplayStartOver;
 }
 
-public void setThirdPowerplayStartOver(int thirdPowerplayStartOver) {
+public void setThirdPowerplayStartOver(String thirdPowerplayStartOver) {
 	this.thirdPowerplayStartOver = thirdPowerplayStartOver;
 }
 
-public int getThirdPowerplayEndOver() {
+public String getThirdPowerplayEndOver() {
 	return thirdPowerplayEndOver;
 }
 
-public void setThirdPowerplayEndOver(int thirdPowerplayEndOver) {
+public void setThirdPowerplayEndOver(String thirdPowerplayEndOver) {
 	this.thirdPowerplayEndOver = thirdPowerplayEndOver;
 }
 
@@ -428,21 +423,22 @@ public Inning(int inningNumber, int totalRuns, int totalWickets, int totalFours,
 
 @Override
 public String toString() {
-	return "Inning [isDeclared=" + isDeclared + ", inningNumber=" + inningNumber + ", battingTeamId=" + battingTeamId
-			+ ", bowlingTeamId=" + bowlingTeamId + ", totalRuns=" + totalRuns + ", totalWickets=" + totalWickets
-			+ ", totalOvers=" + totalOvers + ", totalBalls=" + totalBalls + ", totalExtras=" + totalExtras
-			+ ", totalWides=" + totalWides + ", totalNoBalls=" + totalNoBalls + ", totalByes=" + totalByes
-			+ ", totalLegByes=" + totalLegByes + ", totalPenalties=" + totalPenalties + ", totalFours=" + totalFours
-			+ ", totalSixes=" + totalSixes + ", totalNines=" + totalNines + ", runRate=" + runRate
-			+ ", isCurrentInning=" + isCurrentInning + ", inningStatus=" + inningStatus + ", firstPowerplayStartOver="
+	return "Inning [startTime=" + startTime + ", endTime=" + endTime + ", duration=" + duration + ", isDeclared="
+			+ isDeclared + ", inningNumber=" + inningNumber + ", battingTeamId=" + battingTeamId + ", bowlingTeamId="
+			+ bowlingTeamId + ", totalRuns=" + totalRuns + ", totalWickets=" + totalWickets + ", totalOvers="
+			+ totalOvers + ", totalBalls=" + totalBalls + ", totalExtras=" + totalExtras + ", totalWides=" + totalWides
+			+ ", totalNoBalls=" + totalNoBalls + ", totalByes=" + totalByes + ", totalLegByes=" + totalLegByes
+			+ ", totalPenalties=" + totalPenalties + ", totalFours=" + totalFours + ", totalSixes=" + totalSixes
+			+ ", totalNines=" + totalNines + ", dots=" + dots + ", runRate=" + runRate + ", isCurrentInning="
+			+ isCurrentInning + ", inningStatus=" + inningStatus + ", firstPowerplayStartOver="
 			+ firstPowerplayStartOver + ", firstPowerplayEndOver=" + firstPowerplayEndOver
 			+ ", secondPowerplayStartOver=" + secondPowerplayStartOver + ", secondPowerplayEndOver="
 			+ secondPowerplayEndOver + ", thirdPowerplayStartOver=" + thirdPowerplayStartOver
-			+ ", thirdPowerplayEndOver=" + thirdPowerplayEndOver + ", oversRemaining=" + oversRemaining
-			+ ", batting_team=" + batting_team + ", bowling_team=" + bowling_team + ", battingCard=" + battingCard
-			+ ", partnerships=" + partnerships + ", bowlingCard=" + bowlingCard + ", fielders=" + fielders
-			+ ", reviews=" + reviews + ", fallsOfWickets=" + fallsOfWickets + ", spells=" + spells + ", stats=" + stats
-			+ "]";
+			+ ", thirdPowerplayEndOver=" + thirdPowerplayEndOver + ", newBallOver=" + newBallOver + ", specialRuns="
+			+ specialRuns + ", batting_team=" + batting_team + ", bowling_team=" + bowling_team + ", battingCard="
+			+ battingCard + ", partnerships=" + partnerships + ", bowlingCard=" + bowlingCard + ", fielders=" + fielders
+			+ ", reviews=" + reviews + ", fallsOfWickets=" + fallsOfWickets + ", spells=" + spells + ", inningStats="
+			+ inningStats + ", stats=" + stats + "]";
 }
 
 }

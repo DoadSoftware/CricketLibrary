@@ -14,8 +14,12 @@ public class MatchFinishTime
 	
 	private String endOfPlay;
 
+	private String max_overs;
+	
+	private String new_ball_over;
+
 	public MatchFinishTime(String startOfPlay, String startOfLunch, String endOfLunch, String startOfTea,
-			String endOfTea, String endOfPlay) {
+			String endOfTea, String endOfPlay, String max_overs, String new_ball_over) {
 		super();
 		this.startOfPlay = startOfPlay;
 		this.startOfLunch = startOfLunch;
@@ -23,10 +27,28 @@ public class MatchFinishTime
 		this.startOfTea = startOfTea;
 		this.endOfTea = endOfTea;
 		this.endOfPlay = endOfPlay;
+		this.max_overs = max_overs;
+		this.new_ball_over = new_ball_over;
 	}
 
 	public MatchFinishTime() {
 		super();
+	}
+
+	public String getNew_ball_over() {
+		return new_ball_over;
+	}
+
+	public void setNew_ball_over(String new_ball_over) {
+		this.new_ball_over = new_ball_over;
+	}
+
+	public String getMax_overs() {
+		return max_overs;
+	}
+
+	public void setMax_overs(String max_overs) {
+		this.max_overs = max_overs;
 	}
 
 	public String getStartOfPlay() {
@@ -79,9 +101,8 @@ public class MatchFinishTime
 
 	@Override
 	public String toString() {
-		return "MatchFinishTime [startOfPlay=" + startOfPlay + ", startOfLunch=" + startOfLunch + ", endOfLunch="
-				+ endOfLunch + ", startOfTea=" + startOfTea + ", endOfTea=" + endOfTea + ", endOfPlay=" + endOfPlay
-				+ "]";
+		return "MatchFinishTime [new_ball_over=" + new_ball_over + ", max_overs=" + max_overs + ", startOfPlay="
+				+ startOfPlay + ", startOfLunch=" + startOfLunch + ", endOfLunch=" + endOfLunch + ", startOfTea="
+				+ startOfTea + ", endOfTea=" + endOfTea + ", endOfPlay=" + endOfPlay + "]";
 	}
-	
 }
