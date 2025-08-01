@@ -15,6 +15,15 @@ public class Commentator {
 	
   @Column(name = "CommentatorName")
   private String commentatorName;
+  
+  @Column(name = "FirstName")
+  private String firstName;
+  
+  @Column(name = "LastName")
+  private String lastName;
+  
+  @Column(name = "PhotoName")
+  private String photoName;
 
   @Column(name = "UseThis")
   private String useThis;
@@ -41,6 +50,30 @@ public String getUseThis() {
 
 public void setUseThis(String useThis) {
 	this.useThis = useThis;
+}
+
+public String getFirstName() {
+	return firstName;
+}
+
+public void setFirstName(String firstName) {
+	this.firstName = firstName;
+}
+
+public String getLastName() {
+	return lastName;
+}
+
+public void setLastName(String lastName) {
+	this.lastName = lastName;
+}
+
+public String getPhotoName() {
+	return photoName;
+}
+
+public void setPhotoName(String photoName) {
+	this.photoName = photoName;
 }
   
 }

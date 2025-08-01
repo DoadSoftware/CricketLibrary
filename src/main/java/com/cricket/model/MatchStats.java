@@ -415,6 +415,7 @@ public String toString() {
 		private int over;
 		private String statsType,name,BowlerName,outnotOut;
 		private String thisOverTxt,outBatsman,notWicketCount;
+		private int consecutiveW=0;
 		private int lastBowlerId;
 		private int replacementBowlerId;
 		
@@ -436,6 +437,12 @@ public String toString() {
 			this.notWicketCount = "";
 		}
 		
+		public int getConsecutiveW() {
+			return consecutiveW;
+		}
+		public void setConsecutiveW(int consecutiveW) {
+			this.consecutiveW = consecutiveW;
+		}
 		public String getNotWicketCount() {
 			return notWicketCount;
 		}
@@ -463,6 +470,7 @@ public String toString() {
 			super();
 			this.id = id;
 			this.statsType = statsType;
+			this.thisOverTxt = "";
 		}
 		
 		public VariousStats(int over, String thisOverTxt ,int totalRuns, int totalWickets) {

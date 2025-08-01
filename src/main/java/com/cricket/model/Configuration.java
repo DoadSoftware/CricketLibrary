@@ -69,6 +69,9 @@ public class Configuration {
 	@XmlElement(name="tertiaryPortNumber")
 	private int tertiaryPortNumber;
 	
+	@XmlElement(name="select_Client")
+	private int select_Client;
+	
 	@XmlElement(name="tertiaryScene")
 	private String tertiaryScene;
 
@@ -465,6 +468,14 @@ public class Configuration {
 		this.category = category;
 	}
 
+	public int getSelect_Client() {
+		return select_Client;
+	}
+
+	public void setSelect_Client(int select_Client) {
+		this.select_Client = select_Client;
+	}
+
 	@Override
 	public String toString() {
 		return "Configuration [primaryVariousOptions=" + primaryVariousOptions + ", filename=" + filename
@@ -475,10 +486,10 @@ public class Configuration {
 				+ ", primaryScene=" + primaryScene + ", primaryLanguage=" + primaryLanguage + ", secondaryIpAddress="
 				+ secondaryIpAddress + ", secondaryPortNumber=" + secondaryPortNumber + ", secondaryScene="
 				+ secondaryScene + ", secondaryLanguage=" + secondaryLanguage + ", tertiaryIpAddress="
-				+ tertiaryIpAddress + ", tertiaryPortNumber=" + tertiaryPortNumber + ", tertiaryScene=" + tertiaryScene
-				+ ", tertiaryLanguage=" + tertiaryLanguage + ", speedUnit=" + speedUnit + ", audio=" + audio
-				+ ", qudich=" + qudich + ", wagon=" + wagon + ", preview=" + preview + ", whichInfobar=" + whichInfobar
-				+ "]";
+				+ tertiaryIpAddress + ", tertiaryPortNumber=" + tertiaryPortNumber + ", select_Client=" + select_Client
+				+ ", tertiaryScene=" + tertiaryScene + ", tertiaryLanguage=" + tertiaryLanguage + ", speedUnit="
+				+ speedUnit + ", audio=" + audio + ", qudich=" + qudich + ", category=" + category + ", wagon=" + wagon
+				+ ", preview=" + preview + ", whichInfobar=" + whichInfobar + "]";
 	}
 
 }
