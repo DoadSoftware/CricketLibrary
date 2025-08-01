@@ -111,12 +111,6 @@ public void setNewBallOver(String newBallOver) {
 	this.newBallOver = newBallOver;
 }
 
-//public Inning(int oversRemaining) {
-//	super();
-//	this.oversRemaining = oversRemaining;
-//	this.inningStats = new InningStats();
-//}
-
 public String getSpecialRuns() {
 	return specialRuns;
 }
