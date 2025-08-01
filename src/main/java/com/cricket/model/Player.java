@@ -65,6 +65,15 @@ public class Player implements Comparable<Player>
   
   @Column(name = "TeluguSurName")
   private String telugu_surname;
+  
+  @Column(name = "HindiShortName")
+  private String hindiTickerName;
+  
+  @Column(name = "TamilShortName")
+  private String tamilTickerName;
+  
+  @Column(name = "TeluguShortName")
+  private String teluguTickerName;
 
   @Column(name = "ROLE")
   private String role;
@@ -624,6 +633,30 @@ public String getCategory() {
 
 public void setCategory(String category) {
 	this.category = category;
+}
+
+public String getHindiTickerName() {
+	return hindiTickerName;
+}
+
+public void setHindiTickerName(String hindiTickerName) {
+	this.hindiTickerName = hindiTickerName;
+}
+
+public String getTamilTickerName() {
+	return tamilTickerName;
+}
+
+public void setTamilTickerName(String tamilTickerName) {
+	this.tamilTickerName = tamilTickerName;
+}
+
+public String getTeluguTickerName() {
+	return teluguTickerName;
+}
+
+public void setTeluguTickerName(String teluguTickerName) {
+	this.teluguTickerName = teluguTickerName;
 }
 
 @Override

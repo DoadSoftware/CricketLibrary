@@ -99,6 +99,12 @@ public class Configuration {
 	@XmlElement(name="whichInfobar")
 	private String whichInfobar;
 	
+	@XmlElement(name="showSpeed")
+	private String showSpeed;
+	
+	@XmlElement(name="showReview")
+	private String showReview;
+	
 	public Configuration() {
 		super();
 	}
@@ -144,7 +150,22 @@ public class Configuration {
 		this.primaryIpAddress = primaryIpAddress;
 		this.primaryPortNumber = primaryPortNumber;
 		this.primaryLanguage = primaryLanguage;
-		
+	}
+	
+	public Configuration(String filename, String broadcaster, String speedUnit,String qudich,String wagon,String audio, String primaryIpAddress, 
+			int primaryPortNumber, String primaryLanguage, String showSpeed, String showReview) {
+		super();
+		this.filename = filename;
+		this.broadcaster = broadcaster;
+		this.speedUnit = speedUnit;
+		this.audio = audio;
+		this.qudich = qudich;
+		this.wagon = wagon;
+		this.primaryIpAddress = primaryIpAddress;
+		this.primaryPortNumber = primaryPortNumber;
+		this.primaryLanguage = primaryLanguage;
+		this.showSpeed = showSpeed;
+		this.showReview = showReview;
 	}
 
 	public Configuration(String filename, String broadcaster,String secondaryBroadcaster,String qtIpAddress, 
@@ -208,6 +229,7 @@ public class Configuration {
 			this.secondaryIpAddress = secondaryIpAddress;
 			this.secondaryPortNumber = secondaryPortNumber;
 	}
+	
 	public Configuration(String filename, String broadcaster, String secondaryBroadcaster, String whichScene,
 			String qtIpAddress, int qtPortNumber, String qtScene, String qtLanguage, String primaryIpAddress,
 			int primaryPortNumber, String primaryScene, String primaryLanguage, String secondaryIpAddress,
@@ -476,6 +498,22 @@ public class Configuration {
 		this.select_Client = select_Client;
 	}
 
+	public String getShowSpeed() {
+		return showSpeed;
+	}
+
+	public void setShowSpeed(String showSpeed) {
+		this.showSpeed = showSpeed;
+	}
+
+	public String getShowReview() {
+		return showReview;
+	}
+
+	public void setShowReview(String showReview) {
+		this.showReview = showReview;
+	}
+
 	@Override
 	public String toString() {
 		return "Configuration [primaryVariousOptions=" + primaryVariousOptions + ", filename=" + filename
@@ -489,7 +527,8 @@ public class Configuration {
 				+ tertiaryIpAddress + ", tertiaryPortNumber=" + tertiaryPortNumber + ", select_Client=" + select_Client
 				+ ", tertiaryScene=" + tertiaryScene + ", tertiaryLanguage=" + tertiaryLanguage + ", speedUnit="
 				+ speedUnit + ", audio=" + audio + ", qudich=" + qudich + ", category=" + category + ", wagon=" + wagon
-				+ ", preview=" + preview + ", whichInfobar=" + whichInfobar + "]";
+				+ ", preview=" + preview + ", whichInfobar=" + whichInfobar + ", showSpeed=" + showSpeed
+				+ ", showReview=" + showReview + "]";
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.cricket.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -97,6 +98,8 @@ public class Setup {
 
   private List<Player> awayOtherSquad;
 
+  private List<OverRemainingNewBall> overRemainingNewBall;
+  
   @JsonIgnore
   private Ground ground;
   
@@ -112,6 +115,21 @@ public class Setup {
   @JsonIgnore
   private int which_key_press;
   
+  public void setDefaultOverRemainingNewBallData() {
+	  this.overRemainingNewBall = new ArrayList<OverRemainingNewBall>();
+	  for(int iDay = 1; iDay <= 5; iDay++) {
+		  this.overRemainingNewBall.add(new OverRemainingNewBall(90, "90.0"));
+	  }
+  }
+  
+public List<OverRemainingNewBall> getOverRemainingNewBall() {
+	return overRemainingNewBall;
+}
+
+public void setOverRemainingNewBall(List<OverRemainingNewBall> overRemainingNewBall) {
+	this.overRemainingNewBall = overRemainingNewBall;
+}
+
 public String getPlayerGender() {
 	return playerGender;
 }
@@ -530,9 +548,9 @@ public String toString() {
 			+ ", venueName=" + venueName + ", homeTeam=" + homeTeam + ", awayTeam=" + awayTeam + ", setupHomeTeam="
 			+ setupHomeTeam + ", setupAwayTeam=" + setupAwayTeam + ", homeSquad=" + homeSquad + ", homeSubstitutes="
 			+ homeSubstitutes + ", awaySquad=" + awaySquad + ", awaySubstitutes=" + awaySubstitutes
-			+ ", homeOtherSquad=" + homeOtherSquad + ", awayOtherSquad=" + awayOtherSquad + ", ground=" + ground 
-			+ ", nameSuper=" + nameSuper + ", LastXball=" + LastXball + ", selected_inning=" + selected_inning 
-			+ ", which_key_press=" + which_key_press + "]";
+			+ ", homeOtherSquad=" + homeOtherSquad + ", awayOtherSquad=" + awayOtherSquad + ", overRemainingNewBall="
+			+ overRemainingNewBall + ", ground=" + ground + ", nameSuper=" + nameSuper + ", LastXball=" + LastXball
+			+ ", selected_inning=" + selected_inning + ", which_key_press=" + which_key_press + "]";
 }
 
 }
