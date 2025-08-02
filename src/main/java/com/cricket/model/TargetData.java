@@ -2,14 +2,15 @@ package com.cricket.model;
 
 public class TargetData {
 
-	int targetOvers;
+	String targetOvers;
 	int targetRuns;
 	int remaningRuns;
 	int remaningBall;
-	public int getTargetOvers() {
+	
+	public String getTargetOvers() {
 		return targetOvers;
 	}
-	public void setTargetOvers(int targetOvers) {
+	public void setTargetOvers(String targetOvers) {
 		this.targetOvers = targetOvers;
 	}
 	public int getTargetRuns() {

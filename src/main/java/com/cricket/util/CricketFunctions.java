@@ -94,6 +94,7 @@ import com.cricket.model.OverByOverData;
 import com.cricket.model.POTT;
 import com.cricket.model.Partnership;
 import com.cricket.model.Player;
+import com.cricket.model.PowerPlays;
 import com.cricket.model.Review;
 import com.cricket.model.Season;
 import com.cricket.model.Setup;
@@ -16209,19 +16210,33 @@ public class CricketFunctions {
 	    }
 	
 	    if (matchAllData.getSetup().getTargetOvers() != null && Integer.valueOf(matchAllData.getSetup().getTargetOvers()) > 0) {
-	    	targetData.setTargetOvers(Integer.valueOf(matchAllData.getSetup().getTargetOvers()));
+	    	targetData.setTargetOvers(matchAllData.getSetup().getTargetOvers());
 	    } else {
-	    	targetData.setTargetOvers(matchAllData.getSetup().getMaxOvers());
+	    	targetData.setTargetOvers(String.valueOf(matchAllData.getSetup().getMaxOvers()));
 	    }
 	
 	    if (matchAllData.getSetup().getMaxOvers() > 0) {
-	    	targetData.setRemaningBall((targetData.getTargetOvers() * 6) - (matchAllData.getMatch().getInning().get(1).getTotalOvers() * 6)
-	    		- matchAllData.getMatch().getInning().get(1).getTotalBalls());
+	    	if(targetData.getTargetOvers().contains("\\.")) {
+	    		targetData.setRemaningBall((Integer.valueOf(targetData.getTargetOvers().split("\\.")[0]) * 6 + 
+	    			Integer.valueOf(targetData.getTargetOvers().split("\\.")[1])) - (matchAllData.getMatch().getInning().get(1).getTotalOvers() * 6)
+			    		- matchAllData.getMatch().getInning().get(1).getTotalBalls());
+	    	} else {
+		    	targetData.setRemaningBall((Integer.valueOf(targetData.getTargetOvers()) * 6) - (matchAllData.getMatch().getInning().get(1).getTotalOvers() * 6)
+		    		- matchAllData.getMatch().getInning().get(1).getTotalBalls());
+	    	}
 	    	targetData.setRemaningRuns(targetData.getTargetRuns() - matchAllData.getMatch().getInning().get(1).getTotalRuns());
 	    } else {
 	    	if (matchAllData.getSetup().getTargetOvers() != null && Integer.valueOf(matchAllData.getSetup().getTargetOvers()) > 0) {
-		    	targetData.setRemaningBall((targetData.getTargetOvers() * 6) - (matchAllData.getMatch().getInning().get(3).getTotalOvers() * 6)
-		    		- matchAllData.getMatch().getInning().get(3).getTotalBalls());
+		    	if(targetData.getTargetOvers().contains("\\.")) {
+		    		targetData.setRemaningBall((Integer.valueOf(targetData.getTargetOvers().split("\\.")[0]) * 6 + 
+		    			Integer.valueOf(targetData.getTargetOvers().split("\\.")[1])) - (matchAllData.getMatch().getInning().get(3).getTotalOvers() * 6)
+				    		- matchAllData.getMatch().getInning().get(3).getTotalBalls());
+		    	} else {
+		    		targetData.setRemaningBall((Integer.valueOf(targetData.getTargetOvers()) * 6) - (matchAllData.getMatch().getInning().get(3).getTotalOvers() * 6)
+			    		- matchAllData.getMatch().getInning().get(3).getTotalBalls());
+		    	}
+	    	} else {
+	    		targetData.setRemaningBall(0);
 	    	}
 	    	targetData.setRemaningRuns(targetData.getTargetRuns() - matchAllData.getMatch().getInning().get(3).getTotalRuns());
 	    }
