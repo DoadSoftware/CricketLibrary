@@ -7627,7 +7627,7 @@ public class CricketFunctions {
 							if(ballsRemaining) {
 								TargetData targetData = GetTargetData(match);
 								if(targetData.getRemaningBall() > 0) {
-									if(targetData.getRemaningBall() > 30) {
+									if(targetData.getRemaningBall() > 120) {
 										resultToShow = resultToShow + " with " + CricketFunctions.OverBalls(0, targetData.getRemaningBall()) 
 											+ " overs remaining";
 									} else {
@@ -7638,9 +7638,6 @@ public class CricketFunctions {
 									resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
 									+ " wicket" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
 								}
-							}else {
-								resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
-								+ " wicket" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
 							}
 							break;
 						}
