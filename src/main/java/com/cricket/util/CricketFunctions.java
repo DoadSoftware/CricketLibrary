@@ -8086,13 +8086,26 @@ public class CricketFunctions {
 				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
 				break;
 			case CricketUtil.STUMPED:
+//				if(bc.getHowOutFielderId() < 0) {
+//					bc.setHowOutText("st substitute b " + bc.getHowOutBowler().getTicker_name());
+//					bc.setHowOutPartOne("st substitute");
+//				} else {
+//					bc.setHowOutText("st " + bc.getHowOutFielder().getTicker_name() + " b " + bc.getHowOutBowler().getTicker_name());
+//					bc.setHowOutPartOne("st " + bc.getHowOutFielder().getTicker_name());
+//				}
+//				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
 				if(bc.getHowOutFielderId() < 0) {
-					bc.setHowOutText("st substitute b " + bc.getHowOutBowler().getTicker_name());
+					bc.setHowOutText("st substitute");
 					bc.setHowOutPartOne("st substitute");
 				} else {
-					bc.setHowOutText("st " + bc.getHowOutFielder().getTicker_name() + " b " + bc.getHowOutBowler().getTicker_name());
+					bc.setHowOutText("st " + bc.getHowOutFielder().getTicker_name());
 					bc.setHowOutPartOne("st " + bc.getHowOutFielder().getTicker_name());
+					if(bc.getWasHowOutFielderSubstitute() != null && bc.getWasHowOutFielderSubstitute().equalsIgnoreCase(CricketUtil.YES)) {
+						bc.setHowOutText(bc.getHowOutText() + " (SUB)");
+						bc.setHowOutPartOne(bc.getHowOutPartOne() + " (SUB)");
+					}
 				}
+				bc.setHowOutText(bc.getHowOutText() + " b " + bc.getHowOutBowler().getTicker_name());
 				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
 				break;
 			case CricketUtil.LBW:
