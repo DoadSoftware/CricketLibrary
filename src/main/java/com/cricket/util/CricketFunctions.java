@@ -177,13 +177,30 @@ public class CricketFunctions {
 				ballCount = getBallCountStartAndEndRange(match, inn);
 				
 				if(match.getSetup().getNumberOfPowerplays() > 0) {
-					if(BallsBowledInInnings >= ballCount.get(0) && BallsBowledInInnings <= ballCount.get(1)) {
-				    	return_pp_txt = CricketUtil.ONE;
-				    }else if(BallsBowledInInnings >= ballCount.get(2) && BallsBowledInInnings <= ballCount.get(3)) {
-				    	return_pp_txt = CricketUtil.TWO;
-				    }else if(BallsBowledInInnings >= ballCount.get(4) && BallsBowledInInnings <= ballCount.get(5)) {
-				    	return_pp_txt = CricketUtil.THREE;
-				    }
+					switch (match.getSetup().getNumberOfPowerplays()) {
+					case 1:
+						if(BallsBowledInInnings >= ballCount.get(0) && BallsBowledInInnings <= ballCount.get(1)) {
+					    	return_pp_txt = CricketUtil.ONE;
+					    }
+						break;
+					case 2:
+						if(BallsBowledInInnings >= ballCount.get(0) && BallsBowledInInnings <= ballCount.get(1)) {
+					    	return_pp_txt = CricketUtil.ONE;
+					    }else if(BallsBowledInInnings >= ballCount.get(2) && BallsBowledInInnings <= ballCount.get(3)) {
+					    	return_pp_txt = CricketUtil.TWO;
+					    }
+						break;	
+
+					default:
+						if(BallsBowledInInnings >= ballCount.get(0) && BallsBowledInInnings <= ballCount.get(1)) {
+					    	return_pp_txt = CricketUtil.ONE;
+					    }else if(BallsBowledInInnings >= ballCount.get(2) && BallsBowledInInnings <= ballCount.get(3)) {
+					    	return_pp_txt = CricketUtil.TWO;
+					    }else if(BallsBowledInInnings >= ballCount.get(4) && BallsBowledInInnings <= ballCount.get(5)) {
+					    	return_pp_txt = CricketUtil.THREE;
+					    }
+						break;
+					}
 				}
 				
 			    if(!return_pp_txt.trim().isEmpty()) {
@@ -8178,7 +8195,7 @@ public class CricketFunctions {
 							if(bc.getHowOutFielderId() <= 0) {
 								return "c|" +  "substitute|b|" + bc.getHowOutBowler().getTicker_name();
 							} else {
-								return "c|" +  "sub (" + bc.getHowOutFielder().getTicker_name()+")|b|" + bc.getHowOutBowler().getTicker_name();
+								return "c|" +  "(sub - " + bc.getHowOutFielder().getTicker_name()+")|b|" + bc.getHowOutBowler().getTicker_name();
 							}
 						} else {
 							if(bc.getHowOutFielderId() <= 0) {
@@ -8192,7 +8209,7 @@ public class CricketFunctions {
 							if(bc.getHowOutFielderId() <= 0) {
 								return "run out|(substitute)| | ";
 							} else {
-								return "run out|" + "sub (" + bc.getHowOutFielder().getTicker_name() + ")| | ";
+								return "run out|" + "(sub - " + bc.getHowOutFielder().getTicker_name() + ")| | ";
 							}
 						} else {
 							if(bc.getHowOutFielderId() <= 0) {
