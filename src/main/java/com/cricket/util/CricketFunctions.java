@@ -1615,10 +1615,22 @@ public class CricketFunctions {
 	public static String checkBatAndBallImpactInOutPlayer(List<Event> events, int player_id) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
-				if((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_IMPACT) && events.get(i).getEventBatterNo() == player_id)) {
-					return "IN";
-				}else if((player_id == events.get(i).getEventOtherBatterNo() && events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_IMPACT))) {
-					return "OUT";
+				if((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_IMPACT) && 
+						events.get(i).getEventExtra().equalsIgnoreCase("impact") && 
+						events.get(i).getEventBatterNo() == player_id)) {
+					return "IMP_IN";
+				}else if((player_id == events.get(i).getEventOtherBatterNo() && 
+						events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_IMPACT) && 
+						events.get(i).getEventExtra().equalsIgnoreCase("impact"))) {
+					return "IMP_OUT";
+				}else if((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_IMPACT) && 
+						events.get(i).getEventExtra().equalsIgnoreCase("concussed") && 
+						events.get(i).getEventBatterNo() == player_id)) {
+					return "CON_IN";
+				}else if((player_id == events.get(i).getEventOtherBatterNo() && 
+						events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_IMPACT) && 
+						events.get(i).getEventExtra().equalsIgnoreCase("concussed"))) {
+					return "CON_OUT";
 				}
 			}
 		}
