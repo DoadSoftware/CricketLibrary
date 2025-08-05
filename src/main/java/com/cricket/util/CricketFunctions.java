@@ -179,7 +179,7 @@ public class CricketFunctions {
 				if(match.getSetup().getNumberOfPowerplays() > 0) {
 					switch (match.getSetup().getNumberOfPowerplays()) {
 					case 1:
-						if(BallsBowledInInnings >= ballCount.get(0) && BallsBowledInInnings <= ballCount.get(1)) {
+						if(BallsBowledInInnings >= ballCount.get(0) && BallsBowledInInnings < ballCount.get(1)) {
 					    	return_pp_txt = CricketUtil.ONE;
 					    }
 						break;
