@@ -1637,6 +1637,26 @@ public class CricketFunctions {
 		return "";
 	}
 	
+	public static String checkBatAndBallImpactInOutPlayer(MatchAllData matchalldata, int player_id) {
+		
+		for(Inning inn : matchalldata.getMatch().getInning()) {
+			if(inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES)) {
+				for(BattingCard bc : inn.getBattingCard()) {
+					if(bc.getHowOut() != null && !bc.getHowOut().isEmpty()) {
+						if(bc.getHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED)) {
+							if(player_id == bc.getPlayerId()) {
+								return "CON_OUT";
+							}else if(player_id == bc.getConcussionPlayerId()) {
+								return "CON_IN";
+							}
+						}
+					}
+				}
+			}
+		}
+		return "";
+	}
+	
 	public static String getListOfImpact(List<Event> events,int whichInning) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
