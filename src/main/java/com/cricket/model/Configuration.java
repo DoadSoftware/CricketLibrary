@@ -113,9 +113,19 @@ public class Configuration {
 		super();
 		this.broadcaster = broadcaster;
 	}
-	
-	
-	
+
+	public Configuration(String filename, String broadcaster, String primaryIpAddress,
+			int primaryPortNumber, String primaryScene, String primaryLanguage, String preview) {
+		super();
+		this.filename = filename;
+		this.broadcaster = broadcaster;
+		this.primaryIpAddress = primaryIpAddress;
+		this.primaryPortNumber = primaryPortNumber;
+		this.primaryScene = primaryScene;
+		this.primaryLanguage = primaryLanguage;
+		this.preview = preview;
+	}
+
 	public Configuration(String filename, String broadcaster, String whichScene,
 			String primaryIpAddress, int primaryPortNumber, String primaryScene, String primaryLanguage,
 			String secondaryIpAddress, int secondaryPortNumber, String secondaryScene, String secondaryLanguage,

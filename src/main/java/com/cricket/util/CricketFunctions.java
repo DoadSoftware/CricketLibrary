@@ -16366,15 +16366,14 @@ public class CricketFunctions {
 	        	targetData.setTargetRuns(GetTeamRunsAhead(1, matchAllData) + 1);
 	        }
 	    }
-	    if (matchAllData.getSetup().getTargetOvers() != null && !matchAllData.getSetup().getTargetOvers().isEmpty() 
-	    		&& Integer.valueOf(matchAllData.getSetup().getTargetOvers()) > 0) {
+	    if (matchAllData.getSetup().getTargetOvers() != null && !matchAllData.getSetup().getTargetOvers().isEmpty()) {
 	    	targetData.setTargetOvers(matchAllData.getSetup().getTargetOvers());
 	    } else {
 	    	targetData.setTargetOvers(String.valueOf(matchAllData.getSetup().getMaxOvers()));
 	    }
 	
 	    if (matchAllData.getSetup().getMaxOvers() > 0) {
-	    	if(targetData.getTargetOvers().contains("\\.")) {
+	    	if(targetData.getTargetOvers().contains(".")) {
 	    		targetData.setRemaningBall((Integer.valueOf(targetData.getTargetOvers().split("\\.")[0]) * 6 + 
 	    			Integer.valueOf(targetData.getTargetOvers().split("\\.")[1])) - (matchAllData.getMatch().getInning().get(1).getTotalOvers() * 6)
 			    		- matchAllData.getMatch().getInning().get(1).getTotalBalls());
@@ -16385,7 +16384,7 @@ public class CricketFunctions {
 	    	targetData.setRemaningRuns(targetData.getTargetRuns() - matchAllData.getMatch().getInning().get(1).getTotalRuns());
 	    } else {
 	    	if (matchAllData.getSetup().getTargetOvers() != null && Integer.valueOf(matchAllData.getSetup().getTargetOvers()) > 0) {
-		    	if(targetData.getTargetOvers().contains("\\.")) {
+		    	if(targetData.getTargetOvers().contains(".")) {
 		    		targetData.setRemaningBall((Integer.valueOf(targetData.getTargetOvers().split("\\.")[0]) * 6 + 
 		    			Integer.valueOf(targetData.getTargetOvers().split("\\.")[1])) - (matchAllData.getMatch().getInning().get(3).getTotalOvers() * 6)
 				    		- matchAllData.getMatch().getInning().get(3).getTotalBalls());
