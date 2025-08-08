@@ -11971,7 +11971,7 @@ public class CricketFunctions {
 	public static String GenerateMatchSummaryStatus(int whichInning, MatchAllData match, String teamNameType, 
 		String SplitSummaryText, String broadcaster, boolean ballsRemaining) 
 	{
-		String matchSummaryStatus = GenerateMatchResult(match, teamNameType, broadcaster, SplitSummaryText, true);
+		String matchSummaryStatus = GenerateMatchResult(match, teamNameType, broadcaster, SplitSummaryText, ballsRemaining);
 		
 	    if(matchSummaryStatus.trim().isEmpty()) {
 	    	
