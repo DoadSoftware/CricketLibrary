@@ -1631,9 +1631,20 @@ public class CricketFunctions {
 						events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_IMPACT) && 
 						events.get(i).getEventExtra().equalsIgnoreCase("concussed"))) {
 					return "CON_OUT";
+				}else if(player_id == events.get(i).getEventConcussionReplacePlayerId() &&
+						events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_OVERWRITE_BATSMAN_HOWOUT) &&
+						events.get(i).getEventHowOut().equalsIgnoreCase("CONCUSSED")) {
+					return "CON_IN";
+				}else if(events.get(i).getEventBattingCard() != null && player_id == events.get(i).getEventBattingCard().getPlayerId() &&
+						events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_OVERWRITE_BATSMAN_HOWOUT) &&
+						events.get(i).getEventHowOut().equalsIgnoreCase("CONCUSSED")) {
+					return "CON_OUT";
 				}
 			}
 		}
+		
+		
+		
 		return "";
 	}
 	
@@ -11957,7 +11968,7 @@ public class CricketFunctions {
 	public static String GenerateMatchSummaryStatus(int whichInning, MatchAllData match, String teamNameType, 
 		String SplitSummaryText, String broadcaster, boolean ballsRemaining) 
 	{
-		String matchSummaryStatus = GenerateMatchResult(match, teamNameType, broadcaster, SplitSummaryText, true);
+		String matchSummaryStatus = GenerateMatchResult(match, teamNameType, broadcaster, SplitSummaryText, ballsRemaining);
 		
 	    if(matchSummaryStatus.trim().isEmpty()) {
 	    	
@@ -12091,10 +12102,9 @@ public class CricketFunctions {
 						}
 				    }
 				    else if (targetData.getRemaningRuns() == 1 && (targetData.getRemaningBall() <= 0 
-				    	|| CricketFunctions.getWicketsLeft(match,whichInning) <= 0)) 
-				    {
+				    	|| CricketFunctions.getWicketsLeft(match,whichInning) <= 0)) {
 				    	switch (broadcaster) {
-						case "ICC-U19-2023": case "T20_MUMBAI":
+						case "ICC-U19-2023": case "T20_MUMBAI": case "NPL":
 							if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
 								if(SplitSummaryText.isEmpty()) {
 							    	matchSummaryStatus = "Super Over tied - another super over to follow";
@@ -12951,12 +12961,12 @@ public class CricketFunctions {
 				
 				if(runs < 0)
                 {
-                    ahead_behind = team + " are " + (Math.abs(runs)) + " runs behind";
+                    ahead_behind = team + " are " + (Math.abs(runs)) + " run" + Plural(runs) + " behind";
                 }
 
                 if (runs > 0)
                 {
-                    ahead_behind = team + " are " + runs + " runs ahead";
+                    ahead_behind = team + " are " + runs + " run" + Plural(runs) + " ahead";
                 }
                 
                 if (runs == 0)
@@ -16472,7 +16482,7 @@ public class CricketFunctions {
 	    } else {
 	    	targetData.setTargetOvers(String.valueOf(matchAllData.getSetup().getMaxOvers()));
 	    }
-	
+	    
 	    if (matchAllData.getSetup().getMaxOvers() > 0) {
 	    	if(targetData.getTargetOvers().contains(".")) {
 	    		targetData.setRemaningBall((Integer.valueOf(targetData.getTargetOvers().split("\\.")[0]) * 6 + 

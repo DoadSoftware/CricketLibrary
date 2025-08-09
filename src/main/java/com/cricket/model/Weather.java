@@ -30,6 +30,9 @@ public class Weather {
   
   @Column(name = "WindSpeed")
   private String windSpeed;
+  
+  @Column(name = "IconType")
+  private String iconType;
 
 public int getWeatherId() {
 	return weatherId;
@@ -85,6 +88,14 @@ public String getWindSpeed() {
 
 public void setWindSpeed(String windSpeed) {
 	this.windSpeed = windSpeed;
+}
+
+public String getIconType() {
+	return iconType;
+}
+
+public void setIconType(String iconType) {
+	this.iconType = iconType;
 }
 
 
