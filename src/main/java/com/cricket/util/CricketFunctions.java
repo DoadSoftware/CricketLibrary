@@ -3872,7 +3872,7 @@ public class CricketFunctions {
 
 		ForeignLanguageData foreignLanguageData = new ForeignLanguageData();
 
-		foreignLanguageData.setEnglishText(englishTxt); // win by 23 runs 
+		foreignLanguageData.setEnglishText(englishTxt);
 		foreignLanguageData.setHindiText(hindiTxt);
 		foreignLanguageData.setTamilText(tamilTxt);
 		foreignLanguageData.setTeluguText(teluguTxt);
@@ -3882,7 +3882,7 @@ public class CricketFunctions {
 			if(ForeignLanguageArrayIndex == 1) {
 				foreignLanguageDataList = new ArrayList<ForeignLanguageData>();
 			}
-        	foreignLanguageDataList.add(ForeignLanguageArrayIndex-1,foreignLanguageData); // India, win by 23 runs
+        	foreignLanguageDataList.add(ForeignLanguageArrayIndex-1,foreignLanguageData); 
 
 		} else {
 			
@@ -7881,9 +7881,6 @@ public class CricketFunctions {
 										resultToShow = resultToShow + " with " + targetData.getRemaningBall() 
 											+ " ball" + CricketFunctions.Plural(targetData.getRemaningBall()) + " remaining";
 									}
-								}else {
-									resultToShow = resultToShow + " win by " + Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]) 
-									+ " wicket" + Plural(Integer.valueOf(match.getMatch().getMatchResult().split(",")[1]));
 								}
 							}
 							break;
