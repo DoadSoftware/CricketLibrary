@@ -1,6 +1,7 @@
 package com.cricket.model;
 
-public class DuckWorthLewis {
+public class DuckWorthLewis 
+{
 	private String over_left;
 	private int balls_left;
 	private String wkts_down;

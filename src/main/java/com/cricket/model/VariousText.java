@@ -3,10 +3,14 @@ package com.cricket.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.Column;
 
 @Entity
 @Table(name = "VariousTexts")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class VariousText {
 
   @Id

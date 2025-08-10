@@ -7768,7 +7768,8 @@ public class CricketFunctions {
 //		
 //	}
 	
-	public static String GenerateMatchResult(MatchAllData match, String teamNameType, String broadcaster, String splitResultTxt, boolean ballsRemaining)
+	public static String GenerateMatchResult(MatchAllData match, String teamNameType, String broadcaster, 
+		String splitResultTxt, boolean ballsRemaining)
 	{
 		String resultToShow = "", opponentTeamName = "";
 		

@@ -2,6 +2,9 @@ package com.cricket.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class InningStats
 {
 	private List<Integer> ballsPerHour;

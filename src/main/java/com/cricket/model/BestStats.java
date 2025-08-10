@@ -1,7 +1,6 @@
 package com.cricket.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 public class BestStats implements Cloneable{
 
