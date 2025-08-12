@@ -10,12 +10,16 @@ import org.apache.commons.lang3.builder.DiffResult;
 import org.apache.commons.lang3.builder.Diffable;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+import javax.persistence.Column;
 
 @SuppressWarnings("unused")
 @Entity
 @Table(name = "POTT")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class POTT
 {
   @Id

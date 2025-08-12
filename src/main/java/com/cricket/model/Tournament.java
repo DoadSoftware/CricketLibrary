@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import com.cricket.util.CricketUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Tournament implements Cloneable {
 
   private int playerId;

@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -4414,6 +4415,30 @@ public class CricketFunctions {
 			}
 		}
 		return fixtures;
+	}
+	public static List<LeaderBoard> processLeaderBoard(CricketService cricketService) {
+		List<LeaderBoard> leaderboards = cricketService.getLeaderBoards();
+		
+	    Map<Integer, Player> playerMap = cricketService.getAllPlayer()
+	        .stream().collect(Collectors.toMap(Player::getPlayerId, Function.identity()));
+	    Map<Integer, Team> teamMap = cricketService.getTeams()
+		        .stream().collect(Collectors.toMap(Team::getTeamId, Function.identity()));
+
+	    leaderboards.forEach(lb -> {
+	        lb.setPlayer1(playerMap.get(lb.getPlayer1Id()));
+	        lb.setPlayer2(playerMap.get(lb.getPlayer2Id()));
+	        lb.setPlayer3(playerMap.get(lb.getPlayer3Id()));
+	        lb.setPlayer4(playerMap.get(lb.getPlayer4Id()));
+	        lb.setPlayer5(playerMap.get(lb.getPlayer5Id()));
+	        
+	        lb.setTeam1(teamMap.get(lb.getPlayer1().getTeamId()));
+	        lb.setTeam2(teamMap.get(lb.getPlayer2().getTeamId()));
+	        lb.setTeam3(teamMap.get(lb.getPlayer3().getTeamId()));
+	        lb.setTeam4(teamMap.get(lb.getPlayer4().getTeamId()));
+	        lb.setTeam5(teamMap.get(lb.getPlayer5().getTeamId()));
+	    });
+
+	    return leaderboards;
 	}
 	
 	public static List<Fixture> getFixturesByTeam(int teamId, List<Fixture> allFixtures) {

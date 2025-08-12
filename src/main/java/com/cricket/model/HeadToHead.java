@@ -3,6 +3,11 @@ package com.cricket.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class HeadToHead implements Cloneable {
 
   private List<HeadToHeadTeam> H2hTeam =  new ArrayList<HeadToHeadTeam>();
