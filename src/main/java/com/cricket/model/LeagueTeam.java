@@ -36,6 +36,9 @@ public class LeagueTeam {
 	@XmlElement(name="NetRunRate")
 	private double NetRunRate;
 	
+	@XmlElement(name="NRRR")
+	private double NRRR;
+	
 	@XmlElement(name="Count")
 	private int count;
 
@@ -117,6 +120,14 @@ public class LeagueTeam {
 
 	public void setCount(int count) {
 		this.count = count;
+	}
+
+	public double getNRRR() {
+		return NRRR;
+	}
+
+	public void setNRRR(double nRRR) {
+		NRRR = nRRR;
 	}
 	
 }

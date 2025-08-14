@@ -6448,18 +6448,18 @@ public class CricketFunctions {
 		int playerId = -1;
 		String text_to_return = "";
 		List<Tournament> tournament_stats = new ArrayList<Tournament>();
-		ArrayList<String> ImpactData = new ArrayList<String>();
+//		ArrayList<String> ImpactData = new ArrayList<String>();
 		boolean has_match_started = false,is_player_found = false,fielder_found = false;
 		
-		try (BufferedReader br = new BufferedReader(new FileReader(CricketUtil.CRICKET_DIRECTORY + "ImpactPlayer.txt"))) {
-			while((text_to_return = br.readLine()) != null) {
-				if(text_to_return.contains("|")) {
-					
-				}else {
-					ImpactData.add(text_to_return);
-				}
-			}
-		}
+//		try (BufferedReader br = new BufferedReader(new FileReader(CricketUtil.CRICKET_DIRECTORY + "ImpactPlayer.txt"))) {
+//			while((text_to_return = br.readLine()) != null) {
+//				if(text_to_return.contains("|")) {
+//					
+//				}else {
+//					ImpactData.add(text_to_return);
+//				}
+//			}
+//		}
 		
 		switch(typeOfExtraction) {
 		case "COMBINED_PAST_CURRENT_MATCH_DATA":
@@ -11649,6 +11649,13 @@ public class CricketFunctions {
 			return CricketUtil.TOSS + ": " + TeamNameToUse;
 		case CricketUtil.SHORT:
 			return TeamNameToUse + " won the toss & " + decisionText;
+		case "MEDIUM":
+			switch (electedOrChoose) {
+			case CricketUtil.ELECTED:
+				return TeamNameToUse + " won | elected to " + decisionText;	
+			default:
+				return TeamNameToUse + " won | chose to " + decisionText;	
+			}	
 		default:
 			if(electedOrChoose == null) {
 				return TeamNameToUse + " won the toss";
@@ -12130,7 +12137,7 @@ public class CricketFunctions {
 				    else if (targetData.getRemaningRuns() == 1 && (targetData.getRemaningBall() <= 0 
 				    	|| CricketFunctions.getWicketsLeft(match,whichInning) <= 0)) {
 				    	switch (broadcaster) {
-						case "ICC-U19-2023": case "T20_MUMBAI": case "NPL":
+						case "ICC-U19-2023": case "T20_MUMBAI": case "NPL": case "BENGAL-T20":
 							if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
 								if(SplitSummaryText.isEmpty()) {
 							    	matchSummaryStatus = "Super Over tied - another super over to follow";
@@ -12285,11 +12292,17 @@ public class CricketFunctions {
 			for(int i = 0; i <= match.getEventFile().getEvents().size() - 1; i++) {
 				if(match.getEventFile().getEvents().get(i).getEventInningNumber() == inn_number) {
 					powerplayValues = getBallCountStartAndEndRange(match, inning);
-					
+					System.out.println("powerplayValues = " + powerplayValues);
 					switch(match.getEventFile().getEvents().get(i).getEventType()) {
 					case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 					case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.BYE: case CricketUtil.LEG_BYE:  //case CricketUtil.LOG_ANY_BALL:
 						ball_count = ball_count + 1;
+						break;
+					case CricketUtil.LOG_ANY_BALL:
+						if(match.getEventFile().getEvents().get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY) && 
+								match.getEventFile().getEvents().get(i).getDoNotIncrementBall().equalsIgnoreCase(CricketUtil.NO)) {
+							ball_count = ball_count + 1;
+						}
 						break;
 					case CricketUtil.LOG_WICKET:
 						if(!match.getEventFile().getEvents().get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT) && 
@@ -12301,6 +12314,7 @@ public class CricketFunctions {
 					}
  
 					if(ball_count >= powerplayValues.get(0) && ball_count < powerplayValues.get(1)) {
+						System.out.println("ball_countq = " + ball_count + "  = " + match.getEventFile().getEvents().get(i).getEventType());
 						switch(match.getEventFile().getEvents().get(i).getEventType()) {
 						case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 						case CricketUtil.FOUR: case CricketUtil.SIX: 
@@ -12334,9 +12348,10 @@ public class CricketFunctions {
 							break;
 						}
 					}else if(ball_count >= powerplayValues.get(0) && ball_count == powerplayValues.get(1)){
-						if(match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+						System.out.println("ball_count = " + ball_count);
+						if(match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
 							break;
-						}else if(!match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+						}else if(!match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
             				switch (match.getEventFile().getEvents().get(i).getEventType())
                             {
                             case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
@@ -12997,7 +13012,7 @@ public class CricketFunctions {
                 
                 if (runs == 0)
                 {
-                	ahead_behind = "DLS SCORES are level";
+                	ahead_behind = "VJD SCORES are level";
                 }
 			}
 		}
@@ -14001,8 +14016,7 @@ public class CricketFunctions {
 						}else if(matchStats.getBowlingCard().getLastBowlerId()> 0 && matchStats.getBowlingCard().getReplacementBowlerId()<=0) {
 							typeOfStats += "LAST_OVER,";
 							matchStats.getBowlingCard().setReplacementBowlerId(events.get(i).getEventBowlerNo());							
-						}  	
-						System.out.println("" + matchStats.getLastOverData().getTotalRuns());
+						}
 					}
 				}
 				switch (events.get(i).getEventType()) {
@@ -14602,6 +14616,7 @@ public class CricketFunctions {
 					    }					    
 					 //Powerplay
 						    switch(events.get(i).getEventType()) {
+						    	
 						    	case CricketUtil.LOG_ANY_BALL:case CricketUtil.WIDE:case CricketUtil.NO_BALL:
 							    	if( events.get(i).getEventBowlerNo() > 0) {
 								         if (events.get(i).getEventOverNo() < matchStats.getPhase1EndOver()) {
@@ -14681,6 +14696,8 @@ public class CricketFunctions {
 																        ? String.valueOf(Integer.valueOf(statsData.split(",")[8]))
 																        : matchStats.getHomeSecondPowerPlay().getNotWicketCount() + "," + Integer.valueOf(statsData.split(",")[8]))
 																    : matchStats.getHomeSecondPowerPlay().getNotWicketCount()));
+														
+														System.out.println("wicket = " + matchStats.getHomeSecondPowerPlay().getTotalWickets());
 														
 													}else if(events.get(i).getEventInningNumber()==2) {
 														//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 2 AWAY
@@ -14823,6 +14840,8 @@ public class CricketFunctions {
 												if(statsData.contains(",") && statsData.split(",").length >= 7) {
 													if(events.get(i).getEventInningNumber()==1) {
 														//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 2 HOME
+														System.out.println("events.get(i).getEventType() = " + events.get(i).getEventType() + "   wickets = " + matchStats.getHomeSecondPowerPlay().getTotalWickets());
+														
 														updateMatchStats(matchStats.getHomeSecondPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
 														//PHASE_SCORE PHASE 2 HOME
 														matchStats.setHomeSecondPowerPlay(new VariousStats(
@@ -14956,6 +14975,8 @@ public class CricketFunctions {
 					} 
 				}
 			}
+		
+		System.out.println("ANKIT = " + matchStats.getHomeSecondPowerPlay().getTotalWickets());
 		for (Event even : Event) {
 		    int Batter_id = even.getEventBattingCard().getPlayerId();
 		    boolean isRetired = even.getEventHowOut() != null && !even.getEventHowOut().isEmpty() && 
@@ -14983,12 +15004,15 @@ public class CricketFunctions {
 		    updateWickets(matchStats.getAwayOverByOverData(), Batter_id, isRetired);
 		}
 		
+		System.out.println("SILMANA = " + matchStats.getHomeSecondPowerPlay().getTotalWickets());
+		
 		Collections.reverse(matchStats.getHomeOverByOverData());
 		Collections.reverse(matchStats.getAwayOverByOverData());
 		return matchStats;
 	}
 
 	public static void updateWickets(VariousStats powerPlayStats, int batterId, boolean isRetired) {
+		System.out.println("out = " + powerPlayStats.getOutBatsman().split(",").toString());
 	    boolean isBatterOut = Arrays.stream(powerPlayStats.getOutBatsman().split(","))
 	            .map(String::trim)
 	            .filter(s -> !s.isEmpty())
