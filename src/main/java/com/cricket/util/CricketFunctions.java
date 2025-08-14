@@ -14450,12 +14450,14 @@ public class CricketFunctions {
 							  	if(events.get(i).getEventSubExtra() != null && !events.get(i).getEventSubExtra().isEmpty()) {
 							  		if (events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.BYE)||
 						            		events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.LEG_BYE)) {
-						                if (events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
-						                	if(events.get(i).getEventInningNumber() == 1) {
-												matchStats.getHomeTeamScoreData().setTotalDots(matchStats.getHomeTeamScoreData().getTotalDots()+1);
-											} else if(events.get(i).getEventInningNumber() == 2) {
-												matchStats.getAwayTeamScoreData().setTotalDots(matchStats.getAwayTeamScoreData().getTotalDots()+1);
-											}
+						                if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
+						                	if (events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
+							                	if(events.get(i).getEventInningNumber() == 1) {
+													matchStats.getHomeTeamScoreData().setTotalDots(matchStats.getHomeTeamScoreData().getTotalDots()+1);
+												} else if(events.get(i).getEventInningNumber() == 2) {
+													matchStats.getAwayTeamScoreData().setTotalDots(matchStats.getAwayTeamScoreData().getTotalDots()+1);
+												}
+							                }
 						                }
 						            }
 							  	}
@@ -14569,25 +14571,27 @@ public class CricketFunctions {
 				            batterStats.setTotalNines(batterStats.getTotalNines() + 1);
 				            break;
 				        case CricketUtil.LOG_ANY_BALL:
-				            if (events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
-				                if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() && 
-				                		events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
-				                    bowlerStats.setTotalDots(bowlerStats.getTotalDots() + 1);
-				                    batterStats.setTotalDots(batterStats.getTotalDots() + 1);
-				                }
-				                if (events.get(i).getEventWasABoundary() != null && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
-				                    if (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) {
-				                        bowlerStats.setTotalFours(bowlerStats.getTotalFours() + 1);
-				                        batterStats.setTotalFours(batterStats.getTotalFours() + 1);
-				                    } else if (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX)) {
-				                        bowlerStats.setTotalSixes(bowlerStats.getTotalSixes() + 1);
-				                        batterStats.setTotalSixes(batterStats.getTotalSixes() + 1);
-				                    } else if (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.NINE)) {
-				                        bowlerStats.setTotalNines(bowlerStats.getTotalNines() + 1);
-				                        batterStats.setTotalNines(batterStats.getTotalNines() + 1);
-				                    }
-				                }
-				            }
+				        	if(events.get(i).getEventExtra() != null && !events.get(i).getEventExtra().isEmpty()) {
+				        		if (events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+					                if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() && 
+					                		events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
+					                    bowlerStats.setTotalDots(bowlerStats.getTotalDots() + 1);
+					                    batterStats.setTotalDots(batterStats.getTotalDots() + 1);
+					                }
+					                if (events.get(i).getEventWasABoundary() != null && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
+					                    if (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) {
+					                        bowlerStats.setTotalFours(bowlerStats.getTotalFours() + 1);
+					                        batterStats.setTotalFours(batterStats.getTotalFours() + 1);
+					                    } else if (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX)) {
+					                        bowlerStats.setTotalSixes(bowlerStats.getTotalSixes() + 1);
+					                        batterStats.setTotalSixes(batterStats.getTotalSixes() + 1);
+					                    } else if (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.NINE)) {
+					                        bowlerStats.setTotalNines(bowlerStats.getTotalNines() + 1);
+					                        batterStats.setTotalNines(batterStats.getTotalNines() + 1);
+					                    }
+					                }
+					            }
+				        	}
 				            break;
 				        case CricketUtil.LOG_WICKET:
 				            switch (String.valueOf(events.get(i).getEventRuns())) {
