@@ -12677,43 +12677,49 @@ public class CricketFunctions {
 				        	break;
 				        
 				        case CricketUtil.LOG_ANY_BALL:
-							if(evnt.getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
-								if(evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
-									switch (whatToProcess) {
-									case CricketUtil.BATSMAN: case CricketUtil.BOWLER: 
-										dots++;
-										break;
+				        	if(evnt.getEventExtra() != null) {
+				        		if(evnt.getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+									if(evnt.getEventHowOut() != null) {
+										if(evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
+											switch (whatToProcess) {
+											case CricketUtil.BATSMAN: case CricketUtil.BOWLER: 
+												dots++;
+												break;
+											}
+										}
+									}
+									if ((evnt.getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) && (evnt.getEventWasABoundary() != null) && 
+											(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+										switch (whatToProcess) {
+										case CricketUtil.BATSMAN: case CricketUtil.BOWLER: case "TEAM":
+											fours++;
+											break;
+										}
+							        }
+									if ((evnt.getEventRuns() == Integer.valueOf(CricketUtil.SIX)) && (evnt.getEventWasABoundary() != null) && 
+											(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+										switch (whatToProcess) {
+										case CricketUtil.BATSMAN: case CricketUtil.BOWLER: case "TEAM":
+											sixes++;
+											break;
+										}
+							        }
+									if ((evnt.getEventRuns() == Integer.valueOf(CricketUtil.NINE)) && (evnt.getEventWasABoundary() != null) && 
+											(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+										switch (whatToProcess) {
+										case CricketUtil.BATSMAN: case CricketUtil.BOWLER: case "TEAM":
+											nines++;
+											break;
+										}
+							        }
+									if(evnt.getEventSubExtra() != null) {
+										if ((evnt.getEventSubExtra().equalsIgnoreCase(CricketUtil.BYE)|| evnt.getEventSubExtra().equalsIgnoreCase(CricketUtil.LEG_BYE))&& 
+							            		evnt.getEventHowOut()!= null && evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
+							            	  dots++;
+							            }
 									}
 								}
-								if ((evnt.getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) && (evnt.getEventWasABoundary() != null) && 
-										(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
-									switch (whatToProcess) {
-									case CricketUtil.BATSMAN: case CricketUtil.BOWLER: case "TEAM":
-										fours++;
-										break;
-									}
-						        }
-								if ((evnt.getEventRuns() == Integer.valueOf(CricketUtil.SIX)) && (evnt.getEventWasABoundary() != null) && 
-										(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
-									switch (whatToProcess) {
-									case CricketUtil.BATSMAN: case CricketUtil.BOWLER: case "TEAM":
-										sixes++;
-										break;
-									}
-						        }
-								if ((evnt.getEventRuns() == Integer.valueOf(CricketUtil.NINE)) && (evnt.getEventWasABoundary() != null) && 
-										(evnt.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
-									switch (whatToProcess) {
-									case CricketUtil.BATSMAN: case CricketUtil.BOWLER: case "TEAM":
-										nines++;
-										break;
-									}
-						        }
-					            if ((evnt.getEventSubExtra().equalsIgnoreCase(CricketUtil.BYE)|| evnt.getEventSubExtra().equalsIgnoreCase(CricketUtil.LEG_BYE))&& 
-					            		evnt.getEventHowOut()!= null && evnt.getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
-					            	  dots++;
-					            }
-							}
+				        	}
 				        	break;
 						}
 					}
