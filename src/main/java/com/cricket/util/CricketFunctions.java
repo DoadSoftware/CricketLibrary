@@ -14219,8 +14219,18 @@ public class CricketFunctions {
 									            (events.get(i).getEventSubExtraRuns() > 1 ? events.get(i).getEventSubExtraRuns() : "") +  events.get(i).getEventSubExtra());
 									 }
 							    }else {
-							    	 matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + (events.get(i).getEventRuns() > 0 ? events.get(i).getEventRuns() + "+" : "") +
+							    	if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY)) {
+							    		if(events.get(i).getDoNotIncrementBall().equalsIgnoreCase(CricketUtil.YES)) {
+							    			matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + (events.get(i).getEventRuns() > 0 ? events.get(i).getEventRuns() + "+" : "") +
+										            (events.get(i).getEventSubExtraRuns() > 1 ? events.get(i).getEventSubExtraRuns() : "") +  events.get(i).getEventSubExtra()+"_Y");
+							    		}else {
+							    			matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + (events.get(i).getEventRuns() > 0 ? events.get(i).getEventRuns() + "+" : "") +
+										            (events.get(i).getEventSubExtraRuns() > 1 ? events.get(i).getEventSubExtraRuns() : "") +  events.get(i).getEventSubExtra()+"_N");
+							    		}
+							    	}else {
+							    		matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + (events.get(i).getEventRuns() > 0 ? events.get(i).getEventRuns() + "+" : "") +
 									            (events.get(i).getEventSubExtraRuns() > 1 ? events.get(i).getEventSubExtraRuns() : "") +  events.get(i).getEventSubExtra());
+							    	} 
 							    }
 							    break;
 						    case CricketUtil.LOG_WICKET:
