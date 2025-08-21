@@ -2758,91 +2758,93 @@ public class CricketFunctions {
 			}
 		}
 		
-		if(match.getSetup().getSpecialMatchRules().equalsIgnoreCase(CricketUtil.ISPL)) {
-			lineByLineData.add("|");
-			lineByLineData.add("|============================================================================================================================================================");
-			lineByLineData.add("|	1 - 2       Line Ident ('TB')");
-			lineByLineData.add("|   4 - 23      Match file name");
-			lineByLineData.add("|  25 - 44      Venue name");
-			lineByLineData.add("|  46 - 65      Team name");
-			lineByLineData.add("|  67 - 83      Opponent name");
-			lineByLineData.add("|  84 - 88      Bowler code");
-			lineByLineData.add("|  89 - 91      Balls");
-			lineByLineData.add("|  92 - 94      Runs");
-			lineByLineData.add("|  95 - 97      Wickets");
-			lineByLineData.add("|  98 - 100     Dot balls");
-			lineByLineData.add("|");
-			lineByLineData.add("| <Match File Name   >< Venue Name       >< Team name        >< Opponent Name    ><BWL><B><R><W><D>");
-			
-			for(Inning inn : match.getMatch().getInning()) {
-			    List<String> tape_ball_data = getTapeBalldetails(inn.getInningNumber(), match.getEventFile().getEvents(), match);
-			    for(int i=0;i<=tape_ball_data.size()-1;i++) {
-			    	matchDataTxt = new StringBuilder();
-					matchDataTxt.setLength(0); // Clear the StringBuilder for each iteration
-				    matchDataTxt.append(String.format("%-140s", "")); // Initial padding
-				    
-				    // Add substrings at specific positions using StringBuilder methods
-				    
-				    matchDataTxt.insert(0, "TB");
-				    matchDataTxt.insert(3, match.getMatch().getMatchFileName());
-				    matchDataTxt.insert(23, match.getSetup().getGround().getCity());
-				    matchDataTxt.insert(43, inn.getBowling_team().getTeamName4());
-				    matchDataTxt.insert(63, inn.getBatting_team().getTeamName4());
-			    	
-				    matchDataTxt.insert(86-tape_ball_data.get(i).split(",")[0].length(), tape_ball_data.get(i).split(",")[0]);
-				    matchDataTxt.insert(90-tape_ball_data.get(i).split(",")[1].length(), tape_ball_data.get(i).split(",")[1]);
-				    matchDataTxt.insert(93-tape_ball_data.get(i).split(",")[2].length(), tape_ball_data.get(i).split(",")[2]);
-				    matchDataTxt.insert(96-tape_ball_data.get(i).split(",")[3].length(), tape_ball_data.get(i).split(",")[3]);
-				    matchDataTxt.insert(99-tape_ball_data.get(i).split(",")[4].length(), tape_ball_data.get(i).split(",")[4]);
-				    
-				    lineByLineData.add(matchDataTxt.toString());
-			    }
-			}
-			
-			lineByLineData.add("|");
-			lineByLineData.add("|============================================================================================================================================================");
-			lineByLineData.add("|	1 - 2       Line Ident ('CR')");
-			lineByLineData.add("|   4 - 23      Match file name");
-			lineByLineData.add("|  25 - 44      Venue name");
-			lineByLineData.add("|  46 - 65      Team name");
-			lineByLineData.add("|  67 - 83      Opponent name");
-			lineByLineData.add("|  84 - 88      Bowler code");
-			lineByLineData.add("|  89 - 91      Balls");
-			lineByLineData.add("|  92 - 94      Runs");
-			lineByLineData.add("|  95 - 97      Wickets");
-			lineByLineData.add("|  98 - 100     Dot balls");
-			lineByLineData.add("|  101 - 104    Bonus Added & subtract");
-			lineByLineData.add("|  105 - 108    Challenge Runs");
-			lineByLineData.add("|  109 - 112    Bonus");
-			lineByLineData.add("|");
-			lineByLineData.add("| <Match File Name   >< Venue Name       >< Team name        >< Opponent Name    ><BWL><B><R><W><D><IN><CR><BS>");
-			
-			for(Inning inn : match.getMatch().getInning()) {
-			    List<String> cr_data = getChallengeRunsDetails(inn.getInningNumber(), match.getEventFile().getEvents(), match);
-			    for(int i=0;i<=cr_data.size()-1;i++) {
-			    	matchDataTxt = new StringBuilder();
-					matchDataTxt.setLength(0); // Clear the StringBuilder for each iteration
-				    matchDataTxt.append(String.format("%-140s", "")); // Initial padding
-				    
-				    // Add substrings at specific positions using StringBuilder methods
-				    
-				    matchDataTxt.insert(0, "CR");
-				    matchDataTxt.insert(3, match.getMatch().getMatchFileName());
-				    matchDataTxt.insert(23, match.getSetup().getGround().getCity());
-				    matchDataTxt.insert(43, inn.getBowling_team().getTeamName4());
-				    matchDataTxt.insert(63, inn.getBatting_team().getTeamName4());
-			    	
-				    matchDataTxt.insert(86-cr_data.get(i).split(",")[0].length(), cr_data.get(i).split(",")[0]);
-				    matchDataTxt.insert(90-cr_data.get(i).split(",")[1].length(), cr_data.get(i).split(",")[1]);
-				    matchDataTxt.insert(93-cr_data.get(i).split(",")[2].length(), cr_data.get(i).split(",")[2]);
-				    matchDataTxt.insert(96-cr_data.get(i).split(",")[3].length(), cr_data.get(i).split(",")[3]);
-				    matchDataTxt.insert(99-cr_data.get(i).split(",")[4].length(), cr_data.get(i).split(",")[4]);
-				    matchDataTxt.insert(102-cr_data.get(i).split(",")[4].length(), cr_data.get(i).split(",")[5]);
-				    matchDataTxt.insert(105-cr_data.get(i).split(",")[4].length(), cr_data.get(i).split(",")[6]);
-				    matchDataTxt.insert(109-cr_data.get(i).split(",")[4].length(), cr_data.get(i).split(",")[7]);
-				    
-				    lineByLineData.add(matchDataTxt.toString());
-			    }
+		if(match.getSetup().getSpecialMatchRules() != null) {
+			if(match.getSetup().getSpecialMatchRules().equalsIgnoreCase(CricketUtil.ISPL)) {
+				lineByLineData.add("|");
+				lineByLineData.add("|============================================================================================================================================================");
+				lineByLineData.add("|	1 - 2       Line Ident ('TB')");
+				lineByLineData.add("|   4 - 23      Match file name");
+				lineByLineData.add("|  25 - 44      Venue name");
+				lineByLineData.add("|  46 - 65      Team name");
+				lineByLineData.add("|  67 - 83      Opponent name");
+				lineByLineData.add("|  84 - 88      Bowler code");
+				lineByLineData.add("|  89 - 91      Balls");
+				lineByLineData.add("|  92 - 94      Runs");
+				lineByLineData.add("|  95 - 97      Wickets");
+				lineByLineData.add("|  98 - 100     Dot balls");
+				lineByLineData.add("|");
+				lineByLineData.add("| <Match File Name   >< Venue Name       >< Team name        >< Opponent Name    ><BWL><B><R><W><D>");
+				
+				for(Inning inn : match.getMatch().getInning()) {
+				    List<String> tape_ball_data = getTapeBalldetails(inn.getInningNumber(), match.getEventFile().getEvents(), match);
+				    for(int i=0;i<=tape_ball_data.size()-1;i++) {
+				    	matchDataTxt = new StringBuilder();
+						matchDataTxt.setLength(0); // Clear the StringBuilder for each iteration
+					    matchDataTxt.append(String.format("%-140s", "")); // Initial padding
+					    
+					    // Add substrings at specific positions using StringBuilder methods
+					    
+					    matchDataTxt.insert(0, "TB");
+					    matchDataTxt.insert(3, match.getMatch().getMatchFileName());
+					    matchDataTxt.insert(23, match.getSetup().getGround().getCity());
+					    matchDataTxt.insert(43, inn.getBowling_team().getTeamName4());
+					    matchDataTxt.insert(63, inn.getBatting_team().getTeamName4());
+				    	
+					    matchDataTxt.insert(86-tape_ball_data.get(i).split(",")[0].length(), tape_ball_data.get(i).split(",")[0]);
+					    matchDataTxt.insert(90-tape_ball_data.get(i).split(",")[1].length(), tape_ball_data.get(i).split(",")[1]);
+					    matchDataTxt.insert(93-tape_ball_data.get(i).split(",")[2].length(), tape_ball_data.get(i).split(",")[2]);
+					    matchDataTxt.insert(96-tape_ball_data.get(i).split(",")[3].length(), tape_ball_data.get(i).split(",")[3]);
+					    matchDataTxt.insert(99-tape_ball_data.get(i).split(",")[4].length(), tape_ball_data.get(i).split(",")[4]);
+					    
+					    lineByLineData.add(matchDataTxt.toString());
+				    }
+				}
+				
+				lineByLineData.add("|");
+				lineByLineData.add("|============================================================================================================================================================");
+				lineByLineData.add("|	1 - 2       Line Ident ('CR')");
+				lineByLineData.add("|   4 - 23      Match file name");
+				lineByLineData.add("|  25 - 44      Venue name");
+				lineByLineData.add("|  46 - 65      Team name");
+				lineByLineData.add("|  67 - 83      Opponent name");
+				lineByLineData.add("|  84 - 88      Bowler code");
+				lineByLineData.add("|  89 - 91      Balls");
+				lineByLineData.add("|  92 - 94      Runs");
+				lineByLineData.add("|  95 - 97      Wickets");
+				lineByLineData.add("|  98 - 100     Dot balls");
+				lineByLineData.add("|  101 - 104    Bonus Added & subtract");
+				lineByLineData.add("|  105 - 108    Challenge Runs");
+				lineByLineData.add("|  109 - 112    Bonus");
+				lineByLineData.add("|");
+				lineByLineData.add("| <Match File Name   >< Venue Name       >< Team name        >< Opponent Name    ><BWL><B><R><W><D><IN><CR><BS>");
+				
+				for(Inning inn : match.getMatch().getInning()) {
+				    List<String> cr_data = getChallengeRunsDetails(inn.getInningNumber(), match.getEventFile().getEvents(), match);
+				    for(int i=0;i<=cr_data.size()-1;i++) {
+				    	matchDataTxt = new StringBuilder();
+						matchDataTxt.setLength(0); // Clear the StringBuilder for each iteration
+					    matchDataTxt.append(String.format("%-140s", "")); // Initial padding
+					    
+					    // Add substrings at specific positions using StringBuilder methods
+					    
+					    matchDataTxt.insert(0, "CR");
+					    matchDataTxt.insert(3, match.getMatch().getMatchFileName());
+					    matchDataTxt.insert(23, match.getSetup().getGround().getCity());
+					    matchDataTxt.insert(43, inn.getBowling_team().getTeamName4());
+					    matchDataTxt.insert(63, inn.getBatting_team().getTeamName4());
+				    	
+					    matchDataTxt.insert(86-cr_data.get(i).split(",")[0].length(), cr_data.get(i).split(",")[0]);
+					    matchDataTxt.insert(90-cr_data.get(i).split(",")[1].length(), cr_data.get(i).split(",")[1]);
+					    matchDataTxt.insert(93-cr_data.get(i).split(",")[2].length(), cr_data.get(i).split(",")[2]);
+					    matchDataTxt.insert(96-cr_data.get(i).split(",")[3].length(), cr_data.get(i).split(",")[3]);
+					    matchDataTxt.insert(99-cr_data.get(i).split(",")[4].length(), cr_data.get(i).split(",")[4]);
+					    matchDataTxt.insert(102-cr_data.get(i).split(",")[4].length(), cr_data.get(i).split(",")[5]);
+					    matchDataTxt.insert(105-cr_data.get(i).split(",")[4].length(), cr_data.get(i).split(",")[6]);
+					    matchDataTxt.insert(109-cr_data.get(i).split(",")[4].length(), cr_data.get(i).split(",")[7]);
+					    
+					    lineByLineData.add(matchDataTxt.toString());
+				    }
+				}
 			}
 		}
 		
