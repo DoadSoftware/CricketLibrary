@@ -62,6 +62,9 @@ public class NameSuper
   @Column(name = "TeluguSurName")
   private String TeluguSurName;
   
+  @Column(name = "SUBHEADER")
+  private String subHeader;
+  
   public NameSuper() {
 		super();
   }
@@ -173,6 +176,14 @@ public String getTeluguSurName() {
 
 public void setTeluguSurName(String teluguSurName) {
 	TeluguSurName = teluguSurName;
+}
+
+public String getSubHeader() {
+	return subHeader;
+}
+
+public void setSubHeader(String subHeader) {
+	this.subHeader = subHeader;
 }
 
 }

@@ -5370,6 +5370,27 @@ public class CricketFunctions {
 		
 		return hundReds + "," + tens + "," + units;
 	}
+	
+	public static String hundredsTensUnitsTeamScore(String number) {
+		String hundReds ="",tens="",units="";
+		
+		switch (number.length()) {
+		case 1:
+			units = String.valueOf(number.charAt(0));
+			break;
+		case 2:
+			tens = String.valueOf(number.charAt(0));
+			units = String.valueOf(number.charAt(1));
+			break;
+		case 3:
+			hundReds = String.valueOf(number.charAt(0));
+			tens = String.valueOf(number.charAt(1));
+			units = String.valueOf(number.charAt(2));
+			break;
+		}
+		
+		return hundReds + "," + tens + "," + units;
+	}
 
 	public static Statistics updateTournamentWithH2h(Statistics stats,List<HeadToHeadPlayer> headToHead_matches,MatchAllData currentMatch,String teamNameType) throws JsonMappingException, JsonProcessingException, InterruptedException 
 	{
@@ -12510,7 +12531,7 @@ public class CricketFunctions {
 		return String.valueOf(run_count) + Seperator + String.valueOf(wicket_count);
 	}
 	public static String processThisOverRunsCount(int player_id, List<Event> events) {
-		int total_runs=0,ball_count=0;
+		int total_runs=0,ball_count=0,total_wicket=0;
 		if((events != null) && (events.size() > 0)) {
 			
 			for(int i = events.size() - 1; i >= 0; i--) {
@@ -12555,7 +12576,7 @@ public class CricketFunctions {
 				}
 			}
 		}
-		return total_runs + "-" + ball_count;
+		return total_runs + "-" + ball_count + "-" + total_wicket;
 	}
 
 	public static String getLastWicket(MatchAllData match) {
