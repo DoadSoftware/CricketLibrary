@@ -127,7 +127,7 @@ public class CricketFunctions {
 	private static ObjectMapper objectMapper = new ObjectMapper();
 	public static int ball_number = 0, c = 0;
 	public static boolean isLeagleBall = false;
-
+	
 	public static List<Integer> getBallCountStartAndEndRange(MatchAllData match, Inning inning)
 	{
 		List<Integer> ballCount = new ArrayList<Integer>();
@@ -6099,20 +6099,25 @@ public class CricketFunctions {
 					}							
 				}
 			}
-			for(Player hs : match.getSetup().getHomeSubstitutes()) {
-//				if(hs.getImpactPlayer().equalsIgnoreCase(CricketUtil.YES)) {
-					if(hs.getPlayerId() == stat.getPlayer_id()) {
-						impact_player_found = true;
-					}
-//				}
+			if(match.getSetup().getHomeSubstitutes() != null) {
+				for(Player hs : match.getSetup().getHomeSubstitutes()) {
+//					if(hs.getImpactPlayer().equalsIgnoreCase(CricketUtil.YES)) {
+						if(hs.getPlayerId() == stat.getPlayer_id()) {
+							impact_player_found = true;
+						}
+//					}
+				}
 			}
-			for(Player as : match.getSetup().getAwaySubstitutes()) {
-//				if(as.getImpactPlayer().equalsIgnoreCase(CricketUtil.YES)) {
-					if(as.getPlayerId() == stat.getPlayer_id()) {
-						impact_player_found = true;
-					}
-//				}
+			if(match.getSetup().getAwaySubstitutes() != null) {
+				for(Player as : match.getSetup().getAwaySubstitutes()) {
+//					if(as.getImpactPlayer().equalsIgnoreCase(CricketUtil.YES)) {
+						if(as.getPlayerId() == stat.getPlayer_id()) {
+							impact_player_found = true;
+						}
+//					}
+				}
 			}
+			
 			if(player_found == true){
 				player_found = false;
 				stat.setMatches(stat.getMatches() + 1);
@@ -11047,8 +11052,10 @@ public class CricketFunctions {
 		 	  	            exitLoop = true;
 		 	  	          }
 		 	  	          else {
-		 	  	        	if((!events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) && !events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL))) {
-		 	  	        		if(!events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY) && !events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL)
+		 	  	        	if(events.get(i).getEventExtra() != null && (!events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) && 
+		 	  	        			!events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL))) {
+		 	  	        		if(events.get(i).getEventSubExtra() != null && !events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY) 
+		 	  	        				&& !events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL)
 										&& !events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
 		 	  	        			count_lb += 1;
 								}
@@ -12573,6 +12580,10 @@ public class CricketFunctions {
 			          if (events.get(i).getEventSubExtra() != null) {
 			        	 total_runs += events.get(i).getEventSubExtraRuns();
 			        	 ball_count = ball_count + 1;
+			          }
+			          if(events.get(i).getEventHowOut() != null) {
+			        	  total_wicket += 1;
+			        	  ball_count = ball_count + 1;
 			          }
 			          break;
 				}
