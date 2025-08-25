@@ -12563,6 +12563,7 @@ public class CricketFunctions {
 		        	break;
 		        case CricketUtil.LOG_WICKET:
 		        	total_runs += events.get(i).getEventRuns();
+		        	total_wicket += 1;
 			          if (events.get(i).getEventExtra() != null) {
 			        	 total_runs += events.get(i).getEventExtraRuns();
 			          }
