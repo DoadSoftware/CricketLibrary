@@ -12329,9 +12329,11 @@ public class CricketFunctions {
 						ball_count = ball_count + 1;
 						break;
 					case CricketUtil.LOG_ANY_BALL:
-						if(match.getEventFile().getEvents().get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY) && 
-								match.getEventFile().getEvents().get(i).getDoNotIncrementBall().equalsIgnoreCase(CricketUtil.NO)) {
-							ball_count = ball_count + 1;
+						if(match.getEventFile().getEvents().get(i).getEventSubExtra() != null) {
+							if(match.getEventFile().getEvents().get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY) && 
+									match.getEventFile().getEvents().get(i).getDoNotIncrementBall().equalsIgnoreCase(CricketUtil.NO)) {
+								ball_count = ball_count + 1;
+							}
 						}
 						break;
 					case CricketUtil.LOG_WICKET:
