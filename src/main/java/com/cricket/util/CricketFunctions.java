@@ -15344,50 +15344,53 @@ public class CricketFunctions {
 	                    (events.getEventExtra() != null && !events.getEventExtra().isEmpty() ? "+" : "");
 	                ThisOverwkts++;
 	            }
-
-	            if (events.getEventExtra().equals(CricketUtil.WIDE) || events.getEventExtra().equals(CricketUtil.NO_BALL)) {
-	                if(events.getEventSubExtra() != null) {
-	                	if (events.getEventSubExtra().equals(CricketUtil.WIDE) || events.getEventSubExtra().equals(CricketUtil.NO_BALL)) {
-		                    if (!events.getEventSubExtra().isEmpty() && events.getEventSubExtraRuns() > 0) {
-		                    	 ThisOverTxt = ThisOverTxt + (events.getEventRuns() + events.getEventExtraRuns() + events.getEventSubExtraRuns()) +
-		                            events.getEventExtra();
-		                    } else {
-		                        if (!events.getEventExtra().equalsIgnoreCase(events.getEventSubExtra())) {
-		                            ThisOverTxt = ThisOverTxt +  events.getEventExtra() + "+" +
-		                                (events.getEventRuns() + events.getEventExtraRuns() + events.getEventSubExtraRuns() > 1 ?
-		                                    (events.getEventRuns() + events.getEventExtraRuns() + events.getEventSubExtraRuns()) : "") +
-		                                events.getEventSubExtra();
-		                        } else {
-		                            ThisOverTxt = ThisOverTxt +  (events.getEventRuns() +
-		                                events.getEventExtraRuns() + events.getEventSubExtraRuns()) + events.getEventExtra();
-		                        }
-		                    }
-		                } else if (events.getEventSubExtra().equals(CricketUtil.LEG_BYE) || events.getEventSubExtra().equals(CricketUtil.BYE)) {
-		                	 ThisOverTxt = 	ThisOverTxt + events.getEventExtra() + "+" + (events.getEventRuns() + events.getEventSubExtraRuns() > 0 ?
-		                            events.getEventSubExtra() + "+" + (events.getEventRuns() + events.getEventSubExtraRuns()) :
-		                            events.getEventSubExtra());
-		                } else {
-		                    if (events.getEventSubExtra().isEmpty()) {
-		                        if (events.getEventRuns() > 0) {
-		                            ThisOverTxt = ThisOverTxt + events.getEventExtra() + "+" + events.getEventRuns();
-		                        } else {
-		                            ThisOverTxt = ThisOverTxt + events.getEventExtra();
-		                        }
-		                    } else {
-		                    	if (events.getEventRuns() > 0) {
-		                            ThisOverTxt = ThisOverTxt + events.getEventExtra() + "+" + events.getEventRuns();
-		                        } else {
-		                            ThisOverTxt = ThisOverTxt + events.getEventExtra();
-		                        }
-		                        if (events.getEventSubExtraRuns() > 0) {
-		                            ThisOverTxt = ThisOverTxt + "+" + events.getEventSubExtra() + "+" + events.getEventSubExtraRuns();
-		                        } else {
-		                            ThisOverTxt = ThisOverTxt + "+" + events.getEventSubExtra();
-		                        }
-		                    }
-		                }
-	                }
-	            } else {
+	            
+	            if(events.getEventExtra() != null) {
+	            	 if (events.getEventExtra().equals(CricketUtil.WIDE) || events.getEventExtra().equals(CricketUtil.NO_BALL)) {
+	 	                if(events.getEventSubExtra() != null) {
+	 	                	if (events.getEventSubExtra().equals(CricketUtil.WIDE) || events.getEventSubExtra().equals(CricketUtil.NO_BALL)) {
+	 		                    if (!events.getEventSubExtra().isEmpty() && events.getEventSubExtraRuns() > 0) {
+	 		                    	 ThisOverTxt = ThisOverTxt + (events.getEventRuns() + events.getEventExtraRuns() + events.getEventSubExtraRuns()) +
+	 		                            events.getEventExtra();
+	 		                    } else {
+	 		                        if (!events.getEventExtra().equalsIgnoreCase(events.getEventSubExtra())) {
+	 		                            ThisOverTxt = ThisOverTxt +  events.getEventExtra() + "+" +
+	 		                                (events.getEventRuns() + events.getEventExtraRuns() + events.getEventSubExtraRuns() > 1 ?
+	 		                                    (events.getEventRuns() + events.getEventExtraRuns() + events.getEventSubExtraRuns()) : "") +
+	 		                                events.getEventSubExtra();
+	 		                        } else {
+	 		                            ThisOverTxt = ThisOverTxt +  (events.getEventRuns() +
+	 		                                events.getEventExtraRuns() + events.getEventSubExtraRuns()) + events.getEventExtra();
+	 		                        }
+	 		                    }
+	 		                } else if (events.getEventSubExtra().equals(CricketUtil.LEG_BYE) || events.getEventSubExtra().equals(CricketUtil.BYE)) {
+	 		                	 ThisOverTxt = 	ThisOverTxt + events.getEventExtra() + "+" + (events.getEventRuns() + events.getEventSubExtraRuns() > 0 ?
+	 		                            events.getEventSubExtra() + "+" + (events.getEventRuns() + events.getEventSubExtraRuns()) :
+	 		                            events.getEventSubExtra());
+	 		                } else {
+	 		                    if (events.getEventSubExtra().isEmpty()) {
+	 		                        if (events.getEventRuns() > 0) {
+	 		                            ThisOverTxt = ThisOverTxt + events.getEventExtra() + "+" + events.getEventRuns();
+	 		                        } else {
+	 		                            ThisOverTxt = ThisOverTxt + events.getEventExtra();
+	 		                        }
+	 		                    } else {
+	 		                    	if (events.getEventRuns() > 0) {
+	 		                            ThisOverTxt = ThisOverTxt + events.getEventExtra() + "+" + events.getEventRuns();
+	 		                        } else {
+	 		                            ThisOverTxt = ThisOverTxt + events.getEventExtra();
+	 		                        }
+	 		                        if (events.getEventSubExtraRuns() > 0) {
+	 		                            ThisOverTxt = ThisOverTxt + "+" + events.getEventSubExtra() + "+" + events.getEventSubExtraRuns();
+	 		                        } else {
+	 		                            ThisOverTxt = ThisOverTxt + "+" + events.getEventSubExtra();
+	 		                        }
+	 		                    }
+	 		                }
+	 	                }
+	 	            }
+	            }
+	            else {
 	                ThisOverTxt = ThisOverTxt + (events.getEventRuns() > 0 ? events.getEventRuns() + "+" : "") +
 	                    (events.getEventSubExtraRuns() > 1 ? events.getEventSubExtraRuns() : "") + events.getEventSubExtra();
 	            }
