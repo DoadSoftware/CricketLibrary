@@ -1530,6 +1530,27 @@ public class CricketFunctions {
         return "";
     }
 	
+	public static List<Integer> calculateOrderRuns(Inning inning) {
+	    int rowId = 0;
+	    int topOrder = 0, middleOrder = 0, lowerOrder = 0;
+
+	    for (BattingCard batCard : inning.getBattingCard()) {
+	        rowId++;
+	        int runs = batCard.getRuns();
+	        if (runs > 0) {
+	            if (rowId <= 3) {
+	                topOrder += runs;
+	            } else if (rowId <= 7) {
+	                middleOrder += runs;
+	            } else if (rowId <= 11) {
+	                lowerOrder += runs;
+	            }
+	        }
+	    }
+
+	    return Arrays.asList(topOrder, middleOrder, lowerOrder);
+	}
+	
 	public static FieldersData getFielderFormation(String filePathName) throws IOException {
 		FieldersData fielderFormationData = new ObjectMapper().
 				readValue(new File(filePathName), FieldersData.class);
