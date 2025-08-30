@@ -12728,7 +12728,7 @@ public class CricketFunctions {
 				        	
 				        case CricketUtil.NO_BALL:
 				        	switch (whatToProcess) {
-				        	case CricketUtil.BATSMAN: case CricketUtil.BOWLER:
+				        	case CricketUtil.BATSMAN:
 								dots++;
 								break;
 							}
