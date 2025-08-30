@@ -1538,9 +1538,9 @@ public class CricketFunctions {
 	        rowId++;
 	        int runs = batCard.getRuns();
 	        if (runs > 0) {
-	            if (rowId <= 3) {
+	            if (rowId <= 4) {
 	                topOrder += runs;
-	            } else if (rowId <= 7) {
+	            } else if (rowId <= 8) {
 	                middleOrder += runs;
 	            } else if (rowId <= 11) {
 	                lowerOrder += runs;
@@ -15185,8 +15185,9 @@ public class CricketFunctions {
 	public static String updateOverStats(Event events) {
 	    String ThisOverTxt = "";
 	    int ThisOverRun = 0; int ThisOverwkts = 0;
+	    System.out.println("type - " + events.getEventType());
 	    switch (events.getEventType()) {
-
+	    	
 	        case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: 
 	        case CricketUtil.FOUR: case CricketUtil.FIVE: case CricketUtil.SIX: case CricketUtil.NINE:
 

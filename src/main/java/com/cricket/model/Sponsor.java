@@ -31,6 +31,9 @@ public class Sponsor
 
   @Column(name = "ImageName")
   private String imagename;
+  
+  @Column(name = "Data")
+  private String text;
     
   public Sponsor() {
 		super();
@@ -63,6 +66,14 @@ public String getImagename() {
 
 public void setImagename(String imagename) {
 	this.imagename = imagename;
+}
+
+public String getText() {
+	return text;
+}
+
+public void setText(String text) {
+	this.text = text;
 }
 
 
