@@ -75,10 +75,8 @@ public class Inning {
 
   private String specialRuns;
   
-  @JsonIgnore
   private Team batting_team;
 
-  @JsonIgnore
   private Team bowling_team;
   
   private List<BattingCard> battingCard;

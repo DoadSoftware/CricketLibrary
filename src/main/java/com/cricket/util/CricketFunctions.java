@@ -1482,17 +1482,26 @@ public class CricketFunctions {
 				Files.write(Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY 
 					+ match.getMatch().getMatchFileName()), 
 					objectWriter.writeValueAsString(match.getSetup()).getBytes());			
+				Files.write(Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.BACK_UP_DIRECTORY 
+					+ CricketUtil.SETUP_DIRECTORY + match.getMatch().getMatchFileName()), 
+					objectWriter.writeValueAsString(match.getSetup()).getBytes());			
 			}
 			if(match.getSetup().getMatchDataUpdate() != null && match.getSetup().getMatchDataUpdate().equalsIgnoreCase(CricketUtil.START)) {
 				if(whichFileToProcess.toUpperCase().contains(CricketUtil.EVENT)) {
 					Files.write(Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.EVENT_DIRECTORY 
 						+ match.getMatch().getMatchFileName()), 
 						objectWriter.writeValueAsString(match.getEventFile()).getBytes());
+					Files.write(Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.BACK_UP_DIRECTORY 
+						+ CricketUtil.EVENT_DIRECTORY + match.getMatch().getMatchFileName()), 
+						objectWriter.writeValueAsString(match.getEventFile()).getBytes());			
 				}
 				if(whichFileToProcess.toUpperCase().contains(CricketUtil.MATCH)) {
 					Files.write(Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.MATCHES_DIRECTORY 
 						+ match.getMatch().getMatchFileName()), 
 						objectWriter.writeValueAsString(match.getMatch()).getBytes());
+					Files.write(Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.BACK_UP_DIRECTORY 
+						+ CricketUtil.MATCHES_DIRECTORY + match.getMatch().getMatchFileName()), 
+						objectWriter.writeValueAsString(match.getMatch()).getBytes());			
 				}
 			}
 			break;
@@ -6495,7 +6504,7 @@ public class CricketFunctions {
 			CricketService cricketService,MatchAllData currentMatch, List<Tournament> past_tournament_stat) throws IOException 
 	{		
 		int playerId = -1;
-		String text_to_return = "";
+		//String text_to_return = "";
 		List<Tournament> tournament_stats = new ArrayList<Tournament>();
 //		ArrayList<String> ImpactData = new ArrayList<String>();
 		boolean has_match_started = false,is_player_found = false,fielder_found = false;
@@ -8363,7 +8372,7 @@ public class CricketFunctions {
 				bc.setHowOutFielder(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bc.getHowOutFielderId())));
 				break;
 			}
-
+			System.out.println("bc = " + bc.toString());
 			switch (bc.getHowOut().toUpperCase()) {
 			case CricketUtil.CAUGHT_AND_BOWLED:
 				bc.setHowOutText("c & b " + bc.getHowOutBowler().getTicker_name());

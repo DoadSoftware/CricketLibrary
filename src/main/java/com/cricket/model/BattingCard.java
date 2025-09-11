@@ -1,9 +1,7 @@
 package com.cricket.model;
 
 import java.util.List;
-
 import com.cricket.util.CricketUtil;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -63,13 +61,10 @@ public class BattingCard implements Comparable<BattingCard>
 
   private List<DaySession> battingSession; 
   
-  @JsonIgnore
   private Player concussion_player;
 
-  @JsonIgnore
   private Player howOutFielder;
   
-  @JsonIgnore
   private Player howOutBowler;
   
 public BattingCard(int playerId, int batterPosition, String status) {

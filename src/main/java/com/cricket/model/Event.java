@@ -71,6 +71,10 @@ public class Event implements Comparable<Event> {
 
   private String eventSpeed;
 
+  private String whatToProcess;
+
+  private String valueToProcess;
+  
   private BattingCard EventBattingCard;
 
   private BowlingCard EventBowlingCard;
@@ -94,6 +98,28 @@ public Event(int eventNumber, int eventStatNumber, String eventType, String even
 	this.eventRuns = eventRuns;
 	this.eventOverNo = eventOverNo;
 	this.eventBallNo = eventBallNo;
+}
+
+public Event(String whatToProcess, String valueToProcess) {
+	super();
+	this.whatToProcess = whatToProcess;
+	this.valueToProcess = valueToProcess;
+}
+
+public String getWhatToProcess() {
+	return whatToProcess;
+}
+
+public void setWhatToProcess(String whatToProcess) {
+	this.whatToProcess = whatToProcess;
+}
+
+public String getValueToProcess() {
+	return valueToProcess;
+}
+
+public void setValueToProcess(String valueToProcess) {
+	this.valueToProcess = valueToProcess;
 }
 
 public int getEventWickets() {
@@ -396,9 +422,9 @@ public String toString() {
 			+ ", eventHowOut=" + eventHowOut + ", eventHowOutBatterNo=" + eventHowOutBatterNo
 			+ ", eventHowOutFielderId=" + eventHowOutFielderId + ", eventTotalRunsInAnOver=" + eventTotalRunsInAnOver
 			+ ", doNotIncrementBall=" + doNotIncrementBall + ", eventDescription=" + eventDescription
-			+ ", substitutionMade=" + substitutionMade + ", eventSpeed=" + eventSpeed + ", EventBattingCard="
-			+ EventBattingCard + ", EventBowlingCard=" + EventBowlingCard + ", EventPartnership=" + EventPartnership
-			+ "]";
+			+ ", substitutionMade=" + substitutionMade + ", eventSpeed=" + eventSpeed + ", whatToProcess="
+			+ whatToProcess + ", valueToProcess=" + valueToProcess + ", EventBattingCard=" + EventBattingCard
+			+ ", EventBowlingCard=" + EventBowlingCard + ", EventPartnership=" + EventPartnership + "]";
 }
 
 }
