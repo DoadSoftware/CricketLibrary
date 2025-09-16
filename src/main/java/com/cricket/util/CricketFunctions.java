@@ -27,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -1916,8 +1917,6 @@ public class CricketFunctions {
 				  ball_number = 0;
 				  c = 0;
 			  }
-			  
-			 
 			  break;
 			  
 		  case CricketUtil.NEW_BATSMAN:
@@ -2339,7 +2338,7 @@ public class CricketFunctions {
 			line_txt = addSubString(line_txt,six_distance,162);
 			
 			Files.write(Paths.get(CricketUtil.CRICKET_SERVER_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT), 
-					Arrays.asList(line_txt), StandardOpenOption.APPEND);
+				Arrays.asList(line_txt), StandardOpenOption.APPEND);
 			
 			break;
 	    }
@@ -2356,7 +2355,7 @@ public class CricketFunctions {
 			return "";
 		}
 		Inning inning=match.getMatch().getInning().stream().filter(in -> in.getIsCurrentInning()
-				.equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null);
+			.equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null);
 		int max_inn = 2;
 		String line_txt = String.format("%-140s", "");
 		String txt = String.format("%-140s", "");
@@ -2437,6 +2436,12 @@ public class CricketFunctions {
 				  setInteractiveData(match,line_txt,i);
 			  }
 		    }
+			if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT).exists() == true
+				&& new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.BACK_UP_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY).exists() == true) {
+				Files.copy(Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY + CricketUtil.DOAD_INTERACTIVE_TXT), 
+					Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.BACK_UP_DIRECTORY + CricketUtil.INTERACTIVE_DIRECTORY 
+					+ CricketUtil.DOAD_INTERACTIVE_TXT), StandardCopyOption.REPLACE_EXISTING);
+			}
 		    break;
 		case"OVERWRITE":
 			  if(match.getEventFile().getEvents().get(match.getEventFile().getEvents().size() - 1).getEventInningNumber() == inning.getInningNumber() &&
