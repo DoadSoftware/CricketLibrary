@@ -105,6 +105,9 @@ public class Configuration {
 	@XmlElement(name="showReview")
 	private String showReview;
 	
+	@XmlElement(name="showSubs")
+	private String showSubs;
+	
 	public Configuration() {
 		super();
 	}
@@ -163,7 +166,7 @@ public class Configuration {
 	}
 	
 	public Configuration(String filename, String broadcaster, String speedUnit,String qudich,String wagon,String audio, String primaryIpAddress, 
-			int primaryPortNumber, String primaryLanguage, String showSpeed, String showReview) {
+			int primaryPortNumber, String primaryLanguage, String showSpeed, String showReview, String showSubs) {
 		super();
 		this.filename = filename;
 		this.broadcaster = broadcaster;
@@ -176,6 +179,7 @@ public class Configuration {
 		this.primaryLanguage = primaryLanguage;
 		this.showSpeed = showSpeed;
 		this.showReview = showReview;
+		this.showSubs = showSubs;
 	}
 
 	public Configuration(String filename, String broadcaster,String secondaryBroadcaster,String qtIpAddress, 
@@ -522,6 +526,14 @@ public class Configuration {
 
 	public void setShowReview(String showReview) {
 		this.showReview = showReview;
+	}
+
+	public String getShowSubs() {
+		return showSubs;
+	}
+
+	public void setShowSubs(String showSubs) {
+		this.showSubs = showSubs;
 	}
 
 	@Override
