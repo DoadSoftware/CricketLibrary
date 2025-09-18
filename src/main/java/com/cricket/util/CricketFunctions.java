@@ -12025,7 +12025,7 @@ public class CricketFunctions {
 		String SplitSummaryText, String broadcaster, boolean ballsRemaining) 
 	{
 		String matchSummaryStatus = GenerateMatchResult(match, teamNameType, broadcaster, SplitSummaryText, ballsRemaining);
-		
+	    System.out.println("GenerateMatchResult = " + matchSummaryStatus);
 	    if(matchSummaryStatus.trim().isEmpty()) {
 	    	
 	    	int lead_by = GetTeamRunsAhead(whichInning,match);
@@ -16751,7 +16751,8 @@ public class CricketFunctions {
 	    } else {
 	    	targetData.setTargetOvers(String.valueOf(matchAllData.getSetup().getMaxOvers()));
 	    }
-	    
+	    System.out.println("MaxOvers = " + matchAllData.getSetup().getMaxOvers());
+	    	    
 	    if (matchAllData.getSetup().getMaxOvers() > 0) {
 	    	if(targetData.getTargetOvers().contains(".")) {
 	    		targetData.setRemaningBall((Integer.valueOf(targetData.getTargetOvers().split("\\.")[0]) * 6 + 
@@ -16783,6 +16784,7 @@ public class CricketFunctions {
 	    if(targetData.getRemaningRuns() < 0) {
 	    	targetData.setRemaningRuns(0);
 	    } 
+	    System.out.println("targetData = " + targetData);
 	    return targetData;
 	}
 

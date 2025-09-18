@@ -270,7 +270,12 @@ public int getBalls() {
 	return balls;
 }
 public void setBalls(int balls) {
-	this.balls = balls;
+	if(balls < 0) {
+		this.balls = 0;
+	}
+	else {
+		this.balls = balls;
+	}
 }
 public Player getPlayer() {
 	return player;
