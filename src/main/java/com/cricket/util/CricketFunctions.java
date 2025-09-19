@@ -16746,7 +16746,8 @@ public class CricketFunctions {
 	        	targetData.setTargetRuns(GetTeamRunsAhead(1, matchAllData) + 1);
 	        }
 	    }
-	    if (matchAllData.getSetup().getTargetOvers() != null && !matchAllData.getSetup().getTargetOvers().isEmpty()) {
+	    if (matchAllData.getSetup().getTargetOvers() != null && !matchAllData.getSetup().getTargetOvers().isEmpty()
+	    	&& Integer.valueOf(matchAllData.getSetup().getTargetOvers()) > 0) {
 	    	targetData.setTargetOvers(matchAllData.getSetup().getTargetOvers());
 	    } else {
 	    	targetData.setTargetOvers(String.valueOf(matchAllData.getSetup().getMaxOvers()));
