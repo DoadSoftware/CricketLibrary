@@ -8484,7 +8484,6 @@ public class CricketFunctions {
 				bc.setHowOutFielder(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bc.getHowOutFielderId())));
 				break;
 			}
-			System.out.println("bc = " + bc.toString());
 			switch (bc.getHowOut().toUpperCase()) {
 			case CricketUtil.CAUGHT_AND_BOWLED:
 				bc.setHowOutText("c & b " + bc.getHowOutBowler().getTicker_name());
@@ -14861,6 +14860,7 @@ public class CricketFunctions {
 								        	thisOverWkts +=Integer.valueOf(thisOver.split(",")[2]);
 								        	
 											statsData = getpowerplay(events.get(i));
+											
 											if(statsData.contains(",") && statsData.split(",").length >= 7) {
 												if(events.get(i).getEventInningNumber()==1) {
 													//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 1 HOME
@@ -15150,6 +15150,10 @@ public class CricketFunctions {
 	        	matchStats.setPhase3StartOver(16); matchStats.setPhase3EndOver(20);
 				break;
 			}
+	    }else if(Match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
+	    	matchStats.setPhase1StartOver(1); matchStats.setPhase1EndOver(10);
+        	matchStats.setPhase2StartOver(11); matchStats.setPhase2EndOver(40);
+        	matchStats.setPhase3StartOver(41); matchStats.setPhase3EndOver(50);
 	    }
 	   
 	    return getAllEventsStatsMASTER(matchStats ,Match.getMatch(), Match.getEventFile().getEvents());
@@ -15157,7 +15161,6 @@ public class CricketFunctions {
 	public static String updateOverStats(Event events) {
 	    String ThisOverTxt = "";
 	    int ThisOverRun = 0; int ThisOverwkts = 0;
-	    System.out.println("type - " + events.getEventType());
 	    switch (events.getEventType()) {
 	    	
 	        case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: 
