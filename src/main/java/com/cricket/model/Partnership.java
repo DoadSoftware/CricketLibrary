@@ -71,7 +71,12 @@ public int getTotalNines() {
 }
 
 public void setTotalNines(int totalNines) {
-	this.totalNines = totalNines;
+	if(totalNines < 0) {
+		this.totalNines = 0;
+	}
+	else {
+		this.totalNines = totalNines;
+	}
 }
 
 public Player getFirstPlayer() {
@@ -135,7 +140,12 @@ public int getTotalRuns() {
 }
 
 public void setTotalRuns(int totalRuns) {
-	this.totalRuns = totalRuns;
+	if(totalRuns < 0) {
+		this.totalRuns = 0;
+	}
+	else {
+		this.totalRuns = totalRuns;
+	}
 }
 
 public int getTotalBalls() {
@@ -143,7 +153,12 @@ public int getTotalBalls() {
 }
 
 public void setTotalBalls(int totalBalls) {
-	this.totalBalls = totalBalls;
+	if(totalBalls < 0) {
+		this.totalBalls = 0;
+	}
+	else {
+		this.totalBalls = totalBalls;
+	}
 }
 
 public int getFirstBatterBalls() {
@@ -167,7 +182,12 @@ public int getTotalFours() {
 }
 
 public void setTotalFours(int totalFours) {
-	this.totalFours = totalFours;
+	if(totalFours < 0) {
+		this.totalFours = 0;
+	}
+	else {
+		this.totalFours = totalFours;
+	}
 }
 
 public int getTotalSixes() {
@@ -175,7 +195,12 @@ public int getTotalSixes() {
 }
 
 public void setTotalSixes(int totalSixes) {
-	this.totalSixes = totalSixes;
+	if(totalSixes < 0) {
+		this.totalSixes = 0;
+	}
+	else {
+		this.totalSixes = totalSixes;
+	}
 }
 
 @Override

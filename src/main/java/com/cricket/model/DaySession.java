@@ -81,7 +81,12 @@ public int getTotalRuns() {
 }
 
 public void setTotalRuns(int totalRuns) {
-	this.totalRuns = totalRuns;
+	if(totalRuns < 0) {
+		this.totalRuns = 0;
+	}
+	else {
+		this.totalRuns = totalRuns;
+	}
 }
 
 public int getTotalBalls() {
@@ -89,7 +94,12 @@ public int getTotalBalls() {
 }
 
 public void setTotalBalls(int totalBalls) {
-	this.totalBalls = totalBalls;
+	if(totalBalls < 0) {
+		this.totalBalls = 0;
+	}
+	else {
+		this.totalBalls = totalBalls;
+	}
 }
 
 public int getTotalWickets() {
@@ -97,7 +107,12 @@ public int getTotalWickets() {
 }
 
 public void setTotalWickets(int totalWickets) {
-	this.totalWickets = totalWickets;
+	if(totalWickets < 0) {
+		this.totalWickets = 0;
+	}
+	else {
+		this.totalWickets = totalWickets;
+	}
 }
 
 public int getTotalFours() {
@@ -105,7 +120,12 @@ public int getTotalFours() {
 }
 
 public void setTotalFours(int totalFours) {
-	this.totalFours = totalFours;
+	if(totalFours < 0) {
+		this.totalFours = 0;
+	}
+	else {
+		this.totalFours = totalFours;
+	}
 }
 
 public int getTotalSixes() {
@@ -113,7 +133,12 @@ public int getTotalSixes() {
 }
 
 public void setTotalSixes(int totalSixes) {
-	this.totalSixes = totalSixes;
+	if(totalSixes < 0) {
+		this.totalSixes = 0;
+	}
+	else {
+		this.totalSixes = totalSixes;
+	}
 }
 
 public long getTotalSeconds() {
@@ -121,7 +146,12 @@ public long getTotalSeconds() {
 }
 
 public void setTotalSeconds(long totalSeconds) {
-	this.totalSeconds = totalSeconds;
+	if(totalSeconds < 0) {
+		this.totalSeconds = 0;
+	}
+	else {
+		this.totalSeconds = totalSeconds;
+	}
 }
  
 }

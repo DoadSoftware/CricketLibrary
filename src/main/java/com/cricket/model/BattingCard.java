@@ -179,19 +179,34 @@ public int getFours() {
 	return fours;
 }
 public void setFours(int fours) {
-	this.fours = fours;
+	if(fours < 0) {
+		this.fours = 0;
+	}
+	else {
+		this.fours = fours;
+	}
 }
 public int getSixes() {
 	return sixes;
 }
 public void setSixes(int sixes) {
-	this.sixes = sixes;
+	if(sixes < 0) {
+		this.sixes = 0;
+	}
+	else {
+		this.sixes = sixes;
+	}
 }
 public int getNines() {
 	return nines;
 }
 public void setNines(int nines) {
-	this.nines = nines;
+	if(nines < 0) {
+		this.nines = 0;
+	}
+	else {
+		this.nines = nines;
+	}
 }
 public String getHowOutText() {
 	return howOutText;
@@ -264,7 +279,12 @@ public int getRuns() {
 	return runs;
 }
 public void setRuns(int runs) {
-	this.runs = runs;
+	if(runs < 0) {
+		this.runs = 0;
+	}
+	else {
+		this.runs = runs;
+	}
 }
 public int getBalls() {
 	return balls;

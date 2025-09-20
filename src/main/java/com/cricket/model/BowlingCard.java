@@ -147,8 +147,9 @@ public int getMaidens() {
 public void setMaidens(int maidens) {
 	if(maidens < 0) {
 		maidens = 0;
+	}else {
+		this.maidens = maidens;
 	}
-	this.maidens = maidens;
 }
 public int getDots() {
 	return dots;
@@ -220,25 +221,45 @@ public int getOvers() {
 	return overs;
 }
 public void setOvers(int overs) {
-	this.overs = overs;
+	if(overs < 0) {
+		this.overs = 0;
+	}
+	else {
+		this.overs = overs;
+	}
 }
 public int getRuns() {
 	return runs;
 }
 public void setRuns(int runs) {
-	this.runs = runs;
+	if(runs < 0) {
+		this.runs = 0;
+	}
+	else {
+		this.runs = runs;
+	}
 }
 public int getBalls() {
 	return balls;
 }
 public void setBalls(int balls) {
-	this.balls = balls;
+	if(balls < 0) {
+		this.balls = 0;
+	}
+	else {
+		this.balls = balls;
+	}
 }
 public int getWickets() {
 	return wickets;
 }
 public void setWickets(int wickets) {
-	this.wickets = wickets;
+	if(wickets < 0) {
+		this.wickets = 0;
+	}
+	else {
+		this.wickets = wickets;
+	}
 }
 @Override
 public int compareTo(BowlingCard bc) {

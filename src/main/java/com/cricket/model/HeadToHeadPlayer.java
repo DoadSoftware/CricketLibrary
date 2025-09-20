@@ -78,6 +78,12 @@ public int getRuns() {
 
 public void setRuns(int runs) {
 	this.runs = runs;
+	if(runs < 0) {
+		this.runs = 0;
+	}
+	else {
+		this.runs = runs;
+	}
 }
 
 public int getBallsFaced() {
@@ -85,7 +91,12 @@ public int getBallsFaced() {
 }
 
 public void setBallsFaced(int ballsFaced) {
-	this.ballsFaced = ballsFaced;
+	if(ballsFaced < 0) {
+		this.ballsFaced = 0;
+	}
+	else {
+		this.ballsFaced = ballsFaced;
+	}
 }
 
 public int getBatdots() {
@@ -93,7 +104,12 @@ public int getBatdots() {
 }
 
 public void setBatdots(int batdots) {
-	this.batdots = batdots;
+	if(batdots < 0) {
+		this.batdots = 0;
+	}
+	else {
+		this.batdots = batdots;
+	}
 }
 
 public int getBalldots() {
@@ -101,7 +117,12 @@ public int getBalldots() {
 }
 
 public void setBalldots(int balldots) {
-	this.balldots = balldots;
+	if(balldots < 0) {
+		this.balldots = 0;
+	}
+	else {
+		this.balldots = balldots;
+	}
 }
 
 public int getOnes() {
@@ -109,7 +130,12 @@ public int getOnes() {
 }
 
 public void setOnes(int ones) {
-	this.ones = ones;
+	if(ones < 0) {
+		this.ones = 0;
+	}
+	else {
+		this.ones = ones;
+	}
 }
 
 public int getTwos() {
@@ -117,7 +143,12 @@ public int getTwos() {
 }
 
 public void setTwos(int twos) {
-	this.twos = twos;
+	if(twos < 0) {
+		this.twos = 0;
+	}
+	else {
+		this.twos = twos;
+	}
 }
 
 public int getThrees() {
@@ -125,7 +156,12 @@ public int getThrees() {
 }
 
 public void setThrees(int threes) {
-	this.threes = threes;
+	if(threes < 0) {
+		this.threes = 0;
+	}
+	else {
+		this.threes = threes;
+	}
 }
 
 public int getFours() {
@@ -133,7 +169,12 @@ public int getFours() {
 }
 
 public void setFours(int fours) {
-	this.fours = fours;
+	if(fours < 0) {
+		this.fours = 0;
+	}
+	else {
+		this.fours = fours;
+	}
 }
 
 public int getSixes() {
@@ -141,7 +182,12 @@ public int getSixes() {
 }
 
 public void setSixes(int sixes) {
-	this.sixes = sixes;
+	if(sixes < 0) {
+		this.sixes = 0;
+	}
+	else {
+		this.sixes = sixes;
+	}
 }
 
 public int getWickets() {
@@ -149,7 +195,12 @@ public int getWickets() {
 }
 
 public void setWickets(int wickets) {
-	this.wickets = wickets;
+	if(wickets < 0) {
+		this.wickets = 0;
+	}
+	else {
+		this.wickets = wickets;
+	}
 }
 
 public int getRunsConceded() {
@@ -157,7 +208,12 @@ public int getRunsConceded() {
 }
 
 public void setRunsConceded(int runsConceded) {
-	this.runsConceded = runsConceded;
+	if(runsConceded < 0) {
+		this.runsConceded = 0;
+	}
+	else {
+		this.runsConceded = runsConceded;
+	}
 }
 
 public int getBallsBowled() {
@@ -165,7 +221,12 @@ public int getBallsBowled() {
 }
 
 public void setBallsBowled(int ballsBowled) {
-	this.ballsBowled = ballsBowled;
+	if(ballsBowled < 0) {
+		this.ballsBowled = 0;
+	}
+	else {
+		this.ballsBowled = ballsBowled;
+	}
 }
 
 public int getMaidens() {
@@ -173,7 +234,12 @@ public int getMaidens() {
 }
 
 public void setMaidens(int maidens) {
-	this.maidens = maidens;
+	if(maidens < 0) {
+		this.maidens = 0;
+	}
+	else {
+		this.maidens = maidens;
+	}
 }
 
 public String getMatchFileName() {
@@ -229,7 +295,12 @@ public int getTapeBall_balls() {
 }
 
 public void setTapeBall_balls(int tapeBall_balls) {
-	this.tapeBall_balls = tapeBall_balls;
+	if(tapeBall_balls < 0) {
+		this.tapeBall_balls = 0;
+	}
+	else {
+		this.tapeBall_balls = tapeBall_balls;
+	}
 }
 
 public int getTapeBall_runs() {
@@ -237,7 +308,12 @@ public int getTapeBall_runs() {
 }
 
 public void setTapeBall_runs(int tapeBall_runs) {
-	this.tapeBall_runs = tapeBall_runs;
+	if(tapeBall_runs < 0) {
+		this.tapeBall_runs = 0;
+	}
+	else {
+		this.tapeBall_runs = tapeBall_runs;
+	}
 }
 
 public int getTapeBall_wickets() {
@@ -245,7 +321,12 @@ public int getTapeBall_wickets() {
 }
 
 public void setTapeBall_wickets(int tapeBall_wickets) {
-	this.tapeBall_wickets = tapeBall_wickets;
+	if(tapeBall_wickets < 0) {
+		this.tapeBall_wickets = 0;
+	}
+	else {
+		this.tapeBall_wickets = tapeBall_wickets;
+	}
 }
 
 public int getTapeBall_dotsBall() {
@@ -253,7 +334,12 @@ public int getTapeBall_dotsBall() {
 }
 
 public void setTapeBall_dotsBall(int tapeBall_dotsBall) {
-	this.tapeBall_dotsBall = tapeBall_dotsBall;
+	if(tapeBall_dotsBall < 0) {
+		this.tapeBall_dotsBall = 0;
+	}
+	else {
+		this.tapeBall_dotsBall = tapeBall_dotsBall;
+	}
 }
 
 public boolean isTeamVsTeam() {

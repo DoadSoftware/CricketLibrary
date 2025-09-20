@@ -50,7 +50,12 @@ public int getBalls() {
 }
 
 public void setBalls(int balls) {
-	this.balls = balls;
+	if(balls < 0) {
+		this.balls = 0;
+	}
+	else {
+		this.balls = balls;
+	}
 }
 
 public int getRuns() {
@@ -58,7 +63,12 @@ public int getRuns() {
 }
 
 public void setRuns(int runs) {
-	this.runs = runs;
+	if(runs < 0) {
+		this.runs = 0;
+	}
+	else {
+		this.runs = runs;
+	}
 }
 
 public int getWickets() {
@@ -66,7 +76,12 @@ public int getWickets() {
 }
 
 public void setWickets(int wickets) {
-	this.wickets = wickets;
+	if(wickets < 0) {
+		this.wickets = 0;
+	}
+	else {
+		this.wickets = wickets;
+	}
 }
 
 public int getMaidens() {
@@ -74,7 +89,12 @@ public int getMaidens() {
 }
 
 public void setMaidens(int maidens) {
-	this.maidens = maidens;
+	if(maidens < 0) {
+		this.maidens = 0;
+	}
+	else {
+		this.maidens = maidens;
+	}
 }
   
 }
