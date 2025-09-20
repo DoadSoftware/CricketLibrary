@@ -14729,6 +14729,7 @@ public class CricketFunctions {
 								        	thisOverWkts +=Integer.valueOf(thisOver.split(",")[2]);
 								        	
 											statsData = getpowerplay(events.get(i));
+											
 											if(statsData.contains(",") && statsData.split(",").length >= 7) {
 												if(events.get(i).getEventInningNumber()==1) {
 													//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 1 HOME
@@ -15017,6 +15018,10 @@ public class CricketFunctions {
 	        	matchStats.setPhase3StartOver(16); matchStats.setPhase3EndOver(20);
 				break;
 			}
+	    }else if(Match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
+	    	matchStats.setPhase1StartOver(1); matchStats.setPhase1EndOver(10);
+        	matchStats.setPhase2StartOver(11); matchStats.setPhase2EndOver(40);
+        	matchStats.setPhase3StartOver(41); matchStats.setPhase3EndOver(50);
 	    }
 	   
 	    return getAllEventsStatsMASTER(matchStats ,Match.getMatch(), Match.getEventFile().getEvents());
