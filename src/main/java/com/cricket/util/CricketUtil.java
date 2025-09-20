@@ -68,6 +68,8 @@ public class CricketUtil {
 	public final static String LOG_REVIEW = "LOG_REVIEW";
 	public final static String SUCCESSFUL = "SUCCESSFUL";
 	public final static String UNSUCCESSFUL = "UNSUCCESSFUL";
+	public final static String RETAINED = "RETAINED";
+	public final static String UNRETAINED = "UNRETAINED";
 	
 	public final static String YES = "YES";
 	public final static String NO = "NO";

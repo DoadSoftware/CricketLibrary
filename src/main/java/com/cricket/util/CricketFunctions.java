@@ -334,7 +334,6 @@ public class CricketFunctions {
                 	 powerplay.put(inn.getBatting_team().getTeamName4(),teams);
                  }
 	        }
-		System.out.println("powerplay = " + powerplay.get("TIGERS"));
 		return powerplay;	
 	}
 	public static List<String> getTeamScore(List<Team> team, List<HeadToHeadTeam> headToHead, MatchAllData match) {
@@ -449,10 +448,8 @@ public class CricketFunctions {
 		            .anyMatch(bc -> bc.getPlayerId() == secondBatterNo);
 		        
 		        if (firstMatch && (next.getFirstBatterNo() != firstBatterNo)) {
-		            System.out.println(current.getPartnershipNumber());
 		            current.setPartnershipNumber(0);
 		        } else if (secondMatch && (next.getSecondBatterNo() != secondBatterNo)) {
-		            System.out.println(current.getPartnershipNumber());
 		            current.setPartnershipNumber(0);
 		        } else {
 		            current.setPartnershipNumber(i);
@@ -528,16 +525,9 @@ public class CricketFunctions {
                 }
             }
 
-            // Print the HashMap
-//            dataMap.forEach((key, value) -> {
-//                System.out.println(key + " : " + value);
-//            });
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("dataMap = " + dataMap);
 		return dataMap;
     }
 	
@@ -562,12 +552,6 @@ public class CricketFunctions {
                     }
                 }
             }
-
-            // Print the HashMap
-            rowData.forEach((key, value) -> {
-                System.out.println(key + " : " + value);
-            });
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -736,7 +720,6 @@ public class CricketFunctions {
 			this_match.getSetup().setMatchType(CricketUtil.IT20);
 			this_match.getSetup().setMaxOvers(CricketUtil.T20_MAXIMUM_OVERS);
 		}
-		System.out.println(valueToProcess);
 		this_match.getSetup().setSaveMatchFileAs("JSON");
 		this_match.getSetup().setMatchIdent(valueToProcess.split("/")[valueToProcess.split("/").length-2]);
 		this_match.getSetup().setTournament(valueToProcess.split("/")[valueToProcess.split("/").length-2]);
@@ -751,10 +734,7 @@ public class CricketFunctions {
 				for (WebElement this_team : driver.findElements(By.className("ci-team-score"))) {
 					if(this_match.getMatch().getMatchResult() == null) {
 						this_webElement = this_team.findElement(By.xpath("../../.."));
-						System.out.println("this_webElement tag name = " + this_webElement.getTagName());
-						System.out.println("this_webElement p/span is empty = " + this_webElement.findElements(By.xpath("./p/span")).isEmpty());
 						if(!this_webElement.findElements(By.xpath("./p/span")).isEmpty()) {
-							System.out.println("Result = " + this_webElement.findElement(By.xpath("./p/span")).getText());
 							this_match.getMatch().setMatchResult(this_webElement.findElement(By.xpath("./p/span")).getText());
 						}
 					}
@@ -762,10 +742,7 @@ public class CricketFunctions {
 					for (WebElement team_anchor : this_team.findElements(By.tagName("a"))) {
 						if(team_anchor.getAttribute("href").contains("/team/")
 							&& team_anchor.getAttribute("href").contains("-")) {
-							System.out.println("team_anchor href = " + team_anchor.getAttribute("href"));
 							data_to_process = team_anchor.getAttribute("href").split("/")[team_anchor.getAttribute("href").split("/").length-1];
-							System.out.println("team name = " + team_anchor.findElement(By.tagName("span")).getText());
-							System.out.println("team ID = " + data_to_process.split("-")[data_to_process.split("-").length-1]);
 							for (Team team : all_teams) {
 								if(team_anchor.findElement(By.tagName("span")).getText().toLowerCase().contains(team.getTeamName1().toLowerCase())
 										|| team_anchor.findElement(By.tagName("span")).getText().toLowerCase().contains(team.getTeamName4().toLowerCase())) {
@@ -774,17 +751,11 @@ public class CricketFunctions {
 									
 									switch (column_data_count) {
 									case 1:
-										System.out.println("column_data_count1 = " + column_data_count);
-										System.out.println(team_anchor.findElement(By.tagName("span")).getText().toLowerCase());
-										System.out.println("teams = " + team.getTeamName4().toLowerCase());
 										this_match.getSetup().setHomeTeam(team);
 										this_match.getSetup().getHomeTeam().setTeamId(Integer.valueOf(data_to_process.split("-")[data_to_process.split("-").length-1]));
 										this_match.getSetup().setHomeTeamId(Integer.valueOf(data_to_process.split("-")[data_to_process.split("-").length-1]));
 										break;
 									case 2:
-										System.out.println("column_data_count2 = " + column_data_count);
-										System.out.println(team_anchor.findElement(By.tagName("span")).getText().toLowerCase());
-										System.out.println("teams = " + team.getTeamName4().toLowerCase());
 										this_match.getSetup().setAwayTeam(team);
 										this_match.getSetup().getAwayTeam().setTeamId(Integer.valueOf(data_to_process.split("-")[data_to_process.split("-").length-1]));
 										this_match.getSetup().setAwayTeamId(Integer.valueOf(data_to_process.split("-")[data_to_process.split("-").length-1]));
@@ -811,8 +782,6 @@ public class CricketFunctions {
 						column_data_count = 0;
 						for(WebElement column : row.findElements(By.tagName("td")))
 						{
-							System.out.println("column.getText() = " + column.getText());
-							
 							if(column.getText().equalsIgnoreCase(CricketUtil.EXTRAS)) {
 								extras_found = true;
 							} else if(column.getText().equalsIgnoreCase(CricketUtil.TOTAL)) {
@@ -825,7 +794,6 @@ public class CricketFunctions {
 									
 									data_to_process = column.getText().replace("(", "");
 									data_to_process = data_to_process.replace(")", "");
-									System.out.println("Extra data_to_process = " + data_to_process);
 									if(data_to_process.contains(",")) {
 										for (String ext : data_to_process.split(",")) {
 											if(ext.toUpperCase().contains("LB")) {
@@ -872,20 +840,14 @@ public class CricketFunctions {
 								
 								if(!column.findElements(By.tagName("span")).isEmpty()) {
 									for (WebElement this_span : column.findElements(By.tagName("span"))) {
-										System.out.println("this_span = " + this_span);
-										System.out.println("TOTAL OVERS = " + this_span.getText());
 										if(this_span.getText().toUpperCase().contains(" OV") && !this_span.getText().toUpperCase().contains(",")) {
 											data_to_process = this_span.getText().toUpperCase().replace("OV", "").trim();
-											System.out.println("Overs = " + data_to_process);
 											if(data_to_process.contains(".") && !data_to_process.contains(",")) {
-												System.out.println("Over no = " + data_to_process.substring(0,data_to_process.indexOf(".")));
-												System.out.println("Ball no = " + data_to_process.substring(data_to_process.indexOf(".")+1));
 												this_inn.get(this_inn.size()-1).setTotalOvers(
 													Integer.valueOf(data_to_process.substring(0,data_to_process.indexOf("."))));
 												this_inn.get(this_inn.size()-1).setTotalBalls(
 														Integer.valueOf(data_to_process.substring(data_to_process.indexOf(".")+1)));
 											}else if(!data_to_process.contains(",")) {
-												System.out.println("50Over no = " + data_to_process);
 												this_inn.get(this_inn.size()-1).setTotalOvers(
 													Integer.valueOf(data_to_process));
 												this_inn.get(this_inn.size()-1).setTotalBalls(0);
@@ -899,12 +861,8 @@ public class CricketFunctions {
 										}
 									}
 								} else {
-									System.out.println("TOTAL = " + column.getText());
 									data_to_process = column.getText().trim();
 									if(data_to_process.contains("/")) {
-										System.out.println("Total Score = " + data_to_process);
-										System.out.println("Runs = " + data_to_process.substring(0,data_to_process.indexOf("/")));
-										System.out.println("Wickets = " + data_to_process.substring(data_to_process.indexOf("/")+1));
 										this_inn.get(this_inn.size()-1).setTotalRuns(
 											Integer.valueOf(data_to_process.substring(0,data_to_process.indexOf("/"))));
 										this_inn.get(this_inn.size()-1).setTotalWickets(
@@ -912,8 +870,6 @@ public class CricketFunctions {
 										total_found = false;
 									} else {
 										if(NumberUtils.isCreatable(data_to_process)) {
-											System.out.println("Total Runs without / = " + data_to_process);
-											System.out.println("Total Wickets = " + this_battingcard.size());
 											this_inn.get(this_inn.size()-1).setTotalRuns(Integer.valueOf(data_to_process));
 											this_inn.get(this_inn.size()-1).setTotalWickets(this_battingcard.size()-1);
 											total_found = false;
@@ -926,7 +882,6 @@ public class CricketFunctions {
 								if(column.getText().toUpperCase().contains("FALL OF WICKETS:")) {
 									
 									data_to_process = column.getText().toUpperCase().replace("FALL OF WICKETS:", "").trim();
-									System.out.println("FoW -> data_to_process = " + data_to_process);
 									for(int i=0; i < data_to_process.split(",").length; i++) {
 										
 										for (BattingCard bc : this_battingcard) {
@@ -945,7 +900,6 @@ public class CricketFunctions {
 													Integer.valueOf(data_to_process.split(",")[i+1].toUpperCase()
 													.replace("OV)", "").substring(data_to_process.split(",")[i+1].indexOf(".")+1).trim()), ""));
 												i++;
-												System.out.println("FoW Variable = " + this_FoWs.get(this_FoWs.size()-1).toString());
 												break;
 											}
 										}										
@@ -955,9 +909,6 @@ public class CricketFunctions {
 									for (WebElement did_not_bat_anchor : column.findElements(By.tagName("a"))) {
 										if(did_not_bat_anchor.getAttribute("href").contains("/cricketers/")
 												&& did_not_bat_anchor.getAttribute("href").contains("-")) {
-											System.out.println("did_not_bat_anchor = " + did_not_bat_anchor.getAttribute("href"));
-											System.out.println("did_not_bat_anchor span->span = " + did_not_bat_anchor.findElement(
-												By.xpath("./span/span")).getText());
 											this_player = new Player();
 											this_player.setPlayerId(Integer.valueOf(did_not_bat_anchor.getAttribute("href").split("-")[
 											    did_not_bat_anchor.getAttribute("href").split("-").length-1]));
@@ -989,11 +940,6 @@ public class CricketFunctions {
 									if(!column.findElements(By.tagName("a")).isEmpty()) {
 										if(column.findElement(By.tagName("a")).getAttribute("href").contains("/cricketers/")
 											&& column.findElement(By.tagName("a")).getAttribute("href").contains("-")) {
-										
-											System.out.println("Bat anchor HREF = " + column.findElement(
-													By.tagName("a")).getAttribute("href"));
-											System.out.println("Bat player full name = " + column.findElement(By.tagName("a")).
-												findElement(By.tagName("span")).getText());
 											this_battingcard.add(new BattingCard(Integer.valueOf(column.findElement(
 												By.tagName("a")).getAttribute("href").split("-")[
 												column.findElement(By.tagName("a")).getAttribute("href").split("-").length-1]), 
@@ -1154,7 +1100,6 @@ public class CricketFunctions {
 										
 									} else if(!column.findElements(By.tagName("strong")).isEmpty()) {
 										
-										System.out.println("Bat Runs = " + column.findElement(By.tagName("strong")).getText());
 										this_battingcard.get(this_battingcard.size()-1).setRuns(Integer.valueOf(
 											column.findElement(By.tagName("strong")).getText()));
 
@@ -1175,7 +1120,6 @@ public class CricketFunctions {
 														data_to_process = "0";
 													}
 												}
-												System.out.println("Bat column_data_count = " + column_data_count + " -> " + data_to_process);
 												switch (column_data_count) {
 												case 1:
 													this_battingcard.get(this_battingcard.size()-1).setBalls(
@@ -1262,10 +1206,8 @@ public class CricketFunctions {
 				for (WebElement bowling_card_table : driver.findElements(By.tagName("table"))) {
 					
 					data_to_process = "";
-					System.out.println("Table head:row:th found = " + bowling_card_table.findElements(By.xpath("./thead/tr/th")).size());
 					if(bowling_card_table.findElements(By.xpath("./thead/tr/th")).size() > 0) {
 						for (WebElement table_header : bowling_card_table.findElements(By.xpath("./thead/tr/th"))) {
-							System.out.println("table_header.getText() = " + table_header.getText());
 							data_to_process = table_header.getText().toUpperCase().trim();
 							break;
 						}
@@ -1276,7 +1218,6 @@ public class CricketFunctions {
 						
 						for(WebElement row : bowling_card_table.findElements(By.xpath("./tbody/tr")))
 						{
-							System.out.println("row.getAttribute(class) = " + row.getAttribute("class"));
 							if(!row.getAttribute("class").toLowerCase().contains("ds-hidden")) {
 								column_data_count = 0;
 								for(WebElement column : row.findElements(By.tagName("td")))
@@ -1286,8 +1227,6 @@ public class CricketFunctions {
 										if(column.findElement(By.tagName("a")).getAttribute("href").contains("/cricketers/")
 											&& column.findElement(By.tagName("a")).getAttribute("href").contains("-")) {
 											
-											System.out.println("Bowling anchor HREF = " + column.findElement(By.tagName("a")).getAttribute("href"));
-											System.out.println("Bowling player full name = " + column.findElement(By.tagName("a")).findElement(By.tagName("span")).getText());
 											this_bowlingcard.add(new BowlingCard(Integer.valueOf(column.findElement(
 													By.tagName("a")).getAttribute("href").split("-")[
 													column.findElement(By.tagName("a")).getAttribute("href").split("-").length-1]), 
@@ -1324,7 +1263,6 @@ public class CricketFunctions {
 												data_to_process = "0";
 											}
 										}
-										System.out.println("Bowl column_data_count = " + column_data_count + " -> " + data_to_process);
 										switch (column_data_count) {
 										case 1:
 											if(column.getText().contains(".")) {
@@ -1362,9 +1300,6 @@ public class CricketFunctions {
 								}
 							}
 						}
-						
-						System.out.println("Bowling card " + this_bowlingcard.toString());
-						System.out.println("Inn Size " + this_inn.size());
 						this_inn.get(bowling_card_count - 1).setBowlingCard(this_bowlingcard);
 						bowling_card_count = bowling_card_count + 1;
 						
@@ -1399,25 +1334,18 @@ public class CricketFunctions {
 			case "GET-SERIES-MATCHES-DATA":
 				
 				driver.get(valueToProcess);
-				System.out.println("valueToProcess = " + valueToProcess);
-				System.out.println("this_team_id = " + this_team_id);
 				this_team_id = valueToProcess.split("/")[valueToProcess.split("/").length-2];
-				System.out.println("1st this_team_id = " + this_team_id);
 				this_team_id = this_team_id.split("-")[this_team_id.split("-").length-1];
-				System.out.println("2nd this_team_id = " + this_team_id);
 				
 				for (Team team : cricketService.getTeams()) {
-					System.out.println("team = " + team.getTeamName1());
 					if(valueToProcess.toLowerCase().contains(
 							team.getTeamName1().replace(" ", "-").toLowerCase())) {
 						this_teams.add(team.getTeamName1().replace(" ", "-").toLowerCase());
-						System.out.println("this_teams = " + this_teams.get(this_teams.size()-1));
 					}
 				}
 				for(WebElement anchor : driver.findElements(By.tagName("a")))
 				{
 					teams_found_count = 0;
-					System.out.println("anchor.getAttribute(href) = " + anchor.getAttribute("href"));
 					if(anchor.getAttribute("href").toLowerCase().contains("/full-scorecard")
 						|| anchor.getAttribute("href").toLowerCase().contains("/live-cricket-score")) {
 						
@@ -1431,12 +1359,9 @@ public class CricketFunctions {
 							&& anchor.getAttribute("href").toLowerCase().contains(this_team_id + "/")) {
 							teams_found_count = 2;
 						}
-						System.out.println("teams_found_count = " + teams_found_count);
 						if(teams_found_count == 2) {
 							this_url = anchor.getAttribute("href").split("/")[anchor.getAttribute("href").split("/").length - 2];
-							System.out.println("this_url = " + this_url);
 							if(this_url.contains("-")) {
-								System.out.println("match id = " + Long.valueOf(this_url.split("-")[this_url.split("-").length-1]));
 								all_stats.add(new ArchiveData(Long.valueOf(this_url.split("-")[this_url.split("-").length-1]), 
 									this_url, anchor.getAttribute("href")));
 							}
@@ -1603,7 +1528,6 @@ public class CricketFunctions {
 			if ((events != null) && (events.size() > 0)) {
 				for (int i = events.size() - 1; i >= 0; i--) {
 					if(events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_IMPACT) && events.get(i).getEventBatterNo() == player_id) {
-						System.out.println("player_id = yes = " + player_id);
 						return CricketUtil.YES;
 					}
 				}
@@ -2058,7 +1982,6 @@ public class CricketFunctions {
 					}else {
 						over_number = getOvers(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
 						over_ball = getBalls(match.getEventFile().getEvents().get(i).getEventOverNo(), match.getEventFile().getEvents().get(i).getEventBallNo());
-						System.out.println(ball_number);
 						over_ball = String.valueOf(Integer.valueOf(over_ball) + ball_number);
 						c=c+1;
 					}
@@ -2201,7 +2124,6 @@ public class CricketFunctions {
 			        wagonY = String.valueOf(0);
 				  break;
 			  case CricketUtil.LOG_ANY_BALL:
-				  System.out.println("LOG_ANY_BALL");
 				  if(match.getMatch().getWagons() != null) {
 					  for(int k = 0; k < match.getMatch().getWagons().size(); k++){
 						  if(match.getEventFile().getEvents().get(i).getEventInningNumber() == match.getMatch().getWagons().get(k).getInningNumber()) {
@@ -2237,7 +2159,6 @@ public class CricketFunctions {
 				  }
 				  break;
 			default:
-				   System.out.println("Default");
 				  if(match.getMatch().getWagons() != null) {
 					  for(int k = 0; k < match.getMatch().getWagons().size(); k++){
 						  if(match.getEventFile().getEvents().get(i).getEventInningNumber() == match.getMatch().getWagons().get(k).getInningNumber()) {
@@ -2309,7 +2230,6 @@ public class CricketFunctions {
 									}else if(match.getMatch().getShots().get(k).getBoundaryHeight().contains("very_high_in_the_air")) {
 										height = "4";
 									}
-									System.out.println("height = " + height);
 									if(match.getMatch().getShots().get(k).getRuns() == 6) {
 										six_distance = String.valueOf(match.getMatch().getShots().get(k).getSixDistance());
 									}
@@ -2539,8 +2459,6 @@ public class CricketFunctions {
 	        }
 	        // Collect all bowler data for output
 	        bowlerDetails.addAll(bowlerStats.values());
-	    } else {
-	        System.out.println("No events found in matchAllData.");
 	    }
 
 	    return bowlerDetails;
@@ -2637,8 +2555,6 @@ public class CricketFunctions {
 	        }
 	        // Collect all bowler data for output
 	        bowlerDetails.addAll(bowlerStats.values());
-	    } else {
-	        System.out.println("No events found in matchAllData.");
 	    }
 
 	    return bowlerDetails;
@@ -3383,6 +3299,7 @@ public class CricketFunctions {
 	    return sb.toString();
 	}
 	
+	@SuppressWarnings("unused")
 	public static void processCricketStats() {
         // Store batsman and bowler stats per innings
         Map<Integer, Map<String, BatsmanStats>> inningsBatsmanStats = new HashMap<>();
@@ -3467,58 +3384,31 @@ public class CricketFunctions {
             e.printStackTrace();
         }
 
-        if (lastFullOver != -1) {
-            System.out.println("\nT/Ov data for the last full over (" + lastFullOver + ") in Innings " + ":");
-            List<String> lastOverTovData = overBallData.get(lastFullOver);
-            for (String tov : lastOverTovData) {
-                System.out.println(tov);
-            }
-        } else {
-            System.out.println("\nNo full over found in Innings " + ".");
-        }
+//        if (lastFullOver != -1) {
+//            List<String> lastOverTovData = overBallData.get(lastFullOver);
+//        }
         
         if (lastLine != null && lastLine.length() >= 128) {
             lastBatsman = lastLine.substring(8, 34).trim();
             lastBowler = lastLine.substring(34, 60).trim();
             lastOtherBatsman = lastLine.substring(131, 157).trim();  // Other batsman name
-
-            System.out.println("\nDetails from the last valid line:");
-            System.out.println("Batsman: " + lastBatsman);
-            System.out.println("Other Batsman: " + lastOtherBatsman);
-            System.out.println("Bowler: " + lastBowler);
-        } else {
-            System.out.println("\nNo valid last line found or line too short for extraction.");
         }
         
         // Print Batsman Stats per Innings
-        System.out.println("Batsman Stats per Innings:");
-        for (Map.Entry<Integer, Map<String, BatsmanStats>> inningsEntry : inningsBatsmanStats.entrySet()) {
-            int innings = inningsEntry.getKey();
-            System.out.println("\nInnings " + innings + ":");
-            for (Map.Entry<String, BatsmanStats> entry : inningsEntry.getValue().entrySet()) {
-            	
-            	if(lastBatsman.equalsIgnoreCase(entry.getKey())) {
-            		System.out.println(entry.getKey() + " -> " + entry.getValue());
-            	}else if(lastOtherBatsman.equalsIgnoreCase(entry.getKey())) {
-            		System.out.println(entry.getKey() + " -> " + entry.getValue());
-            	}
-                
-            }
-        }
+//        for (Map.Entry<Integer, Map<String, BatsmanStats>> inningsEntry : inningsBatsmanStats.entrySet()) {
+//            int innings = inningsEntry.getKey();
+//            for (Map.Entry<String, BatsmanStats> entry : inningsEntry.getValue().entrySet()) {
+//            	
+//            }
+//        }
 
-        // Print Bowler Stats per Innings
-        System.out.println("\nBowler Stats per Innings:");
-        for (Map.Entry<Integer, Map<String, BowlerStats>> inningsEntry : inningsBowlerStats.entrySet()) {
-            int innings = inningsEntry.getKey();
-            System.out.println("\nInnings " + innings + ":");
-            for (Map.Entry<String, BowlerStats> entry : inningsEntry.getValue().entrySet()) {
-            	
-            	if(lastBowler.equalsIgnoreCase(entry.getKey())) {
-            		System.out.println(entry.getKey() + " -> " + entry.getValue());
-            	}
-               // System.out.println(entry.getKey() + " -> " + entry.getValue());
-            }
-        }
+//        for (Map.Entry<Integer, Map<String, BowlerStats>> inningsEntry : inningsBowlerStats.entrySet()) {
+//            int innings = inningsEntry.getKey();
+//            for (Map.Entry<String, BowlerStats> entry : inningsEntry.getValue().entrySet()) {
+//            	if(lastBowler.equalsIgnoreCase(entry.getKey())) {
+//            	}
+//            }
+//        }
     }
 	public static ForeignLanguageData generateMatchResultForeignLanguage(MatchAllData match, String teamNameType, 
 			MultiLanguageDatabase multiLanguageDb)
@@ -4183,10 +4073,7 @@ public class CricketFunctions {
 						String secondLine = allLines.get(1); // second line
 					
 						if (secondLine.contains(",")) {
-							System.out.println("Second line = " + secondLine);
-							
 							String speedValue = secondLine.split(",")[1].trim();
-							
 							lastSpeed.setSpeedValue(speedValue);
 							lastSpeed.setSpeedFileModifiedTime(latestModifiedTime);
 							lastSpeed.setSpeedExtra(latestFileName);
@@ -4257,10 +4144,7 @@ public class CricketFunctions {
 							String secondLine = allLines.get(1); // second line
 						
 							if (secondLine.contains(",")) {
-								System.out.println("Second line = " + secondLine);
-								
 								String speedValue = secondLine.split(",")[1].trim();
-								
 								lastSpeed.setSpeedValue(speedValue);
 								lastSpeed.setSpeedFileModifiedTime(latestModifiedTime);
 								lastSpeed.setSpeedExtra(latestFileName);
@@ -4634,8 +4518,6 @@ public class CricketFunctions {
 	
 	public static BestStats getProcessedBatsmanBestStats(BestStats best_stats) throws JsonMappingException, JsonProcessingException {
 		
-//		BestStats return_best_stats = objectMapper.readValue(objectMapper.writeValueAsString(best_stats), BestStats.class);
-//		System.out.println("After return_best_stats = " + return_best_stats.getPlayer());
 		int equation = best_stats.getBestEquation();
 		
 		if(equation % 2 > 0) {
@@ -4856,9 +4738,9 @@ public class CricketFunctions {
 			}
 		}
 		Collections.sort(top_ten_beststat,new CricketFunctions.BatsmanBestStatsComparator());
-		for(BestStats bs: top_ten_beststat) {
-			System.out.println(bs.getPlayerId()+"  "+ bs.getRuns());
-		}
+//		for(BestStats bs: top_ten_beststat) {
+//			System.out.println(bs.getPlayerId()+"  "+ bs.getRuns());
+//		}
 		return top_ten_beststat;
 		
 	}
@@ -8484,7 +8366,6 @@ public class CricketFunctions {
 				bc.setHowOutFielder(cricketService.getPlayer(CricketUtil.PLAYER, String.valueOf(bc.getHowOutFielderId())));
 				break;
 			}
-			System.out.println("bc = " + bc.toString());
 			switch (bc.getHowOut().toUpperCase()) {
 			case CricketUtil.CAUGHT_AND_BOWLED:
 				bc.setHowOutText("c & b " + bc.getHowOutBowler().getTicker_name());
@@ -8530,7 +8411,6 @@ public class CricketFunctions {
 				}
 				break;
 			case CricketUtil.BOWLED:
-				//System.out.println("BOWLER_NAME BOWLED = " + bc.getHowOutBowler().getTicker_name());
 				bc.setHowOutText("b " + bc.getHowOutBowler().getTicker_name());
 				bc.setHowOutPartOne("");
 				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
@@ -10281,7 +10161,6 @@ public class CricketFunctions {
 						 // Add batsman if not already present
                         if (batsman==null||batsman.stream().noneMatch(bc -> bc.getPlayerId() == batter_id)) {
                             batsman.add(new Player(batter_id, 0, 0, 0, 0, 0, 0));
-                            System.out.println("Added new batsman with ID: " + batter_id);
                         }
 
                         // Add bowler if not already present
@@ -10312,10 +10191,9 @@ public class CricketFunctions {
             	}
             }
         }
-        for(Player p:batsman ) {
-        	System.out.println("ID  "+p.getPlayerId()+"  RUN:- "+p.getRuns()+" Balls :- "+p.getBalls());
-        }
-        System.out.println("batsman "+batsman.size());
+//        for(Player p:batsman ) {
+//        	System.out.println("ID  "+p.getPlayerId()+"  RUN:- "+p.getRuns()+" Balls :- "+p.getBalls());
+//        }
         PerformarOfmatch.add(batsman);
         PerformarOfmatch.add(bowler);
         List<Object> arr = new ArrayList<>(PerformarOfmatch);
@@ -11708,8 +11586,6 @@ public class CricketFunctions {
 		}
 	    int thisOverRuns = Integer.parseInt(CricketFunctions.processThisOverRunsCount(bowlerId, sessionEvent).split("-")[0]);
 	    
-	    System.out.println("thisOverRuns - " + thisOverRuns);
-
 	    if(this_50_50 && crTarget <= thisOverRuns) {
 	    	totalRuns = inning.getTotalRuns() + (thisOverRuns/2);
 	    }
@@ -12025,7 +11901,6 @@ public class CricketFunctions {
 		String SplitSummaryText, String broadcaster, boolean ballsRemaining) 
 	{
 		String matchSummaryStatus = GenerateMatchResult(match, teamNameType, broadcaster, SplitSummaryText, ballsRemaining);
-	    System.out.println("GenerateMatchResult = " + matchSummaryStatus);
 	    if(matchSummaryStatus.trim().isEmpty()) {
 	    	
 	    	int lead_by = GetTeamRunsAhead(whichInning,match);
@@ -12315,7 +12190,6 @@ public class CricketFunctions {
 			for(int i = 0; i <= match.getEventFile().getEvents().size() - 1; i++) {
 				if(match.getEventFile().getEvents().get(i).getEventInningNumber() == inn_number) {
 					powerplayValues = getBallCountStartAndEndRange(match, inning);
-					System.out.println("powerplayValues = " + powerplayValues);
 					switch(match.getEventFile().getEvents().get(i).getEventType()) {
 					case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 					case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.BYE: case CricketUtil.LEG_BYE:  //case CricketUtil.LOG_ANY_BALL:
@@ -12339,7 +12213,6 @@ public class CricketFunctions {
 					}
  
 					if(ball_count >= powerplayValues.get(0) && ball_count < powerplayValues.get(1)) {
-						System.out.println("ball_countq = " + ball_count + "  = " + match.getEventFile().getEvents().get(i).getEventType());
 						switch(match.getEventFile().getEvents().get(i).getEventType()) {
 						case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 						case CricketUtil.FOUR: case CricketUtil.SIX: 
@@ -12373,7 +12246,6 @@ public class CricketFunctions {
 							break;
 						}
 					}else if(ball_count >= powerplayValues.get(0) && ball_count == powerplayValues.get(1)){
-						System.out.println("ball_count = " + ball_count);
 						if(match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
 							break;
 						}else if(!match.getEventFile().getEvents().get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
@@ -12928,8 +12800,6 @@ public class CricketFunctions {
 					team = match.getMatchDetails().getAwayTeam().getLongName();
 				}
 				
-				System.out.println("team = "+ team);
-				
 				runs = (inn.getRuns() - dlsRuns);
 				
 				if(runs < 0)
@@ -13298,10 +13168,10 @@ public class CricketFunctions {
 				}
 			}
 		}
-		for(int k=0;k<=bowler_data.size()-1;k++) {
-			System.out.println("Player Name : " + bowler_data.get(k).getPlayer().getFull_name() + " - Runs : " + bowler_data.get(k).getRuns() + 
-					" - FOURS/SIXES : " + bowler_data.get(k).getFours() + "/" + bowler_data.get(k).getSixes());
-		}
+//		for(int k=0;k<=bowler_data.size()-1;k++) {
+//			System.out.println("Player Name : " + bowler_data.get(k).getPlayer().getFull_name() + " - Runs : " + bowler_data.get(k).getRuns() + 
+//					" - FOURS/SIXES : " + bowler_data.get(k).getFours() + "/" + bowler_data.get(k).getSixes());
+//		}
 		return bowler_data;
 	}
 	
@@ -14770,8 +14640,6 @@ public class CricketFunctions {
 																        : matchStats.getHomeSecondPowerPlay().getNotWicketCount() + "," + Integer.valueOf(statsData.split(",")[8]))
 																    : matchStats.getHomeSecondPowerPlay().getNotWicketCount()));
 														
-														System.out.println("wicket = " + matchStats.getHomeSecondPowerPlay().getTotalWickets());
-														
 													}else if(events.get(i).getEventInningNumber()==2) {
 														//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 2 AWAY
 														updateMatchStats(matchStats.getAwaySecondPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
@@ -15080,7 +14948,6 @@ public class CricketFunctions {
 	}
 
 	public static void updateWickets(VariousStats powerPlayStats, int batterId, boolean isRetired) {
-		System.out.println("out = " + powerPlayStats.getOutBatsman().split(",").toString());
 	    boolean isBatterOut = Arrays.stream(powerPlayStats.getOutBatsman().split(","))
 	            .map(String::trim)
 	            .filter(s -> !s.isEmpty())
@@ -15157,7 +15024,6 @@ public class CricketFunctions {
 	public static String updateOverStats(Event events) {
 	    String ThisOverTxt = "";
 	    int ThisOverRun = 0; int ThisOverwkts = 0;
-	    System.out.println("type - " + events.getEventType());
 	    switch (events.getEventType()) {
 	    	
 	        case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE: 
@@ -15785,7 +15651,6 @@ public class CricketFunctions {
 	        	            tournament_stats.add(new PowerPlays(new Team(inn.getBattingTeamId(), inn.getBatting_team().getTeamName1(), inn.getBatting_team().getTeamName4()), new ArrayList<>(Arrays.asList(0, 0)),new ArrayList<>(Arrays.asList(0, 0))));
 	        	           
 	        	        }
-	        	    	System.out.println(tn.getMatch().getMatchFileName());
 	        	    	 for(PowerPlays stats : tournament_stats) {
 	        	            if ((inn.getInningNumber() == 1 && inn.getBattingTeamId() == stats.getTeam().getTeamId()) ||
 	        	                    (inn.getInningNumber() == 2 && inn.getBattingTeamId() == stats.getTeam().getTeamId())) {
@@ -15966,7 +15831,6 @@ public class CricketFunctions {
 		    RateX = String.valueOf(O) + "." + String.valueOf(b);
 		    Valid = true;
 		}
-		System.out.println("RateX = " + RateX);
 		return RateX;
 	}
 
@@ -16569,11 +16433,11 @@ public class CricketFunctions {
       
       Collections.sort(top_ten_beststats, new CricketFunctions.BatsmanBestStatsComparator());
       
-      System.out.println("-----------------------------------------------");
-      for (BestStats bs : top_ten_beststats) {
-          System.out.println("bsID = " + bs.getPlayerId() + "   runs = " + bs.getRuns());
-      }
-      System.out.println("-----------------------------------------------");
+//      System.out.println("-----------------------------------------------");
+//      for (BestStats bs : top_ten_beststats) {
+//          System.out.println("bsID = " + bs.getPlayerId() + "   runs = " + bs.getRuns());
+//      }
+//      System.out.println("-----------------------------------------------");
 	 
 	 return top_ten_beststats;
 	}
@@ -16719,8 +16583,8 @@ public class CricketFunctions {
 			}
 		  }
 		 Collections.reverse(this_speed_str);
-		  System.out.println(this_data_str);
-		  System.out.println(this_speed_str); 
+//		  System.out.println(this_data_str);
+//		  System.out.println(this_speed_str); 
 		
 		return null;
 	}
@@ -16752,8 +16616,6 @@ public class CricketFunctions {
 	    } else {
 	    	targetData.setTargetOvers(String.valueOf(matchAllData.getSetup().getMaxOvers()));
 	    }
-	    System.out.println("MaxOvers = " + matchAllData.getSetup().getMaxOvers());
-	    	    
 	    if (matchAllData.getSetup().getMaxOvers() > 0) {
 	    	if(targetData.getTargetOvers().contains(".")) {
 	    		targetData.setRemaningBall((Integer.valueOf(targetData.getTargetOvers().split("\\.")[0]) * 6 + 
@@ -16785,7 +16647,6 @@ public class CricketFunctions {
 	    if(targetData.getRemaningRuns() < 0) {
 	    	targetData.setRemaningRuns(0);
 	    } 
-	    System.out.println("targetData = " + targetData);
 	    return targetData;
 	}
 
@@ -16971,8 +16832,6 @@ public class CricketFunctions {
 					Inning inn = session_match.getMatch().getInning().get(0);
 					List<Integer> powerplay = getBallCountStartAndEndRange(session_match, inn);
 					
-					System.out.println("powerplay = " + powerplay);
-					
 					matchStats.setPhase1StartOver(powerplay.get(0)); matchStats.setPhase1EndOver(powerplay.get(1));
 		        	matchStats.setPhase2StartOver(powerplay.get(2)); matchStats.setPhase2EndOver(powerplay.get(3));
 		        	matchStats.setPhase3StartOver(powerplay.get(4)); matchStats.setPhase3EndOver(powerplay.get(5));
@@ -16980,7 +16839,6 @@ public class CricketFunctions {
 				}else if(events.get(i).getEventInningNumber()==2 && !setInning2) {
 					Inning inn = session_match.getMatch().getInning().get(1);
 					List<Integer> powerplay = getBallCountStartAndEndRange(session_match, inn);
-					System.out.println("powerplay = " + powerplay);
 					
 					matchStats.setPhase1StartOver(powerplay.get(0)); matchStats.setPhase1EndOver(powerplay.get(1));
 		        	matchStats.setPhase2StartOver(powerplay.get(2)); matchStats.setPhase2EndOver(powerplay.get(3));
@@ -17135,7 +16993,6 @@ public class CricketFunctions {
 								if(statsData.contains(",") && statsData.split(",").length >= 7) {
 									if(events.get(i).getEventInningNumber()==1) {
 										//PHASE_SCORE PHASE 1 HOME
-										System.out.println("Home Runs = " + statsData.split(",")[0]);
 										matchStats.setHomeFirstPowerPlay(new VariousStats(
 												matchStats.getHomeFirstPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
 												matchStats.getHomeFirstPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
@@ -17153,7 +17010,6 @@ public class CricketFunctions {
 										
 									}else if(events.get(i).getEventInningNumber()==2) {
 										//PHASE_SCORE PHASE 1 AWAY
-										System.out.println("Away Runs = " + statsData.split(",")[0]);
 										matchStats.setAwayFirstPowerPlay(new VariousStats(
 												matchStats.getAwayFirstPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
 												matchStats.getAwayFirstPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
@@ -17181,7 +17037,6 @@ public class CricketFunctions {
 									if(statsData.contains(",") && statsData.split(",").length >= 7) {
 										if(events.get(i).getEventInningNumber()==1) {
 											//PHASE_SCORE PHASE 2 HOME
-											System.out.println("Home Runs2 = " + statsData.split(",")[0]);
 											matchStats.setHomeSecondPowerPlay(new VariousStats(
 													matchStats.getHomeSecondPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
 													matchStats.getHomeSecondPowerPlay().getTotalWickets() + Integer.valueOf(statsData.split(",")[1]), 
