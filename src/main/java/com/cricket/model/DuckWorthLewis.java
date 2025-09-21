@@ -44,7 +44,12 @@ public class DuckWorthLewis
 		return balls_left;
 	}
 	public void setBalls_left(int balls_left) {
-		this.balls_left = balls_left;
+		if(balls_left < 0) {
+			this.balls_left = 0;
+		}
+		else {
+			this.balls_left = balls_left;
+		}
 	}
 	public String getWkts_down() {
 		return wkts_down;

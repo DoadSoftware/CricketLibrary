@@ -46,7 +46,12 @@ public int getFowNumber() {
 }
 
 public void setFowNumber(int fowNumber) {
-	this.fowNumber = fowNumber;
+	if(fowNumber < 0) {
+		this.fowNumber = 0;
+	}
+	else {
+		this.fowNumber = fowNumber;
+	}
 }
 
 public int getFowPlayerID() {
@@ -54,7 +59,12 @@ public int getFowPlayerID() {
 }
 
 public void setFowPlayerID(int fowPlayerID) {
-	this.fowPlayerID = fowPlayerID;
+	if(fowPlayerID < 0) {
+		this.fowPlayerID = 0;
+	}
+	else {
+		this.fowPlayerID = fowPlayerID;
+	}
 }
 
 public int getFowRuns() {
@@ -62,7 +72,12 @@ public int getFowRuns() {
 }
 
 public void setFowRuns(int fowRuns) {
-	this.fowRuns = fowRuns;
+	if(fowRuns < 0) {
+		this.fowRuns = 0;
+	}
+	else {
+		this.fowRuns = fowRuns;
+	}
 }
 
 public int getFowOvers() {
@@ -70,7 +85,12 @@ public int getFowOvers() {
 }
 
 public void setFowOvers(int fowOvers) {
-	this.fowOvers = fowOvers;
+	if(fowOvers < 0) {
+		this.fowOvers = 0;
+	}
+	else {
+		this.fowOvers = fowOvers;
+	}
 }
 
 public int getFowBalls() {
@@ -78,7 +98,12 @@ public int getFowBalls() {
 }
 
 public void setFowBalls(int fowBalls) {
-	this.fowBalls = fowBalls;
+	if(fowBalls < 0) {
+		this.fowBalls = 0;
+	}
+	else {
+		this.fowBalls = fowBalls;
+	}
 }
 
 @Override

@@ -22,19 +22,34 @@ public class TargetData {
 		return targetRuns;
 	}
 	public void setTargetRuns(int targetRuns) {
-		this.targetRuns = targetRuns;
+		if(targetRuns < 0) {
+			this.targetRuns = 0;
+		}
+		else {
+			this.targetRuns = targetRuns;
+		}
 	}
 	public int getRemaningRuns() {
 		return remaningRuns;
 	}
 	public void setRemaningRuns(int remaningRuns) {
-		this.remaningRuns = remaningRuns;
+		if(remaningRuns < 0) {
+			this.remaningRuns = 0;
+		}
+		else {
+			this.remaningRuns = remaningRuns;
+		}
 	}
 	public int getRemaningBall() {
 		return remaningBall;
 	}
 	public void setRemaningBall(int remaningBall) {
-		this.remaningBall = remaningBall;
+		if(remaningBall < 0) {
+			this.remaningBall = 0;
+		}
+		else {
+			this.remaningBall = remaningBall;
+		}
 	}
 	@Override
 	public String toString() {

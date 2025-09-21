@@ -132,7 +132,12 @@ public int getDuration() {
 }
 
 public void setDuration(int duration) {
-	this.duration = duration;
+	if(duration < 0) {
+		this.duration = 0;
+	}
+	else {
+		this.duration = duration;
+	}
 }
 
 public String getStartTime() {
@@ -264,7 +269,12 @@ public int getTotalFours() {
 }
 
 public void setTotalFours(int totalFours) {
-	this.totalFours = totalFours;
+	if(totalFours < 0) {
+		this.totalFours = 0;
+	}
+	else {
+		this.totalFours = totalFours;
+	}
 }
 
 public int getTotalSixes() {
@@ -272,7 +282,12 @@ public int getTotalSixes() {
 }
 
 public void setTotalSixes(int totalSixes) {
-	this.totalSixes = totalSixes;
+	if(totalSixes < 0) {
+		this.totalSixes = 0;
+	}
+	else {
+		this.totalSixes = totalSixes;
+	}
 }
 
 public int getTotalNines() {
@@ -280,7 +295,12 @@ public int getTotalNines() {
 }
 
 public void setTotalNines(int totalNines) {
-	this.totalNines = totalNines;
+	if(totalNines < 0) {
+		this.totalNines = 0;
+	}
+	else {
+		this.totalNines = totalNines;
+	}
 }
 
 public List<Player> getFielders() {
@@ -305,61 +325,111 @@ public int getTotalOvers() {
 	return totalOvers;
 }
 public void setTotalOvers(int totalOvers) {
-	this.totalOvers = totalOvers;
+	if(totalOvers < 0) {
+		this.totalOvers = 0;
+	}
+	else {
+		this.totalOvers = totalOvers;
+	}
 }
 public int getTotalBalls() {
 	return totalBalls;
 }
 public void setTotalBalls(int totalBalls) {
-	this.totalBalls = totalBalls;
+	if(totalBalls < 0) {
+		this.totalBalls = 0;
+	}
+	else {
+		this.totalBalls = totalBalls;
+	}
 }
 public int getTotalRuns() {
 	return totalRuns;
 }
 public void setTotalRuns(int totalRuns) {
-	this.totalRuns = totalRuns;
+	if(totalRuns < 0) {
+		this.totalRuns = 0;
+	}
+	else {
+		this.totalRuns = totalRuns;
+	}
 }
 public int getTotalWickets() {
 	return totalWickets;
 }
 public void setTotalWickets(int totalWickets) {
-	this.totalWickets = totalWickets;
+	if(totalWickets < 0) {
+		this.totalWickets = 0;
+	}
+	else {
+		this.totalWickets = totalWickets;
+	}
 }
 public int getTotalExtras() {
 	return totalExtras;
 }
 public void setTotalExtras(int totalExtras) {
-	this.totalExtras = totalExtras;
+	if(totalExtras < 0) {
+		this.totalExtras = 0;
+	}
+	else {
+		this.totalExtras = totalExtras;
+	}
 }
 public int getTotalWides() {
 	return totalWides;
 }
 public void setTotalWides(int totalWides) {
-	this.totalWides = totalWides;
+	if(totalWides < 0) {
+		this.totalWides = 0;
+	}
+	else {
+		this.totalWides = totalWides;
+	}
 }
 public int getTotalNoBalls() {
 	return totalNoBalls;
 }
 public void setTotalNoBalls(int totalNoBalls) {
-	this.totalNoBalls = totalNoBalls;
+	if(totalNoBalls < 0) {
+		this.totalNoBalls = 0;
+	}
+	else {
+		this.totalNoBalls = totalNoBalls;
+	}
 }
 public int getTotalByes() {
 	return totalByes;
 }
 public void setTotalByes(int totalByes) {
-	this.totalByes = totalByes;
+	if(totalByes < 0) {
+		this.totalByes = 0;
+	}
+	else {
+		this.totalByes = totalByes;
+	}
 }
 public int getTotalLegByes() {
 	return totalLegByes;
 }
 public void setTotalLegByes(int totalLegByes) {
-	this.totalLegByes = totalLegByes;
+	if(totalLegByes < 0) {
+		this.totalLegByes = 0;
+	}
+	else {
+		this.totalLegByes = totalLegByes;
+	}
 }
 public int getTotalPenalties() {
 	return totalPenalties;
 }
 public void setTotalPenalties(int totalPenalties) {
-	this.totalPenalties = totalPenalties;
+	if(totalPenalties < 0) {
+		this.totalPenalties = 0;
+	}
+	else {
+		this.totalPenalties = totalPenalties;
+	}
 }
 public int getBattingTeamId() {
 	return battingTeamId;
@@ -407,7 +477,12 @@ public int getDots() {
 	return dots;
 }
 public void setDots(int dots) {
-	this.dots = dots;
+	if(dots < 0) {
+		this.dots = 0;
+	}
+	else {
+		this.dots = dots;
+	}
 }
 
 public Inning(int inningNumber, int totalRuns, int totalWickets, int totalFours, int totalSixes, int totalNines,int dots) {

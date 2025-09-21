@@ -120,7 +120,7 @@ public class LeagueTeam {
 
 	public void setCount(int count) {
 		this.count = count;
-	}
+   }
 
 	public double getNRRR() {
 		return NRRR;

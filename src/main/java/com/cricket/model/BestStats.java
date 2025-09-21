@@ -116,7 +116,12 @@ public int getChallengeRuns() {
 }
 
 public void setChallengeRuns(int challengeRuns) {
-	this.challengeRuns = challengeRuns;
+	if(challengeRuns < 0) {
+		this.challengeRuns = 0;
+	}
+	else {
+		this.challengeRuns = challengeRuns;
+	}
 }
 
 public boolean isNot_out() {
@@ -132,7 +137,12 @@ public int getRuns() {
 }
 
 public void setRuns(int runs) {
-	this.runs = runs;
+	if(runs < 0) {
+		this.runs = 0;
+	}
+	else {
+		this.runs = runs;
+	}
 }
 
 public int getFours() {
@@ -140,7 +150,12 @@ public int getFours() {
 }
 
 public void setFours(int fours) {
-	this.fours = fours;
+	if(fours < 0) {
+		this.fours = 0;
+	}
+	else {
+		this.fours = fours;
+	}
 }
 
 public int getSixes() {
@@ -148,7 +163,12 @@ public int getSixes() {
 }
 
 public void setSixes(int sixes) {
-	this.sixes = sixes;
+	if(sixes < 0) {
+		this.sixes = 0;
+	}
+	else {
+		this.sixes = sixes;
+	}
 }
 
 public int getWickets() {
@@ -156,7 +176,12 @@ public int getWickets() {
 }
 
 public void setWickets(int wickets) {
-	this.wickets = wickets;
+	if(wickets < 0) {
+		this.wickets = 0;
+	}
+	else {
+		this.wickets = wickets;
+	}
 }
 
 public int getBalls() {
@@ -164,7 +189,12 @@ public int getBalls() {
 }
 
 public void setBalls(int balls) {
-	this.balls = balls;
+	if(balls < 0) {
+		this.balls = 0;
+	}
+	else {
+		this.balls = balls;
+	}
 }
 
 public int getBestEquation() {

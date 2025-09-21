@@ -127,7 +127,12 @@ public int getEventWickets() {
 }
 
 public void setEventWickets(int eventWickets) {
-	this.eventWickets = eventWickets;
+	if(eventWickets < 0) {
+		this.eventWickets = 0;
+	}
+	else {
+		this.eventWickets = eventWickets;
+	}
 }
 
 public int getEventFours() {
@@ -135,7 +140,12 @@ public int getEventFours() {
 }
 
 public void setEventFours(int eventFours) {
-	this.eventFours = eventFours;
+	if(eventFours < 0) {
+		this.eventFours = 0;
+	}
+	else {
+		this.eventFours = eventFours;
+	}
 }
 
 public int getEventSixes() {
@@ -143,7 +153,12 @@ public int getEventSixes() {
 }
 
 public void setEventSixes(int eventSixes) {
-	this.eventSixes = eventSixes;
+	if(eventSixes < 0) {
+		this.eventSixes = 0;
+	}
+	else {
+		this.eventSixes = eventSixes;
+	}
 }
 
 public BattingCard getEventBattingCard() {
@@ -247,7 +262,12 @@ public int getEventSubExtraRuns() {
 }
 
 public void setEventSubExtraRuns(int eventSubExtraRuns) {
-	this.eventSubExtraRuns = eventSubExtraRuns;
+	if(eventSubExtraRuns < 0) {
+		this.eventSubExtraRuns = 0;
+	}
+	else {
+		this.eventSubExtraRuns = eventSubExtraRuns;
+	}
 }
 
 public int getEventHowOutBatterNo() {
@@ -295,7 +315,12 @@ public int getEventOverNo() {
 }
 
 public void setEventOverNo(int eventOverNo) {
-	this.eventOverNo = eventOverNo;
+	if(eventOverNo < 0) {
+		this.eventOverNo = 0;
+	}
+	else {
+		this.eventOverNo = eventOverNo;
+	}
 }
 
 public int getEventBallNo() {
@@ -303,7 +328,12 @@ public int getEventBallNo() {
 }
 
 public void setEventBallNo(int eventBallNo) {
-	this.eventBallNo = eventBallNo;
+	if(eventBallNo < 0) {
+		this.eventBallNo = 0;
+	}
+	else {
+		this.eventBallNo = eventBallNo;
+	}
 }
 
 public String getEventExtra() {
@@ -351,7 +381,12 @@ public int getEventRuns() {
 }
 
 public void setEventRuns(int eventRuns) {
-	this.eventRuns = eventRuns;
+	if(eventRuns < 0) {
+		this.eventRuns = 0;
+	}
+	else {
+		this.eventRuns = eventRuns;
+	}
 }
 
 public int getEventExtraRuns() {
@@ -359,7 +394,12 @@ public int getEventExtraRuns() {
 }
 
 public void setEventExtraRuns(int eventExtraRuns) {
-	this.eventExtraRuns = eventExtraRuns;
+	if(eventExtraRuns < 0) {
+		this.eventExtraRuns = 0;
+	}
+	else {
+		this.eventExtraRuns = eventExtraRuns;
+	}
 }
 
 public String getEventHowOut() {

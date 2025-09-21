@@ -59,7 +59,12 @@ public int getSixDistance() {
 }
 
 public void setSixDistance(int sixDistance) {
-	this.sixDistance = sixDistance;
+	if(sixDistance < 0) {
+		this.sixDistance = 0;
+	}
+	else {
+		this.sixDistance = sixDistance;
+	}
 }
 
 public int getShotNumber() {
@@ -99,7 +104,12 @@ public int getRuns() {
 }
 
 public void setRuns(int runs) {
-	this.runs = runs;
+	if(runs < 0) {
+		this.runs = 0;
+	}
+	else {
+		this.runs = runs;
+	}
 }
 
 public int getInningNumber() {
@@ -107,7 +117,12 @@ public int getInningNumber() {
 }
 
 public void setInningNumber(int inningNumber) {
-	this.inningNumber = inningNumber;
+	if(inningNumber < 0) {
+		this.inningNumber = 0;
+	}
+	else {
+		this.inningNumber = inningNumber;
+	}
 }
 
 public int getOverNumber() {
@@ -115,7 +130,12 @@ public int getOverNumber() {
 }
 
 public void setOverNumber(int overNumber) {
-	this.overNumber = overNumber;
+	if(overNumber < 0) {
+		this.overNumber = 0;
+	}
+	else {
+		this.overNumber = overNumber;
+	}
 }
 
 public int getBallNumber() {
@@ -123,7 +143,12 @@ public int getBallNumber() {
 }
 
 public void setBallNumber(int ballNumber) {
-	this.ballNumber = ballNumber;
+	if(ballNumber < 0) {
+		this.ballNumber = 0;
+	}
+	else {
+		this.ballNumber = ballNumber;
+	}
 }
 
 }

@@ -77,7 +77,12 @@ public class BatBallGriff {
 	}
 
 	public void setRuns(int runs) {
-		Runs = runs;
+		if(Runs < 0) {
+			Runs = 0;
+		}
+		else {
+			Runs = runs;
+		}
 	}
 
 	public int getBallsFaced() {
@@ -85,7 +90,12 @@ public class BatBallGriff {
 	}
 
 	public void setBallsFaced(int ballsFaced) {
-		this.ballsFaced = ballsFaced;
+		if(ballsFaced < 0) {
+			ballsFaced = 0;
+		}
+		else {
+			this.ballsFaced = ballsFaced;
+		}
 	}
 
 	public String getStatus() {
@@ -117,7 +127,13 @@ public class BatBallGriff {
 	}
 
 	public void setWickets(int wickets) {
-		this.wickets = wickets;
+		if(wickets < 0) {
+			wickets = 0;
+		}
+		else {
+			this.wickets = wickets;
+		}
+		
 	}
 
 	public String getOversBowled() {

@@ -266,7 +266,12 @@ public int getFours() {
 }
 
 public void setFours(int fours) {
-	this.fours = fours;
+	if(fours < 0) {
+		this.fours = 0;
+	}
+	else {
+		this.fours = fours;
+	}
 }
 
 public int getSixes() {
@@ -274,7 +279,12 @@ public int getSixes() {
 }
 
 public void setSixes(int sixes) {
-	this.sixes = sixes;
+	if(sixes < 0) {
+		this.sixes = 0;
+	}
+	else {
+		this.sixes = sixes;
+	}
 }
 
 public int getRuns() {
@@ -282,7 +292,12 @@ public int getRuns() {
 }
 
 public void setRuns(int runs) {
-	this.runs = runs;
+	if(runs < 0) {
+		this.runs = 0;
+	}
+	else {
+		this.runs = runs;
+	}
 }
 
 public int getWickets() {
@@ -290,7 +305,12 @@ public int getWickets() {
 }
 
 public void setWickets(int wickets) {
-	this.wickets = wickets;
+	if(wickets < 0) {
+		this.wickets = 0;
+	}
+	else {
+		this.wickets = wickets;
+	}
 }
 
 public int getRunsConceded() {
@@ -298,7 +318,12 @@ public int getRunsConceded() {
 }
 
 public void setRunsConceded(int runsConceded) {
-	this.runsConceded = runsConceded;
+	if(runsConceded < 0) {
+		this.runsConceded = 0;
+	}
+	else {
+		this.runsConceded = runsConceded;
+	}
 }
 
 public int getBallsBowled() {
@@ -306,7 +331,12 @@ public int getBallsBowled() {
 }
 
 public void setBallsBowled(int ballsBowled) {
-	this.ballsBowled = ballsBowled;
+	if(ballsBowled < 0) {
+		this.ballsBowled = 0;
+	}
+	else {
+		this.ballsBowled = ballsBowled;
+	}
 }
 
 public int getBallsFaced() {
@@ -314,7 +344,12 @@ public int getBallsFaced() {
 }
 
 public void setBallsFaced(int ballsFaced) {
-	this.ballsFaced = ballsFaced;
+	if(ballsFaced < 0) {
+		this.ballsFaced = 0;
+	}
+	else {
+		this.ballsFaced = ballsFaced;
+	}
 }
 
 public String getNotOut() {
@@ -338,7 +373,12 @@ public int getDots() {
 }
 
 public void setDots(int dots) {
-	this.dots = dots;
+	if(dots < 0) {
+		this.dots = 0;
+	}
+	else {
+		this.dots = dots;
+	}
 }
 
 public int getTournament_fours() {
@@ -346,7 +386,12 @@ public int getTournament_fours() {
 }
 
 public void setTournament_fours(int tournament_fours) {
-	this.tournament_fours = tournament_fours;
+	if(tournament_fours < 0) {
+		this.tournament_fours = 0;
+	}
+	else {
+		this.tournament_fours = tournament_fours;
+	}
 }
 
 public int getTournament_sixes() {
@@ -354,7 +399,12 @@ public int getTournament_sixes() {
 }
 
 public void setTournament_sixes(int tournament_sixes) {
-	this.tournament_sixes = tournament_sixes;
+	if(tournament_sixes < 0) {
+		this.tournament_sixes = 0;
+	}
+	else {
+		this.tournament_sixes = tournament_sixes;
+	}
 }
 
 public int getRuns_against_pace() {
@@ -362,7 +412,12 @@ public int getRuns_against_pace() {
 }
 
 public void setRuns_against_pace(int runs_against_pace) {
-	this.runs_against_pace = runs_against_pace;
+	if(runs_against_pace < 0) {
+		this.runs_against_pace = 0;
+	}
+	else {
+		this.runs_against_pace = runs_against_pace;
+	}
 }
 
 public int getBalls_against_pace() {
@@ -370,7 +425,12 @@ public int getBalls_against_pace() {
 }
 
 public void setBalls_against_pace(int balls_against_pace) {
-	this.balls_against_pace = balls_against_pace;
+	if(balls_against_pace < 0) {
+		this.balls_against_pace = 0;
+	}
+	else {
+		this.balls_against_pace = balls_against_pace;
+	}
 }
 
 public int getRuns_against_spin() {
@@ -378,7 +438,12 @@ public int getRuns_against_spin() {
 }
 
 public void setRuns_against_spin(int runs_against_spin) {
-	this.runs_against_spin = runs_against_spin;
+	if(runs_against_spin < 0) {
+		this.runs_against_spin = 0;
+	}
+	else {
+		this.runs_against_spin = runs_against_spin;
+	}
 }
 
 public int getBalls_against_spin() {
@@ -386,7 +451,12 @@ public int getBalls_against_spin() {
 }
 
 public void setBalls_against_spin(int balls_against_spin) {
-	this.balls_against_spin = balls_against_spin;
+	if(balls_against_spin < 0) {
+		this.balls_against_spin = 0;
+	}
+	else {
+		this.balls_against_spin = balls_against_spin;
+	}
 }
 
 public int getFifty() {
@@ -394,7 +464,12 @@ public int getFifty() {
 }
 
 public void setFifty(int fifty) {
-	this.fifty = fifty;
+	if(fifty < 0) {
+		this.fifty = 0;
+	}
+	else {
+		this.fifty = fifty;
+	}
 }
 
 public int getHundreds() {
@@ -402,7 +477,12 @@ public int getHundreds() {
 }
 
 public void setHundreds(int hundreds) {
-	this.hundreds = hundreds;
+	if(hundreds < 0) {
+		this.hundreds = 0;
+	}
+	else {
+		this.hundreds = hundreds;
+	}
 }
 
 public int getInnings() {
@@ -410,7 +490,12 @@ public int getInnings() {
 }
 
 public void setInnings(int innings) {
-	this.innings = innings;
+	if(innings < 0) {
+		this.innings = 0;
+	}
+	else {
+		this.innings = innings;
+	}
 }
 
 public int getNot_out() {
