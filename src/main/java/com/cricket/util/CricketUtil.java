@@ -216,6 +216,7 @@ public class CricketUtil {
 	
 	public final static String BOUNDARY = "BOUNDARY";
 	public final static String RUN = "RUN";
+	public final static String RUNS = "RUNS";
 	public final static String POWERPLAY = "POWERPLAY";
 	public final static String INNING = "INNING";
 	public final static String OVER = "OVER";
