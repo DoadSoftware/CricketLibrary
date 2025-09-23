@@ -14049,12 +14049,6 @@ public class CricketFunctions {
 							        matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + ",");
 							    }
 
-							    if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
-							        matchStats.getOverData().setTotalWickets(matchStats.getOverData().getTotalWickets() + 1);
-							        matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + CricketUtil.LOG_WICKET +
-							                (events.get(i).getEventExtra() != null && !events.get(i).getEventExtra().isEmpty() ? "+" : ""));
-							    }
-							    
 							    if(events.get(i).getEventExtra() != null) {
 							    	if (events.get(i).getEventExtra().equals(CricketUtil.WIDE) || events.get(i).getEventExtra().equals(CricketUtil.NO_BALL)) {
 								        if(events.get(i).getEventSubExtra() != null) {
@@ -14131,6 +14125,11 @@ public class CricketFunctions {
 							    		matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + (events.get(i).getEventRuns() > 0 ? events.get(i).getEventRuns() + "+" : "") +
 									            (events.get(i).getEventSubExtraRuns() > 1 ? events.get(i).getEventSubExtraRuns() : "") +  events.get(i).getEventSubExtra());
 							    	} 
+							    }
+							    
+							    if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
+							        matchStats.getOverData().setTotalWickets(matchStats.getOverData().getTotalWickets() + 1);
+							        matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + "+" + CricketUtil.LOG_WICKET);
 							    }
 							    break;
 						    case CricketUtil.LOG_WICKET:
@@ -15043,12 +15042,7 @@ public class CricketFunctions {
 	        case CricketUtil.LOG_ANY_BALL:
 	        	
 	        	ThisOverRun += events.getEventRuns()+events.getEventExtraRuns() + events.getEventSubExtraRuns();
-	            if (events.getEventHowOut() != null && !events.getEventHowOut().isEmpty()) {
-	                ThisOverTxt = ThisOverTxt + CricketUtil.LOG_WICKET +
-	                    (events.getEventExtra() != null && !events.getEventExtra().isEmpty() ? "+" : "");
-	                ThisOverwkts++;
-	            }
-
+	            
 	            if(events.getEventExtra() != null) {
 	            	if (events.getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) || events.getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 	            		if(events.getEventSubExtra() != null) {
@@ -15121,7 +15115,10 @@ public class CricketFunctions {
 	        		} 
 	            }
 	            
-	            
+	            if (events.getEventHowOut() != null && !events.getEventHowOut().isEmpty()) {
+	                ThisOverTxt = ThisOverTxt + "+" + CricketUtil.LOG_WICKET;
+	                ThisOverwkts++;
+	            }
 	            break;
 
 	        case CricketUtil.LOG_WICKET:
