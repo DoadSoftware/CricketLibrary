@@ -86,6 +86,8 @@ public class Setup {
   private String setupHomeTeam;
 
   private String setupAwayTeam;
+
+  private boolean historicMatchLoaded;
   
   private List<Player> homeSquad;
 
@@ -114,6 +116,14 @@ public class Setup {
   @JsonIgnore
   private int which_key_press;
   
+public boolean isHistoricMatchLoaded() {
+	return historicMatchLoaded;
+}
+
+public void setHistoricMatchLoaded(boolean historicMatchLoaded) {
+	this.historicMatchLoaded = historicMatchLoaded;
+}
+
 public String getPlayerGender() {
 	return playerGender;
 }
@@ -530,10 +540,10 @@ public String toString() {
 			+ ", targetRuns=" + targetRuns + ", targetType=" + targetType + ", targetOvers=" + targetOvers
 			+ ", secondaryTargetRuns=" + secondaryTargetRuns + ", secondaryTargetOvers=" + secondaryTargetOvers
 			+ ", venueName=" + venueName + ", homeTeam=" + homeTeam + ", awayTeam=" + awayTeam + ", setupHomeTeam="
-			+ setupHomeTeam + ", setupAwayTeam=" + setupAwayTeam + ", homeSquad=" + homeSquad + ", homeSubstitutes="
-			+ homeSubstitutes + ", awaySquad=" + awaySquad + ", awaySubstitutes=" + awaySubstitutes
-			+ ", homeOtherSquad=" + homeOtherSquad + ", awayOtherSquad=" + awayOtherSquad
-			+ ", ground=" + ground + ", nameSuper=" + nameSuper + ", LastXball=" + LastXball
+			+ setupHomeTeam + ", setupAwayTeam=" + setupAwayTeam + ", historicMatchLoaded=" + historicMatchLoaded
+			+ ", homeSquad=" + homeSquad + ", homeSubstitutes=" + homeSubstitutes + ", awaySquad=" + awaySquad
+			+ ", awaySubstitutes=" + awaySubstitutes + ", homeOtherSquad=" + homeOtherSquad + ", awayOtherSquad="
+			+ awayOtherSquad + ", ground=" + ground + ", nameSuper=" + nameSuper + ", LastXball=" + LastXball
 			+ ", selected_inning=" + selected_inning + ", which_key_press=" + which_key_press + "]";
 }
 
