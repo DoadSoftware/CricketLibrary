@@ -236,9 +236,9 @@ public class CricketFunctions {
 					    }
 						break;
 					default:
-						if(BallsBowledInInnings >= ballCount.get(0) && BallsBowledInInnings <= ballCount.get(1)) {
+						if(BallsBowledInInnings >= ballCount.get(0) && BallsBowledInInnings < ballCount.get(1)) {
 					    	return_pp_txt = CricketUtil.ONE;
-					    }else if(BallsBowledInInnings >= ballCount.get(2) && BallsBowledInInnings <= ballCount.get(3)) {
+					    }else if(BallsBowledInInnings >= ballCount.get(2) && BallsBowledInInnings < ballCount.get(3)) {
 					    	return_pp_txt = CricketUtil.TWO;
 					    }else if(BallsBowledInInnings >= ballCount.get(4) && BallsBowledInInnings <= ballCount.get(5)) {
 					    	return_pp_txt = CricketUtil.THREE;
