@@ -1978,21 +1978,23 @@ public class CricketFunctions {
 	    				}
 					}
 					
-					for(Player hsub : match.getSetup().getHomeSubstitutes()) {
-						if(match.getEventFile().getEvents().get(i).getEventBatterNo() == hsub.getPlayerId()) {
-							if(hsub.getBattingStyle() == null) {
-								batsman_style = "";
-							}else {
-								batsman_style = hsub.getBattingStyle().toUpperCase().charAt(0) + "";
-							}
-	    				}
-						if(match.getEventFile().getEvents().get(i).getEventBowlerNo() == hsub.getPlayerId()) {
-							if(hsub.getBowlingStyle() == null) {
-								bowler_handed = "";
-							}else {
-								bowler_handed = hsub.getBowlingStyle().toUpperCase().charAt(0) + "";
-							}
-	    				}
+					if(match.getSetup().getHomeSubstitutes() != null) {
+						for(Player hsub : match.getSetup().getHomeSubstitutes()) {
+							if(match.getEventFile().getEvents().get(i).getEventBatterNo() == hsub.getPlayerId()) {
+								if(hsub.getBattingStyle() == null) {
+									batsman_style = "";
+								}else {
+									batsman_style = hsub.getBattingStyle().toUpperCase().charAt(0) + "";
+								}
+		    				}
+							if(match.getEventFile().getEvents().get(i).getEventBowlerNo() == hsub.getPlayerId()) {
+								if(hsub.getBowlingStyle() == null) {
+									bowler_handed = "";
+								}else {
+									bowler_handed = hsub.getBowlingStyle().toUpperCase().charAt(0) + "";
+								}
+		    				}
+						}
 					}
 					
 					for(Player as : match.getSetup().getAwaySquad()) {
@@ -2012,21 +2014,23 @@ public class CricketFunctions {
 	    				}
 					}
 					
-					for(Player asub : match.getSetup().getAwaySubstitutes()) {
-						if(match.getEventFile().getEvents().get(i).getEventBatterNo() == asub.getPlayerId()) {
-							if(asub.getBattingStyle() == null) {
-								batsman_style = "";
-							}else {
-								batsman_style = asub.getBattingStyle().toUpperCase().charAt(0) + "";
-							}
-	    				}
-						if(match.getEventFile().getEvents().get(i).getEventBowlerNo() == asub.getPlayerId()) {
-							if(asub.getBowlingStyle() == null) {
-								bowler_handed = "";
-							}else {
-								bowler_handed = asub.getBowlingStyle().toUpperCase().charAt(0) + "";
-							}
-	    				}
+					if(match.getSetup().getAwaySubstitutes() != null) {
+						for(Player asub : match.getSetup().getAwaySubstitutes()) {
+							if(match.getEventFile().getEvents().get(i).getEventBatterNo() == asub.getPlayerId()) {
+								if(asub.getBattingStyle() == null) {
+									batsman_style = "";
+								}else {
+									batsman_style = asub.getBattingStyle().toUpperCase().charAt(0) + "";
+								}
+		    				}
+							if(match.getEventFile().getEvents().get(i).getEventBowlerNo() == asub.getPlayerId()) {
+								if(asub.getBowlingStyle() == null) {
+									bowler_handed = "";
+								}else {
+									bowler_handed = asub.getBowlingStyle().toUpperCase().charAt(0) + "";
+								}
+		    				}
+						}
 					}
 					
 	    			for(BattingCard bc : inn.getBattingCard()) {
