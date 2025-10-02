@@ -7,11 +7,34 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TargetData {
 
+	boolean isMatchFinished;
+	String targetOrResult;
 	String targetOvers;
 	int targetRuns;
 	int remaningRuns;
 	int remaningBall;
 	
+	public TargetData(String targetOrResult) {
+		super();
+		this.targetOrResult = targetOrResult;
+	}
+	public TargetData() {
+		super();
+		this.isMatchFinished = false;
+		this.targetOrResult = "";
+	}
+	public String getTargetOrResult() {
+		return targetOrResult;
+	}
+	public void setTargetOrResult(String targetOrResult) {
+		this.targetOrResult = targetOrResult;
+	}
+	public boolean isMatchFinished() {
+		return isMatchFinished;
+	}
+	public void setMatchFinished(boolean isMatchFinished) {
+		this.isMatchFinished = isMatchFinished;
+	}
 	public String getTargetOvers() {
 		return targetOvers;
 	}
@@ -53,8 +76,9 @@ public class TargetData {
 	}
 	@Override
 	public String toString() {
-		return "TargetData [targetOvers=" + targetOvers + ", targetRuns=" + targetRuns + ", remaningRuns="
-				+ remaningRuns + ", remaningBall=" + remaningBall + "]";
+		return "TargetData [isMatchFinished=" + isMatchFinished + ", targetOrResult=" + targetOrResult
+				+ ", targetOvers=" + targetOvers + ", targetRuns=" + targetRuns + ", remaningRuns=" + remaningRuns
+				+ ", remaningBall=" + remaningBall + "]";
 	}
 }
 	
