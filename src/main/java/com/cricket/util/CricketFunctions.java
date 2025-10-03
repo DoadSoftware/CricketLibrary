@@ -14194,7 +14194,7 @@ public class CricketFunctions {
 									            }
 									        } else if (events.get(i).getEventSubExtra().equals(CricketUtil.LEG_BYE) || events.get(i).getEventSubExtra().equals(CricketUtil.BYE)) {
 									            	matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventExtra() + "+" +
-									            		    (events.get(i).getEventSubExtraRuns() > 0 ? events.get(i).getEventSubExtraRuns() + events.get(i).getEventSubExtra() 
+									            		    (events.get(i).getEventSubExtraRuns() > 1 ? events.get(i).getEventSubExtraRuns() + events.get(i).getEventSubExtra() 
 									            		     : events.get(i).getEventSubExtra()) + (events.get(i).getEventRuns() > 0 ? "+" + events.get(i).getEventRuns() : ""));
 
 									        } else {
@@ -15186,7 +15186,7 @@ public class CricketFunctions {
 			                        }
 			                    }
 			                } else if ((events.getEventSubExtra().equalsIgnoreCase(CricketUtil.LEG_BYE) || events.getEventSubExtra().equalsIgnoreCase(CricketUtil.BYE))) {
-			                	ThisOverTxt = 	ThisOverTxt + events.getEventExtra() + "+" + (events.getEventSubExtraRuns() > 0 ? events.getEventSubExtraRuns() 
+			                	ThisOverTxt = 	ThisOverTxt + events.getEventExtra() + "+" + (events.getEventSubExtraRuns() > 1 ? events.getEventSubExtraRuns() 
 			                				+ events.getEventSubExtra() : events.getEventSubExtra()) + (events.getEventRuns() > 0 ? "+" + events.getEventRuns() : "");
 			                } else {
 			                	if(events.getEventSubExtra().isEmpty()) {
