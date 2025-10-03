@@ -15,7 +15,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
@@ -36,7 +35,6 @@ import java.time.LocalTime;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -131,46 +129,37 @@ public class CricketFunctions {
 	public static int ball_number = 0, c = 0;
 	public static boolean isLeagleBall = false;
 	
-	public static void resetEntireObject(Object obj, List<String> fieldsToKeep) throws IllegalAccessException 
-	{
-        if (obj == null) return;
+    public static String RemoveUnicodeCharacters(String input) {
+        if (input == null) return null;
 
-        Class<?> clazz = obj.getClass();
-        for (Field field : clazz.getDeclaredFields()) {
-            field.setAccessible(true);
-            if (fieldsToKeep.contains(field.getName())) continue; // skip "id"
+        // Step 1: Normalize known tricky characters
+        String cleaned = input
+            // spaces
+            .replace('\u202F', ' ')  // narrow no-break space
+            .replace('\u00A0', ' ')  // non-breaking space
+            .replace('\u2007', ' ')  // figure space
+            .replace('\u2060', ' ')  // word joiner (invisible)
+            // hyphens & dashes
+            .replace('\u2011', '-')  // non-breaking hyphen
+            .replace('\u2010', '-')  // hyphen
+            .replace('\u2012', '-')  // figure dash
+            .replace('\u2013', '-')  // en dash
+            .replace('\u2014', '-')  // em dash
+            .replace('\u2212', '-')  // minus sign
+            .replace('\uFE58', '-')  // small em dash
+            .replace('\uFE63', '-')  // small hyphen-minus
+            .replace('\uFF0D', '-'); // fullwidth hyphen-minus
 
-            Object value = field.get(obj);
-            if (value == null) continue;
+        // Step 2: Replace any other Unicode space separators with normal space
+        cleaned = cleaned.replaceAll("\\p{Zs}+", " ");
 
-            Class<?> type = field.getType();
+        // Step 3: Remove other invisible control characters (if any)
+        cleaned = cleaned.replaceAll("\\p{Cc}+", "");
 
-            // --- Basic Types ---
-            if (type == String.class) {
-                field.set(obj, "");
-            } else if (Number.class.isAssignableFrom(type) || type.isPrimitive()) {
-                if (type == int.class || type == Integer.class) field.set(obj, 0);
-                else if (type == double.class || type == Double.class) field.set(obj, 0.0);
-                else if (type == float.class || type == Float.class) field.set(obj, 0f);
-                else if (type == long.class || type == Long.class) field.set(obj, 0L);
-                else if (type == short.class || type == Short.class) field.set(obj, (short)0);
-                else if (type == byte.class || type == Byte.class) field.set(obj, (byte)0);
-            }
-            // --- Collections ---
-            else if (Collection.class.isAssignableFrom(type)) {
-                ((Collection<?>) value).clear();
-            }
-            // --- Maps ---
-            else if (Map.class.isAssignableFrom(type)) {
-                ((Map<?, ?>) value).clear();
-            }
-            // --- Nested Objects (Custom Classes) ---
-            else if (!type.isEnum() && !type.getPackage().getName().startsWith("java.")) {
-            	resetEntireObject(value, fieldsToKeep);
-            }
-        }
-    }	
-	
+        // Step 4: Trim leading and trailing spaces
+        return cleaned.trim();
+    }
+    
 	public static List<Integer> getBallCountStartAndEndRange(MatchAllData match, Inning inning)
 	{
 		List<Integer> ballCount = new ArrayList<Integer>();

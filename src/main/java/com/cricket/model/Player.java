@@ -5,6 +5,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.cricket.util.CricketFunctions;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -195,7 +196,7 @@ public void setSubstitutionType(String substitutionType) {
   private int wickets;
   
 public String getFirstname() {
-	return firstname;
+	return CricketFunctions.RemoveUnicodeCharacters(firstname);
 }
 
 public void setFirstname(String firstname) {
@@ -203,7 +204,7 @@ public void setFirstname(String firstname) {
 }
 
 public String getTicker_name() {
-	return ticker_name;
+	return CricketFunctions.RemoveUnicodeCharacters(ticker_name);
 }
 
 public void setTicker_name(String ticker_name) {
@@ -227,7 +228,7 @@ public void setPlayerId(int playerId) {
 }
 
 public String getFull_name() {
-	return full_name;
+	return CricketFunctions.RemoveUnicodeCharacters(full_name);
 }
 
 public void setFull_name(String full_name) {
@@ -235,7 +236,7 @@ public void setFull_name(String full_name) {
 }
 
 public String getSurname() {
-	return surname;
+	return CricketFunctions.RemoveUnicodeCharacters(surname);
 }
 
 public void setSurname(String surname) {
@@ -622,7 +623,7 @@ public void setAe_Id(Integer ae_Id) {
 }
 
 public String getAbbrv_Name() {
-	return abbrv_Name;
+	return CricketFunctions.RemoveUnicodeCharacters(abbrv_Name);
 }
 
 public void setAbbrv_Name(String abbrv_Name) {
