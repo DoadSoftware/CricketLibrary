@@ -11996,6 +11996,7 @@ public class CricketFunctions {
 	{
 		TargetData targetData = new TargetData(GenerateMatchResult(match, teamNameType, broadcaster, 
 			SplitSummaryText, ballsRemaining));
+		
 		if(!targetData.getTargetOrResult().trim().isEmpty()) {
 			
 			targetData.setMatchFinished(true);
@@ -12020,17 +12021,19 @@ public class CricketFunctions {
 		    	bowlTeamNm = (match.getMatch().getInning().get(whichInning - 1)).getBowling_team().getTeamName1();
 		    	break;
 		    }
+			
 		    switch (whichInning) {
-		    case 1: 
-		    	if (((match.getMatch().getInning().get(whichInning - 1)).getTotalRuns() > 0) || 
-		  		      ((match.getMatch().getInning().get(whichInning - 1)).getTotalOvers() > 0) || 
-		  		      ((match.getMatch().getInning().get(whichInning - 1)).getTotalBalls() > 0)) {
+		    case 1:
+		    	if ((match.getMatch().getInning().get(whichInning - 1).getTotalRuns() > 0) || 
+		  		      (match.getMatch().getInning().get(whichInning - 1).getTotalOvers() > 0) || 
+		  		      (match.getMatch().getInning().get(whichInning - 1).getTotalBalls() > 0)) {
 		    		targetData.setTargetOrResult("Current Run Rate " + (match.getMatch().getInning().get(0)).getRunRate());
 		  		    }
 		    	else {
 		    		targetData.setTargetOrResult(CricketFunctions.generateTossResult(match, CricketUtil.FULL, 
 		    			CricketUtil.FIELD, CricketUtil.FULL, CricketUtil.CHOSE));
 		    	}
+		    	break;
 		    case 2: case 3:
 		    	
 		    	if(match.getSetup().getMaxOvers() <= 0) { //Test & FC matches
