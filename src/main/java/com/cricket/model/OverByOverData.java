@@ -12,7 +12,7 @@ public class OverByOverData
   private int OverTotalRuns;
   private int OverTotalWickets;
   private boolean WasOverPowerplay;
-  private String outBatsman,notWicketCount;
+  private String outBatsman,notWicketCount,overtype,ChallengeOverRuns;
   
 public OverByOverData() {
 	super();
@@ -80,6 +80,18 @@ public String getNotWicketCount() {
 }
 public void setNotWicketCount(String notWicketCount) {
 	this.notWicketCount = notWicketCount;
+}
+public String getOvertype() {
+	return overtype;
+}
+public void setOvertype(String overtype) {
+	this.overtype = overtype;
+}
+public String getChallengeOverRuns() {
+	return ChallengeOverRuns;
+}
+public void setChallengeOverRuns(String challengeOverRuns) {
+	ChallengeOverRuns = challengeOverRuns;
 }
 @Override
 public String toString() {

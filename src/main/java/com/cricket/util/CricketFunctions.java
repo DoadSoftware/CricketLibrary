@@ -165,8 +165,8 @@ public class CricketFunctions {
 		List<Integer> ballCount = new ArrayList<Integer>();
 		String startPoint="",endPoints="";
 		
-//		if(match.getSetup().getNumberOfPowerplays() > 0) {
-			for(int i=1;i<=3;i++) {
+		if(match.getSetup().getNumberOfPowerplays() > 0) {
+			for(int i=1;i<=match.getSetup().getNumberOfPowerplays();i++) {
 				startPoint = "";endPoints ="";
 				switch(i) {
 				case 1:
@@ -195,7 +195,7 @@ public class CricketFunctions {
 					ballCount.add((Integer.valueOf(endPoints)*6));
 				}
 			}
-//		}
+		}
 		return ballCount;
 	}
 	public static String processPowerPlay(String powerplay_return_type, MatchAllData match)
@@ -14060,11 +14060,30 @@ public class CricketFunctions {
 					if(events.get(i).getEventInningNumber()==1) {
 						matchStats.getHomeOverByOverData().add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo()+1,
 	                            overbyRun, overbyWkts, false , outBatsman , notWicketCount));
+						matchStats.getHomeOverByOverData().get(matchStats.getHomeOverByOverData().size() - 1).setOvertype(events.get(i).getEventExtra());
+						if(events.get(i).getEventExtra() != null && !events.get(i).getEventExtra().isEmpty() && events.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
+							if(overbyRun >= Integer.valueOf(events.get(i).getEventSubExtra())) {
+								matchStats.getHomeOverByOverData().get(matchStats.getHomeOverByOverData().size() - 1).setChallengeOverRuns("+" + (overbyRun/2));
+							}else {
+								matchStats.getHomeOverByOverData().get(matchStats.getHomeOverByOverData().size() - 1).setChallengeOverRuns("-" + (overbyRun/2));
+							}
+						}
+						
 						overbyRun=0; overbyWkts=0;outBatsman = "";notWicketCount= "";
 						
 					}else if(events.get(i).getEventInningNumber()==2) {
 						matchStats.getAwayOverByOverData().add(new OverByOverData(events.get(i).getEventInningNumber(), events.get(i).getEventOverNo()+1,
 	                            overbyRun1, overbyWkts1, false, outBatsman , notWicketCount));
+						
+						matchStats.getAwayOverByOverData().get(matchStats.getAwayOverByOverData().size() - 1).setOvertype(events.get(i).getEventExtra());
+						if(events.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
+							if(overbyRun1 >= Integer.valueOf(events.get(i).getEventSubExtra())) {
+								matchStats.getAwayOverByOverData().get(matchStats.getAwayOverByOverData().size() - 1).setChallengeOverRuns("+" + (overbyRun1/2));
+							}else {
+								matchStats.getAwayOverByOverData().get(matchStats.getAwayOverByOverData().size() - 1).setChallengeOverRuns("-" + (overbyRun1/2));
+							}
+						}
+						
 						overbyRun1=0; overbyWkts1=0;outBatsman = "";notWicketCount= "";
 					}
 					if(currentInning != null && currentInning.getInningNumber()== events.get(i).getEventInningNumber()) {
@@ -14686,7 +14705,7 @@ public class CricketFunctions {
 					 //Powerplay
 						    switch(events.get(i).getEventType()) {
 						    	
-						    	case CricketUtil.LOG_ANY_BALL:case CricketUtil.WIDE:case CricketUtil.NO_BALL:
+						    	case CricketUtil.LOG_ANY_BALL: case CricketUtil.WIDE: case CricketUtil.NO_BALL:
 							    	if( events.get(i).getEventBowlerNo() > 0) {
 								         if (events.get(i).getEventOverNo() < matchStats.getPhase1EndOver()) {
 								        	String thisOver = updateOverStats(events.get(i));
@@ -15044,23 +15063,26 @@ public class CricketFunctions {
 		
 		for (Event even : Event) {
 		    int Batter_id = even.getEventBattingCard().getPlayerId();
+//		    boolean isRetired = even.getEventHowOut() != null && !even.getEventHowOut().isEmpty() && 
+//                    (even.getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT) ||
+//                     even.getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT) ||
+//                     even.getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED));
+		    
 		    boolean isRetired = even.getEventHowOut() != null && !even.getEventHowOut().isEmpty() && 
-                    (even.getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT) ||
-                     even.getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT) ||
-                     even.getEventHowOut().equalsIgnoreCase(CricketUtil.CONCUSSED));
-			
+                    (even.getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_OUT));
+		    
 		    // First PP
 		    updateWickets(matchStats.getHomeFirstPowerPlay(), Batter_id, isRetired);
 		    updateWickets(matchStats.getAwayFirstPowerPlay(), Batter_id, isRetired);
-
+		    
 		    // Second PP
 		    updateWickets(matchStats.getHomeSecondPowerPlay(), Batter_id, isRetired);
 		    updateWickets(matchStats.getAwaySecondPowerPlay(), Batter_id, isRetired);
-
+		    
 		    // Third PP
 		    updateWickets(matchStats.getHomeThirdPowerPlay(), Batter_id, isRetired);
 		    updateWickets(matchStats.getAwayThirdPowerPlay(), Batter_id, isRetired);
-
+		    
 		    // Inning Compare
 		    updateWickets(matchStats.getInningCompare(), Batter_id, isRetired);
 		    
@@ -15075,19 +15097,19 @@ public class CricketFunctions {
 	}
 
 	public static void updateWickets(VariousStats powerPlayStats, int batterId, boolean isRetired) {
-	    boolean isBatterOut = Arrays.stream(powerPlayStats.getOutBatsman().split(","))
-	            .map(String::trim)
-	            .filter(s -> !s.isEmpty())
-	            .mapToInt(Integer::parseInt)
-	            .anyMatch(id -> id == batterId);
-	    boolean isBatterNotOut = Arrays.stream(powerPlayStats.getNotWicketCount().split(","))
-	            .map(String::trim)
-	            .filter(s -> !s.isEmpty())
-	            .mapToInt(Integer::parseInt)
-	            .anyMatch(id -> id == batterId);
-	    if (isBatterOut && isRetired) {
-	    	powerPlayStats.setTotalWickets(Math.max(0, powerPlayStats.getTotalWickets() - 1));
-	    }else if ((isBatterOut && !isRetired) || (isBatterNotOut && !isRetired)) {
+		
+//	    boolean isBatterOut = Arrays.stream(powerPlayStats.getOutBatsman().split(",")).map(String::trim)
+//	    		.filter(s -> !s.isEmpty()).mapToInt(Integer::parseInt).anyMatch(id -> id == batterId);
+	    boolean isBatterNotOut = Arrays.stream(powerPlayStats.getNotWicketCount().split(",")).map(String::trim)
+	            .filter(s -> !s.isEmpty()).mapToInt(Integer::parseInt).anyMatch(id -> id == batterId);
+	    
+//	    if (isBatterOut && isRetired) {
+//	    	powerPlayStats.setTotalWickets(Math.max(0, powerPlayStats.getTotalWickets() - 1));
+//	    }else if ((isBatterOut && !isRetired) || (isBatterNotOut && !isRetired)) {
+//	    	powerPlayStats.setTotalWickets(Math.max(0, powerPlayStats.getTotalWickets() + 1));
+//	    }
+	    
+	    if (isBatterNotOut && isRetired) {
 	    	powerPlayStats.setTotalWickets(Math.max(0, powerPlayStats.getTotalWickets() + 1));
 	    }
 	}
@@ -15097,29 +15119,26 @@ public class CricketFunctions {
 	    	
 	    	stat.setOverTotalWickets((int) Arrays.stream(stat.getOutBatsman().split(",")).filter(s -> !s.trim().isEmpty()).count());
 
-	        boolean isBatterOut = Arrays.stream(stat.getOutBatsman().split(","))
-	                .map(String::trim)
-	                .filter(s -> !s.isEmpty())
-	                .mapToInt(Integer::parseInt)
-	                .anyMatch(id -> id == batterId);
-
-	        boolean isBatterNotOut = Arrays.stream(stat.getNotWicketCount().split(","))
-	                .map(String::trim)
-	                .filter(s -> !s.isEmpty())
-	                .mapToInt(Integer::parseInt)
-	                .anyMatch(id -> id == batterId);
+//	        boolean isBatterOut = Arrays.stream(stat.getOutBatsman().split(",")).map(String::trim)
+//	                .filter(s -> !s.isEmpty()).mapToInt(Integer::parseInt).anyMatch(id -> id == batterId);
+	        boolean isBatterNotOut = Arrays.stream(stat.getNotWicketCount().split(",")).map(String::trim)
+	                .filter(s -> !s.isEmpty()).mapToInt(Integer::parseInt).anyMatch(id -> id == batterId);
 
 	        int wickets = stat.getOverTotalWickets();
-	        if (isBatterOut && isRetired) {
-	            stat.setOverTotalWickets(Math.max(0, wickets - 1));
-	        } else if ((isBatterOut && !isRetired) || (isBatterNotOut && !isRetired)) {
-		            if (stat.getOutBatsman().isEmpty()) {
-		                stat.setOutBatsman(String.valueOf(batterId));
-		            } else if (!stat.getOutBatsman().contains(String.valueOf(batterId))) {
-		                stat.setOutBatsman(stat.getOutBatsman() + "," + batterId);
-		            }
-	            stat.setOverTotalWickets(stat.getOverTotalWickets() + 1);
-	        }
+//	        if (isBatterOut && isRetired) {
+//	            stat.setOverTotalWickets(Math.max(0, wickets - 1));
+//	        } else if ((isBatterOut && !isRetired) || (isBatterNotOut && !isRetired)) {
+//		            if (stat.getOutBatsman().isEmpty()) {
+//		                stat.setOutBatsman(String.valueOf(batterId));
+//		            } else if (!stat.getOutBatsman().contains(String.valueOf(batterId))) {
+//		                stat.setOutBatsman(stat.getOutBatsman() + "," + batterId);
+//		            }
+//	            stat.setOverTotalWickets(stat.getOverTotalWickets() + 1);
+//	        }
+	        
+	        if (isBatterNotOut && isRetired) {
+	            stat.setOverTotalWickets(Math.max(0, wickets + 1));
+	        } 
 	    }
 	}
 	public static MatchStats getAllEvents(MatchAllData Match, String Broadcaster, List<Event> events) {
@@ -15530,7 +15549,6 @@ public class CricketFunctions {
 		}
 		return bcard;
 	}
-
 
 	public static String getPhaseBatter(List<VariousStats> player) {
 	    List<VariousStats> batter = player.stream()

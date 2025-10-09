@@ -605,9 +605,10 @@ public String toString() {
 					+ ", totalWickets=" + totalWickets + ", totalDots=" + totalDots + ", totalOnes=" + totalOnes
 					+ ", totalTwos=" + totalTwos + ", totalThrees=" + totalThrees + ", totalFours=" + totalFours
 					+ ", totalFives=" + totalFives + ", totalSixes=" + totalSixes + ", totalNines=" + totalNines
-					+ ", statsType=" + statsType + ", name=" + name + ", BowlerName=" + BowlerName + ", thisOverTxt="
-					+ thisOverTxt + ", lastBowlerId=" + lastBowlerId + ", replacementBowlerId=" + replacementBowlerId
-					+ "]";
+					+ ", over=" + over + ", statsType=" + statsType + ", name=" + name + ", BowlerName=" + BowlerName
+					+ ", outnotOut=" + outnotOut + ", thisOverTxt=" + thisOverTxt + ", outBatsman=" + outBatsman
+					+ ", notWicketCount=" + notWicketCount + ", consecutiveW=" + consecutiveW + ", lastBowlerId="
+					+ lastBowlerId + ", replacementBowlerId=" + replacementBowlerId + "]";
 		}
 
 	}
