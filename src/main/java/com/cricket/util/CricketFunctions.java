@@ -14076,7 +14076,8 @@ public class CricketFunctions {
 	                            overbyRun1, overbyWkts1, false, outBatsman , notWicketCount));
 						
 						matchStats.getAwayOverByOverData().get(matchStats.getAwayOverByOverData().size() - 1).setOvertype(events.get(i).getEventExtra());
-						if(events.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
+						
+						if(events.get(i).getEventExtra() != null && !events.get(i).getEventExtra().isEmpty() && events.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
 							if(overbyRun1 >= Integer.valueOf(events.get(i).getEventSubExtra())) {
 								matchStats.getAwayOverByOverData().get(matchStats.getAwayOverByOverData().size() - 1).setChallengeOverRuns("+" + (overbyRun1/2));
 							}else {
