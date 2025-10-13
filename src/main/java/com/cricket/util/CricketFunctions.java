@@ -2233,12 +2233,13 @@ public class CricketFunctions {
 										  clickY = match.getMatch().getWagons().get(k).getWagonYCord();
 
 								        // Transform using double
-	//								        double thisX = Math.round(((clickX - 41) / 98.0) * 79 + 1);
-	//								        double thisY = Math.round(0.0205 * clickY * clickY - 2.661 * clickY + 93.73);
-								        
-										  thisX = Math.round(((clickX - 42) / 98.0) * 79 + 1);
-										  thisY = Math.round(0.00263 * clickY * clickY + 0.317 * clickY - 16.95);
-							        
+	//								        
+//										  thisX = Math.round(((clickX - 42) / 98.0) * 79 + 1);
+//										  thisY = Math.round(0.00263 * clickY * clickY + 0.317 * clickY - 16.95);
+										  
+										  thisX = Math.min(80, Math.max(0, Math.round((((clickX - 42) / 98.0) * 79 + 1) * 1.085 + 31.9)));
+									      thisY = Math.min(80, Math.max(0, Math.round((0.00263 * clickY * clickY + 0.317 * clickY - 16.95) * 1.438 + 26.0)));
+									        
 										  // Round to nearest integer
 										  roundedX = (int) Math.round(thisX);
 										  roundedY = (int) Math.round(thisY);
@@ -2266,11 +2267,12 @@ public class CricketFunctions {
 								        clickY = match.getMatch().getWagons().get(k).getWagonYCord();
 	
 								        // Transform using double
-	//								        double thisX = Math.round(((clickX - 41) / 98.0) * 79 + 1);
-	//								        double thisY = Math.round(0.0205 * clickY * clickY - 2.661 * clickY + 93.73);
+	//								        
+//								        thisX = Math.round(((clickX - 42) / 98.0) * 79 + 1);
+//								        thisY = Math.round(0.00263 * clickY * clickY + 0.317 * clickY - 16.95);
 								        
-								        thisX = Math.round(((clickX - 42) / 98.0) * 79 + 1);
-								        thisY = Math.round(0.00263 * clickY * clickY + 0.317 * clickY - 16.95);
+								        thisX = Math.min(80, Math.max(0, Math.round((((clickX - 42) / 98.0) * 79 + 1) * 1.085 + 31.9)));
+								        thisY = Math.min(80, Math.max(0, Math.round((0.00263 * clickY * clickY + 0.317 * clickY - 16.95) * 1.438 + 26.0)));
 								        
 								        // Round to nearest integer
 								        roundedX = (int) Math.round(thisX);
