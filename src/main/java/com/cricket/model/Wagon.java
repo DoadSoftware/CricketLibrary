@@ -15,6 +15,10 @@ public class Wagon {
 
   private int wagonYCord;
   
+  private String boundaryHeight;
+
+  private int sixDistance;
+  
   private int batterId;
 
   private int bowlerId;
@@ -31,13 +35,15 @@ public Wagon() {
 	super();
 }
 
-public Wagon(int wagonNumber, int wagonSector, int wagonXCord, int wagonYCord, int batterId, int bowlerId, int runs,
-		int inningNumber, int overNumber, int ballNumber) {
+public Wagon(int wagonNumber, int wagonSector, int wagonXCord, int wagonYCord, String boundaryHeight, int sixDistance,
+		int batterId, int bowlerId, int runs, int inningNumber, int overNumber, int ballNumber) {
 	super();
 	this.wagonNumber = wagonNumber;
 	this.wagonSector = wagonSector;
 	this.wagonXCord = wagonXCord;
 	this.wagonYCord = wagonYCord;
+	this.boundaryHeight = boundaryHeight;
+	this.sixDistance = sixDistance;
 	this.batterId = batterId;
 	this.bowlerId = bowlerId;
 	this.runs = runs;
@@ -78,6 +84,22 @@ public void setWagonYCord(int wagonYCord) {
 	this.wagonYCord = wagonYCord;
 }
 
+public String getBoundaryHeight() {
+	return boundaryHeight;
+}
+
+public void setBoundaryHeight(String boundaryHeight) {
+	this.boundaryHeight = boundaryHeight;
+}
+
+public int getSixDistance() {
+	return sixDistance;
+}
+
+public void setSixDistance(int sixDistance) {
+	this.sixDistance = sixDistance;
+}
+
 public int getBatterId() {
 	return batterId;
 }
@@ -99,12 +121,7 @@ public int getRuns() {
 }
 
 public void setRuns(int runs) {
-	if(runs < 0) {
-		this.runs = 0;
-	}
-	else {
-		this.runs = runs;
-	}
+	this.runs = runs;
 }
 
 public int getInningNumber() {
@@ -112,12 +129,7 @@ public int getInningNumber() {
 }
 
 public void setInningNumber(int inningNumber) {
-	if(inningNumber < 0) {
-		this.inningNumber = 0;
-	}
-	else {
-		this.inningNumber = inningNumber;
-	}
+	this.inningNumber = inningNumber;
 }
 
 public int getOverNumber() {
@@ -125,12 +137,7 @@ public int getOverNumber() {
 }
 
 public void setOverNumber(int overNumber) {
-	if(overNumber < 0) {
-		this.overNumber = 0;
-	}
-	else {
-		this.overNumber = overNumber;
-	}
+	this.overNumber = overNumber;
 }
 
 public int getBallNumber() {
@@ -138,19 +145,15 @@ public int getBallNumber() {
 }
 
 public void setBallNumber(int ballNumber) {
-	if(ballNumber < 0) {
-		this.ballNumber = 0;
-	}
-	else {
-		this.ballNumber = ballNumber;
-	}
+	this.ballNumber = ballNumber;
 }
 
 @Override
 public String toString() {
 	return "Wagon [wagonNumber=" + wagonNumber + ", wagonSector=" + wagonSector + ", wagonXCord=" + wagonXCord
-			+ ", wagonYCord=" + wagonYCord + ", batterId=" + batterId + ", bowlerId=" + bowlerId + ", runs=" + runs
-			+ ", inningNumber=" + inningNumber + ", overNumber=" + overNumber + ", ballNumber=" + ballNumber + "]";
+			+ ", wagonYCord=" + wagonYCord + ", boundaryHeight=" + boundaryHeight + ", sixDistance=" + sixDistance
+			+ ", batterId=" + batterId + ", bowlerId=" + bowlerId + ", runs=" + runs + ", inningNumber=" + inningNumber
+			+ ", overNumber=" + overNumber + ", ballNumber=" + ballNumber + "]";
 }
 
 }

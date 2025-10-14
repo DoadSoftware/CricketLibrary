@@ -11,10 +11,6 @@ public class Shot {
 
   private String shotType;
 
-  private String boundaryHeight;
-
-  private int sixDistance;
-  
   private int batterId;
 
   private int bowlerId;
@@ -26,18 +22,12 @@ public class Shot {
   private int overNumber;
 
   private int ballNumber;
- 
-public Shot() {
-	super();
-}
 
-public Shot(int shotNumber, String shotType, String boundaryHeight, int sixDistance, int batterId, int bowlerId,
-		int runs, int inningNumber, int overNumber, int ballNumber) {
+public Shot(int shotNumber, String shotType, int batterId, int bowlerId, int runs, int inningNumber, int overNumber,
+		int ballNumber) {
 	super();
 	this.shotNumber = shotNumber;
 	this.shotType = shotType;
-	this.boundaryHeight = boundaryHeight;
-	this.sixDistance = sixDistance;
 	this.batterId = batterId;
 	this.bowlerId = bowlerId;
 	this.runs = runs;
@@ -46,25 +36,9 @@ public Shot(int shotNumber, String shotType, String boundaryHeight, int sixDista
 	this.ballNumber = ballNumber;
 }
 
-public String getBoundaryHeight() {
-	return boundaryHeight;
-}
-
-public void setBoundaryHeight(String boundaryHeight) {
-	this.boundaryHeight = boundaryHeight;
-}
-
-public int getSixDistance() {
-	return sixDistance;
-}
-
-public void setSixDistance(int sixDistance) {
-	if(sixDistance < 0) {
-		this.sixDistance = 0;
-	}
-	else {
-		this.sixDistance = sixDistance;
-	}
+public Shot() {
+	super();
+	// TODO Auto-generated constructor stub
 }
 
 public int getShotNumber() {
@@ -104,12 +78,7 @@ public int getRuns() {
 }
 
 public void setRuns(int runs) {
-	if(runs < 0) {
-		this.runs = 0;
-	}
-	else {
-		this.runs = runs;
-	}
+	this.runs = runs;
 }
 
 public int getInningNumber() {
@@ -117,12 +86,7 @@ public int getInningNumber() {
 }
 
 public void setInningNumber(int inningNumber) {
-	if(inningNumber < 0) {
-		this.inningNumber = 0;
-	}
-	else {
-		this.inningNumber = inningNumber;
-	}
+	this.inningNumber = inningNumber;
 }
 
 public int getOverNumber() {
@@ -130,12 +94,7 @@ public int getOverNumber() {
 }
 
 public void setOverNumber(int overNumber) {
-	if(overNumber < 0) {
-		this.overNumber = 0;
-	}
-	else {
-		this.overNumber = overNumber;
-	}
+	this.overNumber = overNumber;
 }
 
 public int getBallNumber() {
@@ -143,12 +102,14 @@ public int getBallNumber() {
 }
 
 public void setBallNumber(int ballNumber) {
-	if(ballNumber < 0) {
-		this.ballNumber = 0;
-	}
-	else {
-		this.ballNumber = ballNumber;
-	}
+	this.ballNumber = ballNumber;
 }
 
+@Override
+public String toString() {
+	return "Shot [shotNumber=" + shotNumber + ", shotType=" + shotType + ", batterId=" + batterId + ", bowlerId="
+			+ bowlerId + ", runs=" + runs + ", inningNumber=" + inningNumber + ", overNumber=" + overNumber
+			+ ", ballNumber=" + ballNumber + "]";
+}
+ 
 }

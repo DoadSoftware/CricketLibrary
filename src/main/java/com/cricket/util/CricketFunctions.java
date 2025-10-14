@@ -2281,6 +2281,20 @@ public class CricketFunctions {
 								        wagonX = String.valueOf(roundedX);
 								        wagonY = String.valueOf(roundedY);
 								        
+										if(match.getMatch().getWagons().get(k).getBoundaryHeight().contains("along_ground")) {
+											height = "0";
+										}else if(match.getMatch().getWagons().get(k).getBoundaryHeight().contains("below_head_height")) {
+											height = "1";
+										}else if(match.getMatch().getWagons().get(k).getBoundaryHeight().contains("just_over_head_height")) {
+											height = "2";
+										}else if(match.getMatch().getWagons().get(k).getBoundaryHeight().contains("high_in_the_air")) {
+											height = "3";
+										}else if(match.getMatch().getWagons().get(k).getBoundaryHeight().contains("very_high_in_the_air")) {
+											height = "4";
+										}
+										if(match.getMatch().getShots().get(k).getRuns() == 6) {
+											six_distance = String.valueOf(match.getMatch().getWagons().get(k).getSixDistance());
+										}
 								        break;
 								  }
 							  }
@@ -2313,21 +2327,6 @@ public class CricketFunctions {
 										shot = shot + "D";
 									}else {
 										shot = shot + "A";
-									}
-									
-									if(match.getMatch().getShots().get(k).getBoundaryHeight().contains("along_ground")) {
-										height = "0";
-									}else if(match.getMatch().getShots().get(k).getBoundaryHeight().contains("below_head_height")) {
-										height = "1";
-									}else if(match.getMatch().getShots().get(k).getBoundaryHeight().contains("just_over_head_height")) {
-										height = "2";
-									}else if(match.getMatch().getShots().get(k).getBoundaryHeight().contains("high_in_the_air")) {
-										height = "3";
-									}else if(match.getMatch().getShots().get(k).getBoundaryHeight().contains("very_high_in_the_air")) {
-										height = "4";
-									}
-									if(match.getMatch().getShots().get(k).getRuns() == 6) {
-										six_distance = String.valueOf(match.getMatch().getShots().get(k).getSixDistance());
 									}
 								}
 							}
