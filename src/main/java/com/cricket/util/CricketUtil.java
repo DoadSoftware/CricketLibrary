@@ -2,6 +2,7 @@ package com.cricket.util;
 
 public class CricketUtil {
 
+	public final static String WEBSITE = "WEBSITE";
 	public final static String ISPL = "ISPL";
 	public final static String DOAD = "DOAD";
 	public final static String ALL_ROUNDER = "All-rounder";

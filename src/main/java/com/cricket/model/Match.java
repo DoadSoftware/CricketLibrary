@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Match {
 
+  private String sourceOfThisMatchData;
+	
   private String matchResult;
 
   private String matchStatus;
@@ -40,6 +42,17 @@ public Match() {
 public Match(String matchFileName) {
 	super();
 	this.matchFileName = matchFileName;
+}
+
+public String getSourceOfThisMatchData() {
+	if(sourceOfThisMatchData == null) {
+		sourceOfThisMatchData = "";
+	}
+	return sourceOfThisMatchData;
+}
+
+public void setSourceOfThisMatchData(String sourceOfThisMatchData) {
+	this.sourceOfThisMatchData = sourceOfThisMatchData;
 }
 
 public MatchStats getMatchStats() {
@@ -139,10 +152,11 @@ public void setWagons(List<Wagon> wagons) {
 
 @Override
 public String toString() {
-	return "Match [matchResult=" + matchResult + ", matchStatus=" + matchStatus + ", current_speed=" + current_speed
-			+ ", bowlerRunning=" + bowlerRunning + ", ballRelease=" + ballRelease + ", matchFileName=" + matchFileName
-			+ ", inning=" + inning + ", daysSessions=" + daysSessions + ", shots=" + shots + ", wagons=" + wagons
-			+ ", matchFinishTime=" + matchFinishTime + ", matchStats=" + matchStats + "]";
+	return "Match [sourceOfThisMatchData=" + sourceOfThisMatchData + ", matchResult=" + matchResult + ", matchStatus="
+			+ matchStatus + ", current_speed=" + current_speed + ", bowlerRunning=" + bowlerRunning + ", ballRelease="
+			+ ballRelease + ", matchFileName=" + matchFileName + ", inning=" + inning + ", daysSessions=" + daysSessions
+			+ ", shots=" + shots + ", wagons=" + wagons + ", matchFinishTime=" + matchFinishTime + ", matchStats="
+			+ matchStats + "]";
 }
 
 }
