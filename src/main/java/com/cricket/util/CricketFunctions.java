@@ -16754,7 +16754,7 @@ public class CricketFunctions {
 	        }
 	    }
 	    if (matchAllData.getSetup().getTargetOvers() != null && !matchAllData.getSetup().getTargetOvers().isEmpty()
-	    	&& Integer.valueOf(matchAllData.getSetup().getTargetOvers()) > 0) {
+	    	&& Integer.valueOf(matchAllData.getSetup().getTargetOvers().split("\\.")[0]) > 0) {
 	    	targetData.setTargetOvers(matchAllData.getSetup().getTargetOvers());
 	    } else {
 	    	targetData.setTargetOvers(String.valueOf(matchAllData.getSetup().getMaxOvers()));

@@ -21,22 +21,25 @@ import javax.persistence.Column;
 public class Player implements Comparable<Player>
 {
   @Id
-  @Column(name = "PLAYERID")
+  @Column(name = "PlayerId")
   private int playerId;
 	
-  @Column(name = "FULLNAME")
+  @Column(name = "FullName")
   private String full_name;
 
   @Column(name = "AE_Id")
   private Integer ae_Id;
   
-  @Column(name = "FIRSTNAME")
+  @Column(name = "FirstName")
   private String firstname;
 
-  @Column(name = "SURNAME")
+  @Column(name = "Surname")
   private String surname;
+
+  @Column(name = "OnlineId")
+  private long OnlineId;
   
-  @Column(name = "TICKERNAME")
+  @Column(name = "TickerName")
   private String ticker_name;
   
   @Column(name = "AbbrvName")
@@ -90,13 +93,13 @@ public class Player implements Comparable<Player>
   @Column(name = "Debut")
   private String debut;
   
-  @Column(name = "BOWLINGSTYLE")
+  @Column(name = "BowlingStyle")
   private String bowlingStyle;
   
-  @Column(name = "BATTINGSTYLE")
+  @Column(name = "BattingStyle")
   private String battingStyle;
 
-  @Column(name = "TEAMID")
+  @Column(name = "TeamId")
   private Integer teamId;
   
   @Column(name = "OverseasPlayer")
@@ -195,6 +198,14 @@ public void setSubstitutionType(String substitutionType) {
   @Transient
   private int wickets;
   
+public long getOnlineId() {
+	return OnlineId;
+}
+
+public void setOnlineId(long onlineId) {
+	OnlineId = onlineId;
+}
+
 public String getFirstname() {
 	return CricketFunctions.RemoveUnicodeCharacters(firstname);
 }
@@ -665,19 +676,21 @@ public void setTeluguTickerName(String teluguTickerName) {
 @Override
 public String toString() {
 	return "Player [playerId=" + playerId + ", full_name=" + full_name + ", ae_Id=" + ae_Id + ", firstname=" + firstname
-			+ ", surname=" + surname + ", ticker_name=" + ticker_name + ", twitterHandle=" + twitterHandle
-			+ ", instagramHandle=" + instagramHandle + ", age=" + age + ", hindifull_name=" + hindifull_name
-			+ ", tamilfull_name=" + tamilfull_name + ", telugufull_name=" + telugufull_name + ", hindi_surname="
-			+ hindi_surname + ", tamil_surname=" + tamil_surname + ", telugu_surname=" + telugu_surname + ", role="
-			+ role + ", zone=" + zone + ", squad=" + squad + ", debut=" + debut + ", bowlingStyle=" + bowlingStyle
-			+ ", battingStyle=" + battingStyle + ", teamId=" + teamId + ", overseasPlayer=" + overseasPlayer
-			+ ", Photo=" + Photo + ", Nationality=" + Nationality + ", text1=" + text1 + ", text2=" + text2 + ", text3="
-			+ text3 + ", question1=" + question1 + ", question2=" + question2 + ", question3=" + question3 + ", gender="
-			+ gender + ", playerPosition=" + playerPosition + ", captainWicketKeeper=" + captainWicketKeeper
-			+ ", BatBall=" + BatBall + ", playerPos=" + playerPos + ", substitutionType=" + substitutionType + ", one="
-			+ one + ", two=" + two + ", three=" + three + ", five=" + five + ", six=" + six + ", four=" + four
-			+ ", nine=" + nine + ", dot=" + dot + ", catches=" + catches + ", runs=" + runs + ", balls=" + balls
-			+ ", wickets=" + wickets + "]";
+			+ ", surname=" + surname + ", OnlineId=" + OnlineId + ", ticker_name=" + ticker_name + ", abbrv_Name="
+			+ abbrv_Name + ", twitterHandle=" + twitterHandle + ", instagramHandle=" + instagramHandle + ", age=" + age
+			+ ", hindifull_name=" + hindifull_name + ", tamilfull_name=" + tamilfull_name + ", telugufull_name="
+			+ telugufull_name + ", hindi_surname=" + hindi_surname + ", tamil_surname=" + tamil_surname
+			+ ", telugu_surname=" + telugu_surname + ", hindiTickerName=" + hindiTickerName + ", tamilTickerName="
+			+ tamilTickerName + ", teluguTickerName=" + teluguTickerName + ", role=" + role + ", zone=" + zone
+			+ ", squad=" + squad + ", debut=" + debut + ", bowlingStyle=" + bowlingStyle + ", battingStyle="
+			+ battingStyle + ", teamId=" + teamId + ", overseasPlayer=" + overseasPlayer + ", Photo=" + Photo
+			+ ", Nationality=" + Nationality + ", text1=" + text1 + ", text2=" + text2 + ", text3=" + text3
+			+ ", question1=" + question1 + ", question2=" + question2 + ", question3=" + question3 + ", gender="
+			+ gender + ", category=" + category + ", playerPosition=" + playerPosition + ", captainWicketKeeper="
+			+ captainWicketKeeper + ", BatBall=" + BatBall + ", playerPos=" + playerPos + ", substitutionType="
+			+ substitutionType + ", one=" + one + ", two=" + two + ", three=" + three + ", five=" + five + ", six="
+			+ six + ", four=" + four + ", nine=" + nine + ", dot=" + dot + ", catches=" + catches + ", runs=" + runs
+			+ ", balls=" + balls + ", wickets=" + wickets + "]";
 }
 
 }
