@@ -165,7 +165,7 @@ public void setInnings(Integer innings) {
 }
 
 public Integer getNot_out() {
-	return not_out;
+	return not_out == null ? 0 : not_out;
 }
 
 public void setNot_out(Integer not_out) {
@@ -173,7 +173,7 @@ public void setNot_out(Integer not_out) {
 }
 
 public Integer getRuns() {
-	return runs;
+	return runs == null ? 0 : runs;
 }
 
 public void setRuns(Integer runs) {
@@ -181,7 +181,7 @@ public void setRuns(Integer runs) {
 }
 
 public Integer getBalls_faced() {
-	return balls_faced;
+	return balls_faced == null ? 0 : balls_faced;
 }
 
 public void setBalls_faced(Integer balls_faced) {
@@ -189,7 +189,7 @@ public void setBalls_faced(Integer balls_faced) {
 }
 
 public String getBest_score() {
-	return best_score;
+	return best_score == null ? "" : best_score;
 }
 
 public void setBest_score(String best_score) {
@@ -197,7 +197,7 @@ public void setBest_score(String best_score) {
 }
 
 public String getBest_score_against() {
-	return best_score_against;
+	return best_score_against == null ? "" : best_score_against;
 }
 
 public void setBest_score_against(String best_score_against) {
@@ -205,7 +205,7 @@ public void setBest_score_against(String best_score_against) {
 }
 
 public String getBest_score_venue() {
-	return best_score_venue;
+	return best_score_venue == null ? "" : best_score_venue;
 }
 
 public void setBest_score_venue(String best_score_venue) {
@@ -213,7 +213,7 @@ public void setBest_score_venue(String best_score_venue) {
 }
 
 public Integer getHundreds() {
-	return hundreds;
+	return hundreds == null ? 0 : hundreds;
 }
 
 public void setHundreds(Integer hundreds) {
@@ -221,7 +221,7 @@ public void setHundreds(Integer hundreds) {
 }
 
 public Integer getFifties() {
-	return fifties;
+	return fifties == null ? 0 : fifties;
 }
 
 public void setFifties(Integer fifties) {
@@ -229,7 +229,7 @@ public void setFifties(Integer fifties) {
 }
 
 public Integer getThirties() {
-	return thirties;
+	return thirties == null ? 0 : thirties;
 }
 
 public void setThirties(Integer thirties) {
@@ -237,7 +237,7 @@ public void setThirties(Integer thirties) {
 }
 
 public Integer getFours() {
-	return fours;
+	return fours == null ? 0 : fours;
 }
 
 public void setFours(Integer fours) {
@@ -245,7 +245,7 @@ public void setFours(Integer fours) {
 }
 
 public Integer getSixes() {
-	return sixes;
+	return sixes == null ? 0 : sixes;
 }
 
 public void setSixes(Integer sixes) {
@@ -253,7 +253,7 @@ public void setSixes(Integer sixes) {
 }
 
 public Integer getBalls_bowled() {
-	return balls_bowled;
+	return balls_bowled == null ? 0 : balls_bowled;
 }
 
 public void setBalls_bowled(Integer balls_bowled) {
@@ -261,7 +261,7 @@ public void setBalls_bowled(Integer balls_bowled) {
 }
 
 public Integer getRuns_conceded() {
-	return runs_conceded;
+	return runs_conceded == null ? 0 : runs_conceded;
 }
 
 public void setRuns_conceded(Integer runs_conceded) {
@@ -269,7 +269,7 @@ public void setRuns_conceded(Integer runs_conceded) {
 }
 
 public Integer getPlus_3() {
-	return plus_3;
+	return plus_3 == null ? 0 : plus_3;
 }
 
 public void setPlus_3(Integer plus_3) {
@@ -277,7 +277,7 @@ public void setPlus_3(Integer plus_3) {
 }
 
 public Integer getPlus_5() {
-	return plus_5;
+	return plus_5 == null ? 0 : plus_5;
 }
 
 public void setPlus_5(Integer plus_5) {
@@ -285,7 +285,7 @@ public void setPlus_5(Integer plus_5) {
 }
 
 public Integer getDotbowled() {
-	return dotbowled;
+	return dotbowled == null ? 0 : dotbowled;
 }
 
 public void setDotbowled(Integer dotbowled) {
@@ -293,7 +293,7 @@ public void setDotbowled(Integer dotbowled) {
 }
 
 public Integer getWickets() {
-	return wickets;
+	return wickets == null ? 0 : wickets;
 }
 
 public void setWickets(Integer wickets) {
@@ -301,7 +301,7 @@ public void setWickets(Integer wickets) {
 }
 
 public String getBest_figures() {
-	return best_figures;
+	return best_figures == null ? "" : best_figures;
 }
 
 public void setBest_figures(String best_figures) {
@@ -309,7 +309,7 @@ public void setBest_figures(String best_figures) {
 }
 
 public String getBest_figures_against() {
-	return best_figures_against;
+	return best_figures_against == null ? "" : best_figures_against;
 }
 
 public void setBest_figures_against(String best_figures_against) {
@@ -317,7 +317,7 @@ public void setBest_figures_against(String best_figures_against) {
 }
 
 public String getBest_figures_venue() {
-	return best_figures_venue;
+	return best_figures_venue == null ? "" : best_figures_venue;
 }
 
 public void setBest_figures_venue(String best_figures_venue) {
@@ -354,6 +354,20 @@ public Integer getCatches() {
 
 public void setCatches(Integer catches) {
 	this.catches = catches;
+}
+
+@Override
+public String toString() {
+	return "Statistics [statistics_id=" + statistics_id + ", player_id=" + player_id + ", stats_type_id="
+			+ stats_type_id + ", matches=" + matches + ", innings=" + innings + ", bowler_inning=" + bowler_inning
+			+ ", not_out=" + not_out + ", runs=" + runs + ", balls_faced=" + balls_faced + ", best_score=" + best_score
+			+ ", best_score_against=" + best_score_against + ", best_score_venue=" + best_score_venue + ", hundreds="
+			+ hundreds + ", fifties=" + fifties + ", thirties=" + thirties + ", fours=" + fours + ", sixes=" + sixes
+			+ ", balls_bowled=" + balls_bowled + ", runs_conceded=" + runs_conceded + ", plus_3=" + plus_3 + ", plus_5="
+			+ plus_5 + ", dotbowled=" + dotbowled + ", wickets=" + wickets + ", catches=" + catches + ", best_figures="
+			+ best_figures + ", best_figures_against=" + best_figures_against + ", best_figures_venue="
+			+ best_figures_venue + ", stats_type=" + stats_type + ", tournament_fours=" + tournament_fours
+			+ ", tournament_sixes=" + tournament_sixes + "]";
 }
 
 }

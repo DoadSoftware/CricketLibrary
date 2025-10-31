@@ -49,4 +49,10 @@ public void setStats_short_name(String stats_short_name) {
 	this.stats_short_name = stats_short_name;
 }
 
+@Override
+public String toString() {
+	return "StatsType [stats_id=" + stats_id + ", stats_full_name=" + stats_full_name + ", stats_short_name="
+			+ stats_short_name + "]";
+}
+
 }
