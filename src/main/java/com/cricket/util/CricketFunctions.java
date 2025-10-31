@@ -2880,8 +2880,7 @@ public class CricketFunctions {
 			    	pp3 = matchStats.getAwayThirdPowerPlay();
 			    }
 			    if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
-			    	matchDataTxt.insert(86-String.valueOf(pp1.getTotalRuns()).length(), 
-				    		String.valueOf(pp1.getTotalRuns()));
+			    	matchDataTxt.insert(86-String.valueOf(pp1.getTotalRuns()).length(), String.valueOf(pp1.getTotalRuns()));
 				    matchDataTxt.insert(93-String.valueOf(pp2.getTotalRuns()).length(), pp2.getTotalRuns());
 				    matchDataTxt.insert(99-String.valueOf(pp3.getTotalRuns()).length(), pp3.getTotalRuns());
 				    
@@ -2890,8 +2889,7 @@ public class CricketFunctions {
 				    matchDataTxt.insert(117-String.valueOf(pp3.getTotalWickets()).length(), pp3.getTotalWickets());
 				    
 			    }else {
-			    	matchDataTxt.insert(86-String.valueOf(pp1.getTotalRuns()).length(), 
-				    		String.valueOf(pp1.getTotalRuns()));
+			    	matchDataTxt.insert(86-String.valueOf(pp1.getTotalRuns()).length(), String.valueOf(pp1.getTotalRuns()));
 				    matchDataTxt.insert(93-String.valueOf(pp2.getTotalRuns()).length(), pp2.getTotalRuns());
 				    matchDataTxt.insert(99-String.valueOf(pp3.getTotalRuns()).length(), pp3.getTotalRuns());
 				    
@@ -8011,7 +8009,7 @@ public class CricketFunctions {
 					    break;
 					}
 					if(match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.SUPER_OVER)) {
-						resultToShow = "Match Tied - " + resultToShow + " win the super over";
+						resultToShow = resultToShow + " win the super over";
 					} else if(match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.INNING + "_LEAD")) {
 						resultToShow = resultToShow + " win on first inning lead";
 					} else if(match.getMatch().getMatchResult().toUpperCase().contains(CricketUtil.INNING) 
@@ -12154,11 +12152,7 @@ public class CricketFunctions {
 				    	switch (broadcaster) {
 						case "ICC-U19-2023": case "T20_MUMBAI": case "NPL": case "BENGAL-T20":
 							if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
-								if(SplitSummaryText.isEmpty()) {
-									targetData.setTargetOrResult("Super Over tied - another super over to follow");
-								} else {
-									targetData.setTargetOrResult("Super Over tied" + SplitSummaryText + "another super over to follow");
-								}
+								targetData.setTargetOrResult("Another super over to follow");
 							}else {
 								if(SplitSummaryText.isEmpty()) {
 									targetData.setTargetOrResult("Match tied - winner will be decided by super over");
@@ -12168,7 +12162,15 @@ public class CricketFunctions {
 							}
 							break;
 						default:
-							targetData.setTargetOrResult("Match tied");
+							if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
+								targetData.setTargetOrResult("Another super over to follow");
+							}else {
+								if(SplitSummaryText.isEmpty()) {
+									targetData.setTargetOrResult("Match tied - winner will be decided by super over");
+								} else {
+									targetData.setTargetOrResult("Match tied" + SplitSummaryText + "winner will be decided by super over");
+								}
+							}
 							break;
 						}
 						targetData.setMatchFinished(true);
@@ -16975,18 +16977,60 @@ public class CricketFunctions {
 					Inning inn = session_match.getMatch().getInning().get(0);
 					List<Integer> powerplay = getBallCountStartAndEndRange(session_match, inn);
 					
-					matchStats.setPhase1StartOver(powerplay.get(0)); matchStats.setPhase1EndOver(powerplay.get(1));
-		        	matchStats.setPhase2StartOver(powerplay.get(2)); matchStats.setPhase2EndOver(powerplay.get(3));
-		        	matchStats.setPhase3StartOver(powerplay.get(4)); matchStats.setPhase3EndOver(powerplay.get(5));
+					if (powerplay == null || powerplay.isEmpty()) {
+					    // Handle missing or invalid powerplay data
+					    matchStats.setPhase1StartOver(0);matchStats.setPhase1EndOver(0);
+					    matchStats.setPhase2StartOver(0);matchStats.setPhase2EndOver(0);
+					    matchStats.setPhase3StartOver(0);matchStats.setPhase3EndOver(0);
+					}else {
+						for (int j = 0; j < powerplay.size(); j += 2) {
+						    int phase = (j / 2) + 1;
+						    switch (phase) {
+						        case 1:
+						            matchStats.setPhase1StartOver(powerplay.get(j));
+						            matchStats.setPhase1EndOver(powerplay.get(j + 1));
+						            break;
+						        case 2:
+						            matchStats.setPhase2StartOver(powerplay.get(j));
+						            matchStats.setPhase2EndOver(powerplay.get(j + 1));
+						            break;
+						        case 3:
+						            matchStats.setPhase3StartOver(powerplay.get(j));
+						            matchStats.setPhase3EndOver(powerplay.get(j + 1));
+						            break;
+						    }
+						}
+					}
 		        	setInning1 = true;
 				}else if(events.get(i).getEventInningNumber()==2 && !setInning2) {
 					Inning inn = session_match.getMatch().getInning().get(1);
 					List<Integer> powerplay = getBallCountStartAndEndRange(session_match, inn);
 					
-					matchStats.setPhase1StartOver(powerplay.get(0)); matchStats.setPhase1EndOver(powerplay.get(1));
-		        	matchStats.setPhase2StartOver(powerplay.get(2)); matchStats.setPhase2EndOver(powerplay.get(3));
-		        	matchStats.setPhase3StartOver(powerplay.get(4)); matchStats.setPhase3EndOver(powerplay.get(5));
-		        	
+					if (powerplay == null || powerplay.isEmpty()) {
+					    // Handle missing or invalid powerplay data
+					    matchStats.setPhase1StartOver(0);matchStats.setPhase1EndOver(0);
+					    matchStats.setPhase2StartOver(0);matchStats.setPhase2EndOver(0);
+					    matchStats.setPhase3StartOver(0);matchStats.setPhase3EndOver(0);
+					}else {
+						for (int j = 0; j < powerplay.size(); j += 2) {
+						    int phase = (j / 2) + 1;
+						    switch (phase) {
+						        case 1:
+						            matchStats.setPhase1StartOver(powerplay.get(j));
+						            matchStats.setPhase1EndOver(powerplay.get(j + 1));
+						            break;
+						        case 2:
+						            matchStats.setPhase2StartOver(powerplay.get(j));
+						            matchStats.setPhase2EndOver(powerplay.get(j + 1));
+						            break;
+						        case 3:
+						            matchStats.setPhase3StartOver(powerplay.get(j));
+						            matchStats.setPhase3EndOver(powerplay.get(j + 1));
+						            break;
+						    }
+						}
+					}
+					
 		        	setInning2 = true;
 				}
 				//Powerplay
