@@ -37,7 +37,7 @@ public class Player implements Comparable<Player>
   private String surname;
 
   @Column(name = "OnlineId")
-  private long OnlineId;
+  private Long OnlineId;
   
   @Column(name = "TickerName")
   private String ticker_name;
@@ -198,11 +198,11 @@ public void setSubstitutionType(String substitutionType) {
   @Transient
   private int wickets;
   
-public long getOnlineId() {
+public Long getOnlineId() {
 	return OnlineId;
 }
 
-public void setOnlineId(long onlineId) {
+public void setOnlineId(Long onlineId) {
 	OnlineId = onlineId;
 }
 
