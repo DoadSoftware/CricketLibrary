@@ -14636,7 +14636,7 @@ public class CricketFunctions {
 				            bowlerStats.setTotalFives(bowlerStats.getTotalFives() + 1);
 				            batterStats.setTotalFives(batterStats.getTotalFives() + 1);
 				            break;
-				        case CricketUtil.DOT:
+				        case CricketUtil.DOT: case CricketUtil.LEG_BYE: case CricketUtil.BYE:
 				            bowlerStats.setTotalDots(bowlerStats.getTotalDots() + 1);
 				            batterStats.setTotalDots(batterStats.getTotalDots() + 1);
 				            break;
@@ -14656,8 +14656,7 @@ public class CricketFunctions {
 				        	if(events.get(i).getEventExtra() != null && !events.get(i).getEventExtra().isEmpty()) {
 				        		if (events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 					                if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() && 
-					                		events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT)) {
-					                    bowlerStats.setTotalDots(bowlerStats.getTotalDots() + 1);
+					                		events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RUN_OUT) && events.get(i).getEventRuns() <= 0) {
 					                    batterStats.setTotalDots(batterStats.getTotalDots() + 1);
 					                }
 					                if (events.get(i).getEventWasABoundary() != null && events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)) {
