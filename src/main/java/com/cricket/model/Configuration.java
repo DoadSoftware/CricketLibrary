@@ -111,6 +111,9 @@ public class Configuration {
 	@XmlElement(name="generateInteractiveFile")
 	private String generateInteractiveFile;
 	
+	@XmlElement(name="type")
+	private String type;
+	
 	public Configuration() {
 		super();
 	}
@@ -217,7 +220,7 @@ public class Configuration {
 			String primaryIpAddress, int primaryPortNumber, String primaryLanguage,
 			String qtIpAddress,int qtPortNumber, String primaryVariousOptions, String secondaryIpAddress, 
 			int secondaryPortNumber,String secondaryLanguage, String preview,String whichInfobar, 
-			String generateInteractiveFile, String category) {
+			String generateInteractiveFile, String category,String type) {
 		super();
 		this.filename = filename;
 		this.broadcaster = broadcaster;
@@ -235,6 +238,7 @@ public class Configuration {
 		this.whichInfobar = whichInfobar;
 		this.generateInteractiveFile = generateInteractiveFile;
 		this.category = category;
+		this.type = type;
 	}
 	public Configuration(String selectedMatch, String select_broadcaster, String select_second_broadcaster,
 			String primaryIpAddress, int primaryPortNumber, String primaryLanguage, String secondaryIpAddress,
@@ -550,6 +554,14 @@ public class Configuration {
 		this.showSubs = showSubs;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
 		return "Configuration [primaryVariousOptions=" + primaryVariousOptions + ", filename=" + filename
@@ -565,7 +577,7 @@ public class Configuration {
 				+ speedUnit + ", audio=" + audio + ", qudich=" + qudich + ", category=" + category + ", wagon=" + wagon
 				+ ", preview=" + preview + ", whichInfobar=" + whichInfobar + ", showSpeed=" + showSpeed
 				+ ", showReview=" + showReview + ", showSubs=" + showSubs + ", generateInteractiveFile="
-				+ generateInteractiveFile + "]";
+				+ generateInteractiveFile + ", type=" + type + "]";
 	}
 
 }
