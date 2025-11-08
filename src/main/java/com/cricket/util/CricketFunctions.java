@@ -12060,6 +12060,7 @@ public class CricketFunctions {
 		    			CricketUtil.FIELD, CricketUtil.FULL, CricketUtil.CHOSE));
 		    	}
 		    	break;
+		    	
 		    case 2: case 3:
 		    	
 		    	if(match.getSetup().getMaxOvers() <= 0) { //Test & FC matches
@@ -12072,7 +12073,7 @@ public class CricketFunctions {
 			    		}
 		    		} else {
 		    			if(whichInning == 3 && CricketFunctions.getWicketsLeft(match,whichInning) <= 0) {
-		    				targetData.setTargetOrResult(batTeamNm + " win by innings & " + (-1 * lead_by) 
+		    				targetData.setTargetOrResult(bowlTeamNm + " win by innings & " + (-1 * lead_by) 
 		    					+ " run" + Plural(-1 * lead_by));
 		    				targetData.setMatchFinished(true);
 		    			} else {
@@ -12132,21 +12133,6 @@ public class CricketFunctions {
 							}
 							targetData.setMatchFinished(true);
 							break;
-//						case "LEGENDS-90":
-//							if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
-//								targetData.setTargetOrResult(batTeamNm + " win the super over");
-//							} else {
-//								targetData.setTargetOrResult(batTeamNm + " win by " + CricketFunctions.getWicketsLeft(match,whichInning) + 
-//							    	" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning)));
-//								if(ballsRemaining) {
-//									if(targetData.getRemaningBall() > 0) {
-//										targetData.setTargetOrResult(targetData.getTargetOrResult() + " with " + targetData.getRemaningBall() 
-//											+ " ball" + CricketFunctions.Plural(targetData.getRemaningBall()) + " remaining");
-//									}
-//								}
-//							}
-//							targetData.setMatchFinished(true);
-//							break;
 						default:
 							if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.SUPER_OVER)) {
 								targetData.setTargetOrResult(batTeamNm + " win the super over");
