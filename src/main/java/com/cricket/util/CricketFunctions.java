@@ -15999,6 +15999,26 @@ public class CricketFunctions {
 		}
 		return RateX;
 	}
+	
+	public static String calculateOverRate(int overs, int balls, double durationInSeconds) {
+	    if (durationInSeconds <= 0) {
+	        return "-";
+	    }
+
+	    // Step 1: Convert overs + balls → total overs in decimal
+	    double totalOvers = overs + (balls / 6.0);
+
+	    // Step 2: Convert seconds → hours
+	    double hours = durationInSeconds / 3600.0;
+
+	    // Step 3: Calculate over rate
+	    double overRate = totalOvers / hours;
+
+	    // Step 4: Format to 2 decimal places
+	    return String.format("%.2f", overRate);
+	}
+
+
 
 	public static AE_Six_Distance getDistance_of_ball_from_ThirdParty(String FilePathName) throws JAXBException {
 		AE_Six_Distance cricket_data =(AE_Six_Distance)JAXBContext.newInstance(AE_Six_Distance.class)
