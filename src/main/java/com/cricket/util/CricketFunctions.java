@@ -14648,6 +14648,9 @@ public class CricketFunctions {
 				            bowlerStats.setTotalDots(bowlerStats.getTotalDots() + 1);
 				            batterStats.setTotalDots(batterStats.getTotalDots() + 1);
 				            break;
+				        case CricketUtil.NO_BALL:
+				        	batterStats.setTotalDots(batterStats.getTotalDots() + 1);
+				        	break;
 				        case CricketUtil.FOUR:
 				            bowlerStats.setTotalFours(bowlerStats.getTotalFours() + 1);
 				            batterStats.setTotalFours(batterStats.getTotalFours() + 1);
