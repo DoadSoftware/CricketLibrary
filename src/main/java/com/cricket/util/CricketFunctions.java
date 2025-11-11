@@ -8548,6 +8548,7 @@ public class CricketFunctions {
 				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
 				break;
 			case CricketUtil.LBW:
+				System.out.println(bc.getPlayerId());
 				bc.setHowOutText("lbw b " + bc.getHowOutBowler().getTicker_name());
 				bc.setHowOutPartOne("lbw");
 				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());

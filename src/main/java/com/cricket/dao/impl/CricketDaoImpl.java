@@ -44,6 +44,9 @@ public class CricketDaoImpl implements CricketDao {
  @Autowired
  private SessionFactory sessionFactory;
  
+ @Autowired
+ private SessionFactory sessionFactorySecondaryDb;
+ 
 @Override
 public Player getPlayer(String whatToProcess, String valueToProcess) {
 	switch (whatToProcess) {
@@ -216,4 +219,8 @@ public List<PerformanceBug> getPerformanceBugs() {
 	return sessionFactory.getCurrentSession().createQuery("from PerformanceBug").list();
 }
 
+@Override
+public List<Player> getArchivePlayers() {
+	return sessionFactorySecondaryDb.getCurrentSession().createQuery("from Player").list();
+}
 }

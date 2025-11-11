@@ -46,6 +46,7 @@ public interface CricketDao {
   List<Venue> getVenues();
   List<Dictionary> getDictionary();
   List<Statistics> getAllStats();
+  List<Player> getArchivePlayers();
   List<Player> getAllPlayer();
   List<Fixture> getFixtures();
   List<VariousText> getVariousTexts();
