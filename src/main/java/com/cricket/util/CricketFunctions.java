@@ -12787,15 +12787,25 @@ public class CricketFunctions {
 		List<String> proj_score = new ArrayList<String>();
 		String  PS_Curr="", PS_1 = "",PS_2 = "",PS_3 = "",RR_1 = "",RR_2 = "",RR_3 = "",CRR = "";
 		int Balls_val = 0;
-
-		if(match.getSetup().getReducedOvers() > 0) {
-			Balls_val = Integer.valueOf(match.getSetup().getReducedOvers()) * Integer.valueOf(match.getSetup().getBallsPerOver());
-		}else {
+		
+		if(match.getSetup().getReducedOvers() != null && !match.getSetup().getReducedOvers().isEmpty()) {
+			if(match.getSetup().getReducedOvers().contains(".")) {
+		    	Balls_val = Integer.valueOf(match.getSetup().getReducedOvers().split("\\.")[0]) * Integer.valueOf(match.getSetup().getBallsPerOver()) + 
+	    			Integer.valueOf(match.getSetup().getReducedOvers().split("\\.")[1]);
+			} else {
+		    	Balls_val = Integer.valueOf(match.getSetup().getReducedOvers()) * Integer.valueOf(match.getSetup().getBallsPerOver());
+			}
+		} else {
 			Balls_val = match.getSetup().getMaxOvers()* Integer.valueOf(match.getSetup().getBallsPerOver());
 		}
+//		if(match.getSetup().getReducedOvers() > 0) {
+//			Balls_val = Integer.valueOf(match.getSetup().getReducedOvers()) * Integer.valueOf(match.getSetup().getBallsPerOver());
+//		}else {
+//			Balls_val = match.getSetup().getMaxOvers()* Integer.valueOf(match.getSetup().getBallsPerOver());
+//		}
 		
 		int remaining_balls = (Balls_val - (match.getMatch().getInning().get(0).getTotalOvers()* Integer.valueOf(match.getSetup().getBallsPerOver()) 
-				+ match.getMatch().getInning().get(0).getTotalBalls()));
+			+ match.getMatch().getInning().get(0).getTotalBalls()));
 		double value = (remaining_balls * Double.valueOf(match.getMatch().getInning().get(0).getRunRate()));
 		value  = value/6;
 		

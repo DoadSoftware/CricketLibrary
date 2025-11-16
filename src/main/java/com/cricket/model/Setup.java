@@ -57,7 +57,7 @@ public class Setup {
   
   private int maxOvers;
 
-  private int reducedOvers;
+  private String reducedOvers;
   
   private int homeTeamId;
 
@@ -332,11 +332,11 @@ public void setMaxOvers(int maxOvers) {
 	this.maxOvers = maxOvers;
 }
 
-public int getReducedOvers() {
+public String getReducedOvers() {
 	return reducedOvers;
 }
 
-public void setReducedOvers(int reducedOvers) {
+public void setReducedOvers(String reducedOvers) {
 	this.reducedOvers = reducedOvers;
 }
 
