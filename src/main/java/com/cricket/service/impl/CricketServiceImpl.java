@@ -196,4 +196,8 @@ public List<EverestBugs> getEverestBugs() {
 public List<LeaderBoard> getLeaderBoards() {
 	return cricketDao.getLeaderBoards();
 }
+@Override
+public List<Player> getArchivePlayers() {
+	return cricketDao.getArchivePlayers();
+}
 }

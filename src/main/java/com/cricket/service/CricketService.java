@@ -44,6 +44,7 @@ public interface CricketService {
   List<Pointers> getPointers();
   List<Ground> getGrounds();
   List<Statistics> getAllStats();
+  List<Player> getArchivePlayers();
   List<Player> getAllPlayer();
   List<Venue> getVenues();
   List<Dictionary> getDictionary();

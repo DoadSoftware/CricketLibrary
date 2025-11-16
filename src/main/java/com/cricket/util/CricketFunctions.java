@@ -8548,6 +8548,7 @@ public class CricketFunctions {
 				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
 				break;
 			case CricketUtil.LBW:
+				System.out.println(bc.getPlayerId());
 				bc.setHowOutText("lbw b " + bc.getHowOutBowler().getTicker_name());
 				bc.setHowOutPartOne("lbw");
 				bc.setHowOutPartTwo("b " + bc.getHowOutBowler().getTicker_name());
@@ -14658,6 +14659,9 @@ public class CricketFunctions {
 				            bowlerStats.setTotalDots(bowlerStats.getTotalDots() + 1);
 				            batterStats.setTotalDots(batterStats.getTotalDots() + 1);
 				            break;
+				        case CricketUtil.NO_BALL:
+				        	batterStats.setTotalDots(batterStats.getTotalDots() + 1);
+				        	break;
 				        case CricketUtil.FOUR:
 				            bowlerStats.setTotalFours(bowlerStats.getTotalFours() + 1);
 				            batterStats.setTotalFours(batterStats.getTotalFours() + 1);

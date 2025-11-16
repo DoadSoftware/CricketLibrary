@@ -9,6 +9,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Configuration {
 	
+	private static Configuration currentConfig;
+	
 	@XmlElement(name="primaryVariousOptions")
 	private String primaryVariousOptions;
 	
@@ -560,6 +562,14 @@ public class Configuration {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public static Configuration getCurrentConfig() {
+		return currentConfig;
+	}
+
+	public static void setCurrentConfig(Configuration currentConfig) {
+		Configuration.currentConfig = currentConfig;
 	}
 
 	@Override
