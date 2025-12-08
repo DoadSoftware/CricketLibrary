@@ -10441,7 +10441,6 @@ public class CricketFunctions {
 						break;
 					}
             		
-            		System.out.println("ball_count = " + ball_count + "   powerplayValues.get(0) = "  +  powerplayValues.get(0) + "  events.get(i).getEventType() = " + events.get(i).getEventType());
             		if(ball_count >= powerplayValues.get(0) && ball_count < powerplayValues.get(1)) {
             			switch (events.get(i).getEventType())
                         {
@@ -15278,7 +15277,8 @@ public class CricketFunctions {
 	        	matchStats.setPhase3StartOver(16); matchStats.setPhase3EndOver(20);
 				break;
 			}
-	    }else if(Match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI)) {
+	    }else if(Match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.ODI) ||
+	    		Match.getSetup().getMatchType().equalsIgnoreCase("OD")) {
 	    	matchStats.setPhase1StartOver(1); matchStats.setPhase1EndOver(10);
         	matchStats.setPhase2StartOver(11); matchStats.setPhase2EndOver(40);
         	matchStats.setPhase3StartOver(41); matchStats.setPhase3EndOver(50);
