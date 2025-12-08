@@ -154,6 +154,67 @@ public class CricketFunctions {
         return cleaned.trim();
     }
     
+    public static List<Double> getLastSpellSpeeds(List<Event> events) {
+
+        List<Double> speedList = new ArrayList<>();
+
+        // Step-1: Collect speeds in reverse
+        for (int i = events.size() - 1; i >= 0; i--) {
+
+            Event ev = events.get(i);
+            String type = ev.getEventType();
+
+            // STOP only for CHANGE_BOWLER
+            if ("CHANGE_BOWLER".equalsIgnoreCase(type)) {
+                break;
+            }
+
+            // ignore END_OVER
+            if ("END_OVER".equalsIgnoreCase(type)) {
+                continue;
+            }
+
+            String sp = ev.getEventSpeed();
+            Double speedValue = null;
+
+            if (sp != null && !sp.trim().isEmpty()) {
+                try {
+                    speedValue = Double.valueOf(sp.trim());
+                } catch (Exception ignored) {}
+            }
+
+            // If null → store 0.0 now
+            if (speedValue == null) {
+                speedValue = 0.0;
+            }
+
+            speedList.add(speedValue);
+        }
+
+        // Step-2: Calculate average of NON-ZERO speeds
+        double sum = 0;
+        int count = 0;
+
+        for (double s : speedList) {
+            if (s > 0) {
+                sum += s;
+                count++;
+            }
+        }
+
+        double average = count > 0 ? sum / count : 0.0;
+        average = Math.round(average * 10.0) / 10.0;
+
+        // Step-3: Replace all 0.0 with average
+        for (int i = 0; i < speedList.size(); i++) {
+            if (speedList.get(i) == 0.0) {
+                speedList.set(i, average);
+            }
+        }
+
+        return speedList;
+    }
+    
 	public static List<Integer> getBallCountStartAndEndRange(MatchAllData match, Inning inning)
 	{
 		List<Integer> ballCount = new ArrayList<Integer>();
@@ -4333,6 +4394,41 @@ public class CricketFunctions {
 
 	        if (this_dir1.isDirectory()) {
 	            Optional<File> opFile = Arrays.stream(this_dir1.listFiles(File::isFile))
+	                .max((f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified()));
+
+	            if (opFile.isPresent()) {
+	                File latestFile = opFile.get();
+	                long currentModifiedTime = latestFile.lastModified();
+
+	                // Check if the file has been modified
+	                if (lastModifiedTime != currentModifiedTime) {
+	                    lastModifiedTime = currentModifiedTime; // Update global timestamp
+
+	                    // Read the file content
+	                    for (String str_line : Files.readAllLines(Paths.get(latestFile.getPath()), StandardCharsets.UTF_8)) {
+	                        //SpeedObject speedToReturn = new SpeedObject();
+	                    	speed_to_return.setSpeedValue(str_line);
+	                    	speed_to_return.setSpeedFileModifiedTime(currentModifiedTime);
+
+	                        // Write to the destination file
+	                        try (BufferedWriter writers = new BufferedWriter(new FileWriter(speedDestinationPath))) {
+	                            writers.write(str_line.trim());
+	                        }
+
+	                        return speed_to_return; // Return the updated speed object
+	                    }
+	                }
+	            }
+	        }
+
+	        //return null;
+			break;
+		case "KADAMBA":
+
+			File this_dir2 = new File(speedSourcePath);
+
+	        if (this_dir2.isDirectory()) {
+	            Optional<File> opFile = Arrays.stream(this_dir2.listFiles(File::isFile))
 	                .max((f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified()));
 
 	            if (opFile.isPresent()) {
@@ -14740,7 +14836,7 @@ public class CricketFunctions {
 											if(statsData.contains(",") && statsData.split(",").length >= 7) {
 												if(events.get(i).getEventInningNumber()==1) {
 													//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 1 HOME
-													updateMatchStats(matchStats.getHomeFirstPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
+													updateMatchStats(matchStats.getHomeFirstPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData, events.get(i).getEventType());
 													//PHASE_SCORE PHASE 1 HOME
 													matchStats.setHomeFirstPowerPlay(new VariousStats(
 															matchStats.getHomeFirstPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
@@ -14759,7 +14855,7 @@ public class CricketFunctions {
 													
 												}else if(events.get(i).getEventInningNumber()==2) {
 													//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 1 AWAY
-													updateMatchStats(matchStats.getAwayFirstPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
+													updateMatchStats(matchStats.getAwayFirstPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData, events.get(i).getEventType());
 													//PHASE_SCORE PHASE 1 AWAY
 													matchStats.setAwayFirstPowerPlay(new VariousStats(
 															matchStats.getAwayFirstPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
@@ -14787,7 +14883,7 @@ public class CricketFunctions {
 												if(statsData.contains(",") && statsData.split(",").length >= 7) {
 													if(events.get(i).getEventInningNumber()==1) {
 														//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 2 HOME
-														updateMatchStats(matchStats.getHomeSecondPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
+														updateMatchStats(matchStats.getHomeSecondPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData, events.get(i).getEventType());
 														//PHASE_SCORE PHASE 2 HOME
 														matchStats.setHomeSecondPowerPlay(new VariousStats(
 																matchStats.getHomeSecondPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
@@ -14806,7 +14902,7 @@ public class CricketFunctions {
 														
 													}else if(events.get(i).getEventInningNumber()==2) {
 														//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 2 AWAY
-														updateMatchStats(matchStats.getAwaySecondPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
+														updateMatchStats(matchStats.getAwaySecondPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData, events.get(i).getEventType());
 														//PHASE_SCORE PHASE 2 AWAY
 														matchStats.setAwaySecondPowerPlay(new VariousStats(
 																matchStats.getAwaySecondPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
@@ -14834,7 +14930,7 @@ public class CricketFunctions {
 													if(statsData.contains(",") && statsData.split(",").length >= 7) {
 														if(events.get(i).getEventInningNumber()==1) {
 															//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 3 HOME
-															updateMatchStats(matchStats.getHomeThirdPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
+															updateMatchStats(matchStats.getHomeThirdPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData, events.get(i).getEventType());
 															//PHASE_SCORE PHASE 3 HOME
 															matchStats.setHomeThirdPowerPlay(new VariousStats(
 																	matchStats.getHomeThirdPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
@@ -14853,7 +14949,7 @@ public class CricketFunctions {
 														
 														}else if(events.get(i).getEventInningNumber()==2) {
 															//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 3 AWAY
-															updateMatchStats(matchStats.getAwayThirdPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
+															updateMatchStats(matchStats.getAwayThirdPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData, events.get(i).getEventType());
 															//PHASE_SCORE PHASE 3 AWAY
 															matchStats.setAwayThirdPowerPlay(new VariousStats(
 																	matchStats.getAwayThirdPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
@@ -14897,7 +14993,7 @@ public class CricketFunctions {
 											if(statsData.contains(",") && statsData.split(",").length >= 7) {
 												if(events.get(i).getEventInningNumber()==1) {
 													//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 1 HOME
-													updateMatchStats(matchStats.getHomeFirstPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
+													updateMatchStats(matchStats.getHomeFirstPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData, events.get(i).getEventType());
 													//PHASE_SCORE PHASE 1 HOME
 													matchStats.setHomeFirstPowerPlay(new VariousStats(
 															matchStats.getHomeFirstPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
@@ -14916,7 +15012,7 @@ public class CricketFunctions {
 													
 												}else if(events.get(i).getEventInningNumber()==2) {
 													//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 1 AWAY
-													updateMatchStats(matchStats.getAwayFirstPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
+													updateMatchStats(matchStats.getAwayFirstPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData, events.get(i).getEventType());
 													//PHASE_SCORE PHASE 1 AWAY
 													matchStats.setAwayFirstPowerPlay(new VariousStats(
 															matchStats.getAwayFirstPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
@@ -14946,7 +15042,7 @@ public class CricketFunctions {
 												if(statsData.contains(",") && statsData.split(",").length >= 7) {
 													if(events.get(i).getEventInningNumber()==1) {
 														//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 2 HOME
-														updateMatchStats(matchStats.getHomeSecondPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
+														updateMatchStats(matchStats.getHomeSecondPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData, events.get(i).getEventType());
 														//PHASE_SCORE PHASE 2 HOME
 														matchStats.setHomeSecondPowerPlay(new VariousStats(
 																matchStats.getHomeSecondPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
@@ -14965,7 +15061,7 @@ public class CricketFunctions {
 														
 													}else if(events.get(i).getEventInningNumber()==2) {
 														//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 2 AWAY
-														updateMatchStats(matchStats.getAwaySecondPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
+														updateMatchStats(matchStats.getAwaySecondPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData, events.get(i).getEventType());
 														//PHASE_SCORE PHASE 2 AWAY
 														matchStats.setAwaySecondPowerPlay(new VariousStats(
 																matchStats.getAwaySecondPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
@@ -14993,7 +15089,7 @@ public class CricketFunctions {
 													if(statsData.contains(",") && statsData.split(",").length >= 7) {
 														if(events.get(i).getEventInningNumber()==1) {
 															//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 3 HOME
-															updateMatchStats(matchStats.getHomeThirdPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
+															updateMatchStats(matchStats.getHomeThirdPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData, events.get(i).getEventType());
 															//PHASE_SCORE PHASE 3 HOME
 															matchStats.setHomeThirdPowerPlay(new VariousStats(
 																	matchStats.getHomeThirdPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
@@ -15012,7 +15108,7 @@ public class CricketFunctions {
 					
 														}else if(events.get(i).getEventInningNumber()==2) {
 															//PHASE_SCORE BATSMAN /BOWLER STATS PHASE 3 AWAY
-															updateMatchStats(matchStats.getAwayThirdPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData);
+															updateMatchStats(matchStats.getAwayThirdPowerPlayBatsman(), events.get(i).getEventBatterNo(), events.get(i).getEventBowlerNo(), statsData, events.get(i).getEventType());
 															//PHASE_SCORE PHASE 3 AWAY
 															matchStats.setAwayThirdPowerPlay(new VariousStats(
 																	matchStats.getAwayThirdPowerPlay().getTotalRuns() + Integer.valueOf(statsData.split(",")[0]), 
@@ -15453,7 +15549,7 @@ public class CricketFunctions {
 		return ThisOverTxt+","+ThisOverRun+","+ThisOverwkts;
 	}
 
-	public static void updateMatchStats(List<VariousStats> matchStatsList, int batterNum, int bowlerNum, String statsData) {
+	public static void updateMatchStats(List<VariousStats> matchStatsList, int batterNum, int bowlerNum, String statsData, String eventType) {
 	    VariousStats batter = null, bowler = null;
 	    // Loop to find the corresponding batter and bowler
 	    for (VariousStats varStat : matchStatsList) {
@@ -15486,7 +15582,18 @@ public class CricketFunctions {
 	    bowler.setTotalWickets(bowler.getTotalWickets() + Integer.valueOf(statsData.split(",")[1]));
 	
 	    // Update batter's stats
-	    batter.setTotalRuns(batter.getTotalRuns() + Integer.valueOf(statsData.split(",")[0]));
+	    switch(eventType) {
+	    case CricketUtil.BYE: case CricketUtil.LEG_BYE:
+	    	break;
+	    case CricketUtil.LOG_WICKET:
+	    	batter.setOutnotOut("");
+	    	batter.setTotalRuns(batter.getTotalRuns() + Integer.valueOf(statsData.split(",")[0]));
+	    	break;
+	    default:
+	    	batter.setTotalRuns(batter.getTotalRuns() + Integer.valueOf(statsData.split(",")[0]));
+	    	break;
+	    }
+	    
 	    batter.setTotalFours(batter.getTotalFours() + Integer.valueOf(statsData.split(",")[3]));
 	    batter.setTotalSixes(batter.getTotalSixes() + Integer.valueOf(statsData.split(",")[4]));
 	    batter.setTotalNines(batter.getTotalNines() + Integer.valueOf(statsData.split(",")[5]));
@@ -15595,11 +15702,8 @@ public class CricketFunctions {
 	}
 
 	public static String getPhaseBowler(List<VariousStats> player) {
-	    List<VariousStats> bowler = player.stream()
-	            .filter(bs -> bs.getStatsType().equalsIgnoreCase(CricketUtil.BOWL))
-	            .filter(bs -> bs.getTotalWickets() >= 1)
-	            .sorted(Comparator.comparingInt(VariousStats::getTotalWickets).reversed())
-	            .limit(2)
+	    List<VariousStats> bowler = player.stream().filter(bs -> bs.getStatsType().equalsIgnoreCase(CricketUtil.BOWL)).filter(bs -> bs.getTotalWickets() >= 1)
+	            .sorted(Comparator.comparingInt(VariousStats::getTotalWickets).reversed()).limit(2)
 	            .collect(Collectors.toList());
 	   
 	    if (bowler.isEmpty()) {
