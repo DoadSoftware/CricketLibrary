@@ -12884,7 +12884,7 @@ public class CricketFunctions {
 		String  PS_Curr="", PS_1 = "",PS_2 = "",PS_3 = "",RR_1 = "",RR_2 = "",RR_3 = "",CRR = "";
 		int Balls_val = 0;
 		
-		if(match.getSetup().getReducedOvers() != null && !match.getSetup().getReducedOvers().isEmpty()) {
+		if(Integer.valueOf(match.getSetup().getReducedOvers()) > 0) {
 			if(match.getSetup().getReducedOvers().contains(".")) {
 		    	Balls_val = Integer.valueOf(match.getSetup().getReducedOvers().split("\\.")[0]) * Integer.valueOf(match.getSetup().getBallsPerOver()) + 
 	    			Integer.valueOf(match.getSetup().getReducedOvers().split("\\.")[1]);
