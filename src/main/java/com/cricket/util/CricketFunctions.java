@@ -12879,6 +12879,54 @@ public class CricketFunctions {
 		return data;
 	}
 	
+	public static List<String> GetProjectedScore(MatchAllData match) {
+
+	    List<String> projectedScoreResult = new ArrayList<>();
+
+	    int ballsPerOver = Integer.parseInt(match.getSetup().getBallsPerOver());
+	    int maxOvers = match.getSetup().getMaxOvers();
+
+	    String reducedOvers = match.getSetup().getReducedOvers();
+	    int totalBalls;
+
+	    if (reducedOvers != null && !reducedOvers.trim().isEmpty() && !reducedOvers.trim().equals("0")) {
+
+	        if (reducedOvers.contains(".")) {
+	            if (Integer.parseInt(reducedOvers.split("\\.")[1]) >= ballsPerOver) { 
+		        totalBalls = (Integer.parseInt(reducedOvers.split("\\.")[0]) + 1) * ballsPerOver;
+		    } else {
+		        totalBalls = Integer.parseInt(reducedOvers.split("\\.")[0]) * ballsPerOver + Integer.parseInt(reducedOvers.split("\\.")[1]);
+		    }
+	        } else {
+	            totalBalls = Integer.parseInt(reducedOvers) * ballsPerOver;
+	        }
+
+	    } else {
+	        totalBalls = maxOvers * ballsPerOver;
+	    }
+
+	    int bowled = match.getMatch().getInning().get(0).getTotalOvers() * ballsPerOver
+	          + match.getMatch().getInning().get(0).getTotalBalls();
+
+	    int remaining = Math.max(0, totalBalls - Math.min(bowled, totalBalls));
+
+	    int runs = match.getMatch().getInning().get(0).getTotalRuns();
+	    double rr = Double.parseDouble(match.getMatch().getInning().get(0).getRunRate());
+
+	    // Current RR
+	    projectedScoreResult.add(String.format("%.2f", rr));
+	    projectedScoreResult.add(String.valueOf(Math.round(runs + (remaining / 6.0) * rr)));
+
+	    // @2, @4, @6
+	    for (int i = 2; i <= 6; i += 2) {
+	        double rrb = rr + i;
+	        projectedScoreResult.add(String.format("%.2f", rrb));
+	        projectedScoreResult.add(String.valueOf(Math.round(runs + (remaining / 6.0) * rrb)));
+	    }
+
+	    return projectedScoreResult;
+	}
+	
 	public static List<String> projectedScore(MatchAllData match) {
 		List<String> proj_score = new ArrayList<String>();
 		String  PS_Curr="", PS_1 = "",PS_2 = "",PS_3 = "",RR_1 = "",RR_2 = "",RR_3 = "",CRR = "";
