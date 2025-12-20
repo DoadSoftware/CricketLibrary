@@ -13647,7 +13647,8 @@ public class CricketFunctions {
 			    if(!matchname.equalsIgnoreCase(h2h.getMatchFileName())) {
 			    	// Always add a default "DNP"
 				    matchname = h2h.getMatchFileName();
-				    griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0", h2h.getOpponentTeam(), player, matchname.replace(".json", ""),match.getSetup().getMatchIdent()));	
+				    griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0", h2h.getOpponentTeam(), 
+				    		player, matchname.replace(".json", ""),ident));
 			    }
 			    // Check if this h2h is for the same player and team
 			    if (h2h.getPlayerId() == PlayerId) {
@@ -13698,7 +13699,8 @@ public class CricketFunctions {
 					if(!matchname.equalsIgnoreCase(h2h.getMatchFileName())) {
 				    	// Always add a default "DNP"
 					    matchname = h2h.getMatchFileName();
-					    griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0", h2h.getOpponentTeam(), player, matchname.replace(".json", ""),ident));	
+					    griffBatBall.add(new BatBallGriff(PlayerId, 0, 0, "DNP", "", 0, 0, "0", h2h.getOpponentTeam(), player, 
+					    		matchname.replace(".json", ""),ident));	
 				    }	
 				    // Check if this h2h is for the same player and team
 				    if (h2h.getPlayerId() == PlayerId) {
@@ -14478,7 +14480,7 @@ public class CricketFunctions {
 						        
 							case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.WIDE: case CricketUtil.PENALTY:
 								switch (events.get(i).getEventType()) {
-						    	case CricketUtil.WIDE:case CricketUtil.NO_BALL:	case CricketUtil.BYE: case CricketUtil.LEG_BYE:
+						    	case CricketUtil.WIDE:case CricketUtil.NO_BALL:
   
 						    		if(!matchStats.getOverData().getThisOverTxt().isEmpty()) {
 							    		matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + ",");
@@ -14494,6 +14496,22 @@ public class CricketFunctions {
 						    			matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt()+  events.get(i).getEventType());
 						    		}
 						    		break;
+						    	case CricketUtil.BYE: case CricketUtil.LEG_BYE:
+						    		  
+						    		if(!matchStats.getOverData().getThisOverTxt().isEmpty()) {
+							    		matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + ",");
+							    	}
+							    	
+						    		matchStats.getOverData().setTotalRuns(matchStats.getOverData().getTotalRuns() +
+						    				events.get(i).getEventRuns() + events.get(i).getEventSubExtraRuns());
+						    		
+						    		if(events.get(i).getEventRuns() > 1) {
+						    			matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + String.valueOf((events.get(i).getEventRuns()  
+							    			+ events.get(i).getEventSubExtraRuns())) + events.get(i).getEventType());
+						    		} else {
+						    			matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + events.get(i).getEventRuns() +  events.get(i).getEventType());
+						    		}
+						    		break;	
 						    	case CricketUtil.PENALTY:
 						    		if(!matchStats.getOverData().getThisOverTxt().isEmpty()) {
 							    		matchStats.getOverData().setThisOverTxt(matchStats.getOverData().getThisOverTxt() + ",");
@@ -15464,7 +15482,7 @@ public class CricketFunctions {
 
 	        case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.WIDE: case CricketUtil.PENALTY:
 	            switch (events.getEventType()) {
-	                case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE:
+	                case CricketUtil.WIDE: case CricketUtil.NO_BALL:
 	                    if (events.getEventRuns() > 1) {
 	                        ThisOverTxt = String.valueOf((events.getEventRuns() + events.getEventSubExtraRuns())) + events.getEventType();
 	                    } else {
@@ -15472,6 +15490,14 @@ public class CricketFunctions {
 	                    }
 	    	        	ThisOverRun += events.getEventRuns()+ events.getEventSubExtraRuns();
 	                    break;
+	                case CricketUtil.BYE: case CricketUtil.LEG_BYE:
+	                    if (events.getEventRuns() > 1) {
+	                        ThisOverTxt = String.valueOf((events.getEventRuns() + events.getEventSubExtraRuns())) + events.getEventType();
+	                    } else {
+	                       ThisOverTxt =  events.getEventRuns() + events.getEventType();
+	                    }
+	    	        	ThisOverRun += events.getEventRuns()+ events.getEventSubExtraRuns();
+	                    break;    
 	                case CricketUtil.PENALTY:
 	                    ThisOverTxt = String.valueOf((events.getEventRuns() + events.getEventExtraRuns() +
 	                        events.getEventSubExtraRuns())) + "+" + events.getEventType();
