@@ -11952,10 +11952,37 @@ public class CricketFunctions {
 		} else {
 		    for(int inn = 1; inn <= inning_number; inn++) {
 		    	if(matchAllData.getMatch().getInning().get(inn - 1).getBattingTeamId() 
-		    		== matchAllData.getMatch().getInning().get(inning_number - 1).getBattingTeamId()) {
-		    		teamTotalRuns = teamTotalRuns + matchAllData.getMatch().getInning().get(inn - 1).getTotalRuns();
+		    		== matchAllData.getMatch().getInning().get(inning_number - 1).getBattingTeamId()) 
+		    	{
+					if(matchAllData.getSetup().getSpecialMatchRules() != null && matchAllData.getSetup().getSpecialMatchRules().equalsIgnoreCase(CricketUtil.ISPL)
+						&& matchAllData.getMatch().getInning().get(inn - 1).getSpecialRuns() != null 
+						&& !matchAllData.getMatch().getInning().get(inn - 1).getSpecialRuns().trim().isEmpty()) 
+					{
+						if(matchAllData.getMatch().getInning().get(inn - 1).getSpecialRuns().startsWith("+")) {
+				    		teamTotalRuns = teamTotalRuns + matchAllData.getMatch().getInning().get(inn - 1).getTotalRuns()
+				    			+ Integer.parseInt(matchAllData.getMatch().getInning().get(inn - 1).getSpecialRuns().replace("+", ""));
+						}else if(matchAllData.getMatch().getInning().get(inn - 1).getSpecialRuns().startsWith("-")) {
+				    		teamTotalRuns = teamTotalRuns + matchAllData.getMatch().getInning().get(inn - 1).getTotalRuns()
+				    			- Integer.parseInt(matchAllData.getMatch().getInning().get(inn - 1).getSpecialRuns().replace("-", ""));
+						}
+					} else {
+			    		teamTotalRuns = teamTotalRuns + matchAllData.getMatch().getInning().get(inn - 1).getTotalRuns();
+					}
 		    	}else {
-		    		teamTotalRuns = teamTotalRuns - matchAllData.getMatch().getInning().get(inn - 1).getTotalRuns();
+					if(matchAllData.getSetup().getSpecialMatchRules() != null && matchAllData.getSetup().getSpecialMatchRules().equalsIgnoreCase(CricketUtil.ISPL)
+						&& matchAllData.getMatch().getInning().get(inn - 1).getSpecialRuns() != null 
+						&& !matchAllData.getMatch().getInning().get(inn - 1).getSpecialRuns().trim().isEmpty()) 
+					{
+						if(matchAllData.getMatch().getInning().get(inn - 1).getSpecialRuns().startsWith("+")) {
+				    		teamTotalRuns = teamTotalRuns - matchAllData.getMatch().getInning().get(inn - 1).getTotalRuns()
+				    			+ Integer.parseInt(matchAllData.getMatch().getInning().get(inn - 1).getSpecialRuns().replace("+", ""));
+						}else if(matchAllData.getMatch().getInning().get(inn - 1).getSpecialRuns().startsWith("-")) {
+				    		teamTotalRuns = teamTotalRuns - matchAllData.getMatch().getInning().get(inn - 1).getTotalRuns()
+				    			- Integer.parseInt(matchAllData.getMatch().getInning().get(inn - 1).getSpecialRuns().replace("-", ""));
+						}
+					} else {
+			    		teamTotalRuns = teamTotalRuns - matchAllData.getMatch().getInning().get(inn - 1).getTotalRuns();
+					}
 		    	}
 		    }
 		}
@@ -12119,7 +12146,6 @@ public class CricketFunctions {
 	{
 		TargetData targetData = new TargetData(GenerateMatchResult(match, teamNameType, broadcaster, 
 			SplitSummaryText, ballsRemaining));
-		
 		if(!targetData.getTargetOrResult().trim().isEmpty()) {
 			
 			targetData.setMatchFinished(true);
@@ -17002,7 +17028,19 @@ public class CricketFunctions {
 		    	targetData.setRemaningBall((Integer.valueOf(targetData.getTargetOvers()) * 6) - (matchAllData.getMatch().getInning().get(1).getTotalOvers() * 6)
 		    		- matchAllData.getMatch().getInning().get(1).getTotalBalls());
 	    	}
-	    	targetData.setRemaningRuns(targetData.getTargetRuns() - matchAllData.getMatch().getInning().get(1).getTotalRuns());
+			if(matchAllData.getSetup().getSpecialMatchRules() != null && matchAllData.getSetup().getSpecialMatchRules().equalsIgnoreCase(CricketUtil.ISPL)
+				&& matchAllData.getMatch().getInning().get(1).getSpecialRuns() != null && !matchAllData.getMatch().getInning().get(1).getSpecialRuns().trim().isEmpty()) 
+			{
+				if(matchAllData.getMatch().getInning().get(1).getSpecialRuns().startsWith("+")) {
+			    	targetData.setRemaningRuns(targetData.getTargetRuns() - (matchAllData.getMatch().getInning().get(1).getTotalRuns() 
+			    		+ Integer.parseInt(matchAllData.getMatch().getInning().get(1).getSpecialRuns().replace("+", ""))));
+				}else if(matchAllData.getMatch().getInning().get(1).getSpecialRuns().startsWith("-")) {
+			    	targetData.setRemaningRuns(targetData.getTargetRuns() - (matchAllData.getMatch().getInning().get(1).getTotalRuns() 
+			    		- Integer.parseInt(matchAllData.getMatch().getInning().get(1).getSpecialRuns().replace("-", ""))));
+				}
+			} else {
+		    	targetData.setRemaningRuns(targetData.getTargetRuns() - matchAllData.getMatch().getInning().get(1).getTotalRuns());
+			}
 	    } else {
 	    	if (matchAllData.getSetup().getTargetOvers() != null && Integer.valueOf(matchAllData.getSetup().getTargetOvers()) > 0) {
 		    	if(targetData.getTargetOvers().contains(".")) {
