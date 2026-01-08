@@ -11673,15 +11673,17 @@ public class CricketFunctions {
 							break;
 							
 					    case CricketUtil.CHANGE_BOWLER:
-					    	if(events.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
-					    		if(match.getMatch().getInning().get(inn_num-1).getSpecialRuns() != null && 
-					    				!match.getMatch().getInning().get(inn_num-1).getSpecialRuns().isEmpty()) {
-						    		if(match.getMatch().getInning().get(inn_num-1).getSpecialRuns().startsWith("+")) {
-						    			total_runs = total_runs + Integer.parseInt(match.getMatch().getInning().get(inn_num-1).getSpecialRuns().replace("+", ""));
-									}else {
-										total_runs = total_runs - Integer.parseInt(match.getMatch().getInning().get(inn_num-1).getSpecialRuns().replace("-", ""));
-									}
-					    		}
+					    	if(type.equalsIgnoreCase("WORM")) {
+					    		if(events.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
+						    		if(match.getMatch().getInning().get(inn_num-1).getSpecialRuns() != null && 
+						    				!match.getMatch().getInning().get(inn_num-1).getSpecialRuns().isEmpty()) {
+							    		if(match.getMatch().getInning().get(inn_num-1).getSpecialRuns().startsWith("+")) {
+							    			total_runs = total_runs + Integer.parseInt(match.getMatch().getInning().get(inn_num-1).getSpecialRuns().replace("+", ""));
+										}else {
+											total_runs = total_runs - Integer.parseInt(match.getMatch().getInning().get(inn_num-1).getSpecialRuns().replace("-", ""));
+										}
+						    		}
+						    	}
 					    	}
 					    	
 					    	if(events.get(i).getEventBallNo() <= 0) {
