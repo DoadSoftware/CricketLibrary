@@ -10509,6 +10509,16 @@ public class CricketFunctions {
         List<Object> arr = new ArrayList<>(PerformarOfmatch);
 		return arr;
     }
+	
+	public static int getOverNumberFromString(String overStr) {
+	    if (overStr == null || overStr.trim().isEmpty()) {
+	        return 0; // or throw exception based on your requirement
+	    }
+
+	    double overValue = Double.parseDouble(overStr.trim());
+	    return (int) Math.floor(overValue) + 1;
+	}
+	
 	public static String getFirstPowerPlayScore(MatchAllData match, int inn_num, List<Event> events)
     {
 

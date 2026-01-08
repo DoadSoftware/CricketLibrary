@@ -48,6 +48,9 @@ public class Team implements Comparable<Team> {
   
   @Column(name = "Gender")
   private String gender;
+  
+  @Column(name = "OnlineId")
+  private String onlineId;
 
   @Column(name = "FullHindiTeamName")
   private String FullHindiTeamName;
@@ -249,6 +252,14 @@ public void setPlayer(List<Player> player) {
 	this.player = player;
 }
 
+
+public String getOnlineId() {
+	return onlineId;
+}
+
+public void setOnlineId(String onlineId) {
+	this.onlineId = onlineId;
+}
 
 @Override
 public String toString() {
