@@ -31,9 +31,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Year;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,6 +53,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import org.jsoup.Jsoup;
@@ -123,6 +129,95 @@ public class CricketFunctions {
 	private static ObjectMapper objectMapper = new ObjectMapper();
 	public static int ball_number = 0, c = 0;
 	public static boolean isLeagleBall = false;
+	
+	public static void logAllHawkeyeSpeeds(String sourceSpeedsDirectory, String destinationSpeedLogFile) throws IOException 
+	{
+		if(!new File(sourceSpeedsDirectory).exists()) {
+			new File(sourceSpeedsDirectory).mkdir();
+		}
+		if(!new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SPEED_DIRECTORY + destinationSpeedLogFile.toLowerCase().replace(".json", ".txt")).exists()) {
+			new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SPEED_DIRECTORY + destinationSpeedLogFile.toLowerCase().replace(".json", ".txt")).createNewFile();
+		}
+
+		Path hawkeyeDir = Paths.get(sourceSpeedsDirectory);
+	    Path speedLog = Paths.get(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SPEED_DIRECTORY 
+	    	+ destinationSpeedLogFile.toLowerCase().replace(".json", ".txt"));
+
+	    DateTimeFormatter tsFormat = DateTimeFormatter.ofPattern("ddMMyyyy_HHmmss");
+
+	    Map<String, Integer> inningCount = new HashMap<>();
+	    Set<String> processedSources = new HashSet<>();
+
+	    if (Files.exists(speedLog)) {
+	        for (String line : Files.readAllLines(speedLog)) {
+
+	            // Source=01.2_15012026_143512
+	            int srcIdx = line.indexOf("Source=");
+	            if (srcIdx != -1) {
+	                String src = line.substring(srcIdx + 7).trim();
+	                processedSources.add(src);
+	            }
+
+	            // Over=1,Ball=2
+	            String[] parts = line.split(",");
+	            int over = Integer.parseInt(parts[1].split("=")[1]);
+	            int ball = Integer.parseInt(parts[2].split("=")[1]);
+
+	            String key = over + "." + ball;
+	            inningCount.put(key, inningCount.getOrDefault(key, 0) + 1);
+	        }
+	    }
+
+	    try (Stream<Path> paths = Files.list(hawkeyeDir)) {
+
+	        for (Path p : paths
+	                .filter(Files::isRegularFile)
+	                .filter(f -> f.getFileName().toString().matches("\\d+\\.\\d+"))
+	                .sorted().collect(Collectors.toList())) {
+
+	            File file = p.toFile();
+	            String fileName = file.getName();   // 01.2
+
+	            // Timestamp from file modified time
+	            String timestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(file.lastModified()), ZoneId.systemDefault()).format(tsFormat);
+
+	            String sourceKey = fileName + "_" + timestamp;
+
+	            // SAME FILE + SAME TIME → SKIP
+	            if (!processedSources.add(sourceKey)) {
+	                continue;
+	            }
+
+	            String[] ob = fileName.split("\\.");
+	            int over = Integer.parseInt(ob[0]);
+	            int ball = Integer.parseInt(ob[1]);
+
+	            List<String> lines = Files.readAllLines(p);
+	            if (lines.size() < 2) continue;
+
+	            String[] speedParts = lines.get(1).split(",");
+	            if (speedParts.length < 2) continue;
+
+	            String speed = speedParts[1].trim();
+
+	            String key = over + "." + ball;
+	            int inning = inningCount.getOrDefault(key, 0) + 1;
+	            inningCount.put(key, inning);
+
+	            String logLine = String.format(
+	                    "Inning=%d,Over=%d,Ball=%d,Speed=%s,Source=%s",
+	                    inning, over, ball, speed, sourceKey
+	            );
+
+	            Files.write(
+	                    speedLog,
+	                    (logLine + System.lineSeparator()).getBytes(),
+	                    StandardOpenOption.CREATE,
+	                    StandardOpenOption.APPEND
+	            );
+	        }
+	    }
+	}
 	
     public static String RemoveUnicodeCharacters(String input) {
         if (input == null) return null;
