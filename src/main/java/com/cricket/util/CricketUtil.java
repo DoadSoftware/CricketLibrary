@@ -15,7 +15,6 @@ public class CricketUtil {
 	public final static String ISPL_SCENE_NEW_FRUIT = "D:/DOAD_In_House_Everest/Everest_Cricket/ICC_U19_WprldCup_2024/Scenes/ISPL_Fruit.sum";
 	public final static String ICC_U19_WorldCup_2024_scene = "D:/DOAD_In_House_Everest/Everest_Cricket/ICC_U19_WprldCup_2024/Scenes/Fruit.sum";
 	public final static String LastBallAudio = "LastBallAudio";
-	
 	public final static String INFOBAR_SCENE_DIRECTORY = "D:/DOAD_In_House_Everest/Everest_Cricket/EVEREST_APL2022/Scenes/Scorebug.sum";
 	public final static String CRICKET_SERVER_DIRECTORY = "C:/Sports/Cricket/";
 	public final static String REVIEWS="C:/Sports/Cricket/Reviews.txt";
