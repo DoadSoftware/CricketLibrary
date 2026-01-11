@@ -9717,7 +9717,7 @@ public class CricketFunctions {
 	}
 	
 	public static List<String> getSplit(int inning_number, int splitvalue, MatchAllData match,List<Event> events) {
-		int total_runs = 0, total_balls = 0 ;
+		int total_runs = 0, total_balls = 0, cr_Over_num = 0, cr_target = 0 ;
 		List<String> Balls = new ArrayList<String>();
 		if((events != null) && (events.size() > 0)) {
 			for (int i = 0; i <= events.size() - 1; i++) {
@@ -9732,7 +9732,6 @@ public class CricketFunctions {
 						total_balls = total_balls + 1 ;
 						total_runs = total_runs + events.get(i).getEventRuns();
 						break;
-					
 					case CricketUtil.LOG_WICKET:
 						if(!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT) && 
 								!events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.ABSENT_HURT) &&
@@ -9743,10 +9742,26 @@ public class CricketFunctions {
 							total_runs = total_runs + events.get(i).getEventRuns();
 						}
 						break;
-						
 					case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.PENALTY:
 						total_runs = total_runs + events.get(i).getEventRuns();
 						break;
+					case CricketUtil.CHANGE_BOWLER:
+                    	if(events.get(i).getEventExtra() != null) {
+                    		if(events.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
+                    			cr_Over_num = (events.get(i).getEventOverNo()+1);
+                    			cr_target = Integer.valueOf(events.get(i).getEventSubExtra()); 
+                    		}
+                    	}
+                    	break;
+                    case "end_over":
+                    	if(cr_Over_num > 0 && events.get(i).getEventOverNo() == cr_Over_num) {
+                    		if(cr_target <= events.get(i).getEventTotalRunsInAnOver()) {
+                    			total_runs = total_runs + (events.get(i).getEventTotalRunsInAnOver()/2);
+                    		}else {
+                    			total_runs = total_runs + (events.get(i).getEventTotalRunsInAnOver()/2);
+                    		}
+                		}
+                    	break;
 					
 					case CricketUtil.LOG_ANY_BALL:
 						total_runs += events.get(i).getEventRuns();
@@ -11390,7 +11405,6 @@ public class CricketFunctions {
 				case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
 		        	ball_count = ball_count + 1;
 		        	total_runs += events.get(i).getEventRuns();
-		        	
 		          break;
 		          
 		        case CricketUtil.FOUR: case CricketUtil.SIX:
@@ -11425,34 +11439,31 @@ public class CricketFunctions {
 		        	}
 		        	break;
 		        case CricketUtil.LOG_ANY_BALL:
-		        	
 		        	if (events.get(i).getEventExtra() != null) {
 		        		if(!events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE) && 
 			        			!events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
 			        		ball_count = ball_count + 1;
 			        	}
 		        	}
-		        	
-		          total_runs += events.get(i).getEventRuns();
-		          
-		          if (events.get(i).getEventExtra() != null) {
-		        	 total_runs += events.get(i).getEventExtraRuns();
-		          }
-		          if (events.get(i).getEventSubExtra() != null) {
-		        	 total_runs += events.get(i).getEventSubExtraRuns();
-		          }
-		          if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
-		        	  total_wickets += 1;
-		          }
-		          if (((events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
-	  	        		  && (events.get(i).getEventWasABoundary() != null) &&  (events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
-		        	  if(events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) {
+			        total_runs += events.get(i).getEventRuns(); 
+			        if (events.get(i).getEventExtra() != null) {
+			        	total_runs += events.get(i).getEventExtraRuns();
+			        }
+			        if (events.get(i).getEventSubExtra() != null) {
+			        	total_runs += events.get(i).getEventSubExtraRuns();
+			        }
+			        if (events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty()) {
+			        	total_wickets += 1;
+			        }
+			        if (((events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) || (events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX))) 
+		  	        		&& (events.get(i).getEventWasABoundary() != null) &&  (events.get(i).getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES))) {
+			        	if(events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.FOUR)) {
 			        		total_fours = total_fours + 1;
-		        	  }else if(events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX)) {
+			        	}else if(events.get(i).getEventRuns() == Integer.valueOf(CricketUtil.SIX)) {
 			        		total_sixes = total_sixes + 1;
-		        	  }
-	  	          }
-		          break;
+			        	}
+		  	        }
+			        break;
 				}
 				if(ball_count >= number_of_events) {
 		    		break;
@@ -11464,7 +11475,7 @@ public class CricketFunctions {
 	}
 	public static String compareInningData(MatchAllData match, String separator, int inning_number, List<Event> events) {
 		
-		int total_runs = 0, total_wickets = 0, CR_Target = 0, CR_Count = 0, cr_over = 0;
+		int total_runs = 0, total_wickets = 0, cr_target = 0, cr_Over_num = 0;
 		
 		if((events != null) && (events.size() > 0)) { 
 			for(int i =0; i <= events.size() - 1 ; i++) {
@@ -11503,29 +11514,23 @@ public class CricketFunctions {
 				          }
 				          break;
 			        case CricketUtil.CHANGE_BOWLER:
-                    	if(events.get(i).getEventExtra() != null && events.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
-                    		CR_Target = Integer.valueOf(events.get(i).getEventSubExtra());
-                    		cr_over = (events.get(i).getEventOverNo()+1);
-                    		CR_Count = 0;
+                    	if(events.get(i).getEventExtra() != null) {
+                    		if(events.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
+                    			cr_Over_num = (events.get(i).getEventOverNo()+1);
+                    			cr_target = Integer.valueOf(events.get(i).getEventSubExtra()); 
+                    		}
                     	}
                     	break;
-                    case CricketUtil.END_OVER:
-                		if(CR_Count > 0 && cr_over == events.get(i).getEventOverNo()) {
-    	                	if(CR_Target <= CR_Count) {
-    	                		total_runs += (CR_Count/2);
-    	                	}else {
-    	                		total_runs -= (CR_Count/2);
-    	                	}
-    	                	CR_Count = 0;
-    	                	cr_over = 0;
-    	                }
+                    case "end_over":
+                    	if(cr_Over_num > 0 && events.get(i).getEventOverNo() == cr_Over_num) {
+                    		if(cr_target <= events.get(i).getEventTotalRunsInAnOver()) {
+                    			total_runs = total_runs + (events.get(i).getEventTotalRunsInAnOver()/2);
+                    		}else {
+                    			total_runs = total_runs + (events.get(i).getEventTotalRunsInAnOver()/2);
+                    		}
+                		}
                     	break;
 					}
-					if(cr_over > 0 && CR_Count > 0) {
-	                	if(CR_Target <= CR_Count) {
-	                		total_runs += (CR_Count/2);
-	                	}
-	                }
 					if(events.get(i).getEventOverNo() == match.getMatch().getInning().get(1).getTotalOvers() && 
 							events.get(i).getEventBallNo() == match.getMatch().getInning().get(1).getTotalBalls()) {
 						if(total_wickets < 10) {
@@ -12041,8 +12046,6 @@ public class CricketFunctions {
 	}
 	
 	public static String getTeamScoreAddBonusRuns(List<Event> sessionEvent, Inning inning, int bowlerId, String slashOrDash, boolean wicketsFirst) throws IOException {
-	    //String[] isplCr = new String(Files.readAllBytes(Paths.get(CricketUtil.CRICKET_DIRECTORY + "ISPL_CR.txt"))).trim().split(",");
-		
 		int crTarget=0, totalRuns=inning.getTotalRuns(), challengeBowlerId = 0, thisOverRuns=0;
 		boolean this_50_50 = false;
 		
@@ -13240,7 +13243,8 @@ public class CricketFunctions {
 	public static List<String> projectedScore(MatchAllData match) {
 		List<String> proj_score = new ArrayList<String>();
 		String  PS_Curr="", PS_1 = "",PS_2 = "",PS_3 = "",RR_1 = "",RR_2 = "",RR_3 = "",CRR = "";
-		int Balls_val = 0;
+		int Balls_val = 0, remaining_balls = 0,total_runs=0;
+		double value = 0;
 		
 		if(match.getSetup().getReducedOvers() != null && !match.getSetup().getReducedOvers().isEmpty()){
 			if(match.getSetup().getReducedOvers().contains(".")) {
@@ -13252,19 +13256,38 @@ public class CricketFunctions {
 		} else {
 			Balls_val = match.getSetup().getMaxOvers()* Integer.valueOf(match.getSetup().getBallsPerOver());
 		}
-//		if(match.getSetup().getReducedOvers() > 0) {
-//			Balls_val = Integer.valueOf(match.getSetup().getReducedOvers()) * Integer.valueOf(match.getSetup().getBallsPerOver());
-//		}else {
-//			Balls_val = match.getSetup().getMaxOvers()* Integer.valueOf(match.getSetup().getBallsPerOver());
-//		}
 		
-		int remaining_balls = (Balls_val - (match.getMatch().getInning().get(0).getTotalOvers()* Integer.valueOf(match.getSetup().getBallsPerOver()) 
+		remaining_balls = (Balls_val - (match.getMatch().getInning().get(0).getTotalOvers()* Integer.valueOf(match.getSetup().getBallsPerOver()) 
 			+ match.getMatch().getInning().get(0).getTotalBalls()));
-		double value = (remaining_balls * Double.valueOf(match.getMatch().getInning().get(0).getRunRate()));
-		value  = value/6;
 		
-		PS_Curr = String.valueOf(Math.round(((value + match.getMatch().getInning().get(0).getTotalRuns()))));
-		CRR = match.getMatch().getInning().get(0).getRunRate();
+		if(match.getSetup().getSpecialMatchRules() != null && !match.getSetup().getSpecialMatchRules().isEmpty() 
+				&& match.getSetup().getSpecialMatchRules().equalsIgnoreCase("ISPL")) {
+			if(match.getMatch().getInning().get(0).getSpecialRuns() != null && 
+					!match.getMatch().getInning().get(0).getSpecialRuns().isEmpty()) {
+				if(match.getMatch().getInning().get(0).getSpecialRuns().startsWith("+")) {
+					total_runs = (match.getMatch().getInning().get(0).getTotalRuns() + 
+							Integer.valueOf(match.getMatch().getInning().get(0).getSpecialRuns().replace("+", "")));
+				}else if(match.getMatch().getInning().get(0).getSpecialRuns().startsWith("-")) {
+					total_runs = (match.getMatch().getInning().get(0).getTotalRuns() - 
+							Integer.valueOf(match.getMatch().getInning().get(0).getSpecialRuns().replace("-", "")));
+				}
+			}else {
+				total_runs = match.getMatch().getInning().get(0).getTotalRuns();
+			}
+			
+			value = (remaining_balls * Double.valueOf(CricketFunctions.generateRunRate(total_runs, match.getMatch().getInning().get(0).getTotalOvers(), 
+					match.getMatch().getInning().get(0).getTotalBalls(), 2,match)));
+			value  = value/6;
+			PS_Curr = String.valueOf(Math.round(((value + total_runs))));
+			CRR = CricketFunctions.generateRunRate(total_runs, match.getMatch().getInning().get(0).getTotalOvers(), 
+					match.getMatch().getInning().get(0).getTotalBalls(), 2,match);
+		}else {
+			value = (remaining_balls * Double.valueOf(match.getMatch().getInning().get(0).getRunRate()));
+			value  = value/6;
+			
+			PS_Curr = String.valueOf(Math.round(((value + match.getMatch().getInning().get(0).getTotalRuns()))));
+			CRR = match.getMatch().getInning().get(0).getRunRate();
+		}
 		
 		proj_score.add(CRR);
 		proj_score.add(String.valueOf(PS_Curr));
@@ -13810,18 +13833,18 @@ public class CricketFunctions {
 		return dot_count;
 	}
 	public static String compareInning_Data(MatchAllData match, String separator, int inning_number, List<Event> events) {
-	    int total_runs = 0, total_wickets = 0, total_Four = 0, total_SIX = 0, total_nine = 0,
-	    		CR_Target = 0, CR_Count = 0, cr_over = 0;
+	    int total_runs = 0, total_wickets = 0, total_Four = 0, total_SIX = 0, total_nine = 0, cr_Over_num=0, cr_target=0;
 
 	    if (events != null && !events.isEmpty()) {
 	        for (int i = 0; i < events.size(); i++) {
 
-	            if ( events.get(i).getEventInningNumber() == inning_number) {
+	            if (events.get(i).getEventInningNumber() == inning_number) {
+	            	System.out.println(events.get(i).getEventType());
 	                switch (events.get(i).getEventType()) {
 	                    case CricketUtil.ONE: case CricketUtil.TWO:case CricketUtil.THREE:case CricketUtil.FIVE:case CricketUtil.DOT:
 	                    case CricketUtil.FOUR:case CricketUtil.SIX:
 	                        total_runs += events.get(i).getEventRuns();
-
+	                        
 	                        switch ( events.get(i).getEventType()) {
 	                            case CricketUtil.FOUR:
 	                            	if(events.get(i).getEventWasABoundary() != null && 
@@ -13856,6 +13879,23 @@ public class CricketFunctions {
 	                            total_wickets++;
 	                        }
 	                        break;
+	                    case CricketUtil.CHANGE_BOWLER:
+	                    	if(events.get(i).getEventExtra() != null) {
+	                    		if(events.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
+	                    			cr_Over_num = (events.get(i).getEventOverNo()+1);
+	                    			cr_target = Integer.valueOf(events.get(i).getEventSubExtra()); 
+	                    		}
+	                    	}
+	                    	break;
+	                    case "end_over":
+	                    	if(cr_Over_num > 0 && events.get(i).getEventOverNo() == cr_Over_num) {
+	                    		if(cr_target <= events.get(i).getEventTotalRunsInAnOver()) {
+	                    			total_runs = total_runs + (events.get(i).getEventTotalRunsInAnOver()/2);
+	                    		}else {
+	                    			total_runs = total_runs + (events.get(i).getEventTotalRunsInAnOver()/2);
+	                    		}
+                    		}
+	                    	break;
 	                    
 	                    case CricketUtil.LOG_ANY_BALL:
 	                        total_runs +=  events.get(i).getEventRuns();
@@ -13884,31 +13924,8 @@ public class CricketFunctions {
 	                            total_nine++;
 	                        }
 	                        break;
-	                    case CricketUtil.CHANGE_BOWLER:
-	                    	if(events.get(i).getEventExtra() != null && events.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
-	                    		CR_Target = Integer.valueOf(events.get(i).getEventSubExtra());
-	                    		cr_over = (events.get(i).getEventOverNo()+1);
-	                    		CR_Count = 0;
-	                    	}
-	                    	break;
-	                    case CricketUtil.END_OVER:
-	                		if(CR_Count > 0 && cr_over == events.get(i).getEventOverNo()) {
-	    	                	if(CR_Target <= CR_Count) {
-	    	                		total_runs += (CR_Count/2);
-	    	                	}else {
-	    	                		total_runs -= (CR_Count/2);
-	    	                	}
-	    	                	CR_Count = 0;
-	    	                	cr_over = 0;
-	    	                }
-	                    	break;
-	                }
-	                
-	                if(cr_over > 0 && CR_Count > 0) {
-	                	if(CR_Target <= CR_Count) {
-	                		total_runs += (CR_Count/2);
+	                        
 	                	}
-	                }
 
 	                if ( events.get(i).getEventOverNo() == match.getMatch().getInning().get(1).getTotalOvers()
 	                        &&  events.get(i).getEventBallNo() == match.getMatch().getInning().get(1).getTotalBalls()) {
