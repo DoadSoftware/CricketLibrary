@@ -46,6 +46,7 @@ public class CricketUtil {
 	public final static String AR_FREE_TXT = "ARFreeText.txt";
 	public final static String INFOBAR_FREE_TXT = "InfobarFreeText.txt";
 	public final static String PREVIEW = "C:/Temp/Preview.png";
+	public final static String MVP = "MVP_LEADERBOARD.json";
 	
 	public final static String BEAT = "BEAT";
 	public final static String READ = "READ";
