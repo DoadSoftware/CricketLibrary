@@ -6474,7 +6474,12 @@ public class CricketFunctions {
 								stat.setBest_score(String.valueOf(bc.getRuns()));
 							}
 							stat.setBest_score_against(batTeamName);
-							stat.setBest_score_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
+							if(match.getSetup().getGround() !=null) {
+								stat.setBest_score_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
+							}else {
+								stat.setBest_score_venue("" + ", " + Year.now());
+							}
+							
 						}else {
 							if(stat.getBest_score().contains("*")) {
 								if(Integer.valueOf(stat.getBest_score().replace("*", "")) < bc.getRuns()) {
@@ -6484,13 +6489,22 @@ public class CricketFunctions {
 										stat.setBest_score(String.valueOf(bc.getRuns()));
 									}
 									stat.setBest_score_against(batTeamName);
-									stat.setBest_score_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
+									if(match.getSetup().getGround() !=null) {
+										stat.setBest_score_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
+									}else {
+										stat.setBest_score_venue("" + ", " + Year.now());
+									}
+//									stat.setBest_score_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
 								}
 							}else {
 								if(Integer.valueOf(stat.getBest_score()) == bc.getRuns() && bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
 									stat.setBest_score(bc.getRuns()+"*");
 									stat.setBest_score_against(batTeamName);
-									stat.setBest_score_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
+									if(match.getSetup().getGround() !=null) {
+										stat.setBest_score_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
+									}else {
+										stat.setBest_score_venue("" + ", " + Year.now());
+									}
 								}
 								else if(Integer.valueOf(stat.getBest_score()) < bc.getRuns()) {
 									if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
@@ -6499,7 +6513,11 @@ public class CricketFunctions {
 										stat.setBest_score(String.valueOf(bc.getRuns()));
 									}
 									stat.setBest_score_against(batTeamName);
-									stat.setBest_score_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
+									if(match.getSetup().getGround() !=null) {
+										stat.setBest_score_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
+									}else {
+										stat.setBest_score_venue("" + ", " + Year.now());
+									}
 								}
 							}
 						}
@@ -6523,18 +6541,31 @@ public class CricketFunctions {
 							if(stat.getBest_figures().equalsIgnoreCase("0")) {
 								stat.setBest_figures(boc.getWickets() + "-" + boc.getRuns());
 								stat.setBest_figures_against(ballTeamName);
-								stat.setBest_figures_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
+								if(match.getSetup().getGround() != null) {
+									stat.setBest_figures_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
+								}else {
+									stat.setBest_figures_venue("" + ", " + Year.now());
+								}
+								
 							}else {
 								if(boc.getWickets() > Integer.valueOf(stat.getBest_figures().split("-")[0])) {
 									stat.setBest_figures(boc.getWickets() + "-" + boc.getRuns());
 									stat.setBest_figures_against(ballTeamName);
-									stat.setBest_figures_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
+									if(match.getSetup().getGround() != null) {
+										stat.setBest_figures_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
+									}else {
+										stat.setBest_figures_venue("" + ", " + Year.now());
+									}
 								}
 								else if(boc.getWickets() == Integer.valueOf(stat.getBest_figures().split("-")[0]) && 
 										boc.getRuns() < Integer.valueOf(stat.getBest_figures().split("-")[1])) {
 									stat.setBest_figures(boc.getWickets() + "-" + boc.getRuns());
 									stat.setBest_figures_against(ballTeamName);
-									stat.setBest_figures_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
+									if(match.getSetup().getGround() != null) {
+										stat.setBest_figures_venue(match.getSetup().getGround().getCountry() + ", " + Year.now());
+									}else {
+										stat.setBest_figures_venue("" + ", " + Year.now());
+									}
 								}
 							}
 						}

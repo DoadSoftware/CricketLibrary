@@ -75,11 +75,6 @@ public class mvp_leaderBoard {
             this.meta = meta;
         }
 
-		@Override
-		public String toString() {
-			return "Data [top=" + top + ", list=" + list + ", meta=" + meta + "]";
-		}
-        
     }
 
     public static class Player {
@@ -93,12 +88,17 @@ public class mvp_leaderBoard {
     	@JsonProperty("player_full_name")
         private String playerFullName;
     	
+    	@JsonProperty("team_id")
+        private String teamID;
+    	
+
     	@JsonProperty("team_name")
         private String teamName;
     	
     	@JsonProperty("playing_role")
         private String playingRole;
     	
+
     	@JsonProperty("final_points")
         private double finalPoints;
         
@@ -130,6 +130,15 @@ public class mvp_leaderBoard {
 
 		public void setPlayerFullName(String playerFullName) {
 			this.playerFullName = playerFullName;
+		}
+
+
+		public String getTeamID() {
+			return teamID;
+		}
+
+		public void setTeamID(String teamID) {
+			this.teamID = teamID;
 		}
 
 		public String getTeamName() {
@@ -172,12 +181,6 @@ public class mvp_leaderBoard {
 			this.position = position;
 		}
 
-		@Override
-		public String toString() {
-			return "Player [playerId=" + playerId + ", isplId=" + isplId + ", playerFullName=" + playerFullName
-					+ ", teamName=" + teamName + ", playingRole=" + playingRole + ", finalPoints=" + finalPoints
-					+ ", player_profile=" + player_profile + ", position=" + position + "]";
-		}
 
     }
 
@@ -233,5 +236,7 @@ public class mvp_leaderBoard {
 	public String toString() {
 		return "mvp_leaderBoard [status=" + status + ", message=" + message + ", data=" + data + "]";
 	}
+
+	
     
 }

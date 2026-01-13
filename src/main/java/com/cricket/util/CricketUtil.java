@@ -39,6 +39,7 @@ public class CricketUtil {
 	public final static String CRIC_ARCHIVE_XML = "CricArchive.XML";
 	public final static String OUTPUT_XML = "OUTPUT.XML";
 	public final static String LEAGUE_TABLE_DIRECTORY = "LeagueTable/";
+	public final static String MVP = "MVP_LEADERBOARD.json";
 	public static final String LEAGUETABLE_XML = "LeagueTable.XML";
 	public final static String FREE_TXT = "FreeText.txt";
 	public final static String SPEED_TXT = "Speed.txt";
@@ -46,7 +47,6 @@ public class CricketUtil {
 	public final static String AR_FREE_TXT = "ARFreeText.txt";
 	public final static String INFOBAR_FREE_TXT = "InfobarFreeText.txt";
 	public final static String PREVIEW = "C:/Temp/Preview.png";
-	public final static String MVP = "MVP_LEADERBOARD.json";
 	
 	public final static String BEAT = "BEAT";
 	public final static String READ = "READ";
