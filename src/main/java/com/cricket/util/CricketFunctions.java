@@ -17381,12 +17381,12 @@ public class CricketFunctions {
 			if(matchAllData.getSetup().getSpecialMatchRules() != null && matchAllData.getSetup().getSpecialMatchRules().equalsIgnoreCase(CricketUtil.ISPL)
 				&& matchAllData.getMatch().getInning().get(1).getSpecialRuns() != null && !matchAllData.getMatch().getInning().get(1).getSpecialRuns().trim().isEmpty()) 
 			{
-				if(matchAllData.getMatch().getInning().get(1).getSpecialRuns().startsWith("+")) {
-			    	targetData.setRemaningRuns(targetData.getTargetRuns() - (matchAllData.getMatch().getInning().get(1).getTotalRuns() 
-			    		+ Integer.parseInt(matchAllData.getMatch().getInning().get(1).getSpecialRuns().replace("+", ""))));
-				}else if(matchAllData.getMatch().getInning().get(1).getSpecialRuns().startsWith("-")) {
+				if(matchAllData.getMatch().getInning().get(1).getSpecialRuns().startsWith("-")) {
 			    	targetData.setRemaningRuns(targetData.getTargetRuns() - (matchAllData.getMatch().getInning().get(1).getTotalRuns() 
 			    		- Integer.parseInt(matchAllData.getMatch().getInning().get(1).getSpecialRuns().replace("-", ""))));
+				} else {
+			    	targetData.setRemaningRuns(targetData.getTargetRuns() - (matchAllData.getMatch().getInning().get(1).getTotalRuns() 
+			    		+ Integer.parseInt(matchAllData.getMatch().getInning().get(1).getSpecialRuns().replace("+", ""))));
 				}
 			} else {
 		    	targetData.setRemaningRuns(targetData.getTargetRuns() - matchAllData.getMatch().getInning().get(1).getTotalRuns());

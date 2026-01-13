@@ -273,7 +273,7 @@ public String toString() {
 			+ ", balls=" + balls + ", wickets=" + wickets + ", playerId=" + playerId + ", wides=" + wides + ", noBalls="
 			+ noBalls + ", runOuts=" + runOuts + ", stumpings=" + stumpings + ", catchAsFielder=" + catchAsFielder
 			+ ", catchAsBowler=" + catchAsBowler + ", maidens=" + maidens + ", dots=" + dots + ", totalRunsThisOver="
-			+ totalRunsThisOver + ", speeds=" + speeds + "]";
+			+ totalRunsThisOver + ", speeds=" + speeds + ", ballTypeOverNo=" + ballTypeOverNo + ", bowlingSession=" + bowlingSession + "]";
 }
 
 }
