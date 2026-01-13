@@ -12081,7 +12081,8 @@ public class CricketFunctions {
 		boolean this_50_50 = false;
 		
 		for(int i=0;i<=sessionEvent.size()-1;i++) {
-			if(sessionEvent.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER) && 
+			if(sessionEvent.get(i).getEventInningNumber() == inning.getInningNumber() && 
+					sessionEvent.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER) && 
 					sessionEvent.get(i).getEventExtra() != null && !sessionEvent.get(i).getEventExtra().isEmpty() && 
 					sessionEvent.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
 				crTarget = Integer.valueOf(sessionEvent.get(i).getEventSubExtra());

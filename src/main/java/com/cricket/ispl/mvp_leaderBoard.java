@@ -91,7 +91,6 @@ public class mvp_leaderBoard {
     	@JsonProperty("team_id")
         private String teamID;
     	
-
     	@JsonProperty("team_name")
         private String teamName;
     	
@@ -131,7 +130,6 @@ public class mvp_leaderBoard {
 		public void setPlayerFullName(String playerFullName) {
 			this.playerFullName = playerFullName;
 		}
-
 
 		public String getTeamID() {
 			return teamID;
