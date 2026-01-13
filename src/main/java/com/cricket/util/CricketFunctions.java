@@ -12469,7 +12469,6 @@ public class CricketFunctions {
 		    	int lead_by = GetTeamRunsAhead(whichInning,match);
 	    		targetData = GetTargetData(match);
 				String batTeamNm = "", bowlTeamNm = "";
-
 				switch (teamNameType) {
 			    case CricketUtil.SHORT: 
 			    	batTeamNm = match.getMatch().getInning().get(whichInning - 1).getBatting_team().getTeamName4();
