@@ -2586,8 +2586,10 @@ public class CricketFunctions {
 										}else if(match.getMatch().getWagons().get(k).getBoundaryHeight().contains("very_high_in_the_air")) {
 											height = "4";
 										}
-										if(match.getMatch().getShots().get(k).getRuns() == 6) {
-											six_distance = String.valueOf(match.getMatch().getWagons().get(k).getSixDistance());
+										if(match.getMatch().getShots() != null) {
+											if(match.getMatch().getShots().get(k).getRuns() == 6) {
+												six_distance = String.valueOf(match.getMatch().getWagons().get(k).getSixDistance());
+											}
 										}
 								        break;
 								  }
@@ -11434,14 +11436,15 @@ public class CricketFunctions {
 	}
 	public static String compareInningData(MatchAllData match, String separator, int inning_number, List<Event> events) {
 		
-		int total_runs = 0, total_wickets = 0, cr_target = 0, cr_Over_num = 0;
+		int total_runs = 0, total_wickets = 0;
+		boolean isCurrentChallengeOver = false;
 		
 		if((events != null) && (events.size() > 0)) { 
 			for(int i =0; i <= events.size() - 1 ; i++) {
 				if(events.get(i).getEventInningNumber() == inning_number) {
 					switch (events.get(i).getEventType()) {
 					case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT:
-			        case CricketUtil.FOUR: case CricketUtil.SIX: 
+			        case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE:
 			        	total_runs += events.get(i).getEventRuns();
 			        	break;
 			         
@@ -11475,21 +11478,25 @@ public class CricketFunctions {
 			        case CricketUtil.CHANGE_BOWLER:
                     	if(events.get(i).getEventExtra() != null) {
                     		if(events.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
-                    			cr_Over_num = (events.get(i).getEventOverNo()+1);
-                    			cr_target = Integer.valueOf(events.get(i).getEventSubExtra()); 
+                    			isCurrentChallengeOver = true;
                     		}
                     	}
                     	break;
                     case "end_over":
-                    	if(cr_Over_num > 0 && events.get(i).getEventOverNo() == cr_Over_num) {
-                    		if(cr_target <= events.get(i).getEventTotalRunsInAnOver()) {
-                    			total_runs = total_runs + (events.get(i).getEventTotalRunsInAnOver()/2);
-                    		}else {
-                    			total_runs = total_runs + (events.get(i).getEventTotalRunsInAnOver()/2);
+                    	if(isCurrentChallengeOver) {
+                    		if(match.getMatch().getInning().get(inning_number - 1).getSpecialRuns() != null && 
+                    				!match.getMatch().getInning().get(inning_number - 1).getSpecialRuns().isEmpty()) {
+                    			if(match.getMatch().getInning().get(inning_number - 1).getSpecialRuns().startsWith("+")) {
+                    				total_runs = total_runs + Integer.valueOf(match.getMatch().getInning().get(inning_number - 1).getSpecialRuns().replace("+", ""));
+                    			}else if(match.getMatch().getInning().get(inning_number - 1).getSpecialRuns().startsWith("-")) {
+                    				total_runs = total_runs - Integer.valueOf(match.getMatch().getInning().get(inning_number - 1).getSpecialRuns().replace("-", ""));
+                    			}
                     		}
-                		}
+                    		isCurrentChallengeOver = false;
+                    	}
                     	break;
 					}
+					
 					if(events.get(i).getEventOverNo() == match.getMatch().getInning().get(1).getTotalOvers() && 
 							events.get(i).getEventBallNo() == match.getMatch().getInning().get(1).getTotalBalls()) {
 						if(total_wickets < 10) {
@@ -11733,12 +11740,6 @@ public class CricketFunctions {
 			  for (int i = 0; i <=events.size()-1; i++) {
 				  if(events.get(i).getEventInningNumber() == inn_num) {
 					  switch (events.get(i).getEventType().toUpperCase()) {
-//					  	case CricketUtil.WIDE:
-//					  		if(!events.get(i-1).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER) &&
-//					  				events.get(i).getEventOverNo() != 0) {
-//					  			total_runs = total_runs + events.get(i).getEventRuns();
-//					  		}
-//					  		break;
 					    case CricketUtil.ONE : case CricketUtil.TWO: case CricketUtil.THREE:  case CricketUtil.FIVE : case CricketUtil.DOT: case CricketUtil.FOUR: 
 					    case CricketUtil.SIX: case CricketUtil.NO_BALL: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.PENALTY:
 					    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL: case CricketUtil.NINE: case CricketUtil.WIDE:
@@ -12003,61 +12004,64 @@ public class CricketFunctions {
 			}
 		}
 	}
-	
+
 	public static String getTeamScoreAddBonusRuns(List<Event> sessionEvent, Inning inning, int bowlerId, String slashOrDash, boolean wicketsFirst) throws IOException {
-		int crTarget=0, totalRuns=inning.getTotalRuns(), challengeBowlerId = 0, thisOverRuns=0;
-		boolean this_50_50 = false;
-		
-		for(int i=0;i<=sessionEvent.size()-1;i++) {
-			if(sessionEvent.get(i).getEventInningNumber() == inning.getInningNumber() && 
-					sessionEvent.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER) && 
-					sessionEvent.get(i).getEventExtra() != null && !sessionEvent.get(i).getEventExtra().isEmpty() && 
-					sessionEvent.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
-				crTarget = Integer.valueOf(sessionEvent.get(i).getEventSubExtra());
-				this_50_50 = true;
-				challengeBowlerId = sessionEvent.get(i).getEventBowlerNo();
-				break;
-			}
-		}
-		
-		if(challengeBowlerId == bowlerId) {
-			thisOverRuns = Integer.parseInt(CricketFunctions.processThisOverRunsCount(bowlerId, sessionEvent).split("-")[0]);
-			if(this_50_50 && crTarget <= thisOverRuns) {
-		    	if(inning.getSpecialRuns() != null && !inning.getSpecialRuns().trim().isEmpty()) {
-					if(inning.getSpecialRuns().startsWith("+")) {
-						totalRuns = inning.getTotalRuns() + Integer.parseInt(inning.getSpecialRuns().replace("+", ""));
-					}
-				} else {
-					totalRuns = inning.getTotalRuns();
-				}
-		    }
-		    else if(this_50_50 && crTarget > thisOverRuns) {
-		    	if(sessionEvent.get(sessionEvent.size()-1).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
-		    		totalRuns = inning.getTotalRuns() - Integer.parseInt(inning.getSpecialRuns().replace("-", ""));
-		    		//totalRuns = inning.getTotalRuns() - (thisOverRuns/2);
-		    		this_50_50 = false;
-		    	}
-		    }
-		}else {
-			if(inning.getSpecialRuns() != null && !inning.getSpecialRuns().trim().isEmpty()) {
-				if(inning.getSpecialRuns().startsWith("+")) {
-					totalRuns = inning.getTotalRuns() + Integer.parseInt(inning.getSpecialRuns().replace("+", ""));
-				}else {
-					totalRuns = inning.getTotalRuns() - Integer.parseInt(inning.getSpecialRuns().replace("-", ""));
-				}
-			} else {
-				totalRuns = inning.getTotalRuns();
-			}
-		}
-	    
+
+	    int crTarget = 0, totalRuns = inning.getTotalRuns(), challengeBowlerId = 0, thisOverRuns = 0;
+	    boolean isCurrentChallengeOver = false;
+
+	    for (int i = sessionEvent.size() - 1; i >= 0; i--) {
+
+	        if (sessionEvent.get(i).getEventInningNumber() == inning.getInningNumber() && 
+	        		sessionEvent.get(i).getEventType().equalsIgnoreCase(CricketUtil.CHANGE_BOWLER)) {
+
+	            if (sessionEvent.get(i).getEventExtra() != null && !sessionEvent.get(i).getEventExtra().isEmpty()
+	                    && sessionEvent.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
+
+	                crTarget = Integer.valueOf(sessionEvent.get(i).getEventSubExtra());
+	                challengeBowlerId = sessionEvent.get(i).getEventBowlerNo();
+	                isCurrentChallengeOver = true; 
+	            }
+	            break;
+	        }
+	    }
+
+	    if (isCurrentChallengeOver && challengeBowlerId == bowlerId) {
+	        thisOverRuns = Integer.parseInt(CricketFunctions.processThisOverRunsCount(bowlerId, sessionEvent).split("-")[0]);
+	        if (crTarget <= thisOverRuns) {
+	            if (inning.getSpecialRuns() != null && !inning.getSpecialRuns().trim().isEmpty()) {
+	                if (inning.getSpecialRuns().startsWith("+")) {
+	                    totalRuns = inning.getTotalRuns() + Integer.parseInt(inning.getSpecialRuns().replace("+", "").trim());
+	                }
+	            } else {
+	                totalRuns = inning.getTotalRuns();
+	            }
+	        } else if (crTarget > thisOverRuns) {
+	            if (!sessionEvent.isEmpty() && sessionEvent.get(sessionEvent.size() - 1).getEventType().equalsIgnoreCase(CricketUtil.END_OVER)) {
+	                totalRuns = inning.getTotalRuns() - Integer.parseInt(inning.getSpecialRuns().replace("-", "").trim());
+	            }
+	        }
+
+	    } else {
+	        if (inning.getSpecialRuns() != null && !inning.getSpecialRuns().trim().isEmpty()) {
+	            if (inning.getSpecialRuns().startsWith("+")) {
+	                totalRuns = inning.getTotalRuns() + Integer.parseInt(inning.getSpecialRuns().replace("+", ""));
+	            } else if (inning.getSpecialRuns().startsWith("-")) {
+	                totalRuns = inning.getTotalRuns() - Integer.parseInt(inning.getSpecialRuns().replace("-", ""));
+	            }
+	        } else {
+	            totalRuns = inning.getTotalRuns();
+	        }
+	    }
+
 	    if (inning.getTotalWickets() >= 10) {
 	        return String.valueOf(totalRuns);
 	    }
-	    
+
 	    return wicketsFirst ? inning.getTotalWickets() + slashOrDash + totalRuns
 	                        : totalRuns + slashOrDash + inning.getTotalWickets();
 	}
-
+	
 	public static String getTeamScore(Inning inning, String slashOrDash, boolean wicketsFirst){
 		if(inning.getTotalWickets() >= 10) {
 			return String.valueOf(inning.getTotalRuns());
@@ -13792,16 +13796,16 @@ public class CricketFunctions {
 		return dot_count;
 	}
 	public static String compareInning_Data(MatchAllData match, String separator, int inning_number, List<Event> events) {
-	    int total_runs = 0, total_wickets = 0, total_Four = 0, total_SIX = 0, total_nine = 0, cr_Over_num=0, cr_target=0;
+	    int total_runs = 0, total_wickets = 0, total_Four = 0, total_SIX = 0, total_nine = 0;
+	    boolean isCurrentChallengeOver = false;
 
 	    if (events != null && !events.isEmpty()) {
 	        for (int i = 0; i < events.size(); i++) {
 
 	            if (events.get(i).getEventInningNumber() == inning_number) {
-	            	System.out.println(events.get(i).getEventType());
 	                switch (events.get(i).getEventType()) {
 	                    case CricketUtil.ONE: case CricketUtil.TWO:case CricketUtil.THREE:case CricketUtil.FIVE:case CricketUtil.DOT:
-	                    case CricketUtil.FOUR:case CricketUtil.SIX:
+	                    case CricketUtil.FOUR:case CricketUtil.SIX: case CricketUtil.NINE:
 	                        total_runs += events.get(i).getEventRuns();
 	                        
 	                        switch ( events.get(i).getEventType()) {
@@ -13841,19 +13845,22 @@ public class CricketFunctions {
 	                    case CricketUtil.CHANGE_BOWLER:
 	                    	if(events.get(i).getEventExtra() != null) {
 	                    		if(events.get(i).getEventExtra().equalsIgnoreCase("challenge")) {
-	                    			cr_Over_num = (events.get(i).getEventOverNo()+1);
-	                    			cr_target = Integer.valueOf(events.get(i).getEventSubExtra()); 
+	                    			isCurrentChallengeOver = true;
 	                    		}
 	                    	}
 	                    	break;
 	                    case "end_over":
-	                    	if(cr_Over_num > 0 && events.get(i).getEventOverNo() == cr_Over_num) {
-	                    		if(cr_target <= events.get(i).getEventTotalRunsInAnOver()) {
-	                    			total_runs = total_runs + (events.get(i).getEventTotalRunsInAnOver()/2);
-	                    		}else {
-	                    			total_runs = total_runs + (events.get(i).getEventTotalRunsInAnOver()/2);
+	                    	if(isCurrentChallengeOver) {
+	                    		if(match.getMatch().getInning().get(inning_number - 1).getSpecialRuns() != null && 
+	                    				!match.getMatch().getInning().get(inning_number - 1).getSpecialRuns().isEmpty()) {
+	                    			if(match.getMatch().getInning().get(inning_number - 1).getSpecialRuns().startsWith("+")) {
+	                    				total_runs = total_runs + Integer.valueOf(match.getMatch().getInning().get(inning_number - 1).getSpecialRuns().replace("+", ""));
+	                    			}else if(match.getMatch().getInning().get(inning_number - 1).getSpecialRuns().startsWith("-")) {
+	                    				total_runs = total_runs - Integer.valueOf(match.getMatch().getInning().get(inning_number - 1).getSpecialRuns().replace("-", ""));
+	                    			}
 	                    		}
-                    		}
+	                    		isCurrentChallengeOver = false;
+	                    	}
 	                    	break;
 	                    
 	                    case CricketUtil.LOG_ANY_BALL:
