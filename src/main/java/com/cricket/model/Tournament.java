@@ -101,6 +101,8 @@ public class Tournament implements Cloneable {
   
   private int tournament_sixes;
   
+  private int tournament_nines;
+  
   private List<BestStats> batsman_best_Stats;
 
   private List<BestStats> bowler_best_Stats;
@@ -404,6 +406,19 @@ public void setTournament_sixes(int tournament_sixes) {
 	}
 	else {
 		this.tournament_sixes = tournament_sixes;
+	}
+}
+
+public int getTournament_nines() {
+	return tournament_nines;
+}
+
+public void setTournament_nines(int tournament_nines) {
+	if(tournament_nines < 0) {
+		this.tournament_nines = 0;
+	}
+	else {
+		this.tournament_nines = tournament_nines;
 	}
 }
 

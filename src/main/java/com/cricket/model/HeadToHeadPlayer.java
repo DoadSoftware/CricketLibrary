@@ -16,6 +16,7 @@ public class HeadToHeadPlayer implements Cloneable {
   private int threes;
   private int fours;
   private int sixes;
+  private int nines;
   private int wickets;
   private int runsConceded;
   private int ballsBowled;
@@ -46,7 +47,7 @@ public class HeadToHeadPlayer implements Cloneable {
 
 public HeadToHeadPlayer(int playerId, int runs, int ballsFaced, int batdots, int ones, int twos, int threes, int fours,
 		int sixes, int wickets, int runsConceded, int ballsBowled, int maidens, int balldots, String matchFileName,
-		com.cricket.model.Team team, com.cricket.model.Team opponentTeam, String inningStarted, String dismissed, String venue) {
+		com.cricket.model.Team team, com.cricket.model.Team opponentTeam, String inningStarted, String dismissed, String venue, int nines) {
 	super();
 	this.playerId = playerId;
 	this.runs = runs;
@@ -68,6 +69,7 @@ public HeadToHeadPlayer(int playerId, int runs, int ballsFaced, int batdots, int
 	this.inningStarted = inningStarted;
 	this.dismissed = dismissed;
 	this.venue = venue;
+	this.nines = nines;
 }
 
 public int getPlayerId() {
@@ -180,6 +182,19 @@ public void setFours(int fours) {
 	}
 	else {
 		this.fours = fours;
+	}
+}
+
+public int getNines() {
+	return nines;
+}
+
+public void setNines(int nines) {
+	if(nines < 0) {
+		this.nines = 0;
+	}
+	else {
+		this.nines = nines;
 	}
 }
 
