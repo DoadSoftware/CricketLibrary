@@ -6636,17 +6636,17 @@ public class CricketFunctions {
 		return stat;
 	}
 	
-	public static List<BestStats> extractLogFifty(String typeOfExtraction,String typeOfData ,CricketService cricketService,List<MatchAllData> tournament_matches,
-			MatchAllData currentMatch, List<BestStats> past_logFifty, List<HeadToHeadPlayer> headToHead_matches) throws IOException 
+	public static List<BestStats> extractLogFifty(String typeOfExtraction,String typeOfData ,CricketService cricketService, MatchAllData currentMatch, 
+			List<BestStats> past_logFifty, List<HeadToHeadPlayer> headToHead_matches) throws IOException 
 	{
-		int teamid = -1;
+		//int teamid = -1;
 		List<BestStats> log_50_50 = new ArrayList<BestStats>();
 		List<Player> playerAll = cricketService.getAllPlayer();
 		
 		switch(typeOfExtraction) {
 		case "COMBINED_PAST_CURRENT_MATCH_DATA":
-			return extractLogFifty("CURRENT_MATCH_DATA",typeOfData, cricketService,tournament_matches, currentMatch, 
-					extractLogFifty("PAST_MATCHES_DATA",typeOfData, cricketService,tournament_matches, currentMatch, null, headToHead_matches), headToHead_matches);
+			return extractLogFifty("CURRENT_MATCH_DATA",typeOfData, cricketService, currentMatch, 
+					extractLogFifty("PAST_MATCHES_DATA",typeOfData, cricketService, currentMatch, null, headToHead_matches), headToHead_matches);
 		case "PAST_MATCHES_DATA":
 			for(HeadToHeadPlayer mtch : headToHead_matches) {
 				if(!mtch.getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
@@ -6711,8 +6711,8 @@ public class CricketFunctions {
 		}
 		return null;
 	}
-	public static List<BestStats> extractTapeData(String typeOfData,CricketService cricketService,List<MatchAllData> tournament_matches,
-			MatchAllData currentMatch, List<BestStats> past_tapeBall, List<HeadToHeadPlayer> headToHead_matches) throws IOException 
+	public static List<BestStats> extractTapeData(String typeOfData,CricketService cricketService, MatchAllData currentMatch, List<BestStats> past_tapeBall, 
+			List<HeadToHeadPlayer> headToHead_matches) throws IOException 
 	{
 		int playerId = -1;
 		List<BestStats> tapeBall = new ArrayList<BestStats>();
@@ -6720,8 +6720,8 @@ public class CricketFunctions {
 		
 		switch(typeOfData) {
 		case "COMBINED_PAST_CURRENT_MATCH_DATA":
-			return extractTapeData("CURRENT_MATCH_DATA", cricketService,tournament_matches, currentMatch, 
-					extractTapeData("PAST_MATCHES_DATA", cricketService,tournament_matches, currentMatch, null, headToHead_matches), headToHead_matches);
+			return extractTapeData("CURRENT_MATCH_DATA", cricketService, currentMatch, 
+					extractTapeData("PAST_MATCHES_DATA", cricketService, currentMatch, null, headToHead_matches), headToHead_matches);
 		case "PAST_MATCHES_DATA":
 			for(HeadToHeadPlayer mtch : headToHead_matches) {
 				if(!mtch.getMatchFileName().equalsIgnoreCase(currentMatch.getMatch().getMatchFileName())) {
@@ -11645,7 +11645,7 @@ public class CricketFunctions {
 	{
 		List<OverByOverData> over_by_over_data = new ArrayList<OverByOverData>();
 		
-		int total_runs = 0, total_wickets = 0;
+		int total_runs = 0, total_wickets = 0, total_balls = 0;
 		
 		if ((events != null) && (events.size() > 0)) {
 			  for (int i = 0; i <=events.size()-1; i++) {
@@ -11656,10 +11656,12 @@ public class CricketFunctions {
 					    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL: case CricketUtil.NINE: case CricketUtil.WIDE:
 					    	
 					    	total_runs = total_runs + events.get(i).getEventRuns();
+					    	total_balls = total_balls + 1;
 					    	
 					    	switch (events.get(i).getEventType().toUpperCase()) {
 						    case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
 						    	total_runs = total_runs + events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns();
+						    	total_balls = total_balls + 1;
 						    	
 								if(events.get(i).getEventHowOut() != null && !events.get(i).getEventHowOut().isEmpty() 
 									&& !events.get(i).getEventHowOut().equalsIgnoreCase(CricketUtil.RETIRED_HURT)
@@ -11710,6 +11712,7 @@ public class CricketFunctions {
 								case "MANHATTAN":
 									total_runs = 0;
 									total_wickets = 0;
+									total_balls = 0;
 									break;
 								case "WORM":
 									total_wickets = 0;
@@ -11722,7 +11725,7 @@ public class CricketFunctions {
 				  }  
 			  }
 		}
-		if(total_runs > 0 || total_wickets > 0) {
+		if(total_runs > 0 || total_wickets > 0 || total_balls > 0) {
 	    	switch (processPowerPlay(CricketUtil.FULL, match).replace(CricketUtil.POWERPLAY, "").trim()) {
 	    	case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
 	    		over_by_over_data.add(new OverByOverData(inn_num, events.get(events.size()-1).getEventOverNo(), total_runs, total_wickets, true));
