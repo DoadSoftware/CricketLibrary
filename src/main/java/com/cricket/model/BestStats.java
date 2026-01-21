@@ -59,6 +59,7 @@ public BestStats(int teamId, int matches, int challengeRuns) {
 	this.teamId = teamId;
 	this.matches = matches;
 	this.challengeRuns = challengeRuns;
+	
 }
 
 public BestStats(int playerId, int runs, int balls, int fours, int sixes, Player player) {
@@ -256,8 +257,10 @@ public void setWhichVenue(Ground whichVenue) {
 @Override
 public String toString() {
 	return "BestStats [playerId=" + playerId + ", bestEquation=" + bestEquation + ", opponentTeam=" + opponentTeam
-			+ ", matchNumber=" + matchNumber + ", runs=" + runs + ", wickets=" + wickets + ", balls=" + balls
-			+ ", status=" + status + ", not_out=" + not_out + ", player=" + player + "]";
+			+ ", whichVenue=" + whichVenue + ", matchNumber=" + matchNumber + ", runs=" + runs + ", fours=" + fours
+			+ ", sixes=" + sixes + ", wickets=" + wickets + ", balls=" + balls + ", status=" + status + ", not_out="
+			+ not_out + ", teamId=" + teamId + ", matches=" + matches + ", challengeRuns=" + challengeRuns + ", player="
+			+ player + "]";
 }
 
 @Override

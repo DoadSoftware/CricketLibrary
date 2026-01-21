@@ -16,6 +16,7 @@ public class HeadToHeadPlayer implements Cloneable {
   private int threes;
   private int fours;
   private int sixes;
+  private int nines;
   private int wickets;
   private int runsConceded;
   private int ballsBowled;
@@ -36,11 +37,17 @@ public class HeadToHeadPlayer implements Cloneable {
   private int tapeBall_wickets;
   private int tapeBall_dotsBall;
   
+  private int cr_balls;
+  private int cr_runs;
+  private int cr_wickets;
+  private int cr_bouns;
+  private String cr_bouns_type;
+  
   private boolean isTeamVsTeam = false;
 
 public HeadToHeadPlayer(int playerId, int runs, int ballsFaced, int batdots, int ones, int twos, int threes, int fours,
 		int sixes, int wickets, int runsConceded, int ballsBowled, int maidens, int balldots, String matchFileName,
-		com.cricket.model.Team team, com.cricket.model.Team opponentTeam, String inningStarted, String dismissed, String venue) {
+		com.cricket.model.Team team, com.cricket.model.Team opponentTeam, String inningStarted, String dismissed, String venue, int nines) {
 	super();
 	this.playerId = playerId;
 	this.runs = runs;
@@ -62,6 +69,7 @@ public HeadToHeadPlayer(int playerId, int runs, int ballsFaced, int batdots, int
 	this.inningStarted = inningStarted;
 	this.dismissed = dismissed;
 	this.venue = venue;
+	this.nines = nines;
 }
 
 public int getPlayerId() {
@@ -174,6 +182,19 @@ public void setFours(int fours) {
 	}
 	else {
 		this.fours = fours;
+	}
+}
+
+public int getNines() {
+	return nines;
+}
+
+public void setNines(int nines) {
+	if(nines < 0) {
+		this.nines = 0;
+	}
+	else {
+		this.nines = nines;
 	}
 }
 
@@ -340,6 +361,46 @@ public void setTapeBall_dotsBall(int tapeBall_dotsBall) {
 	else {
 		this.tapeBall_dotsBall = tapeBall_dotsBall;
 	}
+}
+
+public int getCr_balls() {
+	return cr_balls;
+}
+
+public void setCr_balls(int cr_balls) {
+	this.cr_balls = cr_balls;
+}
+
+public int getCr_runs() {
+	return cr_runs;
+}
+
+public void setCr_runs(int cr_runs) {
+	this.cr_runs = cr_runs;
+}
+
+public int getCr_wickets() {
+	return cr_wickets;
+}
+
+public void setCr_wickets(int cr_wickets) {
+	this.cr_wickets = cr_wickets;
+}
+
+public int getCr_bouns() {
+	return cr_bouns;
+}
+
+public void setCr_bouns(int cr_bouns) {
+	this.cr_bouns = cr_bouns;
+}
+
+public String getCr_bouns_type() {
+	return cr_bouns_type;
+}
+
+public void setCr_bouns_type(String cr_bouns_type) {
+	this.cr_bouns_type = cr_bouns_type;
 }
 
 public boolean isTeamVsTeam() {
