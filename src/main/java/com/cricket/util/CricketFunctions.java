@@ -130,6 +130,33 @@ public class CricketFunctions {
 	public static int ball_number = 0, c = 0;
 	public static boolean isLeagleBall = false;
 	
+    public static List<BowlingCard> MergeMissingSpeeds(List<BowlingCard> bowlingCards, List<Speed> allSpeeds) {
+
+        for (BowlingCard bc : bowlingCards) {
+
+            if (bc.getSpeeds() == null)
+            	bc.setSpeeds(new ArrayList<Speed>());
+
+            Set<String> existing = new HashSet<>();
+
+            for (Speed spd : bc.getSpeeds())
+                existing.add(spd.getOverNumber() + "-" + spd.getBallNumber());
+
+            for (Speed spd : allSpeeds)
+                if (existing.add(spd.getOverNumber() + "-" + spd.getBallNumber()))
+                    bc.getSpeeds().add(spd);
+        }
+        return bowlingCards;
+    }
+    
+    public static List<Speed> ReadBallSpeedData(String filePath) throws Exception {
+        return Files.lines(Paths.get(filePath))
+            .filter(line -> !line.trim().isEmpty())
+            .map(line -> line.split("[=,]"))
+            .map(p -> new Speed(p[5], Integer.parseInt(p[1]), Integer.parseInt(p[3])))
+            .collect(Collectors.toList());
+    }
+	
 	public static void logAllHawkeyeSpeeds(String sourceSpeedsDirectory, String destinationSpeedLogFile) throws IOException 
 	{
 		if(!new File(sourceSpeedsDirectory).exists()) {
