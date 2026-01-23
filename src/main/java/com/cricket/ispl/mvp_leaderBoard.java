@@ -74,7 +74,6 @@ public class mvp_leaderBoard {
         public void setMeta(Meta meta) {
             this.meta = meta;
         }
-
     }
 
     public static class Player {
@@ -97,12 +96,26 @@ public class mvp_leaderBoard {
     	@JsonProperty("playing_role")
         private String playingRole;
     	
-
+    	@JsonProperty("vote_count")
+        private double voteCount;
+    	
+    	@JsonProperty("performance_count")
+        private int performanceCount;
+    	
     	@JsonProperty("final_points")
         private double finalPoints;
         
         @JsonIgnore
         private String player_profile;
+        
+        @JsonProperty("number_of_votes")
+        private int numberOfVotes;
+        
+        @JsonProperty("total_performance_points")
+        private int totalPerformancePoints;
+        
+        @JsonProperty("total_points")
+        private int totalPoints;
         
         @JsonProperty("position")
         private int position;
@@ -155,6 +168,22 @@ public class mvp_leaderBoard {
 			this.playingRole = playingRole;
 		}
 
+//		public int getVoteCount() {
+//			return voteCount;
+//		}
+//
+//		public void setVoteCount(int voteCount) {
+//			this.voteCount = voteCount;
+//		}
+//
+//		public double getPerformanceCount() {
+//			return performanceCount;
+//		}
+//
+//		public void setPerformanceCount(double performanceCount) {
+//			this.performanceCount = performanceCount;
+//		}
+
 		public double getFinalPoints() {
 			return finalPoints;
 		}
@@ -178,7 +207,6 @@ public class mvp_leaderBoard {
 		public void setPosition(int position) {
 			this.position = position;
 		}
-
 
     }
 
@@ -229,12 +257,4 @@ public class mvp_leaderBoard {
             this.last_page = last_page;
         }
     }
-
-	@Override
-	public String toString() {
-		return "mvp_leaderBoard [status=" + status + ", message=" + message + ", data=" + data + "]";
-	}
-
-	
-    
 }
