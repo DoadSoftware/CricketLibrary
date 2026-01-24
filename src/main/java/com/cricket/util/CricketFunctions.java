@@ -13106,7 +13106,8 @@ public class CricketFunctions {
 	    int maxOvers = match.getSetup().getMaxOvers();
 
 	    String reducedOvers = match.getSetup().getReducedOvers();
-	    int totalBalls;
+	    int totalBalls, runs = 0;
+	    double rr, baseRR;
 
 	    if (reducedOvers != null && !reducedOvers.trim().isEmpty() && !reducedOvers.trim().equals("0")) {
 
@@ -13126,12 +13127,33 @@ public class CricketFunctions {
 
 	    int bowled = match.getMatch().getInning().get(0).getTotalOvers() * ballsPerOver
 	          + match.getMatch().getInning().get(0).getTotalBalls();
-
 	    int remaining = Math.max(0, totalBalls - Math.min(bowled, totalBalls));
+	    
+	    if(match.getSetup().getSpecialMatchRules() != null && !match.getSetup().getSpecialMatchRules().isEmpty() 
+				&& match.getSetup().getSpecialMatchRules().equalsIgnoreCase("ISPL")) {
+			if(match.getMatch().getInning().get(0).getSpecialRuns() != null && 
+					!match.getMatch().getInning().get(0).getSpecialRuns().isEmpty()) {
+				if(match.getMatch().getInning().get(0).getSpecialRuns().startsWith("+")) {
+					runs = (match.getMatch().getInning().get(0).getTotalRuns() + 
+							Integer.valueOf(match.getMatch().getInning().get(0).getSpecialRuns().replace("+", "")));
+				}else if(match.getMatch().getInning().get(0).getSpecialRuns().startsWith("-")) {
+					runs = (match.getMatch().getInning().get(0).getTotalRuns() - 
+							Integer.valueOf(match.getMatch().getInning().get(0).getSpecialRuns().replace("-", "")));
+				}
+			}else {
+				runs = match.getMatch().getInning().get(0).getTotalRuns();
+			}
+			
+			rr = Double.parseDouble(CricketFunctions.generateRunRate(runs, match.getMatch().getInning().get(0).getTotalOvers(), 
+					match.getMatch().getInning().get(0).getTotalBalls(), 2,match));
+		    baseRR = Math.floor(rr);
+		}else {
+			runs = match.getMatch().getInning().get(0).getTotalRuns();
+		    rr = Double.parseDouble(match.getMatch().getInning().get(0).getRunRate());
+		    baseRR = Math.floor(rr);
+		}
 
-	    int runs = match.getMatch().getInning().get(0).getTotalRuns();
-	    double rr = Double.parseDouble(match.getMatch().getInning().get(0).getRunRate());
-	    double baseRR = Math.floor(rr);
+	    
 	    // Current RR
 	    projectedScoreResult.add(String.format("%.2f", rr));
 	    projectedScoreResult.add(String.valueOf(Math.round(runs + (remaining / 6.0) * rr)));
