@@ -18,6 +18,10 @@ public class Speed {
 
   private int ballNumber;
 
+  private int inningTotalOver;
+
+  private int inningTotalBall;
+  
   @JsonIgnore
   private long speedFileModifiedTime;
   
@@ -36,13 +40,15 @@ public Speed(String speedValue, long speedFileModifiedTime) {
 	this.speedFileModifiedTime = speedFileModifiedTime;
 }
 
-public Speed(int speedNumber, String speedValue, String speedExtra, int overNumber, int ballNumber) {
+public Speed(int speedNumber, String speedValue, String speedExtra, int overNumber, int ballNumber, int inningTotalOver, int inningTotalBall) {
 	super();
 	this.speedNumber = speedNumber;
 	this.speedValue = speedValue;
 	this.speedExtra = speedExtra;
 	this.overNumber = overNumber;
 	this.ballNumber = ballNumber;
+	this.inningTotalOver = inningTotalOver;
+	this.inningTotalBall = inningTotalBall;
 }
 
 public Speed(String speedValue, int overNumber, int ballNumber) {
@@ -50,6 +56,22 @@ public Speed(String speedValue, int overNumber, int ballNumber) {
 	this.speedValue = speedValue;
 	this.overNumber = overNumber;
 	this.ballNumber = ballNumber;
+}
+
+public int getInningTotalOver() {
+	return inningTotalOver;
+}
+
+public void setInningTotalOver(int inningTotalOver) {
+	this.inningTotalOver = inningTotalOver;
+}
+
+public int getInningTotalBall() {
+	return inningTotalBall;
+}
+
+public void setInningTotalBall(int inningTotalBall) {
+	this.inningTotalBall = inningTotalBall;
 }
 
 public long getSpeedFileModifiedTime() {
@@ -103,8 +125,8 @@ public void setBallNumber(int ballNumber) {
 @Override
 public String toString() {
 	return "Speed [speedNumber=" + speedNumber + ", speedValue=" + speedValue + ", speedExtra=" + speedExtra
-			+ ", overNumber=" + overNumber + ", ballNumber=" + ballNumber + ", speedFileModifiedTime="
-			+ speedFileModifiedTime + "]";
+			+ ", overNumber=" + overNumber + ", ballNumber=" + ballNumber + ", inningTotalOver=" + inningTotalOver
+			+ ", inningTotalBall=" + inningTotalBall + ", speedFileModifiedTime=" + speedFileModifiedTime + "]";
 }
 
 }

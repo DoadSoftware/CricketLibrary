@@ -149,8 +149,9 @@ public class CricketFunctions {
         return bowlingCards;
     }
     
-    public static List<Speed> ReadBallSpeedData(String filePath) throws Exception {
-        return Files.lines(Paths.get(filePath))
+    public static List<Speed> ReadBallSpeedData(String filePath) throws Exception 
+    {
+    	return Files.lines(Paths.get(filePath))
             .filter(line -> !line.trim().isEmpty())
             .map(line -> line.split("[=,]"))
             .map(p -> new Speed(p[5], Integer.parseInt(p[1]), Integer.parseInt(p[3])))
