@@ -130,24 +130,40 @@ public class CricketFunctions {
 	public static int ball_number = 0, c = 0;
 	public static boolean isLeagleBall = false;
 	
-    public static List<BowlingCard> MergeMissingSpeeds(List<BowlingCard> bowlingCards, List<Speed> allSpeeds) {
+	public static List<BowlingCard> MergeMissingSpeeds(List<BowlingCard> bowlingCards, List<Speed> allSpeeds) 
+	{
+	    for (BowlingCard bc : bowlingCards) {
 
-        for (BowlingCard bc : bowlingCards) {
+	        if (bc.getSpeeds() == null || bc.getSpeeds().isEmpty())
+	            continue;
 
-            if (bc.getSpeeds() == null)
-            	bc.setSpeeds(new ArrayList<Speed>());
+	        List<Speed> bcSpeeds = objectMapper.convertValue(bc.getSpeeds(), new TypeReference<List<Speed>>() {});
 
-            Set<String> existing = new HashSet<>();
+	        bc.setSpeeds(new ArrayList<>());
 
-            for (Speed spd : bc.getSpeeds())
-                existing.add(spd.getOverNumber() + "-" + spd.getBallNumber());
+	        Set<Integer> inningOvers = new HashSet<>();
+	        for (Speed s : bcSpeeds) {
+	            inningOvers.add(s.getInningTotalOver());
+	        }
 
-            for (Speed spd : allSpeeds)
-                if (existing.add(spd.getOverNumber() + "-" + spd.getBallNumber()))
-                    bc.getSpeeds().add(spd);
-        }
-        return bowlingCards;
-    }
+	        int speedCount = 0;
+
+	        for (Integer inningOver : inningOvers) {
+
+	            int effectiveOver = inningOver + 1;
+
+	            List<Speed> matchSpeeds = allSpeeds.stream().filter(s -> s.getOverNumber() == effectiveOver).collect(Collectors.toList());
+
+	            for (Speed m : matchSpeeds) 
+	            {
+	                speedCount++;
+	                bc.getSpeeds().add(new Speed(speedCount, m.getSpeedValue(), "", m.getOverNumber(), m.getBallNumber(), inningOver, m.getInningTotalBall()
+	                ));
+	            }
+	        }
+	    }
+	    return bowlingCards;
+	}
     
     public static List<Speed> ReadBallSpeedData(String filePath) throws Exception 
     {
