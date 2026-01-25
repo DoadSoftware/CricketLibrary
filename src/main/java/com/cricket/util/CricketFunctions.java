@@ -130,49 +130,77 @@ public class CricketFunctions {
 	public static int ball_number = 0, c = 0;
 	public static boolean isLeagleBall = false;
 	
-	public static List<BowlingCard> MergeMissingSpeeds(List<BowlingCard> bowlingCards, List<Speed> allSpeeds) 
-	{
+	public static List<BowlingCard> MergeMissingSpeeds(int inningNumber, List<BowlingCard> bowlingCards, List<Speed> allSpeeds) {
+
 	    for (BowlingCard bc : bowlingCards) {
 
 	        if (bc.getSpeeds() == null || bc.getSpeeds().isEmpty())
 	            continue;
 
-	        List<Speed> bcSpeeds = objectMapper.convertValue(bc.getSpeeds(), new TypeReference<List<Speed>>() {});
+	        List<Speed> originalSpeeds = objectMapper.convertValue(bc.getSpeeds(), new TypeReference<List<Speed>>() {});
 
-	        bc.setSpeeds(new ArrayList<>());
+	        List<Speed> newSpeeds = new ArrayList<>();
 
-	        Set<Integer> inningOvers = new HashSet<>();
-	        for (Speed s : bcSpeeds) {
-	            inningOvers.add(s.getInningTotalOver());
+	        Set<Integer> inningOversSet = new HashSet<>();
+	        for (Speed s : originalSpeeds) {
+	            inningOversSet.add(s.getInningTotalOver());
 	        }
 
-	        int speedCount = 0;
+	        List<Integer> inningOvers = new ArrayList<>(inningOversSet);
+	        Collections.sort(inningOvers);
 
 	        for (Integer inningOver : inningOvers) {
 
 	            int effectiveOver = inningOver + 1;
 
-	            List<Speed> matchSpeeds = allSpeeds.stream().filter(s -> s.getOverNumber() == effectiveOver).collect(Collectors.toList());
+	            List<Speed> matchSpeeds = allSpeeds.stream().filter(s -> s.getInningNumber() == inningNumber 
+	            	&& s.getOverNumber() == effectiveOver).collect(Collectors.toList());
 
-	            for (Speed m : matchSpeeds) 
-	            {
-	                speedCount++;
-	                bc.getSpeeds().add(new Speed(speedCount, m.getSpeedValue(), "", m.getOverNumber(), m.getBallNumber(), inningOver, m.getInningTotalBall()
-	                ));
+	            List<Speed> originalForOver = originalSpeeds.stream().filter(s -> s.getInningTotalOver() == inningOver).collect(Collectors.toList());
+
+	            if (!matchSpeeds.isEmpty()) {
+
+	                int speedCount = 0;
+
+	                for (int i = 0; i < matchSpeeds.size(); i++) {
+
+	                    Speed m = matchSpeeds.get(i);
+
+	                    Speed context = i < originalForOver.size() ? originalForOver.get(i) : originalForOver.get(originalForOver.size() - 1);
+
+	                    speedCount++;
+
+	                    newSpeeds.add(new Speed(speedCount, m.getSpeedValue(), "", context.getOverNumber(), context.getBallNumber(), 
+	                    	context.getInningTotalOver(), context.getInningTotalBall(), inningNumber));
+	                }
+
+	            } else {
+	                newSpeeds.addAll(originalForOver);
 	            }
 	        }
+	        bc.setSpeeds(newSpeeds);
 	    }
+
 	    return bowlingCards;
 	}
     
-    public static List<Speed> ReadBallSpeedData(String filePath) throws Exception 
-    {
-    	return Files.lines(Paths.get(filePath))
+	public static List<Speed> ReadBallSpeedData(String filePath) throws Exception {
+
+	    return Files.lines(Paths.get(filePath))
             .filter(line -> !line.trim().isEmpty())
-            .map(line -> line.split("[=,]"))
-            .map(p -> new Speed(p[5], Integer.parseInt(p[1]), Integer.parseInt(p[3])))
+            .map(line -> {
+                Map<String, String> values = Arrays.stream(line.split(","))
+                        .map(part -> part.split("=", 2))
+                        .collect(Collectors.toMap(
+                                a -> a[0].trim(),
+                                a -> a[1].trim()
+                        ));
+
+                return new Speed(Integer.parseInt(values.get("Inning")), values.get("Speed"), 
+                	Integer.parseInt(values.get("Over")), Integer.parseInt(values.get("Ball")));
+            })
             .collect(Collectors.toList());
-    }
+	}
 	
 	public static void logAllHawkeyeSpeeds(String sourceSpeedsDirectory, String destinationSpeedLogFile) throws IOException 
 	{

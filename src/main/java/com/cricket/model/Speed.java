@@ -10,6 +10,8 @@ public class Speed {
 
   private int speedNumber;
 
+  private int inningNumber;
+  
   private String speedValue;
 
   private String speedExtra;
@@ -40,7 +42,7 @@ public Speed(String speedValue, long speedFileModifiedTime) {
 	this.speedFileModifiedTime = speedFileModifiedTime;
 }
 
-public Speed(int speedNumber, String speedValue, String speedExtra, int overNumber, int ballNumber, int inningTotalOver, int inningTotalBall) {
+public Speed(int speedNumber, String speedValue, String speedExtra, int overNumber, int ballNumber, int inningTotalOver, int inningTotalBall, int inningNumber) {
 	super();
 	this.speedNumber = speedNumber;
 	this.speedValue = speedValue;
@@ -49,6 +51,7 @@ public Speed(int speedNumber, String speedValue, String speedExtra, int overNumb
 	this.ballNumber = ballNumber;
 	this.inningTotalOver = inningTotalOver;
 	this.inningTotalBall = inningTotalBall;
+	this.inningNumber = inningNumber;
 }
 
 public Speed(String speedValue, int overNumber, int ballNumber) {
@@ -56,6 +59,22 @@ public Speed(String speedValue, int overNumber, int ballNumber) {
 	this.speedValue = speedValue;
 	this.overNumber = overNumber;
 	this.ballNumber = ballNumber;
+}
+
+public Speed(int inningNumber, String speedValue, int overNumber, int ballNumber) {
+	super();
+	this.inningNumber = inningNumber;
+	this.speedValue = speedValue;
+	this.overNumber = overNumber;
+	this.ballNumber = ballNumber;
+}
+
+public int getInningNumber() {
+	return inningNumber;
+}
+
+public void setInningNumber(int inningNumber) {
+	this.inningNumber = inningNumber;
 }
 
 public int getInningTotalOver() {
