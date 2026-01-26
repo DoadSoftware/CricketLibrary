@@ -7659,6 +7659,9 @@ public class CricketFunctions {
 			
 			for(Inning inn : currentMatch.getMatch().getInning())
 			{
+				//Tape Ball Data
+				List<String> tapeBall = getTapeBalldetails(inn.getInningNumber(), currentMatch.getEventFile().getEvents(), currentMatch);
+				
 				if(inn.getBowlingCard() != null && inn.getBowlingCard().size() > 0 ) {
 					for(BowlingCard boc : inn.getBowlingCard())
 					{
@@ -7688,8 +7691,6 @@ public class CricketFunctions {
 								currentMatch.getSetup().getGround(),currentMatch.getMatch().getMatchFileName().replace(".json", ""),boc.getPlayer(),""));
 							Collections.sort(past_tournament_stat_clone.get(playerId).getBowler_best_Stats(),new CricketFunctions.BowlerBestStatsComparator());
 							
-							//Tape Ball Data
-							List<String> tapeBall = getTapeBalldetails(inn.getInningNumber(), currentMatch.getEventFile().getEvents(), currentMatch);
 							for(int i=0;i<=tapeBall.size()-1;i++) {
 								if(Integer.valueOf(tapeBall.get(i).split(",")[0].trim()).intValue() == boc.getPlayerId()) {
 									past_tournament_stat_clone.get(playerId).setTapeBall_balls(past_tournament_stat_clone.get(playerId).getTapeBall_balls() + 
@@ -7727,8 +7728,6 @@ public class CricketFunctions {
 							Collections.sort(past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getBowler_best_Stats(),
 								new CricketFunctions.BowlerBestStatsComparator());
 							
-							//Tape Ball Data
-							List<String> tapeBall = getTapeBalldetails(inn.getInningNumber(), currentMatch.getEventFile().getEvents(), currentMatch);
 							for(int i=0;i<=tapeBall.size()-1;i++) {
 								if(Integer.valueOf(tapeBall.get(i).split(",")[0].trim()).intValue() == boc.getPlayerId()) {
 									past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).setTapeBall_balls(past_tournament_stat_clone.get(
