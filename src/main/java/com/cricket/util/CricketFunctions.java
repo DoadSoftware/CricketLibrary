@@ -2313,7 +2313,7 @@ public class CricketFunctions {
 		  case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.NINE: case CricketUtil.WIDE: case CricketUtil.NO_BALL: case CricketUtil.BYE: 
 		  case CricketUtil.LEG_BYE: case CricketUtil.PENALTY: case CricketUtil.LOG_WICKET: case CricketUtil.LOG_ANY_BALL:
 			  
-			  line_txt = String.format("%-140s", "");
+			  line_txt = String.format("%-200s", "");
 				j = j + 1;
 				for(Inning inn : match.getMatch().getInning()) {
 					for(Player hs : match.getSetup().getHomeSquad()) {
@@ -2461,12 +2461,12 @@ public class CricketFunctions {
 	    		line_txt = addSubString(line_txt,over_ball,67 - over_ball.length());
 	    		
 	    		if(match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL)) {
-	    			this_over = match.getEventFile().getEvents().get(i).getEventExtra();
+	    			this_over = match.getEventFile().getEvents().get(i).getEventExtra() == null ? match.getEventFile().getEvents().get(i).getEventSubExtra() : "";
 	    		}else {
 	    			this_over = match.getEventFile().getEvents().get(i).getEventType();
 	    		}
 	    		
-	    		if(!this_over.trim().isEmpty()) {
+	    		if(this_over != null && !this_over.trim().isEmpty()) {
 	    			
 					this_over = this_over.replace("WIDE", "WD");
 					this_over = this_over.replace("NO_BALL", "NB");
@@ -2659,7 +2659,7 @@ public class CricketFunctions {
 											height = "4";
 										}
 										if(match.getMatch().getShots() != null) {
-											if(match.getMatch().getShots().get(k).getRuns() == 6) {
+											if(match.getMatch().getShots() != null && match.getMatch().getShots().get(k).getRuns() == 6) {
 												six_distance = String.valueOf(match.getMatch().getWagons().get(k).getSixDistance());
 											}
 										}
@@ -2741,8 +2741,8 @@ public class CricketFunctions {
 		Inning inning=match.getMatch().getInning().stream().filter(in -> in.getIsCurrentInning()
 			.equalsIgnoreCase(CricketUtil.YES)).findAny().orElse(null);
 		int max_inn = 2;
-		String line_txt = String.format("%-140s", "");
-		String txt = String.format("%-140s", "");
+		String line_txt = String.format("%-200s", "");
+		String txt = String.format("%-200s", "");
 		if(match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.TEST) || 
 				match.getSetup().getMatchType().equalsIgnoreCase(CricketUtil.FC)) {
 			max_inn = 4;
