@@ -2461,7 +2461,11 @@ public class CricketFunctions {
 	    		line_txt = addSubString(line_txt,over_ball,67 - over_ball.length());
 	    		
 	    		if(match.getEventFile().getEvents().get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_ANY_BALL)) {
-	    			this_over = match.getEventFile().getEvents().get(i).getEventExtra() == null ? match.getEventFile().getEvents().get(i).getEventSubExtra() : "";
+	    			this_over = match.getEventFile().getEvents().get(i).getEventExtra() == null ? match.getEventFile().getEvents().get(i).getEventSubExtra() == null ? "0" : 
+	    				match.getEventFile().getEvents().get(i).getEventSubExtra() : "0";
+	    			if(match.getEventFile().getEvents().get(i).getValueToProcess().contains("penalty")) {
+	    				this_over = "5PENALTY";	
+	    			}
 	    		}else {
 	    			this_over = match.getEventFile().getEvents().get(i).getEventType();
 	    		}
@@ -2569,6 +2573,11 @@ public class CricketFunctions {
 			          this_ball_data = this_ball_data + "+" + CricketUtil.WICKET.charAt(0) + "";
 			          line_txt = addSubString(line_txt,this_ball_data,74);
 			        }
+			      }
+			      if(this_over_run.isEmpty()) {
+			    	  if(match.getEventFile().getEvents().get(i).getValueToProcess().contains("penalty")) {
+			    		  this_over_run = "5PN";	
+		    			}
 			      }
 			      break;
 				}
@@ -15762,7 +15771,7 @@ public class CricketFunctions {
 			                    (events.getEventSubExtraRuns() > 1 ? events.getEventSubExtraRuns() : "") + events.getEventSubExtra();
 			        }
 	            }else {
-	            	if(events.getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY)) {
+	            	if(events.getEventSubExtra() != null && events.getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY)) {
 	        			if(events.getDoNotIncrementBall().equalsIgnoreCase(CricketUtil.YES)) {
 	        				ThisOverTxt = ThisOverTxt + (events.getEventRuns() > 0 ? events.getEventRuns() + "+" : "") +
 	        						(events.getEventSubExtraRuns() > 1 ? events.getEventSubExtraRuns() : "") +  events.getEventSubExtra()+"_Y";

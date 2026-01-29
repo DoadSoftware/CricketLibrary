@@ -168,21 +168,45 @@ public class mvp_leaderBoard {
 			this.playingRole = playingRole;
 		}
 
-//		public int getVoteCount() {
-//			return voteCount;
-//		}
-//
-//		public void setVoteCount(int voteCount) {
-//			this.voteCount = voteCount;
-//		}
-//
-//		public double getPerformanceCount() {
-//			return performanceCount;
-//		}
-//
-//		public void setPerformanceCount(double performanceCount) {
-//			this.performanceCount = performanceCount;
-//		}
+		public double getVoteCount() {
+			return voteCount;
+		}
+
+		public void setVoteCount(double voteCount) {
+			this.voteCount = voteCount;
+		}
+
+		public int getPerformanceCount() {
+			return performanceCount;
+		}
+
+		public void setPerformanceCount(int performanceCount) {
+			this.performanceCount = performanceCount;
+		}
+
+		public int getNumberOfVotes() {
+			return numberOfVotes;
+		}
+
+		public void setNumberOfVotes(int numberOfVotes) {
+			this.numberOfVotes = numberOfVotes;
+		}
+
+		public int getTotalPerformancePoints() {
+			return totalPerformancePoints;
+		}
+
+		public void setTotalPerformancePoints(int totalPerformancePoints) {
+			this.totalPerformancePoints = totalPerformancePoints;
+		}
+
+		public int getTotalPoints() {
+			return totalPoints;
+		}
+
+		public void setTotalPoints(int totalPoints) {
+			this.totalPoints = totalPoints;
+		}
 
 		public double getFinalPoints() {
 			return finalPoints;
