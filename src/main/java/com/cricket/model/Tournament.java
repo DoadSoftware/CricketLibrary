@@ -25,6 +25,8 @@ public class Tournament implements Cloneable {
   
   private int sixes;
   
+  private int nines;
+  
   private int thirty;
   
   private int fifty;
@@ -286,6 +288,19 @@ public void setSixes(int sixes) {
 	}
 	else {
 		this.sixes = sixes;
+	}
+}
+
+public int getNines() {
+	return nines;
+}
+
+public void setNines(int nines) {
+	if(nines < 0) {
+		this.nines = 0;
+	}
+	else {
+		this.nines = nines;
 	}
 }
 
