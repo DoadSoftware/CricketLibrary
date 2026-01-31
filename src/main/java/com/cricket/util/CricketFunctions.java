@@ -7732,236 +7732,391 @@ public class CricketFunctions {
 			return tournament_stats;
 	
 		case "CURRENT_MATCH_DATA":
-			
-			List<Tournament> past_tournament_stat_clone = new ArrayList<Tournament>();
-			
-//			past_tournament_stat_clone = past_tournament_stat.stream().map(tourn_stats -> {
-//				try {
-//					return tourn_stats.clone();
-//				} catch (CloneNotSupportedException e) {
-//					e.printStackTrace();
-//				}
-//				return tourn_stats;
-//			}).collect(Collectors.toList());
-			
-			
-			past_tournament_stat_clone = past_tournament_stat.stream().map(tourn_stats -> {
-			    try {
-			        return tourn_stats.clone(); // Updated deep clone
-			    } catch (CloneNotSupportedException e) {
-			        e.printStackTrace();
-			    }
-			    return null;
-			}).collect(Collectors.toList());
-			
-			List<String> tapeBall = new ArrayList<String>();
-			if(currentMatch.getSetup().getSpecialMatchRules().equalsIgnoreCase(CricketUtil.ISPL)) {
-				//Tape Ball Data
-				tapeBall = getAllTapeBalldetails(currentMatch.getEventFile().getEvents(), currentMatch);
-			}
-			
-			for(Inning inn : currentMatch.getMatch().getInning())
-			{
 
-				if(inn.getBowlingCard() != null && inn.getBowlingCard().size() > 0 ) {
-					for(BowlingCard boc : inn.getBowlingCard())
-					{
-						playerId = -1;
-						for(int i=0; i<=past_tournament_stat_clone.size() - 1;i++)
-						{
-							if(boc.getPlayerId() == past_tournament_stat_clone.get(i).getPlayer().getPlayerId()) {
-								playerId = i;
-								break;
-							}
-						}
-						if(playerId >= 0) {
-							past_tournament_stat_clone.get(playerId).setRunsConceded(past_tournament_stat_clone.get(playerId).getRunsConceded() + boc.getRuns()); // existing record
-							past_tournament_stat_clone.get(playerId).setWickets(past_tournament_stat_clone.get(playerId).getWickets() + boc.getWickets());
-							past_tournament_stat_clone.get(playerId).setDots(past_tournament_stat_clone.get(playerId).getDots() + boc.getDots());
-							past_tournament_stat_clone.get(playerId).setBallsBowled(past_tournament_stat_clone.get(playerId).getBallsBowled() + 
-									6 * boc.getOvers() + boc.getBalls());
-							
-							if(boc.getWickets() >= 3 && boc.getWickets() < 5) {
-								past_tournament_stat_clone.get(playerId).setThreeWicketHaul(past_tournament_stat_clone.get(playerId).getThreeWicketHaul() + 1);
-							}else if(boc.getWickets() >= 5) {
-								past_tournament_stat_clone.get(playerId).setFiveWicketHaul(past_tournament_stat_clone.get(playerId).getFiveWicketHaul() + 1);
-							}
-							
-							past_tournament_stat_clone.get(playerId).getBowler_best_Stats().add(new BestStats(boc.getPlayerId(), 
-								(1000 * boc.getWickets()) - boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), inn.getBatting_team(),
-								currentMatch.getSetup().getGround(),currentMatch.getMatch().getMatchFileName().replace(".json", ""),boc.getPlayer(),""));
-							Collections.sort(past_tournament_stat_clone.get(playerId).getBowler_best_Stats(),new CricketFunctions.BowlerBestStatsComparator());
-							
-							if(currentMatch.getSetup().getSpecialMatchRules().equalsIgnoreCase(CricketUtil.ISPL)) {
-								for(int i=0;i<=tapeBall.size()-1;i++) {
-									if(Integer.valueOf(tapeBall.get(i).split(",")[0].trim()).intValue() == boc.getPlayerId()) {
-										past_tournament_stat_clone.get(playerId).setTapeBall_balls(past_tournament_stat_clone.get(playerId).getTapeBall_balls() + 
-												Integer.valueOf(tapeBall.get(i).split(",")[1]).intValue());
-										past_tournament_stat_clone.get(playerId).setTapeBall_runs(past_tournament_stat_clone.get(playerId).getTapeBall_runs() + 
-												Integer.valueOf(tapeBall.get(i).split(",")[2]).intValue());
-										past_tournament_stat_clone.get(playerId).setTapeBall_wickets(past_tournament_stat_clone.get(playerId).getTapeBall_wickets() + 
-												Integer.valueOf(tapeBall.get(i).split(",")[3]).intValue());
-										past_tournament_stat_clone.get(playerId).setTapeBall_dotsBall(past_tournament_stat_clone.get(playerId).getTapeBall_dotsBall() + 
-												Integer.valueOf(tapeBall.get(i).split(",")[4]).intValue());
-										
-										past_tournament_stat_clone.get(playerId).getTapeBall_best_Stats().add(new BestStats(boc.getPlayerId(), 
-												(1000 * Integer.valueOf(tapeBall.get(i).split(",")[3])) - Integer.valueOf(tapeBall.get(i).split(",")[2]), 
-												Integer.valueOf(tapeBall.get(i).split(",")[1]), inn.getBatting_team(),currentMatch.getSetup().getGround(),
-												currentMatch.getMatch().getMatchFileName().replace(".json", ""),boc.getPlayer(),""));
-									}
-								}
-								Collections.sort(past_tournament_stat_clone.get(playerId).getTapeBall_best_Stats(),new CricketFunctions.BowlerBestStatsComparator());
-							}
-						}else {
-							past_tournament_stat_clone.add(new Tournament(boc.getPlayerId(), 0, 0,0, 0, 0, 0, 0, 0, boc.getWickets(), boc.getRuns(), 
-									6 * boc.getOvers() + boc.getBalls(), 0, boc.getDots(),0,0,null,0,0,0,0, boc.getPlayer(), new ArrayList<BestStats>(), 
-									new ArrayList<BestStats>(), new ArrayList<BestStats>()));
-							
-							if(boc.getWickets() >= 3 && boc.getWickets() < 5) {
-								past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).setThreeWicketHaul(
-										past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getThreeWicketHaul() + 1);
-							}else if(boc.getWickets() >= 5) {
-								past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).setFiveWicketHaul(
-										past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getFiveWicketHaul() + 1);
-							}
-							past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getBowler_best_Stats().add(new BestStats(boc.getPlayerId(), 
-								(1000 * boc.getWickets()) - boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), inn.getBatting_team(),
-								currentMatch.getSetup().getGround(),currentMatch.getMatch().getMatchFileName().replace(".json", ""),boc.getPlayer(),""));
-							Collections.sort(past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getBowler_best_Stats(),
-								new CricketFunctions.BowlerBestStatsComparator());
-							
-							if(currentMatch.getSetup().getSpecialMatchRules().equalsIgnoreCase(CricketUtil.ISPL)) {
-								for(int i=0;i<=tapeBall.size()-1;i++) {
-									if(Integer.valueOf(tapeBall.get(i).split(",")[0].trim()).intValue() == boc.getPlayerId()) {
-										past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).setTapeBall_balls(past_tournament_stat_clone.get(
-												past_tournament_stat_clone.size() - 1).getTapeBall_balls() + Integer.valueOf(tapeBall.get(i).split(",")[1]));
-										
-										past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).setTapeBall_runs(past_tournament_stat_clone.get(
-												past_tournament_stat_clone.size() - 1).getTapeBall_runs() + Integer.valueOf(tapeBall.get(i).split(",")[2]));
-										
-										past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).setTapeBall_wickets(past_tournament_stat_clone.get(
-												past_tournament_stat_clone.size() - 1).getTapeBall_wickets() + Integer.valueOf(tapeBall.get(i).split(",")[3]));
-										
-										past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).setTapeBall_dotsBall(past_tournament_stat_clone.get(
-												past_tournament_stat_clone.size() - 1).getTapeBall_dotsBall() + Integer.valueOf(tapeBall.get(i).split(",")[4]));
-										
-										past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getTapeBall_best_Stats().add(new BestStats(boc.getPlayerId(), 
-												(1000 * Integer.valueOf(tapeBall.get(i).split(",")[3])) - Integer.valueOf(tapeBall.get(i).split(",")[2]), 
-												Integer.valueOf(tapeBall.get(i).split(",")[1]), inn.getBatting_team(),currentMatch.getSetup().getGround(),
-												currentMatch.getMatch().getMatchFileName().replace(".json", ""),boc.getPlayer(),""));
-									}
-								}
-								if(playerId > 0) {
-									Collections.sort(past_tournament_stat_clone.get(playerId).getTapeBall_best_Stats(),new CricketFunctions.BowlerBestStatsComparator());
-								}
-							}
-						}
-					}
-				}
-				
-				for(BattingCard bc : inn.getBattingCard())
-				{
-					playerId = -1;
-					for(int i=0; i<=past_tournament_stat_clone.size() - 1;i++)
-					{
-						if(bc.getPlayerId() == past_tournament_stat_clone.get(i).getPlayerId()) {
-							playerId = i;
-							break;
-						}
-					}
-					
-					if(playerId >= 0) {
-						past_tournament_stat_clone.get(playerId).setRuns(past_tournament_stat_clone.get(playerId).getRuns() + bc.getRuns()); // existing record
-						past_tournament_stat_clone.get(playerId).setBallsFaced(past_tournament_stat_clone.get(playerId).getBallsFaced() + bc.getBalls());
-						past_tournament_stat_clone.get(playerId).setFours(past_tournament_stat_clone.get(playerId).getFours() + bc.getFours());
-						past_tournament_stat_clone.get(playerId).setSixes(past_tournament_stat_clone.get(playerId).getSixes() + bc.getSixes());
-						past_tournament_stat_clone.get(playerId).setNines(past_tournament_stat_clone.get(playerId).getNines() + bc.getNines());
-						
-						if(bc.getRuns() >= 30 && bc.getRuns() < 50) {
-							past_tournament_stat_clone.get(playerId).setThirty(past_tournament_stat_clone.get(playerId).getThirty() + 1);	
-						}else if(bc.getRuns()>= 50 && bc.getRuns() < 100) {
-							past_tournament_stat_clone.get(playerId).setFifty(past_tournament_stat_clone.get(playerId).getFifty() + 1);
-						}else if(bc.getRuns()>= 100) {
-							past_tournament_stat_clone.get(playerId).setHundreds(past_tournament_stat_clone.get(playerId).getHundreds() + 1);
-						}
-						
-						if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES)) {
-							past_tournament_stat_clone.get(playerId).setInnings(past_tournament_stat_clone.get(playerId).getInnings()+1);
-						}
-						
-//						if(bc.getPlayerId() == 115) {
-//							System.out.println("name = " + bc.getPlayer().getFull_name() + "   runs = " + bc.getRuns());
+		    Map<Integer, Tournament> tournamentMap = new HashMap<>();
+
+		    for (Tournament t : past_tournament_stat) {
+		        try {
+		            Tournament clone = t.clone();
+		            tournamentMap.put(clone.getPlayer().getPlayerId(), clone);
+		        } catch (CloneNotSupportedException e) {
+		            throw new RuntimeException(e);
+		        }
+		    }
+
+		    Map<Integer, int[]> tapeBallMap = new HashMap<>();
+
+		    if (CricketUtil.ISPL.equalsIgnoreCase(currentMatch.getSetup().getSpecialMatchRules())) {
+		        List<String> tapeBall = getAllTapeBalldetails(
+		                currentMatch.getEventFile().getEvents(), currentMatch);
+
+		        for (String s : tapeBall) {
+		            String[] p = s.split(",");
+		            playerId = Integer.parseInt(p[0].trim());
+
+		            tapeBallMap.put(playerId, new int[]{
+		                    Integer.parseInt(p[1].trim()), // balls
+		                    Integer.parseInt(p[2].trim()), // runs
+		                    Integer.parseInt(p[3].trim()), // wickets
+		                    Integer.parseInt(p[4].trim())  // dots
+		            });
+		        }
+		    }
+
+		    for (Inning inn : currentMatch.getMatch().getInning()) {
+
+		        if (inn.getBowlingCard() != null) {
+		            for (BowlingCard boc : inn.getBowlingCard()) {
+
+		                Tournament t = tournamentMap.computeIfAbsent(
+		                        boc.getPlayerId(),
+		                        id -> new Tournament(
+		                                id, 0, 0, 0, 0, 0, 0, 0, 0,
+		                                0, 0, 0, 0, 0, 0, 0, null,
+		                                0, 0, 0, 0, boc.getPlayer(),
+		                                new ArrayList<>(), new ArrayList<>(), new ArrayList<>()
+		                        )
+		                );
+
+		                t.setRunsConceded(t.getRunsConceded() + boc.getRuns());
+		                t.setWickets(t.getWickets() + boc.getWickets());
+		                t.setDots(t.getDots() + boc.getDots());
+		                t.setBallsBowled(t.getBallsBowled() +
+		                        (6 * boc.getOvers() + boc.getBalls()));
+
+		                if (boc.getWickets() >= 3 && boc.getWickets() < 5) {
+		                    t.setThreeWicketHaul(t.getThreeWicketHaul() + 1);
+		                } else if (boc.getWickets() >= 5) {
+		                    t.setFiveWicketHaul(t.getFiveWicketHaul() + 1);
+		                }
+
+		                t.getBowler_best_Stats().add(new BestStats(
+		                        boc.getPlayerId(),
+		                        (1000 * boc.getWickets()) - boc.getRuns(),
+		                        6 * boc.getOvers() + boc.getBalls(),
+		                        inn.getBatting_team(),
+		                        currentMatch.getSetup().getGround(),
+		                        currentMatch.getMatch().getMatchFileName().replace(".json", ""),
+		                        boc.getPlayer(), ""
+		                ));
+
+		                int[] tape = tapeBallMap.get(boc.getPlayerId());
+		                if (tape != null) {
+		                    t.setTapeBall_balls(t.getTapeBall_balls() + tape[0]);
+		                    t.setTapeBall_runs(t.getTapeBall_runs() + tape[1]);
+		                    t.setTapeBall_wickets(t.getTapeBall_wickets() + tape[2]);
+		                    t.setTapeBall_dotsBall(t.getTapeBall_dotsBall() + tape[3]);
+
+		                    t.getTapeBall_best_Stats().add(new BestStats(
+		                            boc.getPlayerId(),
+		                            (1000 * tape[2]) - tape[1],
+		                            tape[0],
+		                            inn.getBatting_team(),
+		                            currentMatch.getSetup().getGround(),
+		                            currentMatch.getMatch().getMatchFileName().replace(".json", ""),
+		                            boc.getPlayer(), ""
+		                    ));
+		                }
+		            }
+		        }
+
+		        if (inn.getBattingCard() != null) {
+		            for (BattingCard bc : inn.getBattingCard()) {
+
+		                Tournament t = tournamentMap.computeIfAbsent(
+		                        bc.getPlayerId(),
+		                        id -> new Tournament(
+		                                id, 0, 0, 0, 0, 0, 0, 0, 0,
+		                                0, 0, 0, 0, 0, 0, 0, bc.getStatus(),
+		                                0, 0, 0, 0, bc.getPlayer(),
+		                                new ArrayList<>(), new ArrayList<>(), new ArrayList<>()
+		                        )
+		                );
+
+		                t.setRuns(t.getRuns() + bc.getRuns());
+		                t.setBallsFaced(t.getBallsFaced() + bc.getBalls());
+		                t.setFours(t.getFours() + bc.getFours());
+		                t.setSixes(t.getSixes() + bc.getSixes());
+		                t.setNines(t.getNines() + bc.getNines());
+
+		                if (bc.getRuns() >= 30 && bc.getRuns() < 50) t.setThirty(t.getThirty() + 1);
+		                else if (bc.getRuns() >= 50 && bc.getRuns() < 100) t.setFifty(t.getFifty() + 1);
+		                else if (bc.getRuns() >= 100) t.setHundreds(t.getHundreds() + 1);
+
+		                if (CricketUtil.YES.equalsIgnoreCase(bc.getBatsmanInningStarted())) {
+		                    t.setInnings(t.getInnings() + 1);
+		                }
+
+		                String status = bc.getStatus();
+		                int rating = (bc.getRuns() * 2) +
+		                        (CricketUtil.NOT_OUT.equalsIgnoreCase(status) ? 1 : 0);
+
+		                t.getBatsman_best_Stats().add(new BestStats(
+		                        bc.getPlayerId(),
+		                        rating,
+		                        bc.getBalls(),
+		                        inn.getBowling_team(),
+		                        currentMatch.getSetup().getGround(),
+		                        currentMatch.getMatch().getMatchFileName().replace(".json", ""),
+		                        bc.getPlayer(),
+		                        status
+		                ));
+
+		                if (currentMatch.getMatch().getInning().get(0).getTotalRuns() > 0 ||
+		                        (6 * currentMatch.getMatch().getInning().get(0).getTotalOvers()
+		                                + currentMatch.getMatch().getInning().get(0).getTotalBalls()) > 0) {
+		                    t.setMatches(t.getMatches() + 1);
+		                }
+
+		                if (CricketUtil.NOT_OUT.equalsIgnoreCase(status)) {
+		                    t.setNot_out(t.getNot_out() + 1);
+		                }
+		            }
+		        }
+		    }
+
+		    Comparator<BestStats> bowlerComp = new CricketFunctions.BowlerBestStatsComparator();
+		    Comparator<BestStats> batsmanComp = new CricketFunctions.BatsmanBestStatsComparator();
+
+		    for (Tournament t : tournamentMap.values()) {
+		        t.getBowler_best_Stats().sort(bowlerComp);
+		        t.getTapeBall_best_Stats().sort(bowlerComp);
+		        t.getBatsman_best_Stats().sort(batsmanComp);
+		    }
+
+		    for (Tournament t : tournamentMap.values()) {
+		        System.out.println(
+		            "Player: " + t.getPlayer().getFull_name() +
+		            ", Runs: " + t.getRuns() +
+		            ", Wickets: " + t.getWickets() +
+		            ", Balls: " + t.getBallsFaced() +
+		            ", Matches: " + t.getMatches()
+		        );
+		    }
+		    
+		    return new ArrayList<>(tournamentMap.values());
+			
+//		case "CURRENT_MATCH_DATA":
+//			
+//			List<Tournament> past_tournament_stat_clone = new ArrayList<Tournament>();
+//			
+//			past_tournament_stat_clone = past_tournament_stat.stream().map(tourn_stats -> {
+//			    try {
+//			        return tourn_stats.clone(); // Updated deep clone
+//			    } catch (CloneNotSupportedException e) {
+//			        e.printStackTrace();
+//			    }
+//			    return null;
+//			}).collect(Collectors.toList());
+//			
+//			List<String> tapeBall = new ArrayList<String>();
+//			if(currentMatch.getSetup().getSpecialMatchRules().equalsIgnoreCase(CricketUtil.ISPL)) {
+//				//Tape Ball Data
+//				tapeBall = getAllTapeBalldetails(currentMatch.getEventFile().getEvents(), currentMatch);
+//			}
+//			
+//			for(Inning inn : currentMatch.getMatch().getInning())
+//			{
+//
+//				if(inn.getBowlingCard() != null && inn.getBowlingCard().size() > 0 ) {
+//					for(BowlingCard boc : inn.getBowlingCard())
+//					{
+//						playerId = -1;
+//						for(int i=0; i<=past_tournament_stat_clone.size() - 1;i++)
+//						{
+//							if(boc.getPlayerId() == past_tournament_stat_clone.get(i).getPlayer().getPlayerId()) {
+//								playerId = i;
+//								break;
+//							}
 //						}
-						if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
-							past_tournament_stat_clone.get(playerId).setNot_out(past_tournament_stat_clone.get(playerId).getNot_out() + 1);
-							past_tournament_stat_clone.get(playerId).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), (bc.getRuns() * 2) + 1, 
-									bc.getBalls(), inn.getBowling_team(), currentMatch.getSetup().getGround(), 
-									currentMatch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),CricketUtil.NOT_OUT));
-							
-						}else if(bc.getStatus().equalsIgnoreCase(CricketUtil.OUT)) {
-							past_tournament_stat_clone.get(playerId).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), (bc.getRuns() * 2), 
-									bc.getBalls(), inn.getBowling_team(), currentMatch.getSetup().getGround(), 
-									currentMatch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),CricketUtil.OUT));
-							
-						}
-						else {
-							past_tournament_stat_clone.get(playerId).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), (bc.getRuns() * 2), 
-									bc.getBalls(), inn.getBowling_team(), currentMatch.getSetup().getGround(),
-									currentMatch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),CricketUtil.STILL_TO_BAT));
-						}
-						if(currentMatch.getMatch().getInning().get(0).getTotalRuns() > 0 || (6 * currentMatch.getMatch().getInning().get(0).getTotalOvers() 
-								+ currentMatch.getMatch().getInning().get(0).getTotalBalls()) > 0) {
-							past_tournament_stat_clone.get(playerId).setMatches(past_tournament_stat_clone.get(playerId).getMatches() + 1);
-						}
-						Collections.sort(past_tournament_stat_clone.get(playerId).getBatsman_best_Stats(),new CricketFunctions.BatsmanBestStatsComparator());
-					}else {
-						past_tournament_stat_clone.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), 0, 0, 0,0, 0, 0, 0, 0, 
-								bc.getBalls(),0,0,0,bc.getStatus(),0,0,0,0, bc.getPlayer(), new ArrayList<BestStats>(),new ArrayList<BestStats>(), new ArrayList<BestStats>()));
-						
-						past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).setNines(past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getNines() + bc.getNines());
-						
-						if(bc.getRuns()>= 30 && bc.getRuns() < 50) {
-							past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).
-								setThirty(past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getThirty() + 1);
-						}else if(bc.getRuns()>= 50 && bc.getRuns() < 100) {
-							past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).
-								setFifty(past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getFifty() + 1);
-						}else if(bc.getRuns()>= 100) {
-							past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).
-								setHundreds(past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getHundreds() + 1);
-						}
-						
-						if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES)) {
-							past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).setInnings(
-								past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getInnings()+1);
-						}
-						
-						if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
-							past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).setNot_out(past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getNot_out() + 1);
-							
-							past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), 
-								(bc.getRuns() * 2) + 1, bc.getBalls(), inn.getBowling_team(),currentMatch.getSetup().getGround(),
-								currentMatch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),CricketUtil.NOT_OUT));
-						}else if(bc.getStatus().equalsIgnoreCase(CricketUtil.OUT)) {
-							past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), 
-								(bc.getRuns() * 2), bc.getBalls(), inn.getBowling_team(),currentMatch.getSetup().getGround(),
-								currentMatch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),CricketUtil.OUT));
-						}
-						else {
-							past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), 
-								(bc.getRuns() * 2), bc.getBalls(), inn.getBowling_team(),currentMatch.getSetup().getGround(),
-								currentMatch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),CricketUtil.STILL_TO_BAT));
-						}
-						if(currentMatch.getMatch().getInning().get(0).getTotalRuns() > 0 || (6 * currentMatch.getMatch().getInning().get(0).getTotalOvers() 
-							+ currentMatch.getMatch().getInning().get(0).getTotalBalls()) > 0) {
-							past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).setMatches(
-								past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getMatches() + 1);
-						}
-						Collections.sort(past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getBatsman_best_Stats(),new CricketFunctions.BatsmanBestStatsComparator());
-					}
-				}
-			}
-			return past_tournament_stat_clone;
+//						if(playerId >= 0) {
+//							past_tournament_stat_clone.get(playerId).setRunsConceded(past_tournament_stat_clone.get(playerId).getRunsConceded() + boc.getRuns()); // existing record
+//							past_tournament_stat_clone.get(playerId).setWickets(past_tournament_stat_clone.get(playerId).getWickets() + boc.getWickets());
+//							past_tournament_stat_clone.get(playerId).setDots(past_tournament_stat_clone.get(playerId).getDots() + boc.getDots());
+//							past_tournament_stat_clone.get(playerId).setBallsBowled(past_tournament_stat_clone.get(playerId).getBallsBowled() + 
+//									6 * boc.getOvers() + boc.getBalls());
+//							
+//							if(boc.getWickets() >= 3 && boc.getWickets() < 5) {
+//								past_tournament_stat_clone.get(playerId).setThreeWicketHaul(past_tournament_stat_clone.get(playerId).getThreeWicketHaul() + 1);
+//							}else if(boc.getWickets() >= 5) {
+//								past_tournament_stat_clone.get(playerId).setFiveWicketHaul(past_tournament_stat_clone.get(playerId).getFiveWicketHaul() + 1);
+//							}
+//							
+//							past_tournament_stat_clone.get(playerId).getBowler_best_Stats().add(new BestStats(boc.getPlayerId(), 
+//								(1000 * boc.getWickets()) - boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), inn.getBatting_team(),
+//								currentMatch.getSetup().getGround(),currentMatch.getMatch().getMatchFileName().replace(".json", ""),boc.getPlayer(),""));
+//							Collections.sort(past_tournament_stat_clone.get(playerId).getBowler_best_Stats(),new CricketFunctions.BowlerBestStatsComparator());
+//							
+//							if(currentMatch.getSetup().getSpecialMatchRules().equalsIgnoreCase(CricketUtil.ISPL)) {
+//								for(int i=0;i<=tapeBall.size()-1;i++) {
+//									if(Integer.valueOf(tapeBall.get(i).split(",")[0].trim()).intValue() == boc.getPlayerId()) {
+//										past_tournament_stat_clone.get(playerId).setTapeBall_balls(past_tournament_stat_clone.get(playerId).getTapeBall_balls() + 
+//												Integer.valueOf(tapeBall.get(i).split(",")[1]).intValue());
+//										past_tournament_stat_clone.get(playerId).setTapeBall_runs(past_tournament_stat_clone.get(playerId).getTapeBall_runs() + 
+//												Integer.valueOf(tapeBall.get(i).split(",")[2]).intValue());
+//										past_tournament_stat_clone.get(playerId).setTapeBall_wickets(past_tournament_stat_clone.get(playerId).getTapeBall_wickets() + 
+//												Integer.valueOf(tapeBall.get(i).split(",")[3]).intValue());
+//										past_tournament_stat_clone.get(playerId).setTapeBall_dotsBall(past_tournament_stat_clone.get(playerId).getTapeBall_dotsBall() + 
+//												Integer.valueOf(tapeBall.get(i).split(",")[4]).intValue());
+//										
+//										past_tournament_stat_clone.get(playerId).getTapeBall_best_Stats().add(new BestStats(boc.getPlayerId(), 
+//												(1000 * Integer.valueOf(tapeBall.get(i).split(",")[3])) - Integer.valueOf(tapeBall.get(i).split(",")[2]), 
+//												Integer.valueOf(tapeBall.get(i).split(",")[1]), inn.getBatting_team(),currentMatch.getSetup().getGround(),
+//												currentMatch.getMatch().getMatchFileName().replace(".json", ""),boc.getPlayer(),""));
+//									}
+//								}
+//								Collections.sort(past_tournament_stat_clone.get(playerId).getTapeBall_best_Stats(),new CricketFunctions.BowlerBestStatsComparator());
+//							}
+//						}else {
+//							past_tournament_stat_clone.add(new Tournament(boc.getPlayerId(), 0, 0,0, 0, 0, 0, 0, 0, boc.getWickets(), boc.getRuns(), 
+//									6 * boc.getOvers() + boc.getBalls(), 0, boc.getDots(),0,0,null,0,0,0,0, boc.getPlayer(), new ArrayList<BestStats>(), 
+//									new ArrayList<BestStats>(), new ArrayList<BestStats>()));
+//							
+//							if(boc.getWickets() >= 3 && boc.getWickets() < 5) {
+//								past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).setThreeWicketHaul(
+//										past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getThreeWicketHaul() + 1);
+//							}else if(boc.getWickets() >= 5) {
+//								past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).setFiveWicketHaul(
+//										past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getFiveWicketHaul() + 1);
+//							}
+//							past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getBowler_best_Stats().add(new BestStats(boc.getPlayerId(), 
+//								(1000 * boc.getWickets()) - boc.getRuns(), 6 * boc.getOvers() + boc.getBalls(), inn.getBatting_team(),
+//								currentMatch.getSetup().getGround(),currentMatch.getMatch().getMatchFileName().replace(".json", ""),boc.getPlayer(),""));
+//							Collections.sort(past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getBowler_best_Stats(),
+//								new CricketFunctions.BowlerBestStatsComparator());
+//							
+//							if(currentMatch.getSetup().getSpecialMatchRules().equalsIgnoreCase(CricketUtil.ISPL)) {
+//								for(int i=0;i<=tapeBall.size()-1;i++) {
+//									if(Integer.valueOf(tapeBall.get(i).split(",")[0].trim()).intValue() == boc.getPlayerId()) {
+//										past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).setTapeBall_balls(past_tournament_stat_clone.get(
+//												past_tournament_stat_clone.size() - 1).getTapeBall_balls() + Integer.valueOf(tapeBall.get(i).split(",")[1]));
+//										
+//										past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).setTapeBall_runs(past_tournament_stat_clone.get(
+//												past_tournament_stat_clone.size() - 1).getTapeBall_runs() + Integer.valueOf(tapeBall.get(i).split(",")[2]));
+//										
+//										past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).setTapeBall_wickets(past_tournament_stat_clone.get(
+//												past_tournament_stat_clone.size() - 1).getTapeBall_wickets() + Integer.valueOf(tapeBall.get(i).split(",")[3]));
+//										
+//										past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).setTapeBall_dotsBall(past_tournament_stat_clone.get(
+//												past_tournament_stat_clone.size() - 1).getTapeBall_dotsBall() + Integer.valueOf(tapeBall.get(i).split(",")[4]));
+//										
+//										past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getTapeBall_best_Stats().add(new BestStats(boc.getPlayerId(), 
+//												(1000 * Integer.valueOf(tapeBall.get(i).split(",")[3])) - Integer.valueOf(tapeBall.get(i).split(",")[2]), 
+//												Integer.valueOf(tapeBall.get(i).split(",")[1]), inn.getBatting_team(),currentMatch.getSetup().getGround(),
+//												currentMatch.getMatch().getMatchFileName().replace(".json", ""),boc.getPlayer(),""));
+//									}
+//								}
+//								if(playerId > 0) {
+//									Collections.sort(past_tournament_stat_clone.get(playerId).getTapeBall_best_Stats(),new CricketFunctions.BowlerBestStatsComparator());
+//								}
+//							}
+//						}
+//					}
+//				}
+//				
+//				for(BattingCard bc : inn.getBattingCard())
+//				{
+//					playerId = -1;
+//					for(int i=0; i<=past_tournament_stat_clone.size() - 1;i++)
+//					{
+//						if(bc.getPlayerId() == past_tournament_stat_clone.get(i).getPlayerId()) {
+//							playerId = i;
+//							break;
+//						}
+//					}
+//					
+//					if(playerId >= 0) {
+//						past_tournament_stat_clone.get(playerId).setRuns(past_tournament_stat_clone.get(playerId).getRuns() + bc.getRuns()); // existing record
+//						past_tournament_stat_clone.get(playerId).setBallsFaced(past_tournament_stat_clone.get(playerId).getBallsFaced() + bc.getBalls());
+//						past_tournament_stat_clone.get(playerId).setFours(past_tournament_stat_clone.get(playerId).getFours() + bc.getFours());
+//						past_tournament_stat_clone.get(playerId).setSixes(past_tournament_stat_clone.get(playerId).getSixes() + bc.getSixes());
+//						past_tournament_stat_clone.get(playerId).setNines(past_tournament_stat_clone.get(playerId).getNines() + bc.getNines());
+//						
+//						if(bc.getRuns() >= 30 && bc.getRuns() < 50) {
+//							past_tournament_stat_clone.get(playerId).setThirty(past_tournament_stat_clone.get(playerId).getThirty() + 1);	
+//						}else if(bc.getRuns()>= 50 && bc.getRuns() < 100) {
+//							past_tournament_stat_clone.get(playerId).setFifty(past_tournament_stat_clone.get(playerId).getFifty() + 1);
+//						}else if(bc.getRuns()>= 100) {
+//							past_tournament_stat_clone.get(playerId).setHundreds(past_tournament_stat_clone.get(playerId).getHundreds() + 1);
+//						}
+//						
+//						if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES)) {
+//							past_tournament_stat_clone.get(playerId).setInnings(past_tournament_stat_clone.get(playerId).getInnings()+1);
+//						}
+//						
+////						if(bc.getPlayerId() == 115) {
+////							System.out.println("name = " + bc.getPlayer().getFull_name() + "   runs = " + bc.getRuns());
+////						}
+//						if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+//							past_tournament_stat_clone.get(playerId).setNot_out(past_tournament_stat_clone.get(playerId).getNot_out() + 1);
+//							past_tournament_stat_clone.get(playerId).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), (bc.getRuns() * 2) + 1, 
+//									bc.getBalls(), inn.getBowling_team(), currentMatch.getSetup().getGround(), 
+//									currentMatch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),CricketUtil.NOT_OUT));
+//							
+//						}else if(bc.getStatus().equalsIgnoreCase(CricketUtil.OUT)) {
+//							past_tournament_stat_clone.get(playerId).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), (bc.getRuns() * 2), 
+//									bc.getBalls(), inn.getBowling_team(), currentMatch.getSetup().getGround(), 
+//									currentMatch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),CricketUtil.OUT));
+//							
+//						}
+//						else {
+//							past_tournament_stat_clone.get(playerId).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), (bc.getRuns() * 2), 
+//									bc.getBalls(), inn.getBowling_team(), currentMatch.getSetup().getGround(),
+//									currentMatch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),CricketUtil.STILL_TO_BAT));
+//						}
+//						if(currentMatch.getMatch().getInning().get(0).getTotalRuns() > 0 || (6 * currentMatch.getMatch().getInning().get(0).getTotalOvers() 
+//								+ currentMatch.getMatch().getInning().get(0).getTotalBalls()) > 0) {
+//							past_tournament_stat_clone.get(playerId).setMatches(past_tournament_stat_clone.get(playerId).getMatches() + 1);
+//						}
+//						Collections.sort(past_tournament_stat_clone.get(playerId).getBatsman_best_Stats(),new CricketFunctions.BatsmanBestStatsComparator());
+//					}else {
+//						past_tournament_stat_clone.add(new Tournament(bc.getPlayerId(), bc.getRuns(), bc.getFours(), bc.getSixes(), 0, 0, 0,0, 0, 0, 0, 0, 
+//								bc.getBalls(),0,0,0,bc.getStatus(),0,0,0,0, bc.getPlayer(), new ArrayList<BestStats>(),new ArrayList<BestStats>(), new ArrayList<BestStats>()));
+//						
+//						past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).setNines(past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getNines() + bc.getNines());
+//						
+//						if(bc.getRuns()>= 30 && bc.getRuns() < 50) {
+//							past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).
+//								setThirty(past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getThirty() + 1);
+//						}else if(bc.getRuns()>= 50 && bc.getRuns() < 100) {
+//							past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).
+//								setFifty(past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getFifty() + 1);
+//						}else if(bc.getRuns()>= 100) {
+//							past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).
+//								setHundreds(past_tournament_stat_clone.get(past_tournament_stat_clone.size() - 1).getHundreds() + 1);
+//						}
+//						
+//						if(bc.getBatsmanInningStarted() != null && bc.getBatsmanInningStarted().equalsIgnoreCase(CricketUtil.YES)) {
+//							past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).setInnings(
+//								past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getInnings()+1);
+//						}
+//						
+//						if(bc.getStatus().equalsIgnoreCase(CricketUtil.NOT_OUT)) {
+//							past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).setNot_out(past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getNot_out() + 1);
+//							
+//							past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), 
+//								(bc.getRuns() * 2) + 1, bc.getBalls(), inn.getBowling_team(),currentMatch.getSetup().getGround(),
+//								currentMatch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),CricketUtil.NOT_OUT));
+//						}else if(bc.getStatus().equalsIgnoreCase(CricketUtil.OUT)) {
+//							past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), 
+//								(bc.getRuns() * 2), bc.getBalls(), inn.getBowling_team(),currentMatch.getSetup().getGround(),
+//								currentMatch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),CricketUtil.OUT));
+//						}
+//						else {
+//							past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(), 
+//								(bc.getRuns() * 2), bc.getBalls(), inn.getBowling_team(),currentMatch.getSetup().getGround(),
+//								currentMatch.getMatch().getMatchFileName().replace(".json", ""),bc.getPlayer(),CricketUtil.STILL_TO_BAT));
+//						}
+//						if(currentMatch.getMatch().getInning().get(0).getTotalRuns() > 0 || (6 * currentMatch.getMatch().getInning().get(0).getTotalOvers() 
+//							+ currentMatch.getMatch().getInning().get(0).getTotalBalls()) > 0) {
+//							past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).setMatches(
+//								past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getMatches() + 1);
+//						}
+//						Collections.sort(past_tournament_stat_clone.get(past_tournament_stat_clone.size()-1).getBatsman_best_Stats(),new CricketFunctions.BatsmanBestStatsComparator());
+//					}
+//				}
+//			}
+//			return past_tournament_stat_clone;
 		}
 		
 		return null;
