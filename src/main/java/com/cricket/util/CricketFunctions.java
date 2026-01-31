@@ -1758,6 +1758,7 @@ public class CricketFunctions {
 //		}
 //		return all_stats;
 //	}
+
 	public static MatchAllData readOrSaveMatchFile(String whatToProcess, String whichFileToProcess, MatchAllData match, boolean backUpAllFiles) 
 		throws JAXBException, StreamWriteException, DatabindException, IOException, URISyntaxException
 	{
@@ -1818,6 +1819,7 @@ public class CricketFunctions {
 		}
 		return match;
 	}	
+	
 	public static MatchAllData readOrSaveMatchFile(String whatToProcess, String whichFileToProcess, MatchAllData match,Configuration config) 
 		throws JAXBException, StreamWriteException, DatabindException, IOException, URISyntaxException
 	{
@@ -1856,13 +1858,19 @@ public class CricketFunctions {
 				}
 			}
 			break;
+			
 		case CricketUtil.READ:
+			
+			String mainCricketDirectory = CricketUtil.CRICKET_DIRECTORY;
+			if(config.getCricketDirectory() != null && config.getCricketDirectory().equalsIgnoreCase(CricketUtil.SECONDARY)) {
+				mainCricketDirectory = CricketUtil.CRICKET2_DIRECTORY;
+			}
 			if(whichFileToProcess.toUpperCase().contains(CricketUtil.SETUP)) {
 				
 				if (config.getType() == null || config.getType().isEmpty()) {
-					if(new File(CricketUtil.CRICKET_DIRECTORY + CricketUtil.SETUP_DIRECTORY + match.getMatch().getMatchFileName().toUpperCase().replace(
+					if(new File(mainCricketDirectory + CricketUtil.SETUP_DIRECTORY + match.getMatch().getMatchFileName().toUpperCase().replace(
 						".XML", ".JSON")).exists() == true) {
-						match.setSetup(new ObjectMapper().readValue(new InputStreamReader(new FileInputStream(new File(CricketUtil.CRICKET_DIRECTORY 
+						match.setSetup(new ObjectMapper().readValue(new InputStreamReader(new FileInputStream(new File(mainCricketDirectory 
 							+ CricketUtil.SETUP_DIRECTORY + match.getMatch().getMatchFileName())), StandardCharsets.UTF_8), Setup.class));
 					}
 			    } else {
@@ -1876,10 +1884,10 @@ public class CricketFunctions {
 			}
 			if(whichFileToProcess.toUpperCase().contains(CricketUtil.EVENT)) {
 				if (config.getType() == null || config.getType().isEmpty()) {
-					if(new File(CricketUtil.CRICKET_DIRECTORY 
+					if(new File(mainCricketDirectory 
 						+ CricketUtil.EVENT_DIRECTORY + match.getMatch().getMatchFileName().toUpperCase().replace(
 						".XML", ".JSON")).exists() == true) {
-						match.setEventFile(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY 
+						match.setEventFile(new ObjectMapper().readValue(new File(mainCricketDirectory 
 							+ CricketUtil.EVENT_DIRECTORY + match.getMatch().getMatchFileName()), EventFile.class));
 					}
 			    }
@@ -1887,7 +1895,7 @@ public class CricketFunctions {
 			if(whichFileToProcess.toUpperCase().contains(CricketUtil.MATCH)) {
 				
 				if (config.getType() == null || config.getType().isEmpty()) {
-					match.setMatch(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_DIRECTORY 
+					match.setMatch(new ObjectMapper().readValue(new File(mainCricketDirectory 
 							+ CricketUtil.MATCHES_DIRECTORY + match.getMatch().getMatchFileName()), Match.class));
 			    } else {
 			    	match.setMatch(new ObjectMapper().readValue(new File(CricketUtil.CRICKET_ARCHIVE_DIRECTORY + CricketUtil.ARCHIVE_MATCHES_DIRECTORY + config.getType() + "/" +
@@ -5615,6 +5623,7 @@ public class CricketFunctions {
 				}
 			}
 			return tournament_dismissal_stats;
+			
 		case "CURRENT_MATCH_DATA":
 			
 			List<Tournament> past_tournament_dismissal_stat_clone = past_tournament_dismissal_stat.stream().map(tourn_stats -> {
@@ -7747,8 +7756,7 @@ public class CricketFunctions {
 		    Map<Integer, int[]> tapeBallMap = new HashMap<>();
 
 		    if (CricketUtil.ISPL.equalsIgnoreCase(currentMatch.getSetup().getSpecialMatchRules())) {
-		        List<String> tapeBall = getAllTapeBalldetails(
-		                currentMatch.getEventFile().getEvents(), currentMatch);
+		        List<String> tapeBall = getAllTapeBalldetails(currentMatch.getEventFile().getEvents(), currentMatch);
 
 		        for (String s : tapeBall) {
 		            String[] p = s.split(",");

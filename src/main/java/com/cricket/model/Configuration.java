@@ -10,6 +10,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Configuration {
 	
 	private static Configuration currentConfig;
+
+	@XmlElement(name="cricketDirectory")
+	private String cricketDirectory;
 	
 	@XmlElement(name="primaryVariousOptions")
 	private String primaryVariousOptions;
@@ -352,6 +355,14 @@ public class Configuration {
 		return secondaryBroadcaster;
 	}
 
+	public String getCricketDirectory() {
+		return cricketDirectory;
+	}
+
+	public void setCricketDirectory(String cricketDirectory) {
+		this.cricketDirectory = cricketDirectory;
+	}
+
 	public String getWhichScene() {
 		return whichScene;
 	}
@@ -574,20 +585,20 @@ public class Configuration {
 
 	@Override
 	public String toString() {
-		return "Configuration [primaryVariousOptions=" + primaryVariousOptions + ", filename=" + filename
-				+ ", secondaryFilename=" + secondaryFilename + ", broadcaster=" + broadcaster
-				+ ", secondaryBroadcaster=" + secondaryBroadcaster + ", whichScene=" + whichScene + ", qtIpAddress="
-				+ qtIpAddress + ", qtPortNumber=" + qtPortNumber + ", qtScene=" + qtScene + ", qtLanguage=" + qtLanguage
-				+ ", primaryIpAddress=" + primaryIpAddress + ", primaryPortNumber=" + primaryPortNumber
-				+ ", primaryScene=" + primaryScene + ", primaryLanguage=" + primaryLanguage + ", secondaryIpAddress="
-				+ secondaryIpAddress + ", secondaryPortNumber=" + secondaryPortNumber + ", secondaryScene="
-				+ secondaryScene + ", secondaryLanguage=" + secondaryLanguage + ", tertiaryIpAddress="
-				+ tertiaryIpAddress + ", tertiaryPortNumber=" + tertiaryPortNumber + ", select_Client=" + select_Client
-				+ ", tertiaryScene=" + tertiaryScene + ", tertiaryLanguage=" + tertiaryLanguage + ", speedUnit="
-				+ speedUnit + ", audio=" + audio + ", qudich=" + qudich + ", category=" + category + ", wagon=" + wagon
-				+ ", preview=" + preview + ", whichInfobar=" + whichInfobar + ", showSpeed=" + showSpeed
-				+ ", showReview=" + showReview + ", showSubs=" + showSubs + ", generateInteractiveFile="
-				+ generateInteractiveFile + ", type=" + type + "]";
+		return "Configuration [cricketDirectory=" + cricketDirectory + ", primaryVariousOptions="
+				+ primaryVariousOptions + ", filename=" + filename + ", secondaryFilename=" + secondaryFilename
+				+ ", broadcaster=" + broadcaster + ", secondaryBroadcaster=" + secondaryBroadcaster + ", whichScene="
+				+ whichScene + ", qtIpAddress=" + qtIpAddress + ", qtPortNumber=" + qtPortNumber + ", qtScene="
+				+ qtScene + ", qtLanguage=" + qtLanguage + ", primaryIpAddress=" + primaryIpAddress
+				+ ", primaryPortNumber=" + primaryPortNumber + ", primaryScene=" + primaryScene + ", primaryLanguage="
+				+ primaryLanguage + ", secondaryIpAddress=" + secondaryIpAddress + ", secondaryPortNumber="
+				+ secondaryPortNumber + ", secondaryScene=" + secondaryScene + ", secondaryLanguage="
+				+ secondaryLanguage + ", tertiaryIpAddress=" + tertiaryIpAddress + ", tertiaryPortNumber="
+				+ tertiaryPortNumber + ", select_Client=" + select_Client + ", tertiaryScene=" + tertiaryScene
+				+ ", tertiaryLanguage=" + tertiaryLanguage + ", speedUnit=" + speedUnit + ", audio=" + audio
+				+ ", qudich=" + qudich + ", category=" + category + ", wagon=" + wagon + ", preview=" + preview
+				+ ", whichInfobar=" + whichInfobar + ", showSpeed=" + showSpeed + ", showReview=" + showReview
+				+ ", showSubs=" + showSubs + ", generateInteractiveFile=" + generateInteractiveFile + ", type=" + type
+				+ "]";
 	}
-
 }

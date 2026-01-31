@@ -2,6 +2,8 @@ package com.cricket.util;
 
 public class CricketUtil {
 
+	public final static String PRIMARY = "PRIMARY";
+	public final static String SECONDARY = "SECONDARY";
 	public final static String WEBSITE = "WEBSITE";
 	public final static String ISPL = "ISPL";
 	public final static String DOAD = "DOAD";
@@ -19,6 +21,7 @@ public class CricketUtil {
 	public final static String CRICKET_SERVER_DIRECTORY = "C:/Sports/Cricket/";
 	public final static String REVIEWS="C:/Sports/Cricket/Reviews.txt";
 	public final static String CRICKET_DIRECTORY = "C:/Sports/Cricket/";
+	public final static String CRICKET2_DIRECTORY = "C:/Sports/Cricket2/";
 	public final static String CRICKET_ARCHIVE_DIRECTORY = "C:/Sports/CricketArchive/";
 	public final static String Cricket_THIRDPARTY = "AE-Cricket-ThirdParty.XML";
 	public final static String INTERACTIVE_DIRECTORY = "Interactive/";
@@ -31,6 +34,7 @@ public class CricketUtil {
 	public final static String ARCHIVE_MATCHES_DIRECTORY = "MatchFiles/";
 	public final static String SCENES_DIRECTORY = "Scenes/";
 	public final static String CONFIGURATIONS_DIRECTORY = "Configurations/";
+	public final static String TRIO_DIRECTORY = "TRIO/";
 	public final static String COMMENTATOR_XML = "COMMENTATOR.XML";
 	public final static String CLOCK_XML = "Clock.XML";
 	public final static String SPEED_XML = "Speed.XML";
