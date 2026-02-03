@@ -7752,6 +7752,10 @@ public class CricketFunctions {
 		            throw new RuntimeException(e);
 		        }
 		    }
+		    
+//		    for (Tournament t : past_tournament_stat) {
+//		        tournamentMap.put(t.getPlayer().getPlayerId(), t);
+//		    }
 
 		    Map<Integer, int[]> tapeBallMap = new HashMap<>();
 
@@ -7763,28 +7767,23 @@ public class CricketFunctions {
 		            playerId = Integer.parseInt(p[0].trim());
 
 		            tapeBallMap.put(playerId, new int[]{
-		                    Integer.parseInt(p[1].trim()), // balls
+		                    Integer.parseInt(p[5].trim()), // balls
 		                    Integer.parseInt(p[2].trim()), // runs
 		                    Integer.parseInt(p[3].trim()), // wickets
 		                    Integer.parseInt(p[4].trim())  // dots
 		            });
 		        }
 		    }
+		    
+		    String matchName = currentMatch.getMatch().getMatchFileName().replace(".json", "");
 
 		    for (Inning inn : currentMatch.getMatch().getInning()) {
 
 		        if (inn.getBowlingCard() != null) {
 		            for (BowlingCard boc : inn.getBowlingCard()) {
 
-		                Tournament t = tournamentMap.computeIfAbsent(
-		                        boc.getPlayerId(),
-		                        id -> new Tournament(
-		                                id, 0, 0, 0, 0, 0, 0, 0, 0,
-		                                0, 0, 0, 0, 0, 0, 0, null,
-		                                0, 0, 0, 0, boc.getPlayer(),
-		                                new ArrayList<>(), new ArrayList<>(), new ArrayList<>()
-		                        )
-		                );
+		                Tournament t = tournamentMap.computeIfAbsent(boc.getPlayerId(),id -> new Tournament(id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+		                			0, 0, 0, null,0, 0, 0, 0, boc.getPlayer(),new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
 
 		                t.setRunsConceded(t.getRunsConceded() + boc.getRuns());
 		                t.setWickets(t.getWickets() + boc.getWickets());
@@ -7798,15 +7797,8 @@ public class CricketFunctions {
 		                    t.setFiveWicketHaul(t.getFiveWicketHaul() + 1);
 		                }
 
-		                t.getBowler_best_Stats().add(new BestStats(
-		                        boc.getPlayerId(),
-		                        (1000 * boc.getWickets()) - boc.getRuns(),
-		                        6 * boc.getOvers() + boc.getBalls(),
-		                        inn.getBatting_team(),
-		                        currentMatch.getSetup().getGround(),
-		                        currentMatch.getMatch().getMatchFileName().replace(".json", ""),
-		                        boc.getPlayer(), ""
-		                ));
+		                t.getBowler_best_Stats().add(new BestStats(boc.getPlayerId(),(1000 * boc.getWickets()) - boc.getRuns(),6 * boc.getOvers() + boc.getBalls(),
+		                        inn.getBatting_team(),currentMatch.getSetup().getGround(),matchName,boc.getPlayer(), ""));
 
 		                int[] tape = tapeBallMap.get(boc.getPlayerId());
 		                if (tape != null) {
@@ -7815,15 +7807,8 @@ public class CricketFunctions {
 		                    t.setTapeBall_wickets(t.getTapeBall_wickets() + tape[2]);
 		                    t.setTapeBall_dotsBall(t.getTapeBall_dotsBall() + tape[3]);
 
-		                    t.getTapeBall_best_Stats().add(new BestStats(
-		                            boc.getPlayerId(),
-		                            (1000 * tape[2]) - tape[1],
-		                            tape[0],
-		                            inn.getBatting_team(),
-		                            currentMatch.getSetup().getGround(),
-		                            currentMatch.getMatch().getMatchFileName().replace(".json", ""),
-		                            boc.getPlayer(), ""
-		                    ));
+		                    t.getTapeBall_best_Stats().add(new BestStats(boc.getPlayerId(),(1000 * tape[2]) - tape[1], tape[0], inn.getBatting_team(),
+		                            currentMatch.getSetup().getGround(), matchName, boc.getPlayer(), ""));
 		                }
 		            }
 		        }
@@ -7831,15 +7816,8 @@ public class CricketFunctions {
 		        if (inn.getBattingCard() != null) {
 		            for (BattingCard bc : inn.getBattingCard()) {
 
-		                Tournament t = tournamentMap.computeIfAbsent(
-		                        bc.getPlayerId(),
-		                        id -> new Tournament(
-		                                id, 0, 0, 0, 0, 0, 0, 0, 0,
-		                                0, 0, 0, 0, 0, 0, 0, bc.getStatus(),
-		                                0, 0, 0, 0, bc.getPlayer(),
-		                                new ArrayList<>(), new ArrayList<>(), new ArrayList<>()
-		                        )
-		                );
+		                Tournament t = tournamentMap.computeIfAbsent(bc.getPlayerId(), id -> new Tournament(id, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+		                			0, 0, 0, bc.getStatus(), 0, 0, 0, 0, bc.getPlayer(),new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
 
 		                t.setRuns(t.getRuns() + bc.getRuns());
 		                t.setBallsFaced(t.getBallsFaced() + bc.getBalls());
@@ -7856,19 +7834,10 @@ public class CricketFunctions {
 		                }
 
 		                String status = bc.getStatus();
-		                int rating = (bc.getRuns() * 2) +
-		                        (CricketUtil.NOT_OUT.equalsIgnoreCase(status) ? 1 : 0);
+		                int rating = (bc.getRuns() * 2) + (CricketUtil.NOT_OUT.equalsIgnoreCase(status) ? 1 : 0);
 
-		                t.getBatsman_best_Stats().add(new BestStats(
-		                        bc.getPlayerId(),
-		                        rating,
-		                        bc.getBalls(),
-		                        inn.getBowling_team(),
-		                        currentMatch.getSetup().getGround(),
-		                        currentMatch.getMatch().getMatchFileName().replace(".json", ""),
-		                        bc.getPlayer(),
-		                        status
-		                ));
+		                t.getBatsman_best_Stats().add(new BestStats(bc.getPlayerId(),rating,bc.getBalls(),inn.getBowling_team(),
+		                        currentMatch.getSetup().getGround(),matchName,bc.getPlayer(),status));
 
 		                if (currentMatch.getMatch().getInning().get(0).getTotalRuns() > 0 ||
 		                        (6 * currentMatch.getMatch().getInning().get(0).getTotalOvers()
@@ -7892,15 +7861,15 @@ public class CricketFunctions {
 		        t.getBatsman_best_Stats().sort(batsmanComp);
 		    }
 
-		    for (Tournament t : tournamentMap.values()) {
-		        System.out.println(
-		            "Player: " + t.getPlayer().getFull_name() +
-		            ", Runs: " + t.getRuns() +
-		            ", Wickets: " + t.getWickets() +
-		            ", Balls: " + t.getBallsFaced() +
-		            ", Matches: " + t.getMatches()
-		        );
-		    }
+//		    for (Tournament t : tournamentMap.values()) {
+//		        System.out.println(
+//		            "Player: " + t.getPlayer().getFull_name() +
+//		            ", Runs: " + t.getRuns() +
+//		            ", Wickets: " + t.getWickets() +
+//		            ", Balls: " + t.getBallsFaced() +
+//		            ", Matches: " + t.getMatches()
+//		        );
+//		    }
 		    
 		    return new ArrayList<>(tournamentMap.values());
 			
