@@ -8754,6 +8754,18 @@ public class CricketFunctions {
 	    }
 	}
 	
+	public static class BatsmanNinesComparator implements Comparator<Tournament> {
+	    @Override
+	    public int compare(Tournament bc1, Tournament bc2) {
+	    	if(bc2.getNines() == bc1.getNines()) {
+	    		//return Integer.compare(bc2.getBatsmanStrikeRateSortData(), bc1.getBatsmanStrikeRateSortData());
+	    		return Integer.compare(bc2.getRuns(), bc1.getRuns());
+	    	}else {
+	    		return Integer.compare(bc2.getNines(), bc1.getNines());
+	    	}
+	    }
+	}
+	
 	public static class BestBatsmanStrikeRateComparator implements Comparator<Tournament> {
 	    @Override
 	    public int compare(Tournament bc1, Tournament bc2) {
