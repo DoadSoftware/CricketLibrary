@@ -13659,7 +13659,7 @@ public class CricketFunctions {
                 
                 if (runs == 0)
                 {
-                	ahead_behind = "DLS score is level";
+                	ahead_behind = "score is level";
                 }
 			}
 		}
@@ -13763,7 +13763,7 @@ public class CricketFunctions {
                 
                 if (runs == 0)
                 {
-                	ahead_behind = "VJD SCORES are level";
+                	ahead_behind = "SCORES are level";
                 }
 			}
 		}
@@ -14163,7 +14163,6 @@ public class CricketFunctions {
 	            }
 	        }
 	    }
-
 	    return "";
 	}
 	
