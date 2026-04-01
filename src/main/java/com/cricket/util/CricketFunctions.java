@@ -14757,6 +14757,9 @@ public class CricketFunctions {
 		return new MatchStats();
 	}
 	
+	
+	
+	
 	public static MatchStats getAllEventsStatsMASTER(MatchStats matchStats,Match match, List<Event> events) 
 	{
 		
@@ -18148,4 +18151,236 @@ public class CricketFunctions {
 	return matchStats;
 	   
    }
-}
+  
+  public static MatchStats processAllEvent(MatchStats matchStats, Match match, List<Event> events) {
+
+	    if (matchStats == null) {
+	        matchStats = new MatchStats();
+	    }
+
+	    matchStats.setBallsSinceLastBoundary(0);
+
+	    if (match == null || events == null || events.isEmpty()) {
+	        return matchStats;
+	    }
+
+	    Inning currentInning = match.getInning().stream()
+	            .filter(inn -> inn.getIsCurrentInning().equalsIgnoreCase(CricketUtil.YES))
+	            .findAny()
+	            .orElse(null);
+
+	    if (currentInning == null) {
+	        return matchStats;
+	    }
+
+	    BowlingCard currentBowlerBC = currentInning.getBowlingCard() != null
+	            ? currentInning.getBowlingCard().stream()
+	            .filter(bc -> bc.getStatus().equalsIgnoreCase(CricketUtil.CURRENT + CricketUtil.BOWLER)
+	                    || bc.getStatus().equalsIgnoreCase(CricketUtil.LAST + CricketUtil.BOWLER))
+	            .findAny()
+	            .orElse(null)
+	            : null;
+
+	    boolean boundaryFound = false;
+	    int ballsInCurrentOver = 0;
+	    boolean stopThisOver = false; 
+
+	    if (matchStats.getOverData() != null) {
+	        matchStats.getOverData().setThisOverTxt("");
+	        matchStats.getOverData().setTotalRuns(0);
+	        matchStats.getOverData().setTotalWickets(0);
+	    }
+
+	    for (int i = events.size() - 1; i >= 0; i--) {
+
+	        Event e = events.get(i);
+
+	        if (e == null) continue;
+
+	        if (currentInning.getInningNumber() != e.getEventInningNumber()) {
+	            continue;
+	        }
+
+	        if (CricketUtil.CHANGE_BOWLER.equalsIgnoreCase(e.getEventType())) {
+	            stopThisOver = true;
+	        }
+
+	        if (!stopThisOver
+	                && currentBowlerBC != null
+	                && currentBowlerBC.getPlayerId() == e.getEventBowlerNo()
+	                && ballsInCurrentOver < 6) {
+
+	            if (!matchStats.getOverData().getThisOverTxt().isEmpty()) {
+	                matchStats.getOverData().setThisOverTxt(
+	                        matchStats.getOverData().getThisOverTxt() + ",");
+	            }
+
+	            switch (e.getEventType()) {
+
+	                case CricketUtil.DOT:
+	                    matchStats.getOverData().setThisOverTxt(
+	                            matchStats.getOverData().getThisOverTxt() + "0");
+	                    break;
+
+	                case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
+	                case CricketUtil.FOUR: case CricketUtil.FIVE: case CricketUtil.SIX:
+	                case CricketUtil.NINE:
+
+	                    matchStats.getOverData().setThisOverTxt(
+	                            matchStats.getOverData().getThisOverTxt() +
+	                                    (e.getEventWasABoundary() != null &&
+	                                            e.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES)
+	                                            ? e.getEventRuns() + "BOUNDARY"
+	                                            : e.getEventRuns()));
+
+	                    matchStats.getOverData().setTotalRuns(
+	                            matchStats.getOverData().getTotalRuns() + e.getEventRuns());
+	                    break;
+
+	                case CricketUtil.LOG_ANY_BALL:
+
+	                    matchStats.getOverData().setTotalRuns(
+	                            matchStats.getOverData().getTotalRuns()
+	                                    + e.getEventRuns()
+	                                    + e.getEventExtraRuns()
+	                                    + e.getEventSubExtraRuns());
+
+	                    if (e.getEventExtra() != null) {
+	                        matchStats.getOverData().setThisOverTxt(
+	                                matchStats.getOverData().getThisOverTxt()
+	                                        + (e.getEventRuns() + e.getEventExtraRuns() + e.getEventSubExtraRuns())
+	                                        + e.getEventExtra());
+	                    } else {
+	                        matchStats.getOverData().setThisOverTxt(
+	                                matchStats.getOverData().getThisOverTxt()
+	                                        + (e.getEventRuns() > 0 ? e.getEventRuns() : "")
+	                                        + (e.getEventSubExtra() != null ? e.getEventSubExtra() : ""));
+	                    }
+
+	                    if (e.getEventHowOut() != null && !e.getEventHowOut().isEmpty()) {
+	                        matchStats.getOverData().setTotalWickets(
+	                                matchStats.getOverData().getTotalWickets() + 1);
+	                        matchStats.getOverData().setThisOverTxt(
+	                                matchStats.getOverData().getThisOverTxt() + "+W");
+	                    }
+	                    break;
+
+	                case CricketUtil.LOG_WICKET:
+
+	                    matchStats.getOverData().setTotalRuns(
+	                            matchStats.getOverData().getTotalRuns()
+	                                    + e.getEventRuns()
+	                                    + e.getEventExtraRuns()
+	                                    + e.getEventSubExtraRuns());
+
+	                    matchStats.getOverData().setTotalWickets(
+	                            matchStats.getOverData().getTotalWickets() + 1);
+
+	                    matchStats.getOverData().setThisOverTxt(
+	                            matchStats.getOverData().getThisOverTxt() + "W");
+	                    break;
+
+	                case CricketUtil.WIDE:case CricketUtil.NO_BALL:
+
+	                    matchStats.getOverData().setThisOverTxt(
+	                            matchStats.getOverData().getThisOverTxt() + e.getEventType());
+
+	                    matchStats.getOverData().setTotalRuns(
+	                            matchStats.getOverData().getTotalRuns() + e.getEventRuns());
+	                    break;
+
+	                case CricketUtil.BYE:case CricketUtil.LEG_BYE:
+
+	                    matchStats.getOverData().setThisOverTxt(
+	                            matchStats.getOverData().getThisOverTxt()
+	                                    + e.getEventRuns() + e.getEventType());
+
+	                    matchStats.getOverData().setTotalRuns(
+	                            matchStats.getOverData().getTotalRuns() + e.getEventRuns());
+	                    break;
+
+	                case CricketUtil.PENALTY:
+
+	                    matchStats.getOverData().setThisOverTxt(
+	                            matchStats.getOverData().getThisOverTxt()
+	                                    + (e.getEventRuns() + e.getEventExtraRuns() + e.getEventSubExtraRuns())
+	                                    + "+PENALTY");
+
+	                    matchStats.getOverData().setTotalRuns(
+	                            matchStats.getOverData().getTotalRuns()
+	                                    + e.getEventRuns()
+	                                    + e.getEventExtraRuns()
+	                                    + e.getEventSubExtraRuns());
+	                    break;
+	            }
+
+	            if (isValidBall(e)) {
+	                ballsInCurrentOver++;
+	            }
+	        }
+
+	        if (!boundaryFound) {
+	            if (isBoundary(e)) {
+	                boundaryFound = true;
+	            } else if (isValidBall(e)) {
+	                matchStats.setBallsSinceLastBoundary(
+	                        matchStats.getBallsSinceLastBoundary() + 1);
+	            }
+	        }
+
+	        if (boundaryFound && ballsInCurrentOver >= 6) {
+	            break;
+	        }
+	    }
+
+	    return matchStats;
+	}
+  private static boolean isValidBall(Event e) {
+
+	    if (e == null) return false;
+
+	    String type = e.getEventType();
+
+	    switch (type) {
+
+	        case CricketUtil.DOT: case CricketUtil.ONE: case CricketUtil.TWO: case CricketUtil.THREE:
+	        case CricketUtil.FOUR: case CricketUtil.SIX: case CricketUtil.FIVE:
+	        case CricketUtil.NINE: case CricketUtil.BYE: case CricketUtil.LEG_BYE: case CricketUtil.LOG_WICKET:
+	            return true;
+
+	        case CricketUtil.LOG_ANY_BALL:
+
+	            if (e.getEventExtra() != null) {
+
+	                if (!e.getEventExtra().equalsIgnoreCase(CricketUtil.WIDE)
+	                        && !e.getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
+
+	                    if (e.getEventSubExtra() != null &&
+	                            !e.getEventSubExtra().equalsIgnoreCase(CricketUtil.PENALTY)
+	                            && !e.getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL)
+	                            && !e.getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
+
+	                        return true;
+	                    }
+	                }
+	            }
+
+	            break;
+	    }
+
+	    return false;
+	}
+  private static boolean isBoundary(Event e) {
+
+	    if (e == null) return false;
+
+	    String type = e.getEventType();
+
+	    return (CricketUtil.FOUR.equalsIgnoreCase(type)
+	            || CricketUtil.SIX.equalsIgnoreCase(type)
+	            || CricketUtil.NINE.equalsIgnoreCase(type)
+	            || CricketUtil.LOG_ANY_BALL.equalsIgnoreCase(type))
+	            && e.getEventWasABoundary() != null
+	            && e.getEventWasABoundary().equalsIgnoreCase(CricketUtil.YES);
+	}
+ }

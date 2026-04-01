@@ -22,6 +22,14 @@ public class MatchStats{
 	List<VariousStats> powerPlay1ThisOver;
 	List<VariousStats> powerPlay2ThisOver;
 	private VariousStats lastOverData;
+	public VariousStats getProcessThisOverRunsCount() {
+		return processThisOverRunsCount;
+	}
+
+	public void setProcessThisOverRunsCount(VariousStats processThisOverRunsCount) {
+		this.processThisOverRunsCount = processThisOverRunsCount;
+	}
+	private VariousStats processThisOverRunsCount;
 	private VariousStats inningCompare;
 	private VariousStats lastThirtyBalls;
 	private VariousStats homeTeamScoreData;
@@ -52,6 +60,7 @@ public class MatchStats{
 		this.lastThirtyBalls = new VariousStats();
 		this.lastThirtyBalls.setTotalBalls(30);
 		this.lastOverData = new VariousStats();
+		this.processThisOverRunsCount = new VariousStats();
 		this.bowlingCard = new VariousStats();
 		this.awayTeamScoreData = new VariousStats();
 		this.homeTeamScoreData = new VariousStats();
