@@ -58,7 +58,7 @@ public class MatchStats{
 		this.overData = new VariousStats();
 		this.inningCompare = new VariousStats();
 		this.lastThirtyBalls = new VariousStats();
-		this.lastThirtyBalls.setTotalBalls(30);
+		this.lastThirtyBalls.setTotalBalls(0);
 		this.lastOverData = new VariousStats();
 		this.processThisOverRunsCount = new VariousStats();
 		this.bowlingCard = new VariousStats();
