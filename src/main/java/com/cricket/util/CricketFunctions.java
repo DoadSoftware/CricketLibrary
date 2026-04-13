@@ -52,6 +52,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -4000,6 +4002,71 @@ public class CricketFunctions {
 //            }
 //        }
     }
+	public static ForeignLanguageData universalMatchParser(
+	        String input,String teamNameType,MultiLanguageDatabase multiLanguageDb) {
+
+	    List<ForeignLanguageData> resultToShow = new ArrayList<>();
+	    List<String> insertTxt = new ArrayList<>();
+
+	    String upper = input.toUpperCase();
+
+	    String team = "";
+	    String[] words = upper.split(" ");
+
+	    List<String> keywords = Arrays.asList("NEED", "WON", "WIN", "MATCH");
+
+	    StringBuilder teamBuilder = new StringBuilder();
+
+	    for (String w : words) {
+	        if (keywords.contains(w)) break;
+	        teamBuilder.append(w).append(" ");
+	    }
+
+	    team = teamBuilder.toString().trim();
+
+	    if (!team.isEmpty()) {
+	        resultToShow = CricketFunctions.AssembleMultiLanguageData(
+	                CricketUtil.TEAM,teamNameType,multiLanguageDb,team, "", null,resultToShow.size() + 1,resultToShow
+	        );
+	    }
+
+	    Pattern numPattern = Pattern.compile("\\d+(\\.\\d+)?");
+	    Matcher numMatcher = numPattern.matcher(upper);
+
+	    List<String> numbers = new ArrayList<>();
+
+	    while (numMatcher.find()) {
+	        numbers.add(numMatcher.group());
+	    }
+
+	    String keySentence = upper;
+
+	    if (!team.isEmpty()) {
+	        keySentence = keySentence.replace(team, "");
+	    }
+
+	    for (String num : numbers) {
+	        keySentence = keySentence.replace(num, "");
+	    }
+
+	    keySentence = keySentence.replaceAll("\\s+", " ").trim();
+
+//	    keySentence = keySentence
+//	            .replace("RUNS", "RUN")
+//	            .replace("WICKETS", "WICKET")
+//	            .replace("OVERS", "OVER")
+//	            .replace("BALLS", "BALL");
+
+	    insertTxt.addAll(numbers); // order matters!
+
+	    resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.DICTIONARY, "",multiLanguageDb,keySentence,"",insertTxt, resultToShow.size() + 1,resultToShow);
+	    
+	    if (resultToShow.size() > 0) {
+	        return MergeForeignLanguageDataListToSingleObject(resultToShow);
+	    }
+
+	    return null;
+	}
 	public static ForeignLanguageData generateMatchResultForeignLanguage(MatchAllData match, String teamNameType, 
 			MultiLanguageDatabase multiLanguageDb)
 	{
@@ -4078,32 +4145,78 @@ public class CricketFunctions {
 		List<ForeignLanguageData> resultToShow = new ArrayList<ForeignLanguageData>();
 		
 		if(whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.CAUGHT)){
-			String englishTxt = "";
+			String englishTxt = "",txt = "";
 			resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, howOut1.split(" ")[0]+"|", 
 					"", null, resultToShow.size() + 1, resultToShow);
 			
+			String[] parts1 = howOut1.split(" ");
+			String playerName1 = String.join(" ", Arrays.copyOfRange(parts1, 1, parts1.length));
+
 			Player plyr = multiLanguageDb.getPlayers().stream()
-					.filter(player -> howOut1.split(" ")[1].equalsIgnoreCase(player.getTicker_name()))
-					.findAny().orElse(null);
+			        .filter(player -> playerName1.equalsIgnoreCase(player.getTicker_name()))
+			        .findAny().orElse(null);
+			
+//			Player plyr = multiLanguageDb.getPlayers().stream()
+//					.filter(player -> howOut1.split(" ")[1].equalsIgnoreCase(player.getTicker_name()))
+//					.findAny().orElse(null);
+			if(plyr != null) {
+				englishTxt = plyr.getFull_name();
+			}
+			resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.PLAYER, CricketUtil.FULLNAME, multiLanguageDb, 
+					englishTxt, CricketUtil.TICKERNAME, null, resultToShow.size() + 1, resultToShow);
+			
+			resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, "|" + howOut2.split(" ")[0]+ "|", 
+					"", null, resultToShow.size() + 1, resultToShow);
+			
+			String[] parts2 = howOut2.split(" ");
+			String playerName2 = String.join(" ", Arrays.copyOfRange(parts2, 1, parts2.length));
+
+			Player plyrs = multiLanguageDb.getPlayers().stream()
+			        .filter(player -> playerName2.equalsIgnoreCase(player.getTicker_name()))
+			        .findAny().orElse(null);
+			
+//			Player plyrs = multiLanguageDb.getPlayers().stream()
+//					.filter(player -> howOut2.split(" ")[1].equalsIgnoreCase(player.getTicker_name()))
+//					.findAny().orElse(null);
+			if(plyrs != null) {
+				englishTxt = plyrs.getFull_name();
+			}
+			resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.PLAYER, CricketUtil.FULLNAME, multiLanguageDb, 
+					englishTxt, CricketUtil.TICKERNAME, null, resultToShow.size() + 1, resultToShow);
+			
+		}else if(whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.HANDLED_THE_BALL) || 
+				whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.HIT_BALL_TWICE) || 
+				whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.OBSTRUCTING_FIELDER) || 
+				whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.RETIRED_OUT) || 
+				whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.RETIRED_HURT) || 
+				whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.ABSENT_HURT)){
+			resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.DICTIONARY, "", multiLanguageDb, 
+					howOut1, "", null, resultToShow.size() + 1, resultToShow);
+		}else if(whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.HIT_WICKET)){
+			String englishTxt = "";
+			resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.DICTIONARY, "", multiLanguageDb, 
+					howOut1, "", null, resultToShow.size() + 1, resultToShow);
+			
+			resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, "|" + howOut2.split(" ")[0]+ "|", 
+					"", null, resultToShow.size() + 1, resultToShow);
+			
+			String[] parts1 = howOut2.split(" ");
+			String playerName1 = String.join(" ", Arrays.copyOfRange(parts1, 1, parts1.length));
+
+			Player plyr = multiLanguageDb.getPlayers().stream()
+			        .filter(player -> playerName1.equalsIgnoreCase(player.getTicker_name()))
+			        .findAny().orElse(null);
+			
+//			Player plyr = multiLanguageDb.getPlayers().stream()
+//					.filter(player -> howOut2.split(" ")[1].equalsIgnoreCase(player.getTicker_name()))
+//					.findAny().orElse(null);
 			if(plyr != null) {
 				englishTxt = plyr.getFull_name();
 			}
 			resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.PLAYER, CricketUtil.FULLNAME, multiLanguageDb, 
 					englishTxt, CricketUtil.FIRSTNAME, null, resultToShow.size() + 1, resultToShow);
-			
-			resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, "|" + howOut2.split(" ")[0]+ "|", 
-					"", null, resultToShow.size() + 1, resultToShow);
-			
-			Player plyrs = multiLanguageDb.getPlayers().stream()
-					.filter(player -> howOut2.split(" ")[1].equalsIgnoreCase(player.getTicker_name()))
-					.findAny().orElse(null);
-			if(plyrs != null) {
-				englishTxt = plyrs.getFull_name();
-			}
-			resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.PLAYER, CricketUtil.FULLNAME, multiLanguageDb, 
-					englishTxt, CricketUtil.FIRSTNAME, null, resultToShow.size() + 1, resultToShow);
-			
-		}else if(whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.LBW)){
+		}
+		else if(whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.LBW)){
 			String englishTxt = "";
 			resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, howOut1+"| |", 
 					"", null, resultToShow.size() + 1, resultToShow);
@@ -4111,9 +4224,55 @@ public class CricketFunctions {
 			resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, howOut2.split(" ")[0]+ "|", 
 					"", null, resultToShow.size() + 1, resultToShow);
 			
+			String[] parts1 = howOut2.split(" ");
+			String playerName1 = String.join(" ", Arrays.copyOfRange(parts1, 1, parts1.length));
+
 			Player plyr = multiLanguageDb.getPlayers().stream()
-					.filter(player -> howOut2.split(" ")[1].equalsIgnoreCase(player.getTicker_name()))
-					.findAny().orElse(null);
+			        .filter(player -> playerName1.equalsIgnoreCase(player.getTicker_name()))
+			        .findAny().orElse(null);
+			
+//			Player plyr = multiLanguageDb.getPlayers().stream()
+//					.filter(player -> howOut2.split(" ")[1].equalsIgnoreCase(player.getTicker_name()))
+//					.findAny().orElse(null);
+			if(plyr != null) {
+				englishTxt = plyr.getFull_name();
+			}
+			resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.PLAYER, CricketUtil.FULLNAME, multiLanguageDb, 
+					englishTxt, CricketUtil.FIRSTNAME, null, resultToShow.size() + 1, resultToShow);
+		}else if(whichdata1.toUpperCase().equalsIgnoreCase(CricketUtil.STUMPED)){
+			String englishTxt = "";
+			resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, howOut1.split(" ")[0]+ "|", 
+					"", null, resultToShow.size() + 1, resultToShow);
+			
+			String[] parts1 = howOut1.split(" ");
+			String playerName1 = String.join(" ", Arrays.copyOfRange(parts1, 1, parts1.length));
+
+			Player plr = multiLanguageDb.getPlayers().stream()
+			        .filter(player -> playerName1.equalsIgnoreCase(player.getTicker_name()))
+			        .findAny().orElse(null);
+			
+//			Player plr = multiLanguageDb.getPlayers().stream()
+//					.filter(player -> howOut1.split(" ")[1].equalsIgnoreCase(player.getTicker_name()))
+//					.findAny().orElse(null);
+			if(plr != null) {
+				englishTxt = plr.getFull_name();
+			}
+			resultToShow = CricketFunctions.AssembleMultiLanguageData(CricketUtil.PLAYER, CricketUtil.FULLNAME, multiLanguageDb, 
+					englishTxt, CricketUtil.TICKERNAME, null, resultToShow.size() + 1, resultToShow);
+			
+			resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, "|" + howOut2.split(" ")[0]+ "|", 
+					"", null, resultToShow.size() + 1, resultToShow);
+			
+			String[] parts2 = howOut2.split(" ");
+			String playerName2 = String.join(" ", Arrays.copyOfRange(parts2, 1, parts2.length));
+
+			Player plyr = multiLanguageDb.getPlayers().stream()
+			        .filter(player -> playerName2.equalsIgnoreCase(player.getTicker_name()))
+			        .findAny().orElse(null);
+			
+//			Player plyr = multiLanguageDb.getPlayers().stream()
+//					.filter(player -> howOut2.split(" ")[1].equalsIgnoreCase(player.getTicker_name()))
+//					.findAny().orElse(null);
 			if(plyr != null) {
 				englishTxt = plyr.getFull_name();
 			}
@@ -4135,9 +4294,17 @@ public class CricketFunctions {
 			String englishTxt = "";
 			resultToShow = CricketFunctions.AssembleMultiLanguageData("", "", multiLanguageDb, "| |" + howOut2.split(" ")[0] + "|", 
 					"", null, resultToShow.size() + 1, resultToShow);
+			
+			String[] parts1 = howOut2.split(" ");
+			String playerName1 = String.join(" ", Arrays.copyOfRange(parts1, 1, parts1.length));
+
 			Player plyr = multiLanguageDb.getPlayers().stream()
-					.filter(player -> howOut2.split(" ")[1].equalsIgnoreCase(player.getTicker_name()))
-					.findAny().orElse(null);
+			        .filter(player -> playerName1.equalsIgnoreCase(player.getTicker_name()))
+			        .findAny().orElse(null);
+			
+//			Player plyr = multiLanguageDb.getPlayers().stream()
+//					.filter(player -> howOut2.split(" ")[1].equalsIgnoreCase(player.getTicker_name()))
+//					.findAny().orElse(null);
 			if(plyr != null) {
 				englishTxt = plyr.getFull_name();
 			}
@@ -4311,21 +4478,53 @@ public class CricketFunctions {
 			print_writers.get(i).println(SendTextIn);
 		}
 	}	
-	public static ForeignLanguageData MergeForeignLanguageDataListToSingleObject(List<ForeignLanguageData> foreignLanguageDataList) {
-		
-		ForeignLanguageData this_fd = new ForeignLanguageData();
-		this_fd.setEnglishText(foreignLanguageDataList.get(0).getEnglishText().trim());
-		this_fd.setHindiText(foreignLanguageDataList.get(0).getHindiText().trim());
-		this_fd.setTamilText(foreignLanguageDataList.get(0).getTamilText().trim());
-		this_fd.setTeluguText(foreignLanguageDataList.get(0).getTeluguText().trim());
-		for(int fd = 1; fd <= foreignLanguageDataList.size() - 1; fd++) {
-			this_fd.setEnglishText(this_fd.getEnglishText().trim() + " " + foreignLanguageDataList.get(fd).getEnglishText().trim()); // India<b>win by 23 runs
-			this_fd.setHindiText(this_fd.getHindiText().trim() + " " + foreignLanguageDataList.get(fd).getHindiText().trim());
-			this_fd.setTamilText(this_fd.getTamilText().trim() + " " + foreignLanguageDataList.get(fd).getTamilText().trim());
-			this_fd.setTeluguText(this_fd.getTeluguText().trim() + " " + foreignLanguageDataList.get(fd).getTeluguText().trim());
-		}
-		return this_fd;
+	
+	public static ForeignLanguageData MergeForeignLanguageDataListToSingleObject(
+	        List<ForeignLanguageData> list) {
+
+	    ForeignLanguageData result = new ForeignLanguageData();
+
+	    // ✅ SAFE GETTER
+	    String eng = safe(list.get(0).getEnglishText());
+	    String hin = safe(list.get(0).getHindiText());
+	    String tam = safe(list.get(0).getTamilText());
+	    String tel = safe(list.get(0).getTeluguText());
+
+	    result.setEnglishText(eng);
+	    result.setHindiText(hin);
+	    result.setTamilText(tam);
+	    result.setTeluguText(tel);
+
+	    for (int i = 1; i < list.size(); i++) {
+
+	        result.setEnglishText(result.getEnglishText() + " " + safe(list.get(i).getEnglishText()));
+	        result.setHindiText(result.getHindiText() + " " + safe(list.get(i).getHindiText()));
+	        result.setTamilText(result.getTamilText() + " " + safe(list.get(i).getTamilText()));
+	        result.setTeluguText(result.getTeluguText() + " " + safe(list.get(i).getTeluguText()));
+	    }
+
+	    return result;
 	}
+
+	// ✅ HELPER FUNCTION
+	private static String safe(String text) {
+	    return text == null ? "" : text.trim();
+	}
+//	public static ForeignLanguageData MergeForeignLanguageDataListToSingleObject(List<ForeignLanguageData> foreignLanguageDataList) {
+//		
+//		ForeignLanguageData this_fd = new ForeignLanguageData();
+//		this_fd.setEnglishText(foreignLanguageDataList.get(0).getEnglishText().trim());
+//		this_fd.setHindiText(foreignLanguageDataList.get(0).getHindiText().trim());
+//		this_fd.setTamilText(foreignLanguageDataList.get(0).getTamilText().trim());
+//		this_fd.setTeluguText(foreignLanguageDataList.get(0).getTeluguText().trim());
+//		for(int fd = 1; fd <= foreignLanguageDataList.size() - 1; fd++) {
+//			this_fd.setEnglishText(this_fd.getEnglishText().trim() + " " + foreignLanguageDataList.get(fd).getEnglishText().trim()); // India<b>win by 23 runs
+//			this_fd.setHindiText(this_fd.getHindiText().trim() + " " + foreignLanguageDataList.get(fd).getHindiText().trim());
+//			this_fd.setTamilText(this_fd.getTamilText().trim() + " " + foreignLanguageDataList.get(fd).getTamilText().trim());
+//			this_fd.setTeluguText(this_fd.getTeluguText().trim() + " " + foreignLanguageDataList.get(fd).getTeluguText().trim());
+//		}
+//		return this_fd;
+//	}
 	public static List<ForeignLanguageData> AssembleMultiLanguageData(String whichTableInDb, String whichDBColumnToProcess,  
 			MultiLanguageDatabase multiLanguage, String foreignTextToProcess, String WhatTypeOfTextToReturn, List<String> InsertText,
 			int ForeignLanguageArrayIndex, List<ForeignLanguageData> foreignLanguageDataList)
@@ -4357,6 +4556,24 @@ public class CricketFunctions {
 		        	tamilTxt = plyr.getTamilfull_name();
 		        	teluguTxt = plyr.getTelugufull_name();
 
+		        	if(plyr.getHindifull_name() != null) {
+		        		hindiTxt = plyr.getHindifull_name();
+		        	}else {
+		        		hindiTxt = "";
+		        	}
+		        	
+		        	if(plyr.getTamilfull_name() != null) {
+		        		tamilTxt = plyr.getTamilfull_name();
+		        	}else {
+		        		tamilTxt = "";
+		        	}
+		        	
+		        	if(plyr.getTelugufull_name() != null) {
+		        		teluguTxt = plyr.getTelugufull_name();
+		        	}else {
+		        		teluguTxt = "";
+		        	}
+		        	
 		        	switch(WhatTypeOfTextToReturn) {
 					case CricketUtil.FIRSTNAME:
 			        	if(englishTxt.contains(" ")) {
@@ -4471,26 +4688,74 @@ public class CricketFunctions {
 				tamilTxt = dict.getTamilSentence();
 				teluguTxt = dict.getTeluguSentence();
 				
+				System.out.println("eng = " + foreignTextToProcess);
+				
 				if(InsertText != null) {
+					System.out.println("Size = " + InsertText.size());
+					
 					if (InsertText.size() >= 1) {
+						
 						englishTxt = englishTxt.replace(dict.getEnglishSentence(), 
 								InsertText.get(0) + " " + dict.getEnglishSentence());
-						hindiTxt = hindiTxt.replace(dict.getInsertBeforeFirstHindiText(), 
-								InsertText.get(0) + " " + dict.getInsertBeforeFirstHindiText());
-						tamilTxt = tamilTxt.replace(dict.getInsertBeforeFirstTamilText(), 
-								InsertText.get(0) + " " + dict.getInsertBeforeFirstTamilText());
-						teluguTxt = teluguTxt.replace(dict.getInsertBeforeFirstTeluguText(), 
-								InsertText.get(0) + " " + dict.getInsertBeforeFirstTeluguText());
+//						hindiTxt = hindiTxt.replace(dict.getInsertBeforeFirstHindiText(), 
+//								InsertText.get(0) + " " + dict.getInsertBeforeFirstHindiText());
+//						tamilTxt = tamilTxt.replace(dict.getInsertBeforeFirstTamilText(), 
+//								InsertText.get(0) + " " + dict.getInsertBeforeFirstTamilText());
+//						teluguTxt = teluguTxt.replace(dict.getInsertBeforeFirstTeluguText(), 
+//								InsertText.get(0) + " " + dict.getInsertBeforeFirstTeluguText());
+						
+						if (dict.getInsertBeforeFirstHindiText() != null) {
+						    hindiTxt = hindiTxt.replace(
+						        dict.getInsertBeforeFirstHindiText(),
+						        InsertText.get(0) + " " + dict.getInsertBeforeFirstHindiText()
+						    );
+						}
+						if (dict.getInsertBeforeFirstTamilText() != null) {
+							System.out.println("tamil = " + dict.getInsertBeforeFirstTamilText());
+							tamilTxt = tamilTxt.replace(
+						        dict.getInsertBeforeFirstTamilText(),
+						        InsertText.get(0) + " " + dict.getInsertBeforeFirstTamilText()
+						    );
+						}
+						if (dict.getInsertBeforeFirstTeluguText() != null) {
+							teluguTxt = teluguTxt.replace(
+						        dict.getInsertBeforeFirstTeluguText(),
+						        InsertText.get(0) + " " + dict.getInsertBeforeFirstTeluguText()
+						    );
+						}
 					}
 					if (InsertText.size() >= 2) {
 						englishTxt = englishTxt.replace(dict.getEnglishSentence(), 
 								InsertText.get(1) + " " + dict.getEnglishSentence());
-						hindiTxt = hindiTxt.replace(dict.getInsertBeforeSecondHindiText(), 
-								InsertText.get(1) + " " + dict.getInsertBeforeSecondHindiText());
-						tamilTxt = tamilTxt.replace(dict.getInsertBeforeSecondTamilText(), 
-								InsertText.get(1) + " " + dict.getInsertBeforeSecondTamilText());
-						teluguTxt = teluguTxt.replace(dict.getInsertBeforeSecondTeluguText(), 
-								InsertText.get(1) + " " + dict.getInsertBeforeSecondTeluguText());
+						
+						if (InsertText.size() >= 2 && dict.getInsertBeforeSecondHindiText() != null) {
+						    hindiTxt = hindiTxt.replace(
+						        dict.getInsertBeforeSecondHindiText(),
+						        InsertText.get(1) + " " + dict.getInsertBeforeSecondHindiText()
+						    );
+						}
+						
+						if (InsertText.size() >= 2 && dict.getInsertBeforeSecondTamilText() != null) {
+							tamilTxt = tamilTxt.replace(
+						        dict.getInsertBeforeSecondTamilText(),
+						        InsertText.get(1) + " " + dict.getInsertBeforeSecondTamilText()
+						    );
+						}
+						
+						if (InsertText.size() >= 2 && dict.getInsertBeforeSecondTeluguText() != null) {
+							teluguTxt = teluguTxt.replace(
+						        dict.getInsertBeforeSecondTeluguText(),
+						        InsertText.get(1) + " " + dict.getInsertBeforeSecondTeluguText()
+						    );
+						}
+						
+						
+//						hindiTxt = hindiTxt.replace(dict.getInsertBeforeSecondHindiText(), 
+//								InsertText.get(1) + " " + dict.getInsertBeforeSecondHindiText());
+//						tamilTxt = tamilTxt.replace(dict.getInsertBeforeSecondTamilText(), 
+//								InsertText.get(1) + " " + dict.getInsertBeforeSecondTamilText());
+//						teluguTxt = teluguTxt.replace(dict.getInsertBeforeSecondTeluguText(), 
+//								InsertText.get(1) + " " + dict.getInsertBeforeSecondTeluguText());
 					}
 				}
 				
@@ -12748,13 +13013,14 @@ public class CricketFunctions {
 							    		" wicket" + CricketFunctions.Plural(CricketFunctions.getWicketsLeft(match,whichInning))); 
 									if(ballsRemaining) {
 										if(targetData.getRemaningBall() > 0) {
-											if(targetData.getRemaningBall() <= 120) {
-												targetData.setTargetOrResult(targetData.getTargetOrResult() + " with " + targetData.getRemaningBall() 
-													+ " ball" + CricketFunctions.Plural(targetData.getRemaningBall()) + " remaining");
-											}else {
-												targetData.setTargetOrResult(targetData.getTargetOrResult() + " with " + 
-													CricketFunctions.OverBalls(0, targetData.getRemaningBall()) + " overs remaining");
-											}
+//											if(targetData.getRemaningBall() <= 120) {
+//												targetData.setTargetOrResult(targetData.getTargetOrResult() + " with " + targetData.getRemaningBall() 
+//													+ " ball" + CricketFunctions.Plural(targetData.getRemaningBall()) + " remaining");
+//											}else {
+//												targetData.setTargetOrResult(targetData.getTargetOrResult() + " with " + 
+//													CricketFunctions.OverBalls(0, targetData.getRemaningBall()) + " overs remaining");
+//											}
+											targetData.setTargetOrResult(targetData.getTargetOrResult());
 										}
 									}
 								}
