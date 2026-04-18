@@ -2052,6 +2052,28 @@ public class CricketFunctions {
 		return "";
 	}
 	
+//	public static String checkBatAndBallImpactInOutPlayer(List<Event> events, int player_id) {
+//		if ((events != null) && (events.size() > 0)) {
+//			for (int i = events.size() - 1; i >= 0; i--) {
+//				if((events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_IMPACT) &&
+//						events.get(i).getEventBatterNo() == player_id)) {
+//					return "IMP_IN";
+//				}else if((player_id == events.get(i).getEventOtherBatterNo() && 
+//						events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_IMPACT))) {
+//					return "IMP_OUT";
+//				}else if(player_id == events.get(i).getEventConcussionReplacePlayerId() &&
+//						events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_OVERWRITE_BATSMAN_HOWOUT) &&
+//						events.get(i).getEventHowOut().equalsIgnoreCase("CONCUSSED")) {
+//					return "CON_IN";
+//				}else if(events.get(i).getEventBattingCard() != null && player_id == events.get(i).getEventBattingCard().getPlayerId() &&
+//						events.get(i).getEventType().equalsIgnoreCase(CricketUtil.LOG_OVERWRITE_BATSMAN_HOWOUT) &&
+//						events.get(i).getEventHowOut().equalsIgnoreCase("CONCUSSED")) {
+//					return "CON_OUT";
+//				}
+//			}
+//		}
+//		return "";
+//	}
 	public static String checkBatAndBallImpactInOutPlayerISPL(List<Event> events, int inn_num,int player_id) {
 		if ((events != null) && (events.size() > 0)) {
 			for (int i = events.size() - 1; i >= 0; i--) {
@@ -3754,6 +3776,7 @@ public class CricketFunctions {
 			try(BufferedReader br = new BufferedReader(new FileReader(CricketUtil.CRICKET_DIRECTORY + CricketUtil.HEADTOHEAD_DIRECTORY + 
 					match.getMatch().getMatchFileName().replace(".json", ".h2h")))){
 				while((text_to_return = br.readLine()) != null) {
+					text_to_return = String.format("%-150s", text_to_return);
 					if(text_to_return.contains("|")) {
 						
 					}else {
@@ -4437,34 +4460,75 @@ public class CricketFunctions {
 			}
 		}
 	}
-	public static String GetVariousLanguageTextToEachViz(Configuration config, String broadcaster, List<PrintWriter> print_writers,
-			List<ForeignLanguageData> foreignLanguageData) 
-	{
-		String which_language = "";
-		for(int i = 0; i < print_writers.size(); i++) {
+//	public static String GetVariousLanguageTextToEachViz(Configuration config, String broadcaster, List<PrintWriter> print_writers,
+//			List<ForeignLanguageData> foreignLanguageData) 
+//	{
+//		String which_language = "";
+//		for(int i = 0; i < print_writers.size(); i++) {
+//
+//			switch (i) {
+//			case 0:
+//				which_language = config.getPrimaryLanguage();
+//				break;
+//			case 1:
+//				which_language = config.getSecondaryLanguage();
+//				break;
+//			case 2:
+//				which_language = config.getTertiaryLanguage();
+//				break;
+//			}
+//			if(which_language.equalsIgnoreCase("ENGLISH")) {
+//				return foreignLanguageData.get(foreignLanguageData.size() - 1).getEnglishText();
+//			}else if(which_language.equalsIgnoreCase("HINDI")) {
+//				return foreignLanguageData.get(foreignLanguageData.size() - 1).getHindiText();
+//			}else if(which_language.equalsIgnoreCase("TAMIL")) {
+//				return foreignLanguageData.get(foreignLanguageData.size() - 1).getTamilText();
+//			}else if(which_language.equalsIgnoreCase("TELUGU")) {
+//				return foreignLanguageData.get(foreignLanguageData.size() - 1).getTeluguText();
+//			}
+//		}
+//		return null;
+//	}
+	
+	public static void GetVariousLanguageTextToEachViz(
+	        String baseCommand,Configuration config,
+	        List<PrintWriter> print_writers,List<ForeignLanguageData> foreignLanguageData) {
 
-			switch (i) {
-			case 0:
-				which_language = config.getPrimaryLanguage();
-				break;
-			case 1:
-				which_language = config.getSecondaryLanguage();
-				break;
-			case 2:
-				which_language = config.getTertiaryLanguage();
-				break;
-			}
-			if(which_language.equalsIgnoreCase("ENGLISH")) {
-				return foreignLanguageData.get(foreignLanguageData.size() - 1).getEnglishText();
-			}else if(which_language.equalsIgnoreCase("HINDI")) {
-				return foreignLanguageData.get(foreignLanguageData.size() - 1).getHindiText();
-			}else if(which_language.equalsIgnoreCase("TAMIL")) {
-				return foreignLanguageData.get(foreignLanguageData.size() - 1).getTamilText();
-			}else if(which_language.equalsIgnoreCase("TELUGU")) {
-				return foreignLanguageData.get(foreignLanguageData.size() - 1).getTeluguText();
-			}
-		}
-		return null;
+	    ForeignLanguageData data = foreignLanguageData.get(foreignLanguageData.size() - 1);
+
+	    for (int i = 0; i < print_writers.size(); i++) {
+
+	        PrintWriter writer = print_writers.get(i);
+
+	        String which_language = "";
+
+	        switch (i) {
+	            case 0: which_language = config.getPrimaryLanguage(); break;
+	            case 1: which_language = config.getSecondaryLanguage(); break;
+	            case 2: which_language = config.getTertiaryLanguage(); break;
+	        }
+
+	        String text = "";
+
+	        if ("ENGLISH".equalsIgnoreCase(which_language)) {
+	        	baseCommand = baseCommand.replace("$English$", "$English$");
+	            text = data.getEnglishText();
+	        } else if ("HINDI".equalsIgnoreCase(which_language)) {
+	        	baseCommand = baseCommand.replace("$English$", "$Hindi$");
+	            text = data.getHindiText();
+	        } else if ("TAMIL".equalsIgnoreCase(which_language)) {
+	        	System.out.println("which_language = " + which_language);
+	        	System.out.println("text = " + data.getTamilText());
+	        	baseCommand = baseCommand.replace("$English$", "$Tamil$");
+	            text = data.getTamilText();
+	        } else if ("TELUGU".equalsIgnoreCase(which_language)) {
+	        	baseCommand = baseCommand.replace("$English$", "$Telugu$");
+	            text = data.getTeluguText();
+	        }
+
+	        // ✅ write per writer
+	        writer.println("-1 " + baseCommand + text + "\0");
+	    }
 	}
 	public static void DoadWriteCommandToSelectedViz(int SelectedViz, String SendTextIn, List<PrintWriter> print_writers) 
 	{
@@ -18003,7 +18067,8 @@ public class CricketFunctions {
 	   
   public static String playerRoleIcons(Player hs) {
 	  String role = "";
-	  if(hs.getCaptainWicketKeeper().equalsIgnoreCase(CricketUtil.WICKET_KEEPER)||hs.getCaptainWicketKeeper().equalsIgnoreCase("CAPTAIN_WICKET_KEEPER")) {
+	  if(hs.getCaptainWicketKeeper() != null && (hs.getCaptainWicketKeeper().equalsIgnoreCase(CricketUtil.WICKET_KEEPER) || 
+			  hs.getCaptainWicketKeeper().equalsIgnoreCase("CAPTAIN_WICKET_KEEPER"))) {
 			role = "WicketKeeper";
 		}else if (hs.getRole().equalsIgnoreCase("BATSMAN") || hs.getRole().equalsIgnoreCase("BATTER") || hs.getRole().equalsIgnoreCase("BAT/KEEPER")) {
 		    role = hs.getBattingStyle().equalsIgnoreCase("RHB") ? "Batsman" : "Batsman_Lefthand";
