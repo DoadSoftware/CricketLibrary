@@ -12177,37 +12177,42 @@ public class CricketFunctions {
 		      break;
 		    case CricketUtil.LOG_ANY_BALL:
 		    	if (events.get(i).getEventExtra() != null && !events.get(i).getEventExtra().isEmpty()) {
-		    		if(!events.get(i).getEventSubExtra().isEmpty()&& events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0) {
-		    			if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
-		    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
-		    			}
-		    			else if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL) && events.get(i).getEventRuns() <= 0) {
-		    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + 
-		    						events.get(i).getEventSubExtraRuns());
-		    			}
+		    		if(events.get(i).getEventSubExtra() != null) {
+		    			if(!events.get(i).getEventSubExtra().isEmpty() && 
+			    				events.get(i).getEventSubExtraRuns() > 0) {
+			    			if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
+			    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + events.get(i).getEventSubExtraRuns());
+			    			}
+			    			else if(events.get(i).getEventSubExtra().equalsIgnoreCase(CricketUtil.NO_BALL) && events.get(i).getEventRuns() <= 0) {
+			    				this_ball_data = String.valueOf(events.get(i).getEventRuns() + events.get(i).getEventExtraRuns() + 
+			    						events.get(i).getEventSubExtraRuns());
+			    			}
+			    		}
 		    		}
 		    		if(this_ball_data.isEmpty()) {
 		    			if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.WIDE)) {
 		    				this_ball_data =events.get(i).getEventExtraRuns()+ events.get(i).getEventExtra();
 		    			}
 		    			else if(events.get(i).getEventExtra().equalsIgnoreCase(CricketUtil.NO_BALL)) {
-		    				if(!events.get(i).getEventSubExtra().isEmpty() && events.get(i).getEventSubExtra() != null && events.get(i).getEventSubExtraRuns() > 0) {
-		    					if(events.get(i).getEventRuns()>0) {
-				    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() + "+" + 
-				    						events.get(i).getEventSubExtraRuns() + events.get(i).getEventSubExtra();
-				    				
-				    			}else {
-				    				this_ball_data = events.get(i).getEventExtra() + "+" + 
-				    						events.get(i).getEventSubExtraRuns() + events.get(i).getEventSubExtra();
-				    			}
-		    				}else if(!events.get(i).getEventSubExtra().isEmpty()&& events.get(i).getEventSubExtra() != null 
-		    						&& events.get(i).getEventSubExtraRuns() <= 0) {
-		    					if(events.get(i).getEventRuns()>0) {
-				    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() +
-				    						events.get(i).getEventSubExtra();
-				    			}else {
-				    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventSubExtra();
-				    			}
+		    				if(events.get(i).getEventSubExtra() != null) {
+		    					if(!events.get(i).getEventSubExtra().isEmpty() && events.get(i).getEventSubExtraRuns() > 0) {
+			    					if(events.get(i).getEventRuns()>0) {
+					    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() + "+" + 
+					    						events.get(i).getEventSubExtraRuns() + events.get(i).getEventSubExtra();
+					    				
+					    			}else {
+					    				this_ball_data = events.get(i).getEventExtra() + "+" + 
+					    						events.get(i).getEventSubExtraRuns() + events.get(i).getEventSubExtra();
+					    			}
+			    				}else if(!events.get(i).getEventSubExtra().isEmpty() &&
+			    						events.get(i).getEventSubExtraRuns() <= 0) {
+			    					if(events.get(i).getEventRuns()>0) {
+					    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns() +
+					    						events.get(i).getEventSubExtra();
+					    			}else {
+					    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventSubExtra();
+					    			}
+			    				}
 		    				}else {
 		    					if(events.get(i).getEventRuns()>0) {
 				    				this_ball_data = events.get(i).getEventExtra() + "+" + events.get(i).getEventRuns();
@@ -12215,6 +12220,7 @@ public class CricketFunctions {
 				    				this_ball_data = events.get(i).getEventExtra();
 				    			}
 		    				}
+		    				
 		    			}else {
 		    				if(events.get(i).getEventRuns()>0) {
 			    				this_ball_data = String.valueOf(events.get(i).getEventRuns());
